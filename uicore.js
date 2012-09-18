@@ -1092,7 +1092,7 @@ if(!myfigure.myoverlay){
 //if(false){
 var myimgdiv = document.createElement('div');
 myfigure.myoverlay=myimgdiv;
-myimgdiv.className="imageOverlayDiv";
+myimgdiv.className="imageOverlayDiv inactive imageoverlaypart";
 myimgdiv.style.position='absolute';
 // myimgdiv.style.width=myfigure.width + 'px';
 // myimgdiv.style.height=myfigure.height + 'px';
@@ -1104,10 +1104,11 @@ myimgdiv.style.padding='0px';
 myimgdiv.onmousedown=startdrag;
 myimgdiv.onmouseup=stopdrag;
 myimgdiv.onmousemove=followdrag;
-myimgdiv.onmouseover=hello;
+/* myimgdiv.onmouseover=hello; */
 myimgdiv.onmouseout=goodbye;
-// events on figure for IE9
+// hello for everybody -- turns on overlays
 myfigure.onmouseover=hello;
+// events on figure for IE9
 myfigure.onmousedown=startdrag;
 myfigure.onmouseup=stopdrag;
 myfigure.onmousemove=followdrag;
@@ -1120,6 +1121,7 @@ myimgdiv.zoomstatus.style.position='absolute';
 myimgdiv.zoomstatus.style.visibility='hidden';
 myimgdiv.appendChild(myimgdiv.zoomstatus);
 myimgdiv.outline=document.createElement('span');
+myimgdiv.outline.className='imageoverlaypart';
 myimgdiv.outline.style.visibility='hidden';
 myimgdiv.outline.style.position='absolute';
 myimgdiv.outline.style.width='85px';
@@ -1133,6 +1135,7 @@ myimgdiv.outline.onclick=skipme;
 myimgdiv.outline.onmousemove=skipme;
 myimgdiv.appendChild(myimgdiv.outline);
 myimgdiv.outlineimage=document.createElement('span');
+myimgdiv.outlineimage.className='imageoverlaypart';
 myimgdiv.outlineimage.style.position='absolute';
 myimgdiv.outlineimage.style.left='-102px';
 myimgdiv.outlineimage.style.top='-50px';
@@ -1179,14 +1182,19 @@ return null;
 }
 function hello(evt){
     var myimgdiv;
+    var newentrance=false;
 var mytarget=getcurrentTarget(evt);
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
+    if(myimgdiv.className.indexOf('inactive')>=0){
+	    newentrance='true';
+    changeClass(myimgdiv,'inactive','active');
+	}
 }
 else {
     myimgdiv = mytarget;
 }
-if(myimgdiv){
+if(newentrance){
 var myform=document.getElementById('pageform');
 var checkobject;
 if(myform){
@@ -1220,12 +1228,16 @@ if(mytarget.myoverlay){
 else {
     myimgdiv = mytarget;
 }
+
 if(myimgdiv){
+    if(!evt.relatedTarget || (evt.relatedTarget.className.indexOf('imageoverlaypart') == -1 && evt.relatedTarget != myimgdiv.inputimage  && evt.relatedTarget.parentNode != myimgdiv.outlineimage )){
+    changeClass(myimgdiv,'active','inactive');
 myimgdiv.zoomstatus.style.visibility="hidden";
 if(myimgdiv.zoomstatus.timeoutId){
 clearTimeout(myimgdiv.zoomstatus.timeoutId);
 myimgdiv.zoomstatus.timeoutID=null;
 }
+    }
 }
 return true;
 }

@@ -352,6 +352,10 @@ border-style: outset;
         line-height: 1.1;
 }
 
+.imageOverlayDiv.inactive {
+display: none;
+}
+
 .dlimage > legend > .dlimagecontrol {
 display: none;
 border-width: 2px; border-style: outset; border-color: Grey;
