@@ -368,7 +368,7 @@ border-width: 2px; border-style: outset; border-color: Grey;
         margin-right: 2px;
        -moz-border-radius: 7px;
        border-radius: 7px;
-        background-color: WhiteSmoke;
+    background-color: WhiteSmoke;
 	opacity: 0.6;
 }
 .dlimage > .dlcontrol {
@@ -411,12 +411,11 @@ zindex: 10;
 margin-top: 5px;
 }
 .dlimage > legend > .dlimageswitch {
-display: inline;
 padding: 2px;
--moz-border-radius: 7px; border-radius: 7px;
 margin: 2px;
 	width: 12pt;
 	height: 12pt;
+    background: url('icons/onoff16.png') center no-repeat;
         background-color: WhiteSmoke;
 	opacity: 0.6;
 }
@@ -425,7 +424,17 @@ margin: 2px;
 display: none;
 }
 .dlimage:hover > legend > .dlimagecontrol {
-display: inline;
+display: inline-block;
+}
+.dlimagecontrol.zoomout {
+    width: 13pt;
+    background: url('icons/Zoom-out-16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.info {
+    width: 13pt;
+    background: url('icons/Information-16.png') center no-repeat;
+    background-size: 12pt;
 }
 .dlimage:hover > legend > .dlimagecontrol:hover {
 opacity: 1.0;
