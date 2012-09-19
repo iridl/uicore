@@ -1102,7 +1102,7 @@ myfigure.onmouseout=goodbye;
 myfigure.onclick=skipme;
 myimgdiv.mycontainer=myfigure.parentNode;
 myimgdiv.zoomstatus=document.createElement('div');
-myimgdiv.zoomstatus.className='zoomStatus';
+myimgdiv.zoomstatus.className='zoomStatus imageoverlaypart';
 myimgdiv.zoomstatus.style.position='absolute';
 myimgdiv.zoomstatus.style.visibility='hidden';
 myimgdiv.appendChild(myimgdiv.zoomstatus);
