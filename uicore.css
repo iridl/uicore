@@ -361,7 +361,7 @@ cursor: crosshair;
 cursor: se-resize !important;
 }
 .imageOverlayDiv+img{
-cursor: se-resize;
+cursor: nw-resize;
 }
 .imageOverlayDiv.pickRegion+img {
 cursor: crosshair;
