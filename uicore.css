@@ -351,6 +351,24 @@ border-style: outset;
         text-align: justify;
         line-height: 1.1;
 }
+.imageOverlayDiv {
+cursor: se-resize;
+}
+.imageOverlayDiv.pickRegion {
+cursor: crosshair;
+}
+.zoomArea {
+cursor: se-resize !important;
+}
+.imageOverlayDiv+img{
+cursor: se-resize;
+}
+.imageOverlayDiv.pickRegion+img {
+cursor: crosshair;
+}
+.zoomArea+img {
+cursor: se-resize !important;
+}
 
 .imageOverlayDiv.inactive {
 display: none;

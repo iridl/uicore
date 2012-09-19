@@ -1194,6 +1194,8 @@ var resclass="point";
 if(parseFloat(res.value) != 'NaN'){
 resclass = res.value + "&deg; box";
 }
+// adds pickRegion if necessary to indicate that we could pick a point or choose an area
+appendMissingClass(myimgdiv,'pickRegion');
 mypar.innerHTML="click for " + resclass +"<br /> click & drag down-and-right for larger or to zoom in";
 }
 else {
@@ -1246,7 +1248,7 @@ else {
     myimgdiv = mytarget;
 }
 var myinfo = myimgdiv.inputimage.mylink.info;
-myimgdiv.style.cursor='auto';
+removeClass(myimgdiv,'zoomArea');
 var myvals;
 if(myobj != null && myinfo){
 if(myobj.style.visibility == 'visible'){
@@ -1315,7 +1317,8 @@ myy=evt.pageY-absTop(myimgdiv);
 if(myobj == null){
 myobj = myimgdiv.outline;
 sizeto(myobj,0,0);
-myimgdiv.style.cursor='se-resize';
+// added zoomArea class to imgdiv to indicate that we are now choosing an area
+appendMissingClass(myimgdiv,'zoomArea');
 return false;
 }else
 {return true;
