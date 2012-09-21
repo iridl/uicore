@@ -352,7 +352,7 @@ border-style: outset;
         line-height: 1.1;
 }
 .imageOverlayDiv {
-cursor: nw-resize;
+cursor: crosshair;
 }
 .imageOverlayDiv.pickRegion {
 cursor: crosshair;
@@ -361,7 +361,7 @@ cursor: crosshair;
 cursor: se-resize !important;
 }
 .imageOverlayDiv+img{
-cursor: nw-resize;
+cursor: crosshair;
 }
 .imageOverlayDiv.pickRegion+img {
 cursor: crosshair;
