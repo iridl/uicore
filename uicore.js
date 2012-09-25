@@ -616,39 +616,39 @@ sel.onchange=regiononchange;
 var optgrp=document.createElement('optgroup');
 optgrp.label="Region";
 var opt = document.createElement('option');
-opt.value="[-20,-40,55,40]";
+opt.value="bb:-20:-40:55:40:bb";
 opt.innerHTML="Africa";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[40,-10,170,75]";
+opt.value="bb:40:-10:170:75:bb";
 opt.innerHTML="Asia";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[100,-55,180,0]";
+opt.value="bb:100:-55:180:0:bb";
 opt.innerHTML="Australia";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[-20,35,40,75]";
+opt.value="bb:-20:35:40:75:bb";
 opt.innerHTML="Europe";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[10,15,75,45]";
+opt.value="bb:10:15:75:45:bb";
 opt.innerHTML="Middle East";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[-170,15,-60,75]";
+opt.value="bb:-170:15:-60:75:bb";
 opt.innerHTML="North America";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[-100,0,-70,35]";
+opt.value="bb:-100:0:-70:35:bb";
 opt.innerHTML="Central America";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[-90,-60,-30,15]";
+opt.value="bb:-90:-60:-30:15:bb";
 opt.innerHTML="South America";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="[100,-60,300,60]";
+opt.value="bb:100:-60:300:60:bb";
 opt.innerHTML="Pacific";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
@@ -680,8 +680,7 @@ if(it.name == 'bbox'){
 var myin = pform.elements['region'];
 if(myin){
 if(it.options[it.selectedIndex].value){
-    var mybbox = JSON.parse(it.options[it.selectedIndex].value);
-    myin.value = "bb:" + mybbox.join(':') + ":bb";
+    myin.value = it.options[it.selectedIndex].value
 }
 else {
 myin.value="";
@@ -858,16 +857,17 @@ var update=false;
 var within=false;
 var myform=document.getElementById('pageform');
 if(myform){
-if(newbbox[0] != newbbox[2]){
-var myin = myform.elements['bbox'];
-if(myin){
-myin.value=JSON.stringify(newbbox);
-update=true;
-}
-}
 var ifCRS = "";
 if(crs && crs != "EPSG:4326"){
     ifCRS = ":" + crs;
+}
+if(newbbox[0] != newbbox[2]){
+var myin = myform.elements['bbox'];
+if(myin){
+    /*    myin.value=JSON.stringify(newbbox);  */
+    myin.value='bb:' + newbbox.join(':') + ifCRS + ':bb';
+update=true;
+}
 }
 var myin = myform.elements['region'];
 var res = myform.elements['resolution'];
@@ -904,13 +904,28 @@ updatePageForm();
 }
 }
 }
+function parseBbox(bboxstr){
+    var mybbox;
+    if(bboxstr.slice(0,3)=='bb:'){
+	mybbox=bboxstr.split(':').slice(1,5);
+	mybbox[0] = parseFloat(mybbox[0]);
+	mybbox[1] = parseFloat(mybbox[1]);
+	mybbox[2] = parseFloat(mybbox[2]);
+	mybbox[3] = parseFloat(mybbox[3]);
+    }
+    else {
+mybbox=JSON.parse(bboxstr);
+    }
+    return mybbox;
+}
 function getbbox (myinfo) {
 var mybbox;
 var myform=document.getElementById('pageform');
 if(myform){
 var myin = myform.elements['bbox'];
+/* parses a non-blank bounding box */
 if(myin && myin.value){
-mybbox=JSON.parse(myin.value);
+mybbox=parseBbox(myin.value);
 }
 }
 if(!mybbox){
@@ -1759,7 +1774,7 @@ if(myregion && myregion.value.length > 8){
     within = true;
 }
 if (mybb && mybb.value.length>8 && myregion && myregion.value.length > 8){
-var bba = JSON.parse(mybb.value);
+var bba = parseBbox(mybb.value);
     var regiona = myregion.value.split(':',8);
     if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
 	within = false;
