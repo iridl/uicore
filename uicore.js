@@ -1721,7 +1721,8 @@ var cclass=clist[i];
 var members = document.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
-if(cmem.tagName == 'IMG'){
+/* first changes images that are on-screen */
+if(cmem.offsetTop != 0 && cmem.tagName == 'IMG'){
 var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
@@ -1738,6 +1739,19 @@ if(newsrc != cmem.href){
 	updateHasJSON(cmem);
     }
 }
+}
+}
+}
+/* changes images that are not on-screen */
+for ( var j = 0; j < members.length; j++ ) {
+var cmem=members[j];
+if(cmem.offsetTop == 0 && cmem.tagName == 'IMG'){
+var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
+if(newsrc != cmem.src){
+if(!quietflag) {
+changeClass(cmem,'valid','invalid');
+}
+    cmem.src = newsrc;
 }
 }
 }
