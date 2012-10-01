@@ -1718,7 +1718,9 @@ clist = myform.className.split(' ');
 for ( var i = 0; i < clist.length; i++ )
          {
 var cclass=clist[i];
-var members = document.getElementsByClassName(cclass);
+var membersnl = document.getElementsByClassName(cclass);
+var members=Array.prototype.slice.call(membersnl,0);
+members.sort(function(a,b) {var ao=Math.abs(a.offsetTop-window.pageYOffset); bo=Math.abs(b.offsetTop-window.pageYOffset); return ao-bo});
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
 /* first changes images that are on-screen */
@@ -1740,12 +1742,11 @@ if(newsrc != cmem.href){
     }
 }
 }
-}
-}
-/* changes images that are not on-screen */
+}	 
+/* changes images that were missed above (presumably off-screen */
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
-if(cmem.offsetTop == 0 && cmem.tagName == 'IMG'){
+if(cmem.tagName == 'IMG'){
 var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
@@ -1755,6 +1756,8 @@ changeClass(cmem,'valid','invalid');
 }
 }
 }
+	 }
+/* processes guessvalue, i.e. readahead for images */
 if(guessvalue){
 changedInput.value=guessvalue;
 for ( var i = 0; i < clist.length; i++ )
@@ -1774,8 +1777,8 @@ if(newsrc != cmem.src){
 changedInput.value=newvalue;
 }
 updatePageFormCopies(document);
-}
 updatePageFormConditionalClasses();
+}
 }
 function updatePageFormConditionalClasses(){
 var myform=document.getElementById('pageform');
