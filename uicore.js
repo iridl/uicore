@@ -539,7 +539,17 @@ sel.hrefroot=slhref;
 if(slhref.substring(0,4) == "http"){
 readwithxmlhttp(slhref,sel);
 }
+else {
+    /* faking select when read from a file */
+var stitle=getElementsByAttribute(document,'*','property','term:title');
+if(stitle.length > 0){
+    var opt = document.createElement('option');
+    opt.innerHTML=stitle[0].innerHTML;
+    opt.value="";
+    sel.appendChild(opt);
+}
 // otherwise permissions prevent us from reading the file
+}
 }
 }
 }
@@ -811,6 +821,9 @@ for (var i = 0; i<imglist.length; i++){
 if(imglist[i].className == 'dlimg'){
 xmlhttp.mylink.figureimage=imglist[i];
 xmlhttp.mylink.figureimage.mylink=xmlhttp.mylink;
+xmlhttp.infourl=infourl;
+/* sets the infourl so that we know what we are "seeking" */
+xmlhttp.mylink.infourl=infourl;
 break;
 }
 }
@@ -819,6 +832,8 @@ xmlhttp.onreadystatechange = function(evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
+/* sets the infourl so that we know what we have parsed */
+it.mylink.infourl=it.infourl;
 it.mylink.info=JSON.parse(jsontxt);
 /* info now has figure information */
 /* for (x in it.mylink.info){
