@@ -1742,8 +1742,13 @@ if(newsrc != cmem.href){
     }
 }
 }
-}	 
+}	
+	 } 
 /* changes images that were missed above (presumably off-screen */
+for ( var i = 0; i < clist.length; i++ )
+    {
+var cclass=clist[i];
+var members = document.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
 if(cmem.tagName == 'IMG'){
@@ -1756,7 +1761,7 @@ changeClass(cmem,'valid','invalid');
 }
 }
 }
-	 }
+	}
 /* processes guessvalue, i.e. readahead for images */
 if(guessvalue){
 changedInput.value=guessvalue;
