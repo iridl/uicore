@@ -540,6 +540,7 @@ if(slhref.substring(0,4) == "http"){
 readwithxmlhttp(slhref,sel);
 }
 else {
+// otherwise permissions prevent us from reading the file
     /* faking select when read from a file */
 var stitle=getElementsByAttribute(document,'*','property','term:title');
 if(stitle.length > 0){
@@ -548,7 +549,6 @@ if(stitle.length > 0){
     opt.value="";
     sel.appendChild(opt);
 }
-// otherwise permissions prevent us from reading the file
 }
 }
 }
