@@ -810,12 +810,26 @@ leg=sl[0];
 }
 var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
 if(sfigs.length){
-if(!sfigs[0].info){
-sfigs[0].info="seeking";
-var figurl=sfigs[0].href;
-var infourl=figurl + 'info.json';
+    updateHasFigure(sfigs[0]);
+
+}
+}
+}
+function updateHasFigure(myfig){
+    var newinfourl = myfig.href+'info.json';
+    if(myfig.href.indexOf('?')>0){
+	newinfourl=myfig.href.substr(0,myfig.href.indexOf('?')) + 'info.json' + myfig.href.substr(myfig.href.indexOf('?'));
+    }
+if(!myfig.info || myfig.infourl != newinfourl){
+    if(myfig.info){
+	DLimageRemoveControls(myfig);
+    }
+myfig.info="seeking";
+var s=myfig.parentNode;
+var figurl=myfig.href;
+var infourl=newinfourl;
 var xmlhttp= getXMLhttp();
-xmlhttp.mylink=sfigs[0];
+xmlhttp.mylink=myfig;
 var imglist=s.getElementsByTagName('img');
 for (var i = 0; i<imglist.length; i++){
 if(imglist[i].className == 'dlimg'){
@@ -840,6 +854,7 @@ it.mylink.info=JSON.parse(jsontxt);
 alert(x + " is " + JSON.stringify(it.mylink.info[x]));
 } */
 DLimageBuildControls(it.mylink);
+DLimageBuildZoom(it.mylink);
 }
 };
 try {
@@ -848,8 +863,6 @@ xmlhttp.send();
 }
 catch(err) {}
 DLimageResizeImage(xmlhttp.mylink);
-}
-}
 }
 }
 function dozoomout () {
@@ -1016,13 +1029,24 @@ var newsrc=appendPageForm(mylink.figureimage.src,mylink.figureimage.className);
 mylink.figureimage.src=newsrc;
 }
 }
+function DLimageRemoveControls(mylink){
+    var myimage = mylink.figureimage;
+    var maybecontrol=mylink.nextSibling;
+    while(maybecontrol && maybecontrol != myimage){
+	var nextcontrol=maybecontrol.nextSibling;
+        if(maybecontrol.className && maybecontrol.className.indexOf('dlcontrol') >= 0){
+	mylink.parentNode.removeChild(maybecontrol);
+	}
+	maybecontrol=nextcontrol;
+    }
+}
 /* handles building of image controls from info.json information
 invoked when load of info.json completes
 */
 function DLimageBuildControls(mylink){
 /* builds image choice controls and places them immediately after the hasFigure link 
 */
-    if(!mylink.nextSibling.classname || mylink.nextSibling.className.indexOf('dlcontrol') < 0){
+    if(!mylink.nextSibling.className || mylink.nextSibling.className.indexOf('dlcontrol') < 0){
 var dimlist=mylink.info["iridl:hasDimensions"];
 var currentObj=mylink;
 if(dimlist){
@@ -1102,7 +1126,9 @@ currentObj=ctl;
 }
 }
 }
-} // end of image (dimension) control builds
+    } // end of image (dimension) control builds
+}
+function DLimageBuildZoom(mylink){
 var myfigure = mylink.figureimage;
 if(!myfigure.myoverlay){
 //if(false){
@@ -1755,6 +1781,9 @@ if(newsrc != cmem.href){
     if(cmem.rel == 'iridl:hasJSON'){
 	updateHasJSON(cmem);
     }
+    if(cmem.rel == 'iridl:hasFigure'){
+	updateHasFigure(cmem);
+    }
 }
 }
 }	
@@ -1992,7 +2021,7 @@ if(alldisabled){
 if(localhref.charAt(localhref.length-1) == '/'){
     localhref=localhref+'index.html';
 }
-	    }
+    }
 document.location.href=localhref;
 }
 else {
