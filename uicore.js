@@ -31,7 +31,7 @@ jsDependsOnList.push(document);
     po.type = 'text/javascript';
     po.src = srcfile;
     po.onloan = jsLoaded;
-    po.readyState = "loading";
+    po.readState = "loading";
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
     }
@@ -45,7 +45,7 @@ return ans;
 function jsLoaded (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
 if(evt.currentTarget.readState == 'loading'){
-evt.currentTarget.readyState="complete";
+evt.currentTarget.readState="complete";
 }
 jsAllLoadedRun();
 }
@@ -119,6 +119,7 @@ document.getElementsByClassName = function() {
         }
         return ei;
     }
+Element.prototype.getElementsByClassName=document.getElementsByClassName;
 }
 
 
@@ -1544,7 +1545,7 @@ var gb= document.createElement('a');
 gb.id='irilink';
 gb.href="http://iri.columbia.edu/";
 var hasSVG = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1");
-if(hasSVG){
+if(hasSVG && navigator.appVersion.indexOf('MSIE 9')<0 && navigator.appVersion.indexOf('MSIE 8')<0 ){
 var ob= document.createElement('object');
 ob.data=scriptroot + "icons/iri.svg";
 ob.type="image/svg+xml";
