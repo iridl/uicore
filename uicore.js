@@ -537,7 +537,7 @@ sel.hrefroot=slhref.substr(0,lin+1);
 }else {
 sel.hrefroot=slhref;
 }
-if(slhref.substring(0,4) == "http"){
+if(slhref.substring(0,4) == "http" && navigator.appVersion.indexOf('MSIE 8')<0 ){
 readwithxmlhttp(slhref,sel);
 }
 else {
@@ -682,7 +682,7 @@ mylist[i].style.display=mydisplay;
 }
 function regiononchange(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
 /* updates selectvalue element*/
 it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
 var pform=document.getElementById('pageform');
@@ -858,11 +858,8 @@ DLimageBuildControls(it.mylink);
 DLimageBuildZoom(it.mylink);
 }
 };
-try {
 xmlhttp.open("GET",infourl,true);
 xmlhttp.send();
-}
-catch(err) {}
 DLimageResizeImage(xmlhttp.mylink);
 }
 }
