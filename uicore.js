@@ -30,7 +30,7 @@ jsDependsOnList.push(document);
     var po = document.createElement('script');
     po.type = 'text/javascript';
     po.src = srcfile;
-    po.onloan = jsLoaded;
+    po.onload = jsLoaded;
     po.readState = "loading";
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
