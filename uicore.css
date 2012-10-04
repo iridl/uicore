@@ -473,7 +473,29 @@ background-color: LightGrey;
 	border-width: 3px; 
 }
 
+/* these are nominally 1024 choices -- they appear here for IE8 which seems to ignore @media sections */
+
+.dlimage {
+	width: 46%;
+}
+.dlimage.wide {
+	width: 65%;
+}
+.selectvalue {
+display: none;
+}
+.selectvalue + select {
+display: inline;
+}
+
+
 @media only all and (max-width: 750px) {
+.selectvalue {
+display: inline;
+}
+.selectvalue + select {
+display: none;
+}
 .dlimage, .dlimage.wide, .dlimage.tall {
 	width: 95%;
 }
@@ -501,6 +523,12 @@ font-size: 10pt;
 }
 }
 @media only all and (max-width: 750px) {
+.selectvalue {
+display: inline;
+}
+.selectvalue + select {
+display: none;
+}
 .iriicon {
 height: 32px;
 width: 32px;
