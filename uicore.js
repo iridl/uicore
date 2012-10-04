@@ -28,7 +28,6 @@ $.ready = function(fn) {
 }
 var jsDependsOnList = new Array();
 var jsAllLoadedFn = null;
-var skipInteractive = navigator.appVersion.indexOf('MSIE')>=0;
 jsDependsOnList.push(document);
 
     function jsDependsOn(srcfile){
@@ -46,7 +45,7 @@ jsDependsOnList.push(document);
 function jsAllLoaded() {
 var ans = true;
 for (var i=0; i<jsDependsOnList.length; i++){
-    if(jsDependsOnList[i].readyState && (skipInteractive || jsDependsOnList[i].readyState != 'interactive' )&& jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
+    if(jsDependsOnList[i].readyState && (!(jsDependsOnList[i].readyState === 'interactive' && !!document.getElementsByTagName('body')[0])) && jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
 }
 return ans;
 }
