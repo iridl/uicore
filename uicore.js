@@ -31,21 +31,22 @@ jsDependsOnList.push(document);
     po.type = 'text/javascript';
     po.src = srcfile;
     po.onload = jsLoaded;
-    po.readState = "loading";
+    po.onreadystatechange = jsLoaded;
+    if(! po.readyState) po.readyState = "loadingScript";
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
     }
 function jsAllLoaded() {
 var ans = true;
 for (var i=0; i<jsDependsOnList.length; i++){
-if(jsDependsOnList[i].readState && jsDependsOnList[i].readState != 'complete'){ans=false;}
+if(jsDependsOnList[i].readyState && jsDependsOnList[i].readyState != 'interactive' && jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
 }
 return ans;
 }
 function jsLoaded (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
-if(evt.currentTarget.readState == 'loading'){
-evt.currentTarget.readState="complete";
+if(evt.currentTarget && evt.currentTarget.readyState == 'loadingScript'){
+    evt.currentTarget.readyState="complete";
 }
 jsAllLoadedRun();
 }
