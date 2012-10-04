@@ -6,22 +6,29 @@ runs immediately if already loaded.  It is invoked at the end of this file.
 */
 window.$ = {};
 $.ready = function(fn) {
-  if (jsAllLoaded())
+    if (jsAllLoaded()){
       return fn();
+    }
       jsAllLoadedFn = fn;
-  if (!(document.readyState == "complete" )){
+    if (!(document.readyState == "complete" )){
   if (window.addEventListener) {
       window.addEventListener("DOMContentLoaded", jsAllLoadedRun, false);
       window.addEventListener("load", jsAllLoadedRun, false);
 }
-  else if (window.attachEvent)
+  else if (window.attachEvent){
       window.attachEvent("onload", jsAllLoadedRun);
-  else
+  }
+  else{
       window.onload = jsAllLoadedRun;
-}
+  }
+    }
+    if (jsAllLoaded()){
+      return fn();
+    }
 }
 var jsDependsOnList = new Array();
-var jsAllLoadedFn;
+var jsAllLoadedFn = null;
+var skipInteractive = navigator.appVersion.indexOf('MSIE')>=0;
 jsDependsOnList.push(document);
 
     function jsDependsOn(srcfile){
@@ -39,7 +46,7 @@ jsDependsOnList.push(document);
 function jsAllLoaded() {
 var ans = true;
 for (var i=0; i<jsDependsOnList.length; i++){
-if(jsDependsOnList[i].readyState && jsDependsOnList[i].readyState != 'interactive' && jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
+    if(jsDependsOnList[i].readyState && (skipInteractive || jsDependsOnList[i].readyState != 'interactive' )&& jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
 }
 return ans;
 }
@@ -50,9 +57,11 @@ if(evt.currentTarget && evt.currentTarget.readyState == 'loadingScript'){
 }
 jsAllLoadedRun();
 }
+var jsAllLoadedNotRun = true;
 function jsAllLoadedRun(){
-    if(jsAllLoaded()){
-if(jsAllLoadedFn){
+    if(jsAllLoadedNotRun && jsAllLoaded()){
+if(!!jsAllLoadedFn){
+    jsAllLoadedNotRun = false;
 jsAllLoadedFn();
 }
 }
@@ -273,7 +282,7 @@ function tabsSetup(){
 	if(j != 0){
         atab.className='ui-state-default';
         var sid = atab.children[0].hash.substr(1);
-	if(sid){
+	if(!!sid){
         document.getElementById(sid).className="ui-tabs-panel-hidden";
 	}
 	}
