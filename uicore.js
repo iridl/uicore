@@ -38,7 +38,7 @@ jsDependsOnList.push(document);
 function jsAllLoaded() {
 var ans = true;
 for (var i=0; i<jsDependsOnList.length; i++){
-if(!jsDependsOnList[i].loaded){ans=false;}
+if(jsDependsOnList[i].readState && jsDependsOnList[i].readState != 'complete'){ans=false;}
 }
 return ans;
 }
@@ -50,7 +50,7 @@ evt.currentTarget.readState="complete";
 jsAllLoadedRun();
 }
 function jsAllLoadedRun(){
-if(jsAllLoaded){
+    if(jsAllLoaded()){
 if(jsAllLoadedFn){
 jsAllLoadedFn();
 }
@@ -279,8 +279,9 @@ function tabsSetup(){
 	else {
         atab.className='ui-state-active';
         var sid = atab.children[0].hash.substr(1);
-	if(sid){
-        document.getElementById(sid).className="ui-tabs-panel";
+	if(!!sid){
+	    if(document.getElementById(sid))
+		{document.getElementById(sid).className="ui-tabs-panel";}
 	}
 	}
         atab.children[0].onclick=tabtarget;
@@ -290,6 +291,7 @@ function tabsSetup(){
 }
 function insertshare(){
 var s = document.getElementById('share');
+if(s){
 var sl = s.getElementsByTagName('legend');
 if(!sl.length){
 var ls=document.createElement('legend');
@@ -354,6 +356,7 @@ s.appendChild(po);
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = "http://static.evernote.com/noteit.js";
 s.appendChild(ga);
+}
 }
 function doTwitter(){
  var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
