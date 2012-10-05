@@ -38,6 +38,7 @@ jsDependsOnList.push(document);
     po.src = srcfile;
     po.onload = jsLoaded;
     po.onreadystatechange = jsLoaded;
+    po.myevtfn = jsLoaded;
     if(! po.readyState) po.readyState = "loadingScript";
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
@@ -51,8 +52,9 @@ return ans;
 }
 function jsLoaded (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
-if(evt.currentTarget && evt.currentTarget.readyState == 'loadingScript'){
-    evt.currentTarget.readyState="complete";
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+if(it && it.readyState == 'loadingScript'){
+    it.readyState="complete";
 }
 jsAllLoadedRun();
 }
@@ -130,8 +132,14 @@ document.getElementsByClassName = function() {
     }
 Element.prototype.getElementsByClassName=document.getElementsByClassName;
 }
-
-
+if(typeof [].indexOf != 'function'){
+Array.prototype.indexOf = function(obj, start) {
+     for (var i = (start || 0), j = this.length; i < j; i++) {
+         if (this[i] === obj) { return i; }
+     }
+     return -1;
+}
+}
 function domapsel(){
 it=document.getElementById('mapselect');
 it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;
@@ -167,7 +175,7 @@ function tabclick(it){
 }
 function limitclickevent(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
    var myinput = it.parentNode.getElementsByTagName('input')[0];
 	var last = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
 	myinput.value=it.innerHTML;
@@ -178,11 +186,14 @@ function limitclickevent(evt){
 	if(c0 == last){
 	myinput.guessvalue=it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][last-1];
 }
+	if(!evt.currentTarget){
+	    evt.currentTarget=this;
+	}
 	imageinputvaluechange(evt);
  }
 function stepupclickevent(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
    var myinput = it.parentNode.getElementsByTagName('input')[0];
 	var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
 	if(cin > -1 && cin < it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1) {
@@ -190,12 +201,15 @@ function stepupclickevent(evt){
 	if(cin < it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-2) {
 	myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin+2];
 	}
+	if(!evt.currentTarget){
+	    evt.currentTarget=this;
+	}
 	imageinputvaluechange(evt);
 	}
  }
 function stepdownclickevent(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
    var myinput = it.parentNode.getElementsByTagName('input')[0];
 	var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
 	if(cin >0) {
@@ -203,12 +217,15 @@ function stepdownclickevent(evt){
 	if(cin > 1) {
 	myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin-2];
 	}
+	if(!evt.currentTarget){
+	    evt.currentTarget=this;
+	}
 	imageinputvaluechange(evt);
 	}
  }
 function imageinputvaluechange(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
  var myinput = it.parentNode.getElementsByTagName('input')[0];
  var myimage =  it.parentNode.mylink.figureimage;
  // change class of parent whether single (value in list) or multi (value not in list)
@@ -477,19 +494,22 @@ function preload(href){
 var xmlhttp=getXMLhttp();
 xmlhttp.onreadystatechange=function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 if (it.readyState==4) {
   }
-} 
+}
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",href,true);
 xmlhttp.send();
 }
 function readwithxmlhttp(slhref,sel){
 var xmlhttp=getXMLhttp();
 xmlhttp.mysel=sel;
-xmlhttp.onreadystatechange = function() {
+xmlhttp.onreadystatechange = function(evt) {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var xmlhttp = (evt.currentTarget) ? evt.currentTarget : this;
 if(xmlhttp.readyState == 4){
-var xmlDoc=xmlhttp.responseXML;
+    var xmlDoc;
 // used to test on xmlDoc, but explorer did not work, so now I parse
 if(true){
     if(window.DOMParser){
@@ -505,6 +525,7 @@ xmlDoc=parser.parseFromString(xmlhttp.responseText,"text/xml");
 dofinishchooseSection(xmlhttp.mysel,xmlDoc);
 }
 };
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",slhref,true);
 xmlhttp.send();
 }
@@ -586,7 +607,7 @@ function dofinishchooseSection(sel,xmlDoc){
 if(xmlDoc){
     var itemlist;
     if(xmlDoc.getElementsByClassName){
-itemlist=xmlDoc.getElementsByClassName('item');
+	itemlist=xmlDoc.getElementsByClassName('item');
     }
     else {
 	itemlist=getElementsByAttribute(xmlDoc,'*','class','item');
@@ -752,7 +773,7 @@ xmlhttp.myLink=myLink;
 changeClassWithin(myLink.parentNode,'valid','invalid');
 xmlhttp.onreadystatechange = function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
 if(it.myLink.href == it.infourl){
@@ -762,6 +783,7 @@ updatePageFormCopies(it.myContext);
 }
 }
 };
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",xmlhttp.infourl,true);
 xmlhttp.send();
 }
@@ -843,33 +865,31 @@ var figurl=myfig.href;
 var infourl=newinfourl;
 var xmlhttp= getXMLhttp();
 xmlhttp.mylink=myfig;
+xmlhttp.infourl=infourl;
 var imglist=s.getElementsByTagName('img');
 for (var i = 0; i<imglist.length; i++){
 if(imglist[i].className == 'dlimg'){
-xmlhttp.mylink.figureimage=imglist[i];
-xmlhttp.mylink.figureimage.mylink=xmlhttp.mylink;
-xmlhttp.infourl=infourl;
+myfig.figureimage=imglist[i];
+myfig.figureimage.mylink=xmlhttp.mylink;
 /* sets the infourl so that we know what we are "seeking" */
-xmlhttp.mylink.infourl=infourl;
+myfig.infourl=infourl;
 break;
 }
 }
-xmlhttp.onreadystatechange = function(evt) {
+xmlhttp.onreadystatechange= function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
 /* sets the infourl so that we know what we have parsed */
 it.mylink.infourl=it.infourl;
 it.mylink.info=JSON.parse(jsontxt);
 /* info now has figure information */
-/* for (x in it.mylink.info){
-alert(x + " is " + JSON.stringify(it.mylink.info[x]));
-} */
 DLimageBuildControls(it.mylink);
 DLimageBuildZoom(it.mylink);
 }
-};
+	 };
+	 xmlhttp.myfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",infourl,true);
 xmlhttp.send();
 DLimageResizeImage(xmlhttp.mylink);
@@ -1077,11 +1097,13 @@ ctl.appendChild(iptset);
 ipt = document.createElement('span');
 ipt.className='lowerLimit';
 ipt.onclick=limitclickevent;
+ipt.myevtfn=limitclickevent;
 ipt.innerHTML=glist[0];
 iptset.appendChild(ipt);
 ipt = document.createElement('span');
 ipt.className='oneStep';
 ipt.onclick=stepdownclickevent;
+ipt.myclickfn=stepdownclickevent;
 ipt.innerHTML='&lt;';
 iptset.appendChild(ipt);
 ipt = document.createElement('input');
@@ -1089,6 +1111,7 @@ ipt.className=mylink.figureimage.className.split(' ')[0] + ' pageformcopy';
 ipt.name=dimlist[i]['iridl:name'];
 ipt.value=dimlist[i]['iridl:defaultvalue'];
 ipt.onchange=imageinputvaluechange;
+ipt.mychangeevtfn=imageinputvaluechange;
 ipt.size=16;
 iptset.appendChild(ipt);
 /* resets class of iptset to reflect whether the defaultvalue
@@ -1156,6 +1179,9 @@ myimgdiv.style.padding='0px';
 myimgdiv.onmousedown=startdrag;
 myimgdiv.onmouseup=stopdrag;
 myimgdiv.onmousemove=followdrag;
+myimgdiv.evtfnonmousedown=startdrag;
+myimgdiv.evtfnonmouseup=stopdrag;
+myimgdiv.evtfnonmousemove=followdrag;
 /* myimgdiv.onmouseover=hello; */
 myimgdiv.onmouseout=goodbye;
 // hello for everybody -- turns on overlays
@@ -1172,7 +1198,7 @@ myimgdiv.zoomstatus.className='zoomStatus imageoverlaypart';
 myimgdiv.zoomstatus.style.position='absolute';
 myimgdiv.zoomstatus.style.visibility='hidden';
 myimgdiv.appendChild(myimgdiv.zoomstatus);
-myimgdiv.outline=document.createElement('span');
+myimgdiv.outline=document.createElement('div');
 myimgdiv.outline.className='imageoverlaypart';
 myimgdiv.outline.style.visibility='hidden';
 myimgdiv.outline.style.position='absolute';
@@ -1225,7 +1251,7 @@ myimgdiv.outlineimage.children[0].src=myfigure.src;
 function getcurrentTarget(evt) {
 evt = (evt) ? evt : event;
 if(evt){
-var elem = (evt.currentTarget) ? evt.currentTarget : ((evt.srcElement.parentNode) ? evt.srcElement.parentNode : null);
+var elem = (evt.currentTarget) ? evt.currentTarget :  null;
 if(elem){
 return elem;
 }
@@ -1236,6 +1262,7 @@ function hello(evt){
     var myimgdiv;
     var newentrance=false;
 var mytarget=getcurrentTarget(evt);
+if(!mytarget){mytarget=this};
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
     if(myimgdiv.className.indexOf('inactive')>=0){
@@ -1248,7 +1275,7 @@ else {
 }
 if(newentrance){
 var myform=document.getElementById('pageform');
-var checkobject;
+var checkobj;
 if(myform){
 checkobj = myform.elements['region'];
 }
@@ -1276,6 +1303,9 @@ return true;
 function goodbye(evt){
     var myimgdiv;
 var mytarget=getcurrentTarget(evt);
+if(!mytarget){mytarget=this};
+evt = (evt) ? evt : event;
+
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
 }
@@ -1286,11 +1316,14 @@ else {
 if(myimgdiv){
     if(!evt.relatedTarget || (evt.relatedTarget.className.indexOf('imageoverlaypart') == -1 && evt.relatedTarget != myimgdiv.inputimage  && evt.relatedTarget.parentNode != myimgdiv.outlineimage )){
     changeClass(myimgdiv,'active','inactive');
+    if(myimgdiv.zoomstatus){
 myimgdiv.zoomstatus.style.visibility="hidden";
 if(myimgdiv.zoomstatus.timeoutId){
+
 clearTimeout(myimgdiv.zoomstatus.timeoutId);
 myimgdiv.zoomstatus.timeoutID=null;
 }
+    }
     }
 }
 return true;
@@ -1307,6 +1340,7 @@ function stopdrag(evt){
 evt = (evt) ? evt : event;
     var myimgdiv;
 var mytarget=getcurrentTarget(evt);
+if(!mytarget){mytarget=this};
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
 }
@@ -1323,8 +1357,14 @@ changeClass(myimgdiv.inputimage,'valid','invalid-zooming');
 }
 else {
 var dx,dy;
+if(typeof evt.pageX != 'undefined'){
 dx=evt.pageX-absLeft(myimgdiv);
 dy=evt.pageY-absTop(myimgdiv);
+}
+else {
+    dx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
+dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
+}
 myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
 }
 setbbox(myvals,myinfo["wms:CRS"]);
@@ -1364,6 +1404,7 @@ function startdrag(evt){
 evt = (evt) ? evt : event;
     var myimgdiv;
 var mytarget=getcurrentTarget(evt);
+if(!mytarget){mytarget=this};
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
 }
@@ -1378,8 +1419,14 @@ var plotbordertop = myinfo["iridl:plotbordertop"];
 var plotborderright = myinfo["iridl:plotborderright"];
 var plotborderbottom = myinfo["iridl:plotborderbottom"];
 // alert(evt.layerX + ' ' + evt.x + ' ' + evt.pageX + ' ' + absLeft(myimgdiv));
+if(typeof evt.pageX != 'undefined'){
 myx=evt.pageX-absLeft(myimgdiv);
 myy=evt.pageY-absTop(myimgdiv);
+}
+else {
+    myx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
+myy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
+}
 if(myobj == null){
 myobj = myimgdiv.outline;
 sizeto(myobj,0,0);
@@ -1395,6 +1442,7 @@ function followdrag(evt){
 evt = (evt) ? evt : event;
     var myimgdiv;
 var mytarget=getcurrentTarget(evt);
+if(!mytarget){mytarget=this};
 if(mytarget.myoverlay){
     myimgdiv = mytarget.myoverlay;
 }
@@ -1411,8 +1459,14 @@ var plotborderbottom = myinfo["iridl:plotborderbottom"];
 var Xaxislength = myinfo["iridl:Xaxislength"];
 var Yaxislength = myinfo["iridl:Yaxislength"];
 if(myobj != null){
+if(typeof evt.pageX != 'undefined'){
 dx=evt.pageX-absLeft(myimgdiv);
 dy=evt.pageY-absTop(myimgdiv);
+}
+else {
+    dx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
+dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
+}
 cw=parseInt(myobj.style.width);
 ch=parseInt(myobj.style.height);
 newx=Math.min(dx,myx);
