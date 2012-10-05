@@ -1599,6 +1599,13 @@ var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
 var newvalue=sel.options[sel.selectedIndex].value;
 if(newvalue){
+    if(newvalue.substr(0,5)=='file:'){
+	var locq = newvalue.indexOf('?');
+	if(locq>0){
+	var lang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
+	newvalue = newvalue.substr(0,locq) + '.' + lang + newvalue.substr(locq);
+	}
+    }
 location.href=newvalue;
 }
 }
