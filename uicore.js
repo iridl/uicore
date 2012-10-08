@@ -765,7 +765,7 @@ updatePageForm();
 }
 function pageformcopyonchange(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 var pform=document.getElementById('pageform');
 if(pform){
 if(pform.elements[it.name]){
@@ -1819,6 +1819,7 @@ for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
 if(!sel.onchange){
 sel.onchange=pageformcopyonchange;
+sel.onchangefn=pageformcopyonchange;
 }
 }
 updatePageForm();
