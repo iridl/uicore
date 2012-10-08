@@ -132,6 +132,10 @@ document.getElementsByClassName = function() {
     }
 Element.prototype.getElementsByClassName=document.getElementsByClassName;
 }
+/* IE 8 is missing hasOwnProperty for Elements */
+if(!Element.prototype.hasOwnProperty){
+    Element.prototype.hasOwnProperty=Object.prototype.hasOwnProperty;
+}
 if(typeof [].indexOf != 'function'){
 Array.prototype.indexOf = function(obj, start) {
      for (var i = (start || 0), j = this.length; i < j; i++) {
@@ -519,7 +523,12 @@ xmlDoc=parser.parseFromString(xmlhttp.responseText,"text/xml");
     else {
 	xmlDoc= new ActiveXObject("Microsoft.XMLDOM");
 	xmlDoc.async=false;
-	xmlDoc.loadXML(xmlhttp.responseText);
+	/* IE8 gets confused by either the doctype or the ?xml, so we skip it */
+	xmlDoc.loadXML(xmlhttp.responseText.substr(xmlhttp.responseText.indexOf('<html')));
+	if(xmlDoc.parseError.reason){
+	alert(xmlDoc.parseError.reason + ' on ' + xmlDoc.parseError.line);
+	alert(xmlhttp.responseText);
+	}
     }
 }
 dofinishchooseSection(xmlhttp.mysel,xmlDoc);
@@ -570,7 +579,7 @@ sel.hrefroot=slhref.substr(0,lin+1);
 }else {
 sel.hrefroot=slhref;
 }
-if(slhref.substring(0,4) == "http" && navigator.appVersion.indexOf('MSIE 8')<0 ){
+if(slhref.substring(0,4) == "http"){
 readwithxmlhttp(slhref,sel);
 }
 else {
@@ -610,19 +619,32 @@ if(xmlDoc){
 	itemlist=xmlDoc.getElementsByClassName('item');
     }
     else {
-	itemlist=getElementsByAttribute(xmlDoc,'*','class','item');
+	var mynodes = xmlDoc.documentElement.getElementsByTagName('div');
+	var oAttributeValue = 'item';
+	itemlist=new Array;
+       for (var i = 0; i<mynodes.length ; i++){
+	   var oCurrent = mynodes[i];
+	   var oAttribute = oCurrent.getAttribute('class');
+      if(typeof oAttribute == "string" && oAttribute.length > 0){
+      if(oAttributeValue.indexOf(oAttribute)>=0){
+      itemlist.push(oCurrent);
+      }
+      }
+       }
     }
 var og=sel;
 if(itemlist.length>0){
 for (var i = 0; i<itemlist.length ; i++){
 var item=itemlist[i];
-if(previousElement(item).className == 'itemGroup'){
+if(previousElement(item).getAttribute('class') == 'itemGroup'){
 og=document.createElement('optgroup');
-og.label=previousElement(item).innerHTML;
+var petext = previousElement(item).innerHTML ? previousElement(item).innerHTML : previousElement(item).text;
+og.label=petext;
 sel.appendChild(og);
 }
 var anc =item.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
-var opt= new Option(anc.innerHTML,anc.getAttribute('href'),false,false);
+var anctext = anc.innerHTML? anc.innerHTML : anc.text;
+var opt= new Option(anctext,anc.getAttribute('href'),false,false);
 var fullpathname = document.location.href;
 if(fullpathname.indexOf("?") >=0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
@@ -633,7 +655,11 @@ fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
 if (sel.hrefroot + opt.value == fullpathname){
 opt.selected=true;
 }
+/* IE8 has strange optgroup behavior */
+if(navigator.appVersion.indexOf('MSIE 8')<0){
 og.appendChild(opt);
+}else
+    sel.add(opt);
 }
 if(typeof(sel.selectedIndex) === 'number'){
 sel.parentNode.getElementsByTagName('legend')[0].innerHTML=sel.options[sel.selectedIndex].parentNode.label;
