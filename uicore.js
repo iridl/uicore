@@ -563,6 +563,8 @@ var sels=s.getElementsByTagName('select');
 if(sels.length < 1){
 var sel=document.createElement('span');
 sel.className='selectvalue';
+sel.onclick=selectvalueclick;
+sel.onclickFn=selectvalueclick;
 sel.innerHTML=getElementsByAttribute(document,'*','property','term:title')[0].innerHTML;
 s.appendChild(sel);
 sel=document.createElement('select');
@@ -676,6 +678,8 @@ var sel=theregion.getElementsByTagName('select');
 if (sel.length == 0){
 sel=document.createElement('span');
 sel.className='selectvalue';
+sel.onclick=selectvalueclick;
+sel.onclickFn=selectvalueclick;
 sel.innerHTML='Global';
 theregion.appendChild(sel);
 sel=document.createElement('select');
@@ -1659,6 +1663,8 @@ for (var i=0; i<slist.length ; i++){
     if(mysel.previousSibling.className != "selectvalue"){
 	var sv = document.createElement('span');
 	sv.className='selectvalue';
+	sv.onclick=selectvalueclick;
+	sv.onclickFn=selectvalueclick;
 	if(mysel.selectedIndex >=0){
 	sv.innerHTML=mysel.options[mysel.selectedIndex].innerHTML;
 	}
@@ -1668,6 +1674,10 @@ for (var i=0; i<slist.length ; i++){
 }
 }
 insertlang();
+}
+/* this exists to convince ios to send events to selectvalue for CSS */
+function selectvalueclick () {
+    return true;
 }
 var Languages = new Array();
 Languages["en"]="english";
