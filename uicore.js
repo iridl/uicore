@@ -144,25 +144,31 @@ Array.prototype.indexOf = function(obj, start) {
      return -1;
 }
 }
-function domapsel(){
+function dosectionsel(){
 it=document.getElementById('mapselect');
 it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;
 it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
 
 var opt=it.options[it.selectedIndex];
 var fullpathname = document.location.href;
-if(opt.value.substring(0,5)!='http:'){
+var optvalue = opt.value;
+var optclass="carry";
+if(optvalue.indexOf('@')>0){
+    optclass = optvalue.split('@')[1];
+    optvalue = optvalue.split('@')[0];
+}
+if(optvalue.substring(0,5)!='http:'){
 if(fullpathname.indexOf("?")>= 0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
 }
 if(fullpathname.indexOf("#")>= 0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
 }
-if (it.hrefroot + opt.value != fullpathname){
-submitPageForm(it.hrefroot + opt.value,"carry");
+if (it.hrefroot + optvalue != fullpathname){
+submitPageForm(it.hrefroot + optvalue,optclass);
 }
 } else {
-submitPageForm(opt.value,"carry");
+submitPageForm(optvalue,optclass);
 }
 }
 function tabclick(it){
@@ -569,7 +575,7 @@ sel.innerHTML=getElementsByAttribute(document,'*','property','term:title')[0].in
 s.appendChild(sel);
 sel=document.createElement('select');
 sel.name="mapsel";
-sel.onchange=domapsel;
+sel.onchange=dosectionsel;
 sel.id='mapselect';
 var slhref=sl.getElementsByTagName('a')[0].href;
 slhref=addLanguageVar(localHrefOf(slhref));
@@ -646,7 +652,13 @@ sel.appendChild(og);
 }
 var anc =item.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
 var anctext = anc.innerHTML? anc.innerHTML : anc.text;
-var opt= new Option(anctext,anc.getAttribute('href'),false,false);
+var ancclass = anc.getAttribute('class');
+var anchref = anc.getAttribute('href');
+if(ancclass){optValue=anchref + '@' + ancclass;}
+else {
+    optValue = anchref;
+}
+var opt= new Option(anctext,optValue,false,false);
 var fullpathname = document.location.href;
 if(fullpathname.indexOf("?") >=0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
@@ -654,7 +666,7 @@ fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
 if(fullpathname.indexOf("#") >= 0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
 }
-if (sel.hrefroot + opt.value == fullpathname){
+if (sel.hrefroot + anchref == fullpathname){
 opt.selected=true;
 }
 /* IE8 has strange optgroup behavior */
