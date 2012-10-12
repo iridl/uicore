@@ -1775,6 +1775,18 @@ function getQueryVariable(variable) {
 function setPageForm(){
 var myform=document.getElementById('pageform');
 if(myform){
+    /* initializes pageform classes */
+    var inputs = myform.children;
+    for (var i = 0; i < inputs.length ; i++){
+	var inp = inputs[i];
+	var clist = inp.className.split(' ');
+	for (var j=0; j< clist.length; j++){
+	    if(myform.className.indexOf(clist[j])<0){
+		myform.className = myform.className + ' ' + clist[j];
+	    }
+	}
+    }
+    /* updates values from page url */
 var achange=false;
 var inputs=myform.elements;
         var query = window.location.search.substring(1);
