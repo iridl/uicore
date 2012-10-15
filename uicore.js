@@ -336,11 +336,14 @@ s.insertBefore(ls,s.firstChild);
 }
 sl = document.getElementById('googleplus');
 if(!sl){
+    /* google+ */
 var gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='googleplusbutton';
 gb.innerHTML='<div class="g-plusone" data-count="false" ></div>';
 s.appendChild(gb);
+/* facebook */
+/* twitter */
 gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='custom-tweet-button';
@@ -393,6 +396,17 @@ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async
     ga.src = "http://static.evernote.com/noteit.js";
 s.appendChild(ga);
 }
+}
+function finishFB(){
+/* fb followup */
+var gb=document.createElement('div');
+gb.className="fb-like";
+gb.setAttribute("data-send","false");
+gb.setAttribute("data-layout","button_count");
+gb.setAttribute("data-width","24");
+gb.setAttribute("data-show-faces","true");
+var s = document.getElementById('custom-tweet-button').parentNode;
+s.insertBefore(gb,document.getElementById('custom-tweet-button'));
 }
 function doTwitter(){
  var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
@@ -1987,6 +2001,24 @@ setregionwithinbbox('inline');
 else {
 setregionwithinbbox('none');
 }
+/* does bodyClasses */
+if(myform.className.indexOf('bodyClass')>=0){
+var mylist = myform.elements;
+var thebody = document.getElementsByTagName('body')[0];
+for (var i=0 ; i < mylist.length ; i++){
+    if(mylist[i].className.indexOf('bodyClass')>=0){
+	var value = mylist[i].name + mylist[i].value;
+	if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
+	    var cclassi = thebody.className.indexOf(mylist[i].name);
+	    if(cclassi>=0){
+		var oldclass = "" + thebody.className.substr(cclassi).split(" ");
+		removeClass(thebody,oldclass);
+	    }
+	    appendMissingClass(thebody,value);
+	}
+    }
+}
+}
 }
 }
 /* updates class pageformcopy selects to match pageform
@@ -2076,7 +2108,12 @@ match = true;
 }
 }
 if(!match){
+    if(!element.className){
+element.className = slist[0];
+    }
+    else {
 element.className = targetclass + ' ' + slist[0];
+    }
 }
 }
 function removeClass(element,srcclass){
