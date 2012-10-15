@@ -1152,6 +1152,19 @@ border-radius: 7px;
     border: 1px solid #ccc;
 text-indent:-9999px; overflow:hidden; 
   }
+  .fb-like {
+      display: inline-block;
+        height: 24px;
+        position:relative;
+        left: 0px;
+        top: -2px;
+}
+  .fb-like span {
+        height: 24px !important;
+}
+  .fb-like span iframe {
+        height: 24px !important;
+}
   #evernote a {
     cursor: pointer;
     height: 20px;
