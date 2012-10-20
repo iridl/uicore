@@ -1710,6 +1710,7 @@ Languages["en"]="english";
 Languages["es"]="espa&#241;ol";
 Languages["in"]="bahasa";
 Languages["fr"]="fran&ccedil;ais";
+Languages["id"]="bahasa";
 function languageChange(){
 var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
