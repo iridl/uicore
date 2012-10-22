@@ -1092,6 +1092,7 @@ display: none;
 .item      { width: 98%; clear:both; padding-top: 2px; border: 1px outset grey; border-spacing: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; margin: 2px;  background-color: WhiteSmoke;
 -moz-border-radius: 7px;
 border-radius: 7px;
+display: inline-block;
 }
 .itemGroup0 { background-color:  LightGrey; font-weight: bold;
              border-style: inset;
@@ -1133,7 +1134,25 @@ A.titleLink:link, A.titleLink:visited, A.titleLink:active {text-decoration: none
 color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
 
-
+@media only all and (min-width: 1280px) {
+.rightcol {
+width: 800px;
+}
+.rightcol .ui-tabs {
+width: 820px;
+}
+.rightcol .ui-tabs-panel {
+width: 800px;
+-webkit-column-count: 2;
+column-count: 2;
+-moz-column-count: 2;
+}
+.rightcol .ui-tabs-panel .itemGroup {
+column-span: all;
+-moz-column-span: all;
+-webkit-column-span: all;
+}
+}
   #custom-tweet-button{
     display: inline-block;
     background: WhiteSmoke;
