@@ -390,9 +390,9 @@ border-width: 2px; border-style: outset; border-color: Grey;
 	opacity: 0.6;
 }
 .dlimage > .dlcontrol {
-//        display:block ;
-	display: none;
-	height: 0px;
+        display:block ;
+	min-height: 0px;
+	max-height: 0px;
         padding: 0px;
 	border-width: 0px; 
         background-color: WhiteSmoke;
@@ -402,9 +402,11 @@ border-width: 2px; border-style: outset; border-color: Grey;
        border-radius: 8px;
        font-size: 10pt;
 	text-align: center;
-// transition: height 1s linear,background-color 1s,border 1s,padding 1s;
-// -webkit-transition: height 1s linear, background-color 1s,border 1s,padding 1s;
-// -moz-transition: height 1s linear,background-color 1s,border 1s,padding 1s;
+	opacity: 0.;
+
+transition: min-height 1s linear .5s,padding .75s linear,max-height 1.5s linear,border-width .5s linear;
+-webkit-transition: min-height 1s linear .5s,padding .75s linear,max-height 1.5s linear,border-width .5s linear;
+-moz-transition: min-height 1s linear .5s,padding .75s linear,max-height 1.5s linear,border-width .5s linear;
 }
 .zoomStatus{
 cursor: pointer;
@@ -467,10 +469,12 @@ opacity: 1.0;
 }
 .dlimage:hover > .dlcontrol {
         display:block ;
-height: auto;
+min-height: 22px;
+max-height: 66px;
 background-color: LightGrey;
         padding: 4px;
 	border-width: 3px; 
+	opacity: 1.;
 }
 
 /* these are nominally 1024 choices -- they appear here for IE8 which seems to ignore @media sections */
@@ -1119,12 +1123,14 @@ border-radius: 7px;
         -moz-border-radius-bottomleft: 3px;
         -moz-border-radius-bottomright: 3px;
 margin-bottom: 2pt;
+clear: both;
 }
+.itemTitle:after {content: ""; display: block;}
 .itemFooter {clear: both; }
-.itemIcon{ float:right; background-color: WhiteSmoke; font-size: 12pt; color: #000080; display:table-cell; display: inline-block; text-align: center; padding-right: 5px; padding-top: 2px; border-left-width: 1px; max-width: 60%;}
+.itemIcon{ float:right; background-color: WhiteSmoke; font-size: 12pt; color: #000080; display:table-cell; display: inline-block; text-align: center; padding-right: 5px; padding-top: 2px; border-left-width: 1px; max-width: 50%;}
 .itemImage { max-width: 100%;
 }
-.itemDescription { font-size: 12pt; color: #000000; display: inline; vertical-align: top; max-width: 320px; min-width: 100px; padding-top: 0px; padding-bottom: 0px; line-height: 1.3;}
+.itemDescription { font-size: 12pt; color: #000000; display: inline; vertical-align: top; padding-top: 0px; padding-bottom: 0px; line-height: 1.3;}
 .searchDescription { max-width: 450px; min-width: 100px; display: inline-block; margin-right: 2px}
 .a_column{font-size: 10pt; margin: 0px 0px 5px 0px; padding-left: 5px; padding-right: 5px; width: 137px; float: left; background-color: inherit}
 .column { margin: 0; padding-left: 3%; padding-right: 3%; border-right-width: 1px; border-left-width: 1px; width: 44%; float: left; }
@@ -1135,14 +1141,20 @@ color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
 
 @media only all and (min-width: 1280px) {
+ .itemIcon {
+padding-top: 16px;
+}
+.searchDescription {
+max-width: 350px;
+}
 .rightcol {
-width: 800px;
+width: 900px;
 }
 .rightcol .ui-tabs {
-width: 820px;
+width: 920px;
 }
 .rightcol .ui-tabs-panel {
-width: 800px;
+width: 900px;
 -webkit-column-count: 2;
 column-count: 2;
 -moz-column-count: 2;
