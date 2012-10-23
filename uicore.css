@@ -428,9 +428,6 @@ zindex: 10;
 .dlimage > .dlcontrol input {
 	text-align: center;
 }
-.dlcontrol + .dlcontrol {
-margin-top: 5px;
-}
 .dlimage > legend > .dlimageswitch {
 padding: 2px;
 margin: 2px;
@@ -475,6 +472,9 @@ background-color: LightGrey;
         padding: 4px;
 	border-width: 3px; 
 	opacity: 1.;
+}
+.dlimage:hover > .dlcontrol + .dlcontrol {
+margin-top: 5px;
 }
 
 /* these are nominally 1024 choices -- they appear here for IE8 which seems to ignore @media sections */
