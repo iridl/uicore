@@ -404,9 +404,9 @@ border-width: 2px; border-style: outset; border-color: Grey;
 	text-align: center;
 	opacity: 0.0;
 
-transition: min-height 1.5s linear padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
--webkit-transition: min-height 1.5s linear,padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
--moz-transition: min-height 1.5s linear,padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
+transition:         min-height 1.5s linear, padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
+-webkit-transition: min-height 1.5s linear, padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
+-moz-transition:    min-height 1.5s linear, padding .5s linear .5s,max-height 1.5s linear,border-width .5s linear .5s;
 }
 .zoomStatus{
 cursor: pointer;
