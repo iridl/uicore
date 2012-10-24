@@ -402,7 +402,7 @@ border-width: 2px; border-style: outset; border-color: Grey;
        border-radius: 8px;
        font-size: 10pt;
 	text-align: center;
-	opacity: 0.;
+	opacity: 0.0;
 
 transition: min-height 1s linear .5s,padding .75s linear,max-height 1.5s linear,border-width .5s linear;
 -webkit-transition: min-height 1s linear .5s,padding .75s linear,max-height 1.5s linear,border-width .5s linear;
@@ -471,7 +471,7 @@ max-height: 66px;
 background-color: LightGrey;
         padding: 4px;
 	border-width: 3px; 
-	opacity: 1.;
+	opacity: 1.0;
 }
 .dlimage:hover > .dlcontrol + .dlcontrol {
 margin-top: 5px;
