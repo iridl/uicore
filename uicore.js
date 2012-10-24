@@ -2079,7 +2079,6 @@ mynode.className = mynode.className + ' wide';
 if(it.height*2>it.width && mynode.className.indexOf('wide')>0){
 mynode.className = mynode.className.replace(' wide','');
 }
-}
 hideImageOverlay(it);
 /* makes sure the image overlay is the right size if it exists */
 resetImageOverlay(it);
@@ -2091,6 +2090,7 @@ var plen = pform.elements['plotaxislength'].value;
 if(targetsize!=plen){
 pform.elements['plotaxislength'].value = targetsize;
 updatePageFormQuietly(pform.elements['plotaxislength']);
+}
 }
 }
 }
