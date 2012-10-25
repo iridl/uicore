@@ -26,6 +26,7 @@ $.ready = function(fn) {
       return fn();
     }
 }
+    var FBloaded=false;
 var jsDependsOnList = new Array();
 var jsAllLoadedFn = null;
 jsDependsOnList.push(document);
@@ -342,7 +343,6 @@ gb.className='sharebutton';
 gb.id='googleplusbutton';
 gb.innerHTML='<div class="g-plusone" data-count="false" ></div>';
 s.appendChild(gb);
-/* facebook */
 /* twitter */
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -352,6 +352,7 @@ gba.setAttribute("title","Tweet");
 gba.onclick=doTwitter;
 gb.appendChild(gba);
 s.appendChild(gb);
+/* evernote */
 gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='evernote';
@@ -368,6 +369,24 @@ gb.id='tumblr';
     tumblr_button.setAttribute("title", "Share on Tumblr");
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
+/* facebook */
+gb=document.createElement('div');
+// FB with url following share variables 
+// gb.className="fb-like share";
+//    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+// FB with parameters stripped from url 
+gb.className="fb-like";
+var url = location.href.replace(/[?].*/,'');
+// End of Choice
+    url = url.replace(/[?]/,"/QS/");
+gb.setAttribute("data-href",url);
+gb.setAttribute("data-send","false");
+gb.setAttribute("data-layout","button_count");
+gb.setAttribute("data-width","24");
+gb.setAttribute("data-show-faces","true");
+var s = document.getElementById('custom-tweet-button').parentNode;
+s.insertBefore(gb,document.getElementById('custom-tweet-button'));
+loadFB();
 /* code to add GMail buttons
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -397,16 +416,33 @@ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async
 s.appendChild(ga);
 }
 }
+function loadFB(){
+var js, id = 'facebook-jssdk', ref = document.getElementsByTagName('script')[0];
+           if (document.getElementById(id)) {return;}
+	   js = document.createElement('div');
+	   js.id='fb-root';
+	   var b= document.getElementsByTagName('body')[0];
+	   b.insertBefore(js, b.firstChild);
+	   window.fbAsyncInit = function() {
+	       /*          FB.init({
+            appId      : 'myId', // App ID
+            channelUrl : '', // Channel File
+            status     : true, // check login status
+            cookie     : true, // enable cookies to allow the server to access the session
+            xfbml      : true  // parse XFBML
+	    }); */
+           FB.Event.subscribe('edge.create', function(targetUrl) {
+              _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);
+             });
+};
+           js = document.createElement('script'); js.id = id; js.async = true;
+	   js.onload=finishFB();
+           js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+           ref.parentNode.insertBefore(js, ref);
+}
 function finishFB(){
-/* fb followup */
-var gb=document.createElement('div');
-gb.className="fb-like";
-gb.setAttribute("data-send","false");
-gb.setAttribute("data-layout","button_count");
-gb.setAttribute("data-width","24");
-gb.setAttribute("data-show-faces","true");
-var s = document.getElementById('custom-tweet-button').parentNode;
-s.insertBefore(gb,document.getElementById('custom-tweet-button'));
+/* fb followup FB.XFBML.parse() to rerender */
+FBloaded=true;
 }
 function doTwitter(){
  var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
@@ -418,6 +454,7 @@ function doTwitter(){
 	}
 	if(!title)title=document.title;
 var twitter_url = "https://twitter.com/share?via=iridl&hashtags=dataviz&url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(title);
+ _gaq.push(['_trackSocial', 'twitter', 'tweet', url]);
 window.open(twitter_url);
 }
 function doGMail(){
@@ -438,12 +475,15 @@ function doMail(){
 	}
 	if(!title)title=document.title;
 var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
+ _gaq.push(['_trackSocial', 'mail', 'mail', url]);
 window.open(m);
 }
 function doTumblrClip(){
     var content = document.getElementById("content");
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description');
+    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var ttype='';
     var title="";
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
@@ -467,16 +507,19 @@ function doTumblrClip(){
 	tumblr_photo_source = content.getElementsByTagName('link')[0].figureimage.src;
 	}
 	}
-    var tumblr_photo_click_thru = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var tumblr_photo_click_thru = url;
 	if(tumblr_photo_source){
+	    ttype='photo';
 tumblr_url = "http://www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
 }
 else {
- var tumblr_link_url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	    ttype='link';
+    var tumblr_link_url = url;
     var tumblr_link_name = title;
     var tumblr_link_description = description;
 tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
 }
+ _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
 window.open(tumblr_url);
 }
 
@@ -489,6 +532,7 @@ if(!(arg.className == 'imagecontrols' || arg.style.visibility=='hidden')){
 return arg;
 }
 };
+ _gaq.push(['_trackSocial', 'evernote', 'clip' , clipargs.url]);
 Evernote.doClip(clipargs);
 }
 function readwithiframe(slhref,s,readfn){
@@ -1932,6 +1976,17 @@ if(newsrc != cmem.href){
 	updateHasFigure(cmem);
     }
 }
+}
+if(cmem.tagName == 'DIV'){
+    if(cmem.getAttribute('data-href') && cmem.indexOf('share')>=0 ) {
+    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    url = url.replace(/[?]/,"/QS/");
+    cmem.setAttribute("data-href",url);
+    if(typeof(FB) != 'undefined'){
+    FB.XFBML.parse();
+    }
+    }
+					   
 }
 }	
 	 } 

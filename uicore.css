@@ -1189,6 +1189,16 @@ text-indent:-9999px; overflow:hidden;
         position:relative;
         left: 0px;
         top: -2px;
+overflow: visible;
+   }
+  #fb-like a {
+      display: inline-block;
+        height: 24px;
+	width: 24px;
+        position:relative;
+    background: url('icons/f_logo.png') center no-repeat;
+    background-size: 90%;
+    border: 1px solid #ccc;
 }
   .fb-like span {
         height: 24px !important;
@@ -1227,6 +1237,9 @@ opacity: 0.8;
 #tumblr a:hover {
 background-color: white;
 opacity: 1.0;
+}
+#googleplusbutton div {
+// width: 75px !important;
 }
 #gmailbutton a {
 display:inline-block; 
