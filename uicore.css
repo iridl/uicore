@@ -1140,21 +1140,21 @@ A.titleLink:link, A.titleLink:visited, A.titleLink:active {text-decoration: none
 color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
 
-@media only all and (min-width: 1280px) {
+@media only all and (min-width: 1250px) {
  .itemIcon {
 padding-top: 16px;
 }
 .searchDescription {
-max-width: 350px;
+max-width: 340px;
 }
 .rightcol {
-width: 900px;
+width: 880px;
 }
 .rightcol .ui-tabs {
-width: 920px;
+width: 902px;
 }
 .rightcol .ui-tabs-panel {
-width: 900px;
+width: 880px;
 -webkit-column-count: 2;
 column-count: 2;
 -moz-column-count: 2;
