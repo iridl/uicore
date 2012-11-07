@@ -806,12 +806,13 @@ theregion.appendChild(sel);
 }
 }
 function setregionwithinbbox(mydisplay){
-var mylist=document.getElementsByClassName('regionwithinbbox');
-if(mylist.length>0){
-for(var i=0; i < mylist.length ; i++){
-mylist[i].style.display=mydisplay;
-}
-}
+var thebody = document.getElementsByTagName('body')[0];
+    if(mydisplay == 'none' ){
+	removeClass(thebody,'regioniswithinbbox');
+    }
+    else {
+	    appendMissingClass(thebody,'regioniswithinbbox');
+    }
 }
 function regiononchange(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -2067,7 +2068,7 @@ for (var i=0 ; i < mylist.length ; i++){
 	if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
 	    var cclassi = thebody.className.indexOf(mylist[i].name);
 	    if(cclassi>=0){
-		var oldclass = "" + thebody.className.substr(cclassi).split(" ");
+		var oldclass = "" + thebody.className.substr(cclassi).split(" ")[0];
 		removeClass(thebody,oldclass);
 	    }
 	    appendMissingClass(thebody,value);

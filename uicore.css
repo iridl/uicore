@@ -11,6 +11,9 @@ padding: 0px;
 .regionwithinbbox {
 display: none;
 }
+body.regioniswithinbbox .regionwithinbbox {
+display: inline;
+}
 img {
 opacity: 1.0;
 }
