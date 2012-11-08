@@ -780,7 +780,7 @@ opt.value="bb:10:15:75:45:bb";
 opt.innerHTML="Middle East";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
-opt.value="bb:-170:15:-60:75:bb";
+opt.value="bb:-170:15:-40:75:bb";
 opt.innerHTML="North America";
 optgrp.appendChild(opt);
 opt = document.createElement('option');
