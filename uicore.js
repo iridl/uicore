@@ -1037,7 +1037,31 @@ within=true;
 // none -- return pt:[x,y]
 // number -- return bbox of that size bb:[x,y,x+res,y+res]
 // uri -- returns geoobject of that class/type 
-if(typeof(res) != 'undefined' && parseFloat(res.value) != 'NaN'){
+if(res.value && res.value.substr(0,6) == 'irids:'){
+var clickpt = myform.elements['clickpt'];
+    clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
+    var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect/geoobject/info.json",'transformRegion');
+    
+var xmlhttp= getXMLhttp();
+xmlhttp.onreadystatechange= function(evt) {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+if(it.readyState == 4){
+var jsontxt = it.responseText;
+var result=JSON.parse(jsontxt);
+/* info now has figure information */
+if(result["iridl:geoId"]){
+    myin.value=result["iridl:geoId"];
+    updatePageForm();
+}
+}
+	 };
+
+	 xmlhttp.myfn=xmlhttp.onreadystatechange;
+xmlhttp.open("GET",resurl,true);
+xmlhttp.send();
+}
+else if(typeof(res) != 'undefined' && parseFloat(res.value) != 'NaN'){
 var x,y,delta;
 delta = parseFloat(res.value);
 x = delta*Math.floor(parseFloat(newbbox[0])/delta);
@@ -1052,7 +1076,8 @@ myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
 else {
     myin.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
 }
-}
+    
+} /* end of resolution-dependent click */
 else {
     myin.value="bb:" + newbbox.join(':') + ifCRS + ":bb";
 }
@@ -1143,7 +1168,19 @@ else {
 	csize=csize[1];
 }
 var pform=document.getElementById('pageform');
-var ipt=pform.elements['plotaxislength'];
+var ckres=pform.elements['resolution'];
+if(ckres){
+    appendMissingClass(ckres,'transformRegion');
+}
+var ipt=pform.elements['clickpt'];
+if(!ipt){
+ipt= document.createElement('input');
+ipt.className = 'transformRegion';
+ipt.name = 'clickpt';
+ipt.type='hidden';
+pform.appendChild(ipt);
+}
+ipt=pform.elements['plotaxislength'];
 if(!ipt){
 ipt= document.createElement('input');
 ipt.className = mylink.figureimage.className.split(' ')[0];
