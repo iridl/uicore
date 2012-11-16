@@ -1002,7 +1002,10 @@ if(myform){
 var myin = myform.elements['region'];
 if(myin){
 myin.value='';
-setregionwithinbbox('none');
+}
+myin = myform.elements['clickpt'];
+if(myin){
+myin.value='';
 }
 myin = myform.elements['bbox'];
 if(myin){
@@ -1031,15 +1034,16 @@ update=true;
 var myin = myform.elements['region'];
 var res = myform.elements['resolution'];
 if(myin){
+var clickpt = myform.elements['clickpt'];
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
 // click -- return depends on resolution res
 within=true;
-var clickpt = myform.elements['clickpt'];
     clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
 // none -- return pt:[x,y]
 // number -- return bbox of that size bb:[x,y,x+res,y+res]
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
+    invalidatePageInput('region');
     var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect/geoobject/info.json",'transformRegion');
     
 var xmlhttp= getXMLhttp();
@@ -1051,8 +1055,13 @@ var jsontxt = it.responseText;
 var result=JSON.parse(jsontxt);
 /* info now has figure information */
 if(result["iridl:geoId"]){
+    if(myin.value == result["iridl:geoId"]){
+    validatePageInput('region');
+    }
+    else {
     myin.value=result["iridl:geoId"];
     updatePageForm();
+    }
 }
 }
 	 };
@@ -1079,6 +1088,8 @@ else {
     
 } /* end of resolution-dependent click */
 else {
+    clickpt.value='';
+
     myin.value="bb:" + newbbox.join(':') + ifCRS + ":bb";
 }
 update=true;
@@ -1963,6 +1974,40 @@ updatePageForm();
 }
 }
 
+function invalidatePageInput(iname){
+    ChangeClassPageInput(iname,'valid','invalid');
+}
+function validatePageInput(iname){
+    ChangeClassPageInput(iname,'invalid','valid');
+}
+function ChangeClassPageInput(iname,fromclass,toclass){
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var myinput=myform.elements[iname];
+	if(myinput){
+	    var clist = myinput.className.split(' ');
+	    for ( var i = 0; i < clist.length; i++ )
+		{
+		    var cclass=clist[i];
+		    var members = document.getElementsByClassName(cclass);
+		    for ( var j = 0; j < members.length; j++ ) {
+			var cmem=members[j];
+			if(cmem.rel == 'iridl:hasJSON'){
+			changeClass(cmem.parentNode,fromclass,toclass);
+			}
+			else if(cmem.rel == 'iridl:hasFigure'){
+			    changeClass(cmem.parentNode,fromclass,toclass);
+			}
+			else {
+			    changeClass(cmem,fromclass,toclass);
+			}
+
+		    }
+		}
+	}
+    }
+}
+
 /*
 function to indicate an update to the pageform
 updates all image urls that have classes that match the pageform
@@ -2081,7 +2126,12 @@ if(myform){
     /* updates regionwithinbbox */
 var mybb = myform.elements['bbox'];
 var myregion = myform.elements['region'];
+var myclickpt = myform.elements['clickpt'];
 var within = false;
+if(myclickpt && myclickpt.value){
+    within = true;
+}
+else {
 if(myregion && myregion.value.length > 8){
     within = true;
 }
@@ -2094,6 +2144,7 @@ var bba = parseBbox(mybb.value);
     else {
 	within = true;
     }
+}
 }
 if(within){
 setregionwithinbbox('inline');
