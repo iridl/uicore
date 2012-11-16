@@ -871,7 +871,7 @@ var xmlhttp= getXMLhttp();
 xmlhttp.infourl = myLink.href;
 xmlhttp.myContext = myLink.parentNode;
 xmlhttp.myLink=myLink;
-changeClassWithin(myLink.parentNode,'valid','invalid');
+changeClass(myLink.parentNode,'valid','invalid');
 xmlhttp.onreadystatechange = function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -900,7 +900,7 @@ function runPureOnContext(myContext){
 	myContext.pureTemplateFunction= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
     }
     $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
-changeClassWithin(myContext,'invalid','valid');
+changeClass(myContext,'invalid','valid');
 }
 function initializeDLimage(){
     var mylist=document.getElementsByClassName("dlimage");
@@ -1034,12 +1034,12 @@ if(myin){
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
 // click -- return depends on resolution res
 within=true;
+var clickpt = myform.elements['clickpt'];
+    clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
 // none -- return pt:[x,y]
 // number -- return bbox of that size bb:[x,y,x+res,y+res]
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
-var clickpt = myform.elements['clickpt'];
-    clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
     var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect/geoobject/info.json",'transformRegion');
     
 var xmlhttp= getXMLhttp();
@@ -1693,10 +1693,16 @@ else {
 Yaxislength = plotaxislength;
 }
 frac = imagewidth/(parseFloat(plotborderleft) + parseFloat(Xaxislength) + parseFloat(plotborderright));
-nxl =  Math.round(X0 + (X1-X0)*(left-frac*plotborderleft)/(frac*Xaxislength));
-nxr =  Math.round(X0 + (X1-X0)*(left+width-frac*plotborderleft)/(frac*Xaxislength));
-nyt =  Math.round(Y1 - (Y1-Y0)*(top-frac*plotbordertop)/(frac*Yaxislength));
-nyb =  Math.round(Y1 - (Y1-Y0)*(top+height-frac*plotbordertop)/(frac*Yaxislength));
+nxl =  X0 + (X1-X0)*(left-frac*plotborderleft)/(frac*Xaxislength);
+nxr =  X0 + (X1-X0)*(left+width-frac*plotborderleft)/(frac*Xaxislength);
+nyt =  Y1 - (Y1-Y0)*(top-frac*plotbordertop)/(frac*Yaxislength);
+nyb =  Y1 - (Y1-Y0)*(top+height-frac*plotbordertop)/(frac*Yaxislength);
+var scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(X1-X0))/Math.log(10.)));
+         nxl = nxl.toFixed(scale);
+         nxr = nxr.toFixed(scale);
+scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(Y1-Y0))/Math.log(10.)));
+         nyt = nyt.toFixed(scale);
+         nyb = nyb.toFixed(scale);
 myA[0]=nxl;
 myA[1]=nyb;
 myA[2]=nxr;
