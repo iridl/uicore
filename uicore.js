@@ -1044,8 +1044,7 @@ within=true;
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
     invalidatePageInput('region');
-    var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect/geoobject/info.json",'transformRegion');
-    
+    var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect//string/as.json",'transformRegion');
 var xmlhttp= getXMLhttp();
 xmlhttp.onreadystatechange= function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -1054,12 +1053,12 @@ if(it.readyState == 4){
 var jsontxt = it.responseText;
 var result=JSON.parse(jsontxt);
 /* info now has figure information */
-if(result["iridl:geoId"]){
-    if(myin.value == result["iridl:geoId"]){
+if(result["value"]){
+    if(myin.value == result["value"]){
     validatePageInput('region');
     }
     else {
-    myin.value=result["iridl:geoId"];
+    myin.value=result["value"];
     updatePageForm();
     }
 }
