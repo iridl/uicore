@@ -805,13 +805,24 @@ theregion.appendChild(sel);
 }
 }
 }
-function setregionwithinbbox(mydisplay){
+var regionIsWithinBbox = false;
+function setregionwithinbbox(mydisplay,doflags){
 var thebody = document.getElementsByTagName('body')[0];
-    if(mydisplay == 'none' ){
+    if(!mydisplay){
+	if(doflags){
+	regionIsWithinBbox = false;
+	}
+	else {
 	removeClass(thebody,'regioniswithinbbox');
+	}
     }
     else {
+	if(doflags){
+	regionIsWithinBbox = true;
+	}
+	else {
 	    appendMissingClass(thebody,'regioniswithinbbox');
+	}
     }
 }
 function regiononchange(evt){
@@ -2025,6 +2036,7 @@ updatePageFormSub(false,changedInput, newvalue, guessvalue);
 function updatePageFormSub(quietflag,changedInput, newvalue, guessvalue){
 var myform=document.getElementById('pageform');
 if(myform){
+updatePageFormConditionalClassesAndFlags(true);
 var clist;
 if(changedInput){
 clist = changedInput.className.split(' ');
@@ -2091,7 +2103,10 @@ if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
 }
+/* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
+if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
     cmem.src = newsrc;
+}
 }
 }
 }
@@ -2116,10 +2131,10 @@ if(newsrc != cmem.src){
 changedInput.value=newvalue;
 }
 updatePageFormCopies(document);
-updatePageFormConditionalClasses();
+updatePageFormConditionalClassesAndFlags(false);
 }
 }
-function updatePageFormConditionalClasses(){
+function updatePageFormConditionalClassesAndFlags(doflags){
 var myform=document.getElementById('pageform');
 if(myform){
     /* updates regionwithinbbox */
@@ -2146,12 +2161,13 @@ var bba = parseBbox(mybb.value);
 }
 }
 if(within){
-setregionwithinbbox('inline');
+    setregionwithinbbox(true,doflags);
 }
 else {
-setregionwithinbbox('none');
+    setregionwithinbbox(false,doflags);
 }
 /* does bodyClasses */
+if(!doflags){
 if(myform.className.indexOf('bodyClass')>=0){
 var mylist = myform.elements;
 var thebody = document.getElementsByTagName('body')[0];
@@ -2167,6 +2183,7 @@ for (var i=0 ; i < mylist.length ; i++){
 	    appendMissingClass(thebody,value);
 	}
     }
+}
 }
 }
 }
