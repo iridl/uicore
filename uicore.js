@@ -1734,7 +1734,7 @@ function grow(myit,dx,dy){
 myit.style.width=parseInt(myit.style.width)+dx+'px';
 myit.style.height=parseInt(myit.style.height)+dy+'px';
 myitt=myit.childNodes[0];
-var re=/(\d+)px,?\s+(\d+)px,?\s+(\d+)px,?\s+(\d+)px/;
+var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
 var results = re.exec(myitt.style.clip);
 myitt.style.clip="rect(" + results[1] + "px " + (parseInt(results[2])+dx) + "px " +
 (parseInt(results[3])+dy) + "px " + results[4] + "px)";
@@ -1749,7 +1749,7 @@ function shiftby(myit,dx,dy){
 myit.style.left=parseInt(myit.style.left)+dx+'px';
 myit.style.top=parseInt(myit.style.top)+dy+'px';
 myitt=myit.childNodes[0];
-var re=/(\d+)px,?\s+(\d+)px,?\s+(\d+)px,?\s+(\d+)px/;
+var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
 var results = re.exec(myitt.style.clip);
 myitt.style.clip="rect(" + (parseInt(results[1])+dy) + "px " + (parseInt(results[2])+dx) + "px " +
 (parseInt(results[3])+dy) + "px " + (parseInt(results[4])+dx) + "px)";
