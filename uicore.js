@@ -1057,12 +1057,15 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
     invalidatePageInput('region');
     var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect//string/as.json",'transformRegion');
 var xmlhttp= getXMLhttp();
+xmlhttp.myurl=resurl;
 xmlhttp.onreadystatechange= function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
-var result=JSON.parse(jsontxt);
+var result
+    try{result=JSON.parse(jsontxt)}
+    catch(err){alert(err + ' in parsing ' + jsontxt + ' from ' + resurl)}
 /* info now has figure information */
 if(result["value"]){
     if(myin.value == result["value"]){
