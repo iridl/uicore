@@ -14,6 +14,15 @@ display: none;
 body.regioniswithinbbox .regionwithinbbox {
 display: inline;
 }
+/* while pageform inputs are mostly type hidden so this is not currently
+necessary, adding this css allows adding hidden checkbox support in the
+future which might simplify multiple value element specification */
+#pageform input{
+display: none;
+}
+#pageform input.visible{
+display: inline
+}
 img {
 opacity: 1.0;
 }
