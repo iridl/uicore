@@ -373,7 +373,8 @@ function tabsSetup(){
 	for (var j=0; j<tablist.length; j++){
 	var atab=tablist[j];
 	if(!atab.children[0].onclick) {
-        atab.onclick=tabclickevent;
+        atab.onmousedown=tabclickevent;
+        atab.onfocus=tabclickevent;
 	if(j != 0){
         atab.className='ui-state-default';
         var sid = atab.children[0].hash.substr(1);
