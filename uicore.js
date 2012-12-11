@@ -334,14 +334,20 @@ function tabclickevent(evt){
     it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
     var mylist=it.parentNode.getElementsByClassName("ui-state-active");
     for (var i= 0; i<mylist.length; i++){
-	var sid = mylist[i].children[0].hash.substr(1);
+	var sid;
+	if(mylist[i].children[0].hash){
+	    sid = mylist[i].children[0].hash.substr(1);
+	}
 	if(sid){
         document.getElementById(sid).className="ui-tabs-panel-hidden";
 	}
 	mylist[i].className="ui-state-default";
     }
     it.className="ui-state-active";
-	var sid = it.children[0].hash.substr(1);
+    var sid;
+    if(it.children[0].hash){
+	sid = it.children[0].hash.substr(1);
+    }
 	if(sid){
         document.getElementById(sid).className="ui-tabs-panel";
 	}
