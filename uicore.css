@@ -260,6 +260,7 @@ margin: 0px;
 border-radius: 4px;
 display: inline;
 font-size: 120%;
+color: navy;
 }
 .navitem + .navitem + .navitem .selectvalue {
 font-size: 12pt;
