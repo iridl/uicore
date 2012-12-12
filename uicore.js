@@ -1027,10 +1027,22 @@ ctl.className="dlimagecontrol zoomout";
 ctl.title="Zoom Out";
 ctl.onclick=dozoomout;
 leg.appendChild(ctl);
+ctl=document.createElement('div');
+ctl.className="dlimagecontrol layers";
+ctl.title="Layers";
+leg.appendChild(ctl);
  ctl=document.createElement('div');
 ctl.className="dlimagecontrol info";
 ctl.title="More Information";
 ctl.onclick=doinfobutton;
+leg.appendChild(ctl);
+ctl=document.createElement('div');
+ctl.className="dlimagecontrol linkadd";
+ctl.title="Share";
+leg.appendChild(ctl);
+ctl=document.createElement('div');
+ctl.className="dlimagecontrol download";
+ctl.title="Download";
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
 }
@@ -1344,11 +1356,11 @@ ipt.onclick=limitclickevent;
 ipt.myevtfn=limitclickevent;
 ipt.innerHTML=glist[0];
 iptset.appendChild(ipt);
-ipt = document.createElement('span');
-ipt.className='oneStep';
+ipt = document.createElement('div');
+ipt.className='oneStep leftarrow';
 ipt.onclick=stepdownclickevent;
 ipt.myclickfn=stepdownclickevent;
-ipt.innerHTML='&lt;';
+/*ipt.innerHTML='&lt;';*/
 iptset.appendChild(ipt);
 ipt = document.createElement('input');
 ipt.className=mylink.figureimage.className.split(' ')[0] + ' pageformcopy';
@@ -1390,8 +1402,8 @@ ipt.value=pform.elements[ipt.name].value;
 }
 ipt = document.createElement('span');
 ipt.onclick=stepupclickevent;
-ipt.className='oneStep';
-ipt.innerHTML='>';
+ipt.className='oneStep rightarrow';
+/*ipt.innerHTML='>';*/
 iptset.appendChild(ipt);
 ipt = document.createElement('span');
 ipt.className='upperLimit';

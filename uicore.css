@@ -72,6 +72,7 @@ user-select: none;
 }
 .oneStep, .oneStep-disabled {
 display: inline-block;
+vertical-align: middle;
 cursor: pointer;
 padding-left: 5px;
 padding-right: 5px;
@@ -108,6 +109,7 @@ visibility: hidden;
 
 .controlLabel {
 display: inline-block;
+    vertical-align: middle;
 margin-right: 14pt;
 font-size: 14pt;
 }
@@ -472,6 +474,44 @@ display: inline-block;
 .dlimagecontrol.info {
     width: 13pt;
     background: url('icons/Information-16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.layers + .dlimagecontrol.info {
+}
+.dlimagecontrol.info + .dlimagecontrol.linkadd {
+}
+.leftarrow, .rightarrow {
+opacity: 0.2;
+}
+.controlSet:hover .leftarrow, .controlSet:hover .rightarrow{
+opacity: 0.6;
+}
+.leftarrow:before {
+    width: 13pt;
+    content: url('icons/arrow_full_left_16.png');
+}
+.rightarrow:before {
+    width: 13pt;
+    content: url('icons/arrow_full_right_16.png');
+}
+.dlimagecontrol.linkadd {
+    width: 13pt;
+    background: url('icons/link_add_16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.settings {
+    width: 13pt;
+    background: url('icons/settings_16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.layers {
+    width: 13pt;
+    background: url('icons/text_align_full_16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.download {
+    width: 13pt;
+    background: url('icons/download_16.png') center no-repeat;
     background-size: 12pt;
 }
 .dlimage:hover > legend > .dlimagecontrol:hover {
