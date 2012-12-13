@@ -478,7 +478,7 @@ display: inline-block;
 }
 .dlimagecontrol.layers + .dlimagecontrol.info {
 }
-.dlimagecontrol.info + .dlimagecontrol.linkadd {
+.dlimagecontrol.info + .dlimagecontrol.share {
 }
 .leftarrow, .rightarrow {
 opacity: 0.2;
@@ -497,6 +497,11 @@ opacity: 0.6;
 .dlimagecontrol.linkadd {
     width: 13pt;
     background: url('icons/link_add_16.png') center no-repeat;
+    background-size: 12pt;
+}
+.dlimagecontrol.share {
+    width: 13pt;
+    background: url('icons/share_16.png') center no-repeat;
     background-size: 12pt;
 }
 .dlimagecontrol.settings {

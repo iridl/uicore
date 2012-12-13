@@ -1039,7 +1039,7 @@ ctl.title="More Information";
 ctl.onclick=doinfobutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
-ctl.className="dlimagecontrol linkadd";
+ctl.className="dlimagecontrol share";
 ctl.title="Share";
 leg.appendChild(ctl);
 ctl=document.createElement('div');
