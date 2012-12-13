@@ -780,7 +780,7 @@ var og=sel;
 if(itemlist.length>0){
 for (var i = 0; i<itemlist.length ; i++){
 var item=itemlist[i];
-if(previousElement(item).getAttribute('class') == 'itemGroup'){
+if(previousElement(item) && previousElement(item).getAttribute('class') == 'itemGroup'){
 og=document.createElement('optgroup');
 var petext = previousElement(item).innerHTML ? previousElement(item).innerHTML : previousElement(item).text;
 og.label=petext;
@@ -812,7 +812,9 @@ og.appendChild(opt);
     sel.add(opt);
 }
 if(typeof(sel.selectedIndex) === 'number'){
+    if(sel.options[sel.selectedIndex].parentNode.label){
 sel.parentNode.getElementsByTagName('legend')[0].innerHTML=sel.options[sel.selectedIndex].parentNode.label;
+    }
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
 }
 }
