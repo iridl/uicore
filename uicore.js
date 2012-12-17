@@ -2000,11 +2000,17 @@ var myform=document.getElementById('pageform');
 if(myform){
     /* initializes pageform classes */
     var inputs = myform.children;
+    var pfclasses = [];
+    var clist = myform.className.split(' ');
+    for (var i = 0 ; i < clist.length ; i++){
+	pfclasses[clist[i]] = true;
+    }
     for (var i = 0; i < inputs.length ; i++){
 	var inp = inputs[i];
-	var clist = inp.className.split(' ');
+	clist = inp.className.split(' ');
 	for (var j=0; j< clist.length; j++){
-	    if(myform.className.indexOf(clist[j])<0){
+	    if(!pfclasses[clist[j]]){
+		pfclasses[clist[j]] = true;
 		myform.className = myform.className + ' ' + clist[j];
 	    }
 	}
