@@ -500,6 +500,7 @@ opacity: 0.6;
     background-size: 12pt;
 }
 .dlimagecontrol.share {
+    display: none !important;
     width: 13pt;
     background: url('icons/share_16.png') center no-repeat;
     background-size: 12pt;
@@ -510,11 +511,13 @@ opacity: 0.6;
     background-size: 12pt;
 }
 .dlimagecontrol.layers {
+    display: none !important;
     width: 13pt;
     background: url('icons/text_align_full_16.png') center no-repeat;
     background-size: 12pt;
 }
 .dlimagecontrol.download {
+    display: none !important;
     width: 13pt;
     background: url('icons/download_16.png') center no-repeat;
     background-size: 12pt;
