@@ -782,10 +782,10 @@ img.dlimg, img.dlauximg, img.dlimgts {
 }
 .iriicon {
 float: left;
-height: 22px;
-width: 22px;
--moz-border-radius: 11px;
-border-radius: 11px;
+height: 32px;
+width: 32px;
+-moz-border-radius: 16px;
+border-radius: 16px;
 margin: 1px;
 border: 0px;
 margin-bottom: 0px;
@@ -820,8 +820,8 @@ font-size: 6pt;
 .navitem + .navitem + .navitem > legend {
        font-size: 3pt;
 }
-.lang > legend {
-       font-size: 3pt;
+.lang {
+display: none;
 }
 .navitem{
        font-size: 10pt;
