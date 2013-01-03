@@ -683,10 +683,10 @@ display: inline;
 }
 .controlBar:hover .iriicon {
 float: left;
-height: 50px;
-width: 50px;
--moz-border-radius: 25px;
-border-radius: 25px;
+height: 36px;
+width: 36px;
+-moz-border-radius: 18px;
+border-radius: 18px;
 margin: 1px;
 border: 0px;
 margin-bottom: 0px;
@@ -782,10 +782,10 @@ img.dlimg, img.dlauximg, img.dlimgts {
 }
 .iriicon {
 float: left;
-height: 32px;
-width: 32px;
--moz-border-radius: 16px;
-border-radius: 16px;
+height: 30px !important;
+width: 30px !important;
+-moz-border-radius: 15px !important;
+border-radius: 15px !important;
 margin: 1px;
 border: 0px;
 margin-bottom: 0px;
@@ -820,8 +820,30 @@ font-size: 6pt;
 .navitem + .navitem + .navitem > legend {
        font-size: 3pt;
 }
+/* suppress lang control on very small screens */
 .lang {
 display: none;
+}
+.lang:hover, .lang:active {
+display: inline;
+}
+/* suppress tabs on very small screens */
+.ui-tabs-nav {
+border-width: 2pt !important;
+padding-top: 0pt !important;
+display: none !important;
+}
+.ui-tabs-panel {
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+        -moz-border-radius-topleft: 10px !important;
+        -moz-border-radius-topright: 10px !important;
+}
+.ui-tabs-nav li {
+display: none !important;
+}
+.dlimage {
+margin-top: 2pt;
 }
 .navitem{
        font-size: 10pt;
@@ -831,16 +853,6 @@ display: none;
 }
 .lang {
        font-size: 3pt;
-}
-.controlBar:hover .iriicon {
-float: left;
-height: 54px;
-width: 54px;
--moz-border-radius: 27px;
-border-radius: 27px;
-margin: 1px;
-border: 0px;
-margin-bottom: 0px;
 }
 .controlBar:hover .navlink {
        font-size: 10pt;
@@ -852,17 +864,17 @@ margin-bottom: 0px;
        display: inline;
        font-size: 7pt;
 }
-.controlBar:hover .lang {
+.controlBar:hover .lang select{
        display: inline;
-       font-size: 7pt;
+       font-size: 6pt;
 }
 .controlBar:hover .navitem > legend  {
 display: inline;
-       font-size: 7pt;
+       font-size: 6pt;
 }
 .controlBar:hover .navitem + .navitem > legend  {
 display: inline;
-       font-size: 7pt;
+       font-size: 6pt;
 }
 .controlBar:hover .lang > legend  {
        font-size: 6pt;
