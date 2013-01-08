@@ -2320,6 +2320,10 @@ sel.value=cval;
     }
 if(typeof(cval) != 'undefined' && typeof(sel.selectedIndex) === 'number'){
 var options=sel.options;
+sel.selectedIndex=-1;
+if(sel.previousSibling.className == 'selectvalue'){
+sel.previousSibling.innerHTML="";
+}
 for (var j=0; j < options.length ; j++){
 if(options[j].value == cval){
 sel.selectedIndex=j;
