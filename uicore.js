@@ -973,9 +973,10 @@ xmlhttp.onreadystatechange = function(evt) {
 if(it.readyState == 4){
 var jsontxt = it.responseText;
 if(it.myLink.href == it.infourl){
-it.myContext.parsedJSON=JSON.parse(jsontxt);
-runPureOnContext(it.myContext);
-updatePageFormCopies(it.myContext);
+    it.myContext.parsedJSON=JSON.parse(jsontxt);
+    runPureOnContext(it.myContext);
+    updatePageFormCopies(it.myContext);
+    validateAndCorrectPageForm(it.myContext);
 }
 }
 };
@@ -2334,6 +2335,32 @@ break;
 }
 }
 }
+}
+}
+}
+/* validateAndCorrectsPageForm */
+function validateAndCorrectPageForm(context){
+    var mycontext=context;
+    if(!mycontext || !mycontext.getElementsByClassName){
+	mycontext=document;
+    }
+var myform=document.getElementById('pageform');
+if(myform){
+    var valid=true;
+    var stag = mycontext.getElementsByClassName('containsAllValids');
+for (var i=0; i< stag.length ; i++){
+var sel=stag[i];
+if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
+    valid=false;
+    sel.selectedIndex=0;
+myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
+if(sel.previousSibling.className == 'selectvalue'){
+sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+}
+ }   
+}
+if(!valid){
+    updatePageForm();
 }
 }
 }
