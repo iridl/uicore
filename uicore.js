@@ -1009,10 +1009,6 @@ var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
 if(!sl.length && sfigs.length){
 leg=document.createElement('legend');
 leg.className='imagecontrols';
-ctl=document.createElement('div');
-ctl.className="dlimageswitch";
-ctl.title="Settings";
-leg.appendChild(ctl);
 /* var ctl=document.createElement('img');
 ctl.className="dlimagecontrol";
 ctl.width="13";
@@ -1033,6 +1029,7 @@ leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol layers";
 ctl.title="Layers";
+ctl.onclick=dolayersbutton;
 leg.appendChild(ctl);
  ctl=document.createElement('div');
 ctl.className="dlimagecontrol info";
@@ -1042,10 +1039,21 @@ leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol share";
 ctl.title="Share";
+ctl.onclick=dosharebutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol download";
 ctl.title="Download";
+ctl.onclick=dodownloadbutton;
+leg.appendChild(ctl);
+ctl=document.createElement('div');
+ctl.className="dlimagecontrol settings";
+ctl.title="Settings";
+ctl.onclick=dosettingsbutton;
+leg.appendChild(ctl);
+ctl=document.createElement('div');
+ctl.className="dlimageswitch";
+ctl.title="Settings";
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
 }
@@ -1270,6 +1278,34 @@ var myform=document.getElementById('pageform');
 if(myform){
 updatePageForm();
 }
+}
+function dolayersbutton(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+var mycontainer = it.parentNode.parentNode;
+toggleClass(mycontainer,'ShowControlLayers');
+}
+function dosettingsbutton(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+var mycontainer = it.parentNode.parentNode;
+toggleClass(mycontainer,'ShowControlSettings');
+}
+function dosharebutton(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+var mycontainer = it.parentNode.parentNode;
+toggleClass(mycontainer,'ShowControlShare');
+}
+function dodownloadbutton(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+var mycontainer = it.parentNode.parentNode;
+toggleClass(mycontainer,'ShowControlDownload');
 }
 function doinfobutton (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -2437,6 +2473,31 @@ element.className=element.className.replace(" "+slist[i],"");
 }
 }
 }
+}
+function toggleClass(element,toggleName){
+var targetclass=element.className;
+var slist = toggleName.split(' ');
+var match = false;
+for (var i = 0 ; i < slist.length; i++){
+var ind =targetclass.indexOf(slist[i]);
+if( ind>=0){
+if(ind==0){
+element.className=element.className.replace(slist[i],"");
+}
+else {
+element.className=element.className.replace(" "+slist[i],"");
+}
+}
+else {
+    if(element.className){
+	element.className= element.className + " " + slist[i];
+    }
+    else {
+	element.className=slist[i];
+    }
+}
+}
+
 }
 // changes class of all sublements within an element
 // traverses list in reverse order because the list updates as it executes

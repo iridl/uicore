@@ -396,9 +396,11 @@ cursor: se-resize !important;
 display: none;
 }
 
-.dlimage > legend > .dlimagecontrol {
-display: none;
-border-width: 2px; border-style: outset; border-color: Grey;
+.dlimage > legend {
+margin-left: auto; 
+margin-right: 0pt; 
+}
+.dlimage > legend > div {
 	width: 10pt;
 	height: 10pt;
 	padding: 2pt;
@@ -406,8 +408,13 @@ border-width: 2px; border-style: outset; border-color: Grey;
         margin-bottom: 0px;
         margin-left: 2px;
         margin-right: 2px;
-       -moz-border-radius: 7px;
-       border-radius: 7px;
+       -moz-border-radius: 10px;
+       border-radius: 10px;
+border-width: 2px; border-style: outset; border-color: #DFDFDF;
+}
+
+.dlimage > legend > .dlimagecontrol {
+display: none;
     background-color: WhiteSmoke;
 	opacity: 0.6;
 }
@@ -451,30 +458,40 @@ zindex: 10;
 	text-align: center;
 }
 .dlimage > legend > .dlimageswitch {
-padding: 2px;
-margin: 2px;
-	width: 12pt;
-	height: 12pt;
     background: url('icons/onoff16.png') center no-repeat;
         background-color: WhiteSmoke;
+	background-size: 10pt;
 	opacity: 0.6;
+/* disables button styling for on-off switch
+/* border-width: 2px; border-style: solid; border-color: white; */
 }
 
-.dlimage:hover > legend > .dlimageswitch {
-display: none;
+.dlimage:hover             > legend > .dlimageswitch,
+.dlimage.ShowControlLayers > legend > .dlimageswitch,
+.dlimage.ShowControlShare > legend > .dlimageswitch, 
+.dlimage.ShowControlDownload > legend > .dlimageswitch 
+{
+/* display: none;  */
+	border-style: inset;
+        border-width: 3px 1px 1px 3px;
+        position:relative;
+        left: 1px;
+        top: 1px;
 }
-.dlimage:hover > legend > .dlimagecontrol {
+.dlimage:hover             > legend > div,
+.dlimage.ShowControlLayers > legend > div,
+.dlimage.ShowControlShare > legend > div, 
+.dlimage.ShowControlDownload > legend > div 
+{
 display: inline-block;
 }
 .dlimagecontrol.zoomout {
-    width: 13pt;
     background: url('icons/Zoom-out-16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.info {
-    width: 13pt;
     background: url('icons/Information-16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.layers + .dlimagecontrol.info {
 }
@@ -495,44 +512,50 @@ opacity: 0.6;
     content: url('icons/arrow_full_right_16.png');
 }
 .dlimagecontrol.linkadd {
-    width: 13pt;
     background: url('icons/link_add_16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.share {
-    display: none !important;
-    width: 13pt;
+/*    display: none !important; */
     background: url('icons/share_16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.settings {
-    width: 13pt;
     background: url('icons/settings_16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.layers {
-    display: none !important;
-    width: 13pt;
     background: url('icons/text_align_full_16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
 .dlimagecontrol.download {
-    display: none !important;
-    width: 13pt;
+/*    display: none !important; */
     background: url('icons/download_16.png') center no-repeat;
-    background-size: 12pt;
+    background-size: 10pt;
 }
-.dlimage:hover > legend > .dlimagecontrol:hover {
+.dlimage:hover > legend > .dlimagecontrol:hover,
+.dlimage.ShowControlLayers > legend > .dlimagecontrol.layers,
+.dlimage.ShowControlShare > legend > .dlimagecontrol.share,
+.dlimage.ShowControlDownload > legend > .dlimagecontrol.download,
+.dlimage.ShowControlSettings > legend > .dlimagecontrol.settings
+ {
 opacity: 1.0;
 }
-.dlimage > legend > .dlimagecontrol:active {
+.dlimage > legend > .dlimagecontrol:active,
+.dlimage.ShowControlLayers > legend >.layers,
+.dlimage.ShowControlShare > legend >.share,
+.dlimage.ShowControlDownload > legend >.download,
+.dlimage.ShowControlSettings > legend > .settings
+ {
 	border-style: inset;
         border-width: 3px 1px 1px 3px;
         position:relative;
         left: 1px;
         top: 1px;
 }
-.dlimage:hover > .dlcontrol {
+.dlimage:hover > .dlcontrol,
+.dlimage.ShowControlSettings > .dlcontrol
+ {
         display:block ;
 min-height: 22px;
 max-height: 66px;
@@ -541,10 +564,18 @@ background-color: LightGrey;
 	border-width: 3px; 
 	opacity: 1.0;
 }
-.dlimage:hover > .dlcontrol + .dlcontrol {
+.dlimage:hover > .dlcontrol + .dlcontrol,
+.dlimage.ShowControlSettings > .dlcontrol + .dlcontrol
+ {
 margin-top: 5px;
 }
-
+.dlimage.ShowControlLayers  .dlcontrol {
+display: none;
+}
+.dlimage.ShowControlSettings  .dlcontrol {
+display: block;
+opacity: 1.0;
+}
 /* these are nominally 1024 choices -- they appear here for IE8 which seems to ignore @media sections */
 
 .dlimage {
@@ -586,10 +617,6 @@ font-size: 10pt;
 .lang > legend {
        font-size: 8pt;
 } 
-.dlimage:hover > legend > .dlimagecontrol {
-	width: 14pt;
-	height: 14pt;
-}
 .zoomStatus{
 font-size: 10pt;
 }
@@ -1059,6 +1086,13 @@ visibility: hidden;
         border: none;
 }
 @media only all and (max-width: 750px) {
+.dlimage:hover > legend > div,
+.dlimage:hover > legend > div:hover {
+	width: 12pt;
+	height: 12pt;
+        margin-left: 6px;
+        margin-right: 6px;
+}
 .ui-widget-header {
 	background: LightGrey;
 }
