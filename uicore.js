@@ -1030,26 +1030,31 @@ ctl=document.createElement('div');
 ctl.className="dlimagecontrol layers";
 ctl.title="Layers";
 ctl.onclick=dolayersbutton;
+ctl.myonclick=dolayersbutton;
 leg.appendChild(ctl);
  ctl=document.createElement('div');
 ctl.className="dlimagecontrol info";
 ctl.title="More Information";
 ctl.onclick=doinfobutton;
+ctl.myonclick=doinfobutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol share";
 ctl.title="Share";
 ctl.onclick=dosharebutton;
+ctl.myonclick=dosharebutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol download";
 ctl.title="Download";
 ctl.onclick=dodownloadbutton;
+ctl.myonclick=dodownloadbutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol settings";
 ctl.title="Settings";
 ctl.onclick=dosettingsbutton;
+ctl.myonclick=dosettingsbutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimageswitch";
@@ -1281,28 +1286,27 @@ updatePageForm();
 }
 function dolayersbutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mycontainer = it.parentNode.parentNode;
 toggleClass(mycontainer,'ShowControlLayers');
 }
 function dosettingsbutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
 toggleClass(mycontainer,'ShowControlSettings');
 }
 function dosharebutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
 toggleClass(mycontainer,'ShowControlShare');
 }
 function dodownloadbutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
 toggleClass(mycontainer,'ShowControlDownload');
