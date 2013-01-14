@@ -825,7 +825,11 @@ function insertRegion(){
     var theregion=document.getElementById("chooseRegion");
 if(theregion){
 var sel=theregion.getElementsByTagName('select');
-if (sel.length == 0){
+if (sel.length != 0){
+    sel=sel[0];
+    sel.onchange=regiononchange;
+}
+else {
 sel=document.createElement('span');
 sel.className='selectvalue';
 sel.onclick=selectvalueclick;
@@ -1027,6 +1031,12 @@ ctl.title="Zoom Out";
 ctl.onclick=dozoomout;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
+ctl.className="dlimagecontrol settings";
+ctl.title="Settings";
+ctl.onclick=dosettingsbutton;
+ctl.myonclick=dosettingsbutton;
+leg.appendChild(ctl);
+ctl=document.createElement('div');
 ctl.className="dlimagecontrol layers";
 ctl.title="Layers";
 ctl.onclick=dolayersbutton;
@@ -1051,16 +1061,11 @@ ctl.onclick=dodownloadbutton;
 ctl.myonclick=dodownloadbutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
-ctl.className="dlimagecontrol settings";
-ctl.title="Settings";
-ctl.onclick=dosettingsbutton;
-ctl.myonclick=dosettingsbutton;
-leg.appendChild(ctl);
-ctl=document.createElement('div');
 ctl.className="dlimageswitch";
 ctl.title="Settings";
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
+appendMissingClass(leg.parentNode,'ShowControlSettings');
 }
 else {
 leg=sl[0];
@@ -1288,6 +1293,7 @@ function dolayersbutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mycontainer = it.parentNode.parentNode;
+removeClass(mycontainer,'ShowControlSettings ShowControlShare ShowControlDownload');
 toggleClass(mycontainer,'ShowControlLayers');
 }
 function dosettingsbutton(evt){
@@ -1295,6 +1301,7 @@ function dosettingsbutton(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
+removeClass(mycontainer,'ShowControlLayers ShowControlShare ShowControlDownload');
 toggleClass(mycontainer,'ShowControlSettings');
 }
 function dosharebutton(evt){
@@ -1302,6 +1309,7 @@ function dosharebutton(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
+removeClass(mycontainer,'ShowControlSettings ShowControlLayers ShowControlDownload');
 toggleClass(mycontainer,'ShowControlShare');
 }
 function dodownloadbutton(evt){
@@ -1309,6 +1317,7 @@ function dodownloadbutton(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
+removeClass(mycontainer,'ShowControlSettings ShowControlLayers ShowControlShare');
 toggleClass(mycontainer,'ShowControlDownload');
 }
 function doinfobutton (evt) {
@@ -1376,14 +1385,63 @@ function DLimageBuildControls(mylink){
 /* builds image choice controls and places them immediately after the hasFigure link 
 */
     if(!mylink.nextSibling.className || mylink.nextSibling.className.indexOf('dlcontrol') < 0){
-var dimlist=mylink.info["iridl:hasDimensions"];
 var currentObj=mylink;
+/* builds layer controls */
+var layerlist =mylink.info["iridl:hasLayers"]; 
+if(layerlist){
+    var ctl=document.createElement('div');
+    ctl.className='dlcontrol ' + 'layers';
+var ipt = document.createElement('span');
+ipt.className='controlLabel';
+ipt.innerHTML='Layers' + '  ';
+ctl.appendChild(ipt);
+    for (var i = 0; i<layerlist.length; i++) {
+	var layer=layerlist[i];
+	var layername=layer["iridl:name"];
+	var style=layer["iridl:style"];
+	var iptsp = document.createElement('span');
+	if(style.join){
+	    iptsp.className="layeroption " + style.join(" ");
+	}
+	else {
+	    iptsp.className="layeroption " + style;
+	}
+	var ipt = document.createElement('input');
+	ipt.name='layers';
+	ipt.value=layername;
+	ipt.type='checkbox';
+	ipt.checked=true;
+	iptsp.appendChild(ipt);
+	iptsp.appendChild(document.createTextNode(layername));
+	    ctl.appendChild(iptsp);
+}
+currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+currentObj=ctl;
+}
+    var ctl=document.createElement('div');
+    ctl.className='dlcontrol ' + 'share';
+var ipt = document.createElement('span');
+ipt.className='controlLabel';
+ipt.innerHTML='Share' + '  ';
+ctl.appendChild(ipt);
+currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+currentObj=ctl;
+    var ctl=document.createElement('div');
+    ctl.className='dlcontrol ' + 'download';
+var ipt = document.createElement('span');
+ipt.className='controlLabel';
+ipt.innerHTML='Download as' + '  ';
+ctl.appendChild(ipt);
+currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+currentObj=ctl;
+/* builds fig dimension controls */
+var dimlist=mylink.info["iridl:hasDimensions"];
 if(dimlist){
 for (var i = 0; i<dimlist.length; i++) {
 var glist=dimlist[i]['iridl:gridvalues']['iridl:valuelist'];
 if(glist && (glist.length > 1)){
 var ctl = document.createElement('div');
-ctl.className='dlcontrol ' + dimlist[i]['iridl:name'];
+ctl.className='dlcontrol ivar ' + dimlist[i]['iridl:name'];
 var ipt = document.createElement('span');
 ipt.className='controlLabel';
 ipt.innerHTML=dimlist[i]['cfatt:long_name'] + '  ';
@@ -2121,7 +2179,7 @@ appendMissingClass(members[j],'valid');
 var stag = document.getElementsByClassName('pageformcopy');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
-if(!sel.onchange){
+if(typeof(sel.onchange) == 'undefined'){
 sel.onchange=pageformcopyonchange;
 sel.onchangefn=pageformcopyonchange;
 }
