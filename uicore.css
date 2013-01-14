@@ -419,7 +419,6 @@ display: none;
 	opacity: 0.6;
 }
 .dlimage > .dlcontrol {
-        display:block ;
 	min-height: 0px;
 	max-height: 0px;
         padding: 0px;
@@ -470,10 +469,11 @@ zindex: 10;
 .dlimage.ShowControlLayers > legend > .dlimageswitch,
 .dlimage.ShowControlShare > legend > .dlimageswitch, 
 .dlimage.ShowControlDownload > legend > .dlimageswitch 
+.dlimage.ShowControlSettings > legend > .dlimageswitch 
 {
 /* display: none;  */
 	border-style: inset;
-        border-width: 3px 1px 1px 3px;
+        border-width: 3px 1px 1px 3px; 
         position:relative;
         left: 1px;
         top: 1px;
@@ -482,9 +482,26 @@ zindex: 10;
 .dlimage.ShowControlLayers > legend > div,
 .dlimage.ShowControlShare > legend > div, 
 .dlimage.ShowControlDownload > legend > div 
+.dlimage.ShowControlSettings > legend > div 
 {
 display: inline-block;
 }
+.dlimage .dlcontrol {
+display: none;
+}
+.dlimage.ShowControlLayers .dlcontrol.layers {
+display: block;
+}
+.dlimage.ShowControlShare .dlcontrol.share {
+display: block;
+}
+.dlimage.ShowControlDownload .dlcontrol.download {
+display: block;
+}
+.dlimage.ShowControlSettings .dlcontrol.ivar {
+display: block;
+}
+
 .dlimagecontrol.zoomout {
     background: url('icons/Zoom-out-16.png') center no-repeat;
     background-size: 10pt;
@@ -553,10 +570,8 @@ opacity: 1.0;
         left: 1px;
         top: 1px;
 }
-.dlimage:hover > .dlcontrol,
-.dlimage.ShowControlSettings > .dlcontrol
+.dlimage:hover > .dlcontrol
  {
-        display:block ;
 min-height: 22px;
 max-height: 66px;
 background-color: LightGrey;
@@ -564,15 +579,11 @@ background-color: LightGrey;
 	border-width: 3px; 
 	opacity: 1.0;
 }
-.dlimage:hover > .dlcontrol + .dlcontrol,
-.dlimage.ShowControlSettings > .dlcontrol + .dlcontrol
+.dlimage:hover > .dlcontrol.ivar + .dlcontrol,
  {
 margin-top: 5px;
 }
-.dlimage.ShowControlLayers  .dlcontrol {
-display: none;
-}
-.dlimage.ShowControlSettings  .dlcontrol {
+.dlimage.ShowControlAlways  .dlcontrol {
 display: block;
 opacity: 1.0;
 }
