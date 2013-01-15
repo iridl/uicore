@@ -2179,7 +2179,9 @@ appendMissingClass(members[j],'valid');
 var stag = document.getElementsByClassName('pageformcopy');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
-if(typeof(sel.onchange) == 'undefined'){
+alert(sel.name);
+alert(typeof(sel.onchange));
+if(typeof(sel.onchange) != 'function'){
 sel.onchange=pageformcopyonchange;
 sel.onchangefn=pageformcopyonchange;
 }
