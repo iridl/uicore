@@ -606,7 +606,21 @@ var clipargs = {};
 clipargs.contentId = 'content';
 clipargs.url = appendPageForm(location.href.replace(/[?].*/,''),'share');
 clipargs.filter= function (arg){
-if(!(arg.className == 'imagecontrols' || arg.style.visibility=='hidden')){
+if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 || arg.style.visibility=='hidden')){
+return arg;
+}
+};
+ _gaq.push(['_trackSocial', 'evernote', 'clip' , clipargs.url]);
+Evernote.doClip(clipargs);
+}
+function doEvernoteClipElement(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var clipargs = {};
+clipargs.content = it.clipthis;
+clipargs.url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+clipargs.filter= function (arg){
+    if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0|| arg.style.visibility=='hidden')){
 return arg;
 }
 };
@@ -1424,6 +1438,15 @@ var ipt = document.createElement('span');
 ipt.className='controlLabel';
 ipt.innerHTML='Share' + '  ';
 ctl.appendChild(ipt);
+/* evernote */
+var gb= document.createElement('div');
+gb.className='sharebutton evernote';
+gb.setAttribute("title","Save to Evernote");
+gb.onclick=doEvernoteClipElement;
+gb.myonclick=doEvernoteClipElement;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
+
 currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 currentObj=ctl;
     var ctl=document.createElement('div');
