@@ -478,6 +478,12 @@ zindex: 10;
 {
 display: inline-block;
 }
+.dlimage:hover > legend > div.settings {
+display: none;
+}
+.dlimage.hasIvars:hover > legend > div.settings {
+display: inline-block;
+}
 .dlimage .dlcontrol {
 display: none;
 }

@@ -1516,6 +1516,13 @@ currentObj=ctl;
 }
 }
 }
+var ivarlist = mylink.parentNode.getElementsByClassName('ivar');
+if(ivarlist.length > 0){
+    appendMissingClass(mylink.parentNode,'hasIvars');
+}
+else {
+    removeClass(mylink.parentNode,'hasIvars');
+}
     } // end of image (dimension) control builds
 }
 function DLimageBuildZoom(mylink){
