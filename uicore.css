@@ -478,11 +478,7 @@ zindex: 10;
         left: 1px;
         top: 1px;
 }
-.dlimage:hover             > legend > div,
-.dlimage.ShowControlLayers > legend > div,
-.dlimage.ShowControlShare > legend > div, 
-.dlimage.ShowControlDownload > legend > div 
-.dlimage.ShowControlSettings > legend > div 
+.dlimage:hover             > legend > div
 {
 display: inline-block;
 }
