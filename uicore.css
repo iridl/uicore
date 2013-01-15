@@ -465,11 +465,7 @@ zindex: 10;
 /* border-width: 2px; border-style: solid; border-color: white; */
 }
 
-.dlimage:hover             > legend > .dlimageswitch,
-.dlimage.ShowControlLayers > legend > .dlimageswitch,
-.dlimage.ShowControlShare > legend > .dlimageswitch, 
-.dlimage.ShowControlDownload > legend > .dlimageswitch 
-.dlimage.ShowControlSettings > legend > .dlimageswitch 
+.dlimage:hover             > legend > .dlimageswitch
 {
 /* display: none;  */
 	border-style: inset;
