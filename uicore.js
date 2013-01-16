@@ -956,14 +956,33 @@ function pageformcopyonchange(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var pform=document.getElementById('pageform');
 if(pform){
-if(pform.elements[it.name]){
+    var elbyname = pform.elements[it.name];
+if(elbyname){
+    var changed = "";
 if(it.option){
-pform.elements[it.name].value=it.options[it.selectedIndex].value;
+    changed = pform.elements[it.name];
+changed.value=it.options[it.selectedIndex].value;
 }
+else if(elbyname.length) {
+	/* multivalued copy -- hopefully checkbox */
+	if(typeof(elbyname[0].checked) != 'undefined'){
+	    /* multivalued copy -- checkbox */
+	    for(var j = elbyname.length; j-- ;){
+		if(elbyname[j].value == it.value){
+		    elbyname[j].checked = it.checked;
+		    changed = elbyname[j];
+		}
+	    }
+	}
+	else {
+	    /* multivalued but not checkbox -- how to copy */
+	}
+} 
 else {
-pform.elements[it.name].value=it.value;
+    changed = pform.elements[it.name];
+changed.value=it.value;
 }
-updatePageForm(pform.elements[it.name]);
+updatePageForm(changed);
 }
 }
 }
@@ -1045,8 +1064,8 @@ ctl.title="Zoom Out";
 ctl.onclick=dozoomout;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
-ctl.className="dlimagecontrol settings";
-ctl.title="Settings";
+ctl.className="dlimagecontrol settings ivarswitch";
+ctl.title="Independent Variables";
 ctl.onclick=dosettingsbutton;
 ctl.myonclick=dosettingsbutton;
 leg.appendChild(ctl);
@@ -1404,6 +1423,16 @@ var currentObj=mylink;
 var layerlist =mylink.info["iridl:hasLayers"]; 
 if(layerlist){
     var ctl=document.createElement('div');
+var pform=document.getElementById('pageform');
+var formlayers;
+if(pform){
+    formlayers = pform.elements['layers'];
+    if(formlayers && formlayers.length){
+	var arr = [];
+	for (var i = formlayers.length; i-- ; arr.unshift(formlayers[i]));
+	formlayers=arr;
+    }
+}
     ctl.className='dlcontrol ' + 'layers';
 var ipt = document.createElement('span');
 ipt.className='controlLabel';
@@ -1413,7 +1442,7 @@ ctl.appendChild(ipt);
 	var layer=layerlist[i];
 	var layername=layer["iridl:name"];
 	var style=layer["iridl:style"];
-	var iptsp = document.createElement('span');
+	var iptsp = document.createElement('label');
 	if(style.join){
 	    iptsp.className="layeroption " + style.join(" ");
 	}
@@ -1424,9 +1453,31 @@ ctl.appendChild(ipt);
 	ipt.name='layers';
 	ipt.value=layername;
 	ipt.type='checkbox';
+	ipt.className='pageformcopy';
+	ipt.onchange=pageformcopyonchange;
+	ipt.myonchange=pageformcopyonchange;
 	ipt.checked=true;
+	if(formlayers && formlayers.value==layername){
+	    ipt.checked=formlayers.checked;
+	}
+	else if(formlayers && formlayers.some(function (ele){return ele.value==this},layername)){
+	    var myfl = formlayers.filter(function (ele){return ele.value==this},layername)[0];
+	    ipt.checked=myfl.checked;
+	    }
+	else {
+	iptsp.className += " disabled";
+	var newlay = document.createElement('input');
+	newlay.type = 'checkbox';
+	newlay.name = 'layers';
+	newlay.value = layername;
+        newlay.checked=true;
+	newlay.className = mylink.figureimage.className.split(' ')[0];
+	pform.appendChild(newlay);
+	}
 	iptsp.appendChild(ipt);
-	iptsp.appendChild(document.createTextNode(layername));
+	ipt=document.createElement('span');
+	ipt.appendChild(document.createTextNode(layername));
+	iptsp.appendChild(ipt);
 	    ctl.appendChild(iptsp);
 }
 currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
@@ -1467,6 +1518,7 @@ var ctl = document.createElement('div');
 ctl.className='dlcontrol ivar ' + dimlist[i]['iridl:name'];
 var ipt = document.createElement('span');
 ipt.className='controlLabel';
+ctl.longName=dimlist[i]['cfatt:long_name'];
 ipt.innerHTML=dimlist[i]['cfatt:long_name'] + '  ';
 ctl.appendChild(ipt);
 var iptset = document.createElement('span');
@@ -1542,6 +1594,10 @@ currentObj=ctl;
 var ivarlist = mylink.parentNode.getElementsByClassName('ivar');
 if(ivarlist.length > 0){
     appendMissingClass(mylink.parentNode,'hasIvars');
+    var ivars = [];
+    for (var i=ivarlist.length; i--; ivars.unshift(ivarlist[i].longName));
+    var ivarswitch = mylink.parentNode.getElementsByClassName('ivarswitch')[0];
+    ivarswitch.setAttribute('title',ivars.join(', '));
 }
 else {
     removeClass(mylink.parentNode,'hasIvars');
@@ -2136,6 +2192,10 @@ if(myform){
     }
     for (var i = 0; i < inputs.length ; i++){
 	var inp = inputs[i];
+	/* adds defaultValue to all input elements, e.g. hidden elements  */
+	if(typeof(inp.value) != undefined && typeof(inp.defaultValue) == 'undefined'){
+	    inp.defaultValue = inp.value;
+		}
 	clist = inp.className.split(' ');
 	for (var j=0; j< clist.length; j++){
 	    if(!pfclasses[clist[j]]){
@@ -2167,9 +2227,36 @@ var myform=document.getElementById('pageform');
 if(myform){
 var inputs=myform.elements;
         for (var i = 0; i < inputs.length; i++) {
-if(!inputs[i].value){
-inputs[i].disabled=true;
-}
+
+	    if(inputs[i].length){
+		/* multiple inputs with one name -- switch together, i.e. all disabled if all defaultChecked */
+		var allq=true;
+		var myl=inputs[i];
+		if(myl.type='checkbox'){
+		for(var j=myl.length;j--;){
+		    if(myl[j].checked != myl[j].defaultChecked) {allq=false}
+		};
+		if(!allq){
+		var myl=inputs[i];
+		for(var j=myl.length;j--;myl[j].disabled=true);
+		}
+		}
+		else {
+		for(var j=myl.length;j--;){
+		    if(myl[j].value != myl[j].defaultValue) {allq=false}
+		};
+		if(!allq){
+		var myl=inputs[i];
+		for(var j=myl.length;j--;myl[j].disabled=true);
+		}
+		}
+	    }
+	    else {
+		/* single input with name */
+		if(!inputs[i].value){
+		    inputs[i].disabled=true;
+		}
+	    }
 }
 }
 }
@@ -2438,11 +2525,29 @@ var stag = mycontext.getElementsByClassName('pageformcopy');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
 var cval;
-if(typeof(myform.elements[sel.name]) != 'undefined'){
+var elbyname = myform.elements[sel.name];
+if(typeof(elbyname) != 'undefined'){
+    if(elbyname.length){
+	/* multivalued copy -- hopefully checkbox */
+	if(elbyname[0].type != 'checkbox'){
+	    /* multivalued copy -- checkbox */
+	    for(var j = elbyname.length; j-- ;){
+		if(elbyname[j].value == sel.value){
+		    sel.checked = elbyname[j].checked;
+		}
+	    }
+	}
+	else {
+	    /* multivalued but not checkbox -- how to copy */
+	}
+    }
+    else {
+    /* single valued form elements */
 cval = myform.elements[sel.name].value;
 if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
 sel.value=cval;
 }
+    }
     }
     else {
 	alert('no pageform input called ' + sel.name);
@@ -2683,9 +2788,20 @@ for ( var ic = 0; ic < clist.length; ic++ ){
 var cclass=clist[ic];
 var members = document.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ )
-if(members[j].disabled && members[j].value){
+    if(members[j].disabled) {
+	if(members[j].type != 'checkbox' && members[j].value){
 members[j].disabled=false;
 alldisabled=false;
+	} 
+	else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
+	    var myname=members[j].name;
+	    for (var k=members.length;k--;){
+		if(members[k].disabled && members[k].name == myname){
+		    members[k].disabled=false;
+	    }
+	    }
+alldisabled=false;	    
+	    }
 }
 }
 if(alldisabled){
@@ -2697,8 +2813,10 @@ delim= '?';
         for (var i = 0; i < inputs.length; i++) {
 var myinput=inputs[i];
 	if(!myinput.disabled){
+	    if(myinput.type != 'checkbox' || myinput.checked){
 	action = action + delim + myinput.name + '=' + encodeURIComponent(myinput.value);
 	delim='&'
+	    }
 	}
 	}
 return action;

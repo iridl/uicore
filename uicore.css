@@ -515,6 +515,7 @@ display: block;
 }
 .dlimagecontrol.info + .dlimagecontrol.share {
 }
+input:disabled + span { color: grey }
 .leftarrow, .rightarrow {
 opacity: 0.2;
 }
