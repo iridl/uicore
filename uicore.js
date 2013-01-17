@@ -1460,7 +1460,7 @@ ctl.appendChild(ipt);
 	if(formlayers && formlayers.value==layername){
 	    ipt.checked=formlayers.checked;
 	}
-	else if(formlayers && formlayers.some(function (ele){return ele.value==this},layername)){
+	else if(formlayers && formlayers.some(function (ele){return (ele.value==this)},layername)){
 	    var myfl = formlayers.filter(function (ele){return ele.value==this},layername)[0];
 	    ipt.checked=myfl.checked;
 	    }
@@ -2229,12 +2229,13 @@ var inputs=myform.elements;
         for (var i = 0; i < inputs.length; i++) {
 
 	    if(inputs[i].length){
-		/* multiple inputs with one name -- switch together, i.e. all disabled if all defaultChecked */
+		/* multiple inputs with one name -- switch together */
 		var allq=true;
 		var myl=inputs[i];
 		if(myl.type='checkbox'){
 		for(var j=myl.length;j--;){
-		    if(myl[j].checked != myl[j].defaultChecked) {allq=false}
+		    /* i.e. all disabled if all defaultChecked */
+		    if(myl[j].checked != myl[j].defaultChecked) {allq=false} 
 		};
 		if(!allq){
 		var myl=inputs[i];
