@@ -481,10 +481,17 @@ zindex: 10;
 {
 display: inline-block;
 }
-.dlimage:hover > legend > div.settings {
+.dlimage:hover > legend > div.settings,
+{
 display: none;
 }
 .dlimage.hasIvars:hover > legend > div.settings {
+display: inline-block;
+}
+.dlimage div.googleearth {
+display: none;
+}
+.dlimage.hasKML div.googleearth {
 display: inline-block;
 }
 .dlimage .dlcontrol {
@@ -1364,6 +1371,23 @@ border-radius: 7px;
 opacity: 0.8;
   }
 .evernote:hover {
+opacity: 1.0;
+}
+/* googleearth share element */
+  .googleearth{
+    cursor: pointer;
+    height: 20px;
+   width: 20px;
+    display: inline-block;
+    padding: 2px;
+    background: url('icons/googleearth24.png') center no-repeat;
+    border: 1px solid #ccc;
+text-indent:-9999px; overflow:hidden; 
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+  }
+.googleearth:hover {
 opacity: 1.0;
 }
 

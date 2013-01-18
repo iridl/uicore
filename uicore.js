@@ -627,6 +627,19 @@ return arg;
  _gaq.push(['_trackSocial', 'evernote', 'clip' , clipargs.url]);
 Evernote.doClip(clipargs);
 }
+function doGoogleEarthClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var kmlurl=sfigs[0].info['iridl:hasKML'];
+    if(kmlurl){
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),'share');
+	location.href=myurl;
+	_gaq.push(['_trackSocial', 'googleearth', 'element' , myurl]);
+    }
+}
+}
 function readwithiframe(slhref,s,readfn){
 var iframe=document.getElementById('sectioniframe');
 if(!iframe) {
@@ -1418,7 +1431,15 @@ function DLimageBuildControls(mylink){
 /* builds image choice controls and places them immediately after the hasFigure link 
 */
     if(!mylink.nextSibling.className || mylink.nextSibling.className.indexOf('dlcontrol') < 0){
+	var pformchanged = false;
 var currentObj=mylink;
+    var kmlurl=mylink.info['iridl:hasKML'];
+    if(kmlurl){
+	appendMissingClass(mylink.parentNode,'hasKML');
+    }
+    else {
+	removeClass(mylink.parentNode,'hasKML');
+    }
 /* builds layer controls */
 var layerlist =mylink.info["iridl:hasLayers"]; 
 if(layerlist){
@@ -1456,7 +1477,6 @@ ctl.appendChild(ipt);
 	ipt.className='pageformcopy';
 	ipt.onchange=pageformcopyonchange;
 	ipt.myonchange=pageformcopyonchange;
-	ipt.checked=true;
 	if(formlayers && formlayers.value==layername){
 	    ipt.checked=formlayers.checked;
 	}
@@ -1465,14 +1485,19 @@ ctl.appendChild(ipt);
 	    ipt.checked=myfl.checked;
 	    }
 	else {
+	ipt.checked=true;
+	    if(location.href.indexOf('layers=')>0 && location.href.indexOf('layers='+layername)<0 ) {
+		ipt.checked=false;
+	    }
 	iptsp.className += " disabled";
 	var newlay = document.createElement('input');
 	newlay.type = 'checkbox';
 	newlay.name = 'layers';
 	newlay.value = layername;
-        newlay.checked=true;
-	newlay.className = mylink.figureimage.className.split(' ')[0];
+        newlay.checked=ipt.checked;
+	newlay.className = mylink.figureimage.className.split(' ')[0] + ' share';
 	pform.appendChild(newlay);
+	pformchanged=true;
 	}
 	iptsp.appendChild(ipt);
 	ipt=document.createElement('span');
@@ -1495,6 +1520,14 @@ gb.className='sharebutton evernote';
 gb.setAttribute("title","Save to Evernote");
 gb.onclick=doEvernoteClipElement;
 gb.myonclick=doEvernoteClipElement;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
+/* Google Earth */
+gb= document.createElement('div');
+gb.className='sharebutton googleearth';
+gb.setAttribute("title","View in Google Earth");
+gb.onclick=doGoogleEarthClick;
+gb.myonclick=doGoogleEarthClick;
 gb.clipthis = currentObj.parentNode;
 ctl.appendChild(gb);
 
@@ -1601,6 +1634,9 @@ if(ivarlist.length > 0){
 }
 else {
     removeClass(mylink.parentNode,'hasIvars');
+}
+if(pformchanged){
+    updatePageForm();
 }
     } // end of image (dimension) control builds
 }
