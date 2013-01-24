@@ -633,8 +633,9 @@ function doGoogleEarthClick(evt){
 var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
 if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasKML'];
+    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),'share');
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
 	_gaq.push(['_trackSocial', 'googleearth', 'element' , myurl]);
     }
@@ -1495,6 +1496,7 @@ ctl.appendChild(ipt);
 	newlay.name = 'layers';
 	newlay.value = layername;
         newlay.checked=ipt.checked;
+        newlay.defaultChecked=ipt.checked;
 	newlay.className = mylink.figureimage.className.split(' ')[0] + ' share';
 	pform.appendChild(newlay);
 	pformchanged=true;
