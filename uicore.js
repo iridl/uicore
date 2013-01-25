@@ -1112,7 +1112,7 @@ ctl.className="dlimageswitch";
 ctl.title="Settings";
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
-appendMissingClass(leg.parentNode,'ShowControlSettings');
+appendMissingClass(leg.parentNode,'ShowControlIvars');
 }
 else {
 leg=sl[0];
@@ -1340,7 +1340,7 @@ function dolayersbutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlSettings ShowControlShare ShowControlDownload');
+removeClass(mycontainer,'ShowControlIvars ShowControlShare ShowControlDownload');
 toggleClass(mycontainer,'ShowControlLayers');
 }
 function dosettingsbutton(evt){
@@ -1349,14 +1349,14 @@ function dosettingsbutton(evt){
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
 removeClass(mycontainer,'ShowControlLayers ShowControlShare ShowControlDownload');
-toggleClass(mycontainer,'ShowControlSettings');
+toggleClass(mycontainer,'ShowControlIvars');
 }
 function dosharebutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlSettings ShowControlLayers ShowControlDownload');
+removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlDownload');
 toggleClass(mycontainer,'ShowControlShare');
 }
 function dodownloadbutton(evt){
@@ -1364,7 +1364,7 @@ function dodownloadbutton(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlSettings ShowControlLayers ShowControlShare');
+removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlShare');
 toggleClass(mycontainer,'ShowControlDownload');
 }
 function doinfobutton (evt) {

@@ -509,7 +509,7 @@ display: block;
 .dlimage.ShowControlDownload .dlcontrol.download {
 display: block;
 }
-.dlimage.ShowControlSettings .dlcontrol.ivar {
+.dlimage.ShowControlIvars .dlcontrol.ivar {
 display: block;
 }
 
@@ -563,10 +563,11 @@ opacity: 0.6;
     background-size: 10pt;
 }
 .dlimage:hover > legend > .dlimagecontrol:hover,
+.dlimage:hover > legend > .dlimageswitch:hover,
 .dlimage.ShowControlLayers > legend > .dlimagecontrol.layers,
 .dlimage.ShowControlShare > legend > .dlimagecontrol.share,
 .dlimage.ShowControlDownload > legend > .dlimagecontrol.download,
-.dlimage.ShowControlSettings > legend > .dlimagecontrol.settings
+.dlimage.ShowControlIvars > legend > .dlimagecontrol.settings
  {
 opacity: 1.0;
 }
@@ -574,7 +575,7 @@ opacity: 1.0;
 .dlimage.ShowControlLayers > legend >.layers,
 .dlimage.ShowControlShare > legend >.share,
 .dlimage.ShowControlDownload > legend >.download,
-.dlimage.ShowControlSettings > legend > .settings
+.dlimage.ShowControlIvars > legend > .settings
  {
 	border-style: inset;
         border-width: 3px 1px 1px 3px;
