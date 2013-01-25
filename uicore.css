@@ -481,11 +481,14 @@ zindex: 10;
 {
 display: inline-block;
 }
-.dlimage:hover > legend > div.settings
+.dlimage:hover > legend > div.settings,
+.dlimage:hover > legend > div.layers
 {
 display: none;
 }
-.dlimage.hasIvars:hover > legend > div.settings {
+.dlimage.hasIvars:hover > legend > div.settings,
+.dlimage.hasLayers:hover > legend > div.layers
+ {
 display: inline-block;
 }
 .dlimage div.googleearth {

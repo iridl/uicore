@@ -1637,6 +1637,13 @@ if(ivarlist.length > 0){
 else {
     removeClass(mylink.parentNode,'hasIvars');
 }
+var layerlist =mylink.info["iridl:hasLayers"]; 
+if(layerlist){
+    appendMissingClass(mylink.parentNode,'hasLayers');
+}
+else {
+    removeClass(mylink.parentNode,'hasLayers');
+}
 if(pformchanged){
     updatePageForm();
 }
