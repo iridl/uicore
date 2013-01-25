@@ -1109,7 +1109,9 @@ ctl.myonclick=dodownloadbutton;
 leg.appendChild(ctl);
 ctl=document.createElement('div');
 ctl.className="dlimageswitch";
-ctl.title="Settings";
+ctl.title="Control Lock";
+ctl.onclick=docontrollockbutton;
+ctl.myonclick=docontrollockbutton;
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
 appendMissingClass(leg.parentNode,'ShowControlIvars');
@@ -1350,6 +1352,13 @@ var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:ha
 var mycontainer = it.parentNode.parentNode;
 removeClass(mycontainer,'ShowControlLayers ShowControlShare ShowControlDownload');
 toggleClass(mycontainer,'ShowControlIvars');
+}
+function docontrollockbutton(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+var mycontainer = it.parentNode.parentNode;
+toggleClass(mycontainer,'ControlLock');
 }
 function dosharebutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );

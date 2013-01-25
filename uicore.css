@@ -468,7 +468,8 @@ zindex: 10;
 /* border-width: 2px; border-style: solid; border-color: white; */
 }
 
-.dlimage:hover             > legend > .dlimageswitch
+.dlimage:hover       > legend > .dlimageswitch,
+.dlimage.ControlLock > legend > .dlimageswitch
 {
 /* display: none;  */
 	border-style: inset;
@@ -477,17 +478,22 @@ zindex: 10;
         left: 1px;
         top: 1px;
 }
-.dlimage:hover             > legend > div
+.dlimage:hover             > legend > div,
+.dlimage.ControlLock > legend > div
 {
 display: inline-block;
 }
 .dlimage:hover > legend > div.settings,
-.dlimage:hover > legend > div.layers
+.dlimage:hover > legend > div.layers,
+.dlimage.ControlLock > legend > div.settings,
+.dlimage.ControlLock > legend > div.layers
 {
 display: none;
 }
 .dlimage.hasIvars:hover > legend > div.settings,
-.dlimage.hasLayers:hover > legend > div.layers
+.dlimage.hasLayers:hover > legend > div.layers,
+.dlimage.hasIvars.ControlLock > legend > div.settings,
+.dlimage.hasLayers.ControlLock > legend > div.layers
  {
 display: inline-block;
 }
@@ -567,7 +573,8 @@ opacity: 0.6;
 .dlimage.ShowControlLayers > legend > .dlimagecontrol.layers,
 .dlimage.ShowControlShare > legend > .dlimagecontrol.share,
 .dlimage.ShowControlDownload > legend > .dlimagecontrol.download,
-.dlimage.ShowControlIvars > legend > .dlimagecontrol.settings
+.dlimage.ShowControlIvars > legend > .dlimagecontrol.settings,
+.dlimage.ControlLock > legend > .dlimageswitch
  {
 opacity: 1.0;
 }
@@ -583,7 +590,8 @@ opacity: 1.0;
         left: 1px;
         top: 1px;
 }
-.dlimage:hover > .dlcontrol
+.dlimage:hover > .dlcontrol,
+.dlimage.ControlLock > .dlcontrol
  {
 min-height: 22px;
 max-height: 66px;
