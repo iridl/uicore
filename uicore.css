@@ -500,7 +500,11 @@ display: inline-block;
 .dlimage div.googleearth {
 display: none;
 }
-.dlimage.hasKML div.googleearth {
+.dlimage.hasKML div.googleearth,
+.dlimage.hasKML div.asKML {
+display: inline-block;
+}
+.dlimage.hasWMS div.asWMS {
 display: inline-block;
 }
 .dlimage .dlcontrol {
@@ -568,13 +572,19 @@ opacity: 0.6;
     background: url('icons/download_16.png') center no-repeat;
     background-size: 10pt;
 }
+/* slightly darker control button on hover */
 .dlimage:hover > legend > .dlimagecontrol:hover,
-.dlimage:hover > legend > .dlimageswitch:hover,
+.dlimage:hover > legend > .dlimageswitch:hover
+{
+opacity: 0.8;
+}
+/* fully dark control button on selected */
 .dlimage.ShowControlLayers > legend > .dlimagecontrol.layers,
 .dlimage.ShowControlShare > legend > .dlimagecontrol.share,
 .dlimage.ShowControlDownload > legend > .dlimagecontrol.download,
 .dlimage.ShowControlIvars > legend > .dlimagecontrol.settings,
-.dlimage.ControlLock > legend > .dlimageswitch
+.dlimage.ControlLock > legend > .dlimageswitch,
+.dlimage.ControlLock > legend > .dlimageswitch:hover
  {
 opacity: 1.0;
 }
@@ -1400,6 +1410,25 @@ border-radius: 7px;
 opacity: 0.8;
   }
 .googleearth:hover {
+opacity: 1.0;
+}
+  .asKML,.asWMS{
+    cursor: pointer;
+    display: inline-block;
+    padding: 2px;
+    background-color: WhiteSmoke;
+    border: 1px solid #ccc;
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+  }
+.asKML::before {
+content: "KML";
+}
+.asWMS::before {
+content: "WMS";
+}
+.asKML:hover,.asWMS:hover {
 opacity: 1.0;
 }
 

@@ -641,6 +641,20 @@ if(sfigs.length){
     }
 }
 }
+function doWMSClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var kmlurl=sfigs[0].info['iridl:hasWMS'];
+    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(kmlurl){
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	location.href=myurl;
+	_gaq.push(['_trackSocial', 'WMS', 'element' , myurl]);
+    }
+}
+}
 function readwithiframe(slhref,s,readfn){
 var iframe=document.getElementById('sectioniframe');
 if(!iframe) {
@@ -1450,6 +1464,13 @@ var currentObj=mylink;
     else {
 	removeClass(mylink.parentNode,'hasKML');
     }
+    var kmlurl=mylink.info['iridl:hasWMS'];
+    if(kmlurl){
+	appendMissingClass(mylink.parentNode,'hasWMS');
+    }
+    else {
+	removeClass(mylink.parentNode,'hasWMS');
+    }
 /* builds layer controls */
 var layerlist =mylink.info["iridl:hasLayers"]; 
 if(layerlist){
@@ -1523,7 +1544,7 @@ currentObj=ctl;
     ctl.className='dlcontrol ' + 'share';
 var ipt = document.createElement('span');
 ipt.className='controlLabel';
-ipt.innerHTML='Share' + '  ';
+ipt.innerHTML='Open in' + '  ';
 ctl.appendChild(ipt);
 /* evernote */
 var gb= document.createElement('div');
@@ -1550,6 +1571,22 @@ var ipt = document.createElement('span');
 ipt.className='controlLabel';
 ipt.innerHTML='Download as' + '  ';
 ctl.appendChild(ipt);
+/* Google Earth */
+var gb= document.createElement('div');
+gb.className='sharebutton asKML';
+gb.setAttribute("title","KML");
+gb.onclick=doGoogleEarthClick;
+gb.myonclick=doGoogleEarthClick;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
+/* WMS */
+gb= document.createElement('div');
+gb.className='sharebutton asWMS';
+gb.setAttribute("title","WMS");
+gb.onclick=doWMSClick;
+gb.myonclick=doWMSClick;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
 currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 currentObj=ctl;
 /* builds fig dimension controls */
