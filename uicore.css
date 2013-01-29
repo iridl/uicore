@@ -497,6 +497,7 @@ display: none;
  {
 display: inline-block;
 }
+.dlimage div.arcgis,
 .dlimage div.googleearth {
 display: none;
 }
@@ -504,7 +505,9 @@ display: none;
 .dlimage.hasKML div.asKML {
 display: inline-block;
 }
-.dlimage.hasWMS div.asWMS {
+.dlimage.hasWMS div.arcgis,
+.dlimage.hasWMS div.asWMS
+ {
 display: inline-block;
 }
 .dlimage .dlcontrol {
@@ -1410,6 +1413,23 @@ border-radius: 7px;
 opacity: 0.8;
   }
 .googleearth:hover {
+opacity: 1.0;
+}
+/* arcgis share element */
+  .arcgis{
+    cursor: pointer;
+    height: 20px;
+   width: 20px;
+    display: inline-block;
+    padding: 2px;
+    background: url('icons/arcgis24.png') center no-repeat;
+    border: 1px solid #ccc;
+text-indent:-9999px; overflow:hidden; 
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+  }
+.arcgis:hover {
 opacity: 1.0;
 }
   .asKML,.asWMS{

@@ -650,8 +650,24 @@ if(sfigs.length){
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
-	location.href=myurl;
+	alert(myurl);
+	/*	location.href=myurl; */
 	_gaq.push(['_trackSocial', 'WMS', 'element' , myurl]);
+    }
+}
+}
+function doarcgisClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var kmlurl=sfigs[0].info['iridl:hasWMS'];
+    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(kmlurl){
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	alert(myurl);
+	/*	location.href=myurl; */
+	_gaq.push(['_trackSocial', 'arcgis', 'element' , myurl]);
     }
 }
 }
@@ -1560,6 +1576,14 @@ gb.className='sharebutton googleearth';
 gb.setAttribute("title","View in Google Earth");
 gb.onclick=doGoogleEarthClick;
 gb.myonclick=doGoogleEarthClick;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
+/* ArcGIS */
+gb= document.createElement('div');
+gb.className='sharebutton arcgis';
+gb.setAttribute("title","View in ArcGIS");
+gb.onclick=doarcgisClick;
+gb.myonclick=doarcgisClick;
 gb.clipthis = currentObj.parentNode;
 ctl.appendChild(gb);
 
