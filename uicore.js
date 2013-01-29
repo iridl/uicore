@@ -665,7 +665,7 @@ if(sfigs.length){
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
-	alert(myurl);
+	alert(myurl + "\n\nUse this URL in Add GISserver -> WMSserver");
 	/*	location.href=myurl; */
 	_gaq.push(['_trackSocial', 'arcgis', 'element' , myurl]);
     }
