@@ -498,7 +498,9 @@ display: none;
 display: inline-block;
 }
 .dlimage div.arcgis,
-.dlimage div.googleearth {
+.dlimage div.googleearth,
+.dlimage div.asKML,
+.dlimage div.asWMS {
 display: none;
 }
 .dlimage.hasKML div.googleearth,
