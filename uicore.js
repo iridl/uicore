@@ -610,7 +610,7 @@ if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 |
 return arg;
 }
 };
- _gaq.push(['_trackSocial', 'evernote', 'clip' , clipargs.url]);
+_gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);
 Evernote.doClip(clipargs);
 }
 function doEvernoteClipElement(evt){
@@ -624,7 +624,7 @@ clipargs.filter= function (arg){
 return arg;
 }
 };
- _gaq.push(['_trackSocial', 'evernote', 'clip' , clipargs.url]);
+ _gaq.push(['_trackSocial', 'evernote', 'clipelement']);
 Evernote.doClip(clipargs);
 }
 function doGoogleEarthClick(evt){
@@ -637,7 +637,7 @@ if(sfigs.length){
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
-	_gaq.push(['_trackSocial', 'googleearth', 'element' , myurl]);
+	_gaq.push(['_trackSocial', 'googleearth', 'clipelement']);
     }
 }
 }
@@ -652,7 +652,7 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	alert(myurl);
 	/*	location.href=myurl; */
-	_gaq.push(['_trackSocial', 'WMS', 'element' , myurl]);
+	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);
     }
 }
 }
@@ -667,7 +667,7 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
 	/*	location.href=myurl; */
-	_gaq.push(['_trackSocial', 'arcgis', 'element' , myurl]);
+	_gaq.push(['_trackSocial', 'arcgis', 'toArgGIS']);
     }
 }
 }
