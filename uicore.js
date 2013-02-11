@@ -1047,7 +1047,7 @@ var xmlhttp= getXMLhttp();
 xmlhttp.infourl = myLink.href;
 xmlhttp.myContext = myLink.parentNode;
 xmlhttp.myLink=myLink;
-changeClass(myLink.parentNode,'valid','invalid');
+changeClassWithin(myLink.parentNode,'valid','invalid');
 xmlhttp.onreadystatechange = function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1077,7 +1077,7 @@ function runPureOnContext(myContext){
 	myContext.pureTemplateFunction= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
     }
     $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
-changeClass(myContext,'invalid','valid');
+changeClassWithin(myContext,'invalid','valid');
 }
 function initializeDLimage(){
     var mylist=document.getElementsByClassName("dlimage");
@@ -2814,14 +2814,39 @@ else {
 }
 // changes class of all sublements within an element
 // traverses list in reverse order because the list updates as it executes
+function sameasthis(ele){return ele=this};
 function changeClassWithin(pelement,fromclass,toclass){
 var targetlist=pelement.getElementsByClassName(fromclass);
-if(pelement.className.indexOf(fromclass) >= 0 ){
-    targetlist[targetlist.length] = pelement;
+var classlist = pelement.className.split(' ');
+if(classlist.some(sameasthis,fromclass)){
+    var newlist = new Array;
+    for (var i = classlist.length-1 ; i >=0 ; i--){
+	if(classlist[i] == fromclass){
+	    newlist[i] = toclass;
+	}
+	else {
+	newlist[i] = classlist[i];
+	}
+    }
+	
+    pelement.className = newlist.join(' ');
 }
+if(targetlist.length > 0){
 for (var i = targetlist.length-1 ; i >= 0; i--){
 var ind=targetlist[i];
-ind.className=ind.className.replace(fromclass,toclass);
+var classlist = ind.className.split(' ');
+var newlist = new Array;
+    for (var i = classlist.length-1 ; i >=0 ; i--){
+	if(classlist[i] == fromclass){
+	    newlist[i] = toclass;
+	}
+	else {
+	newlist[i] = classlist[i];
+	}
+    }
+	
+    ind.className = newlist.join(' ');
+}
 }
 }
 function changeClass(pelement,fromclass,toclass){
