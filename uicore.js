@@ -2615,7 +2615,7 @@ if(myclickpt && myclickpt.value){
     within = true;
 }
 else {
-if (mybb && mybb.value.length>8 && myregion && myregion.value.length > 8){
+if (mybb && mybb.value.length>8 && myregion && !myregion.length && myregion.value.length > 8){
 var bba = parseBbox(mybb.value);
     var regiona = myregion.value.split(':',8);
     if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
@@ -2627,7 +2627,7 @@ var bba = parseBbox(mybb.value);
 }
 else 
     {
-if(myregion && myregion.value.length > 8){
+if(myregion && !myregion.length && myregion.value.length > 8){
     within = true;
 }
     }
