@@ -1019,7 +1019,10 @@ else if(elbyname.length) {
 	    }
 	}
 	else {
-	    /* multivalued but not checkbox -- how to copy */
+	    /* multivalued but not checkbox -- copy first
+	     alternatively could look for matching classes */
+	    changed = pform.elements[it.name][0];
+	    changed.value=it.value;
 	}
 } 
 else {
@@ -1239,29 +1242,48 @@ update=true;
 var myin = myform.elements['region'];
 var res = myform.elements['resolution'];
 if(myin){
+    var myins;
+if(myin.length) {
+    myins=myin;
+}
+else {
+    myins=[myin];
+}
+if(res.length) {
+    ress=res;
+}
+else {
+    ress=[res];
+}
 var clickpt = myform.elements['clickpt'];
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
 // click -- return depends on resolution res
 within=true;
     clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
+    for (iin=0 ; iin < myins.length ; iin++){
+	myin = myins[iin];
+	res = ress[iin];
 // none -- return pt:[x,y]
 // number -- return bbox of that size bb:[x,y,x+res,y+res]
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
     invalidatePageInput('region');
-    var resurl = appendPageForm("http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect//string/as.json",'transformRegion');
+    var resurl = "http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect//string/as.json";
+    resurl = resurl + '?clickpt=' + encodeURIComponent(clickpt.value) + '&resolution=' + encodeURIComponent(res.value);
 var xmlhttp= getXMLhttp();
 xmlhttp.myurl=resurl;
+xmlhttp.myin=myin;
 xmlhttp.onreadystatechange= function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
-var result
+var result;
     try{result=JSON.parse(jsontxt)}
     catch(err){alert(err + ' in parsing ' + jsontxt + ' from ' + resurl)}
 /* info now has figure information */
 if(result["value"]){
+    var myin = it.myin;
     if(myin.value == result["value"]){
     validatePageInput('region');
     }
@@ -1272,7 +1294,6 @@ if(result["value"]){
 }
 }
 	 };
-
 	 xmlhttp.myfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",resurl,true);
 xmlhttp.send();
@@ -1292,7 +1313,7 @@ myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
 else {
     myin.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
 }
-    
+    } /* end of loop on iin */
 } /* end of resolution-dependent click */
 else {
     clickpt.value='';
@@ -2441,6 +2462,7 @@ function ChangeClassPageInput(iname,fromclass,toclass){
     if(myform){
 	var myinput=myform.elements[iname];
 	if(myinput){
+	    if(myinput.className){
 	    var clist = myinput.className.split(' ');
 	    for ( var i = 0; i < clist.length; i++ )
 		{
@@ -2460,6 +2482,7 @@ function ChangeClassPageInput(iname,fromclass,toclass){
 
 		    }
 		}
+	    }
 	}
     }
 }
@@ -2663,7 +2686,13 @@ if(typeof(elbyname) != 'undefined'){
 	    }
 	}
 	else {
-	    /* multivalued but not checkbox -- how to copy */
+	    /* multivalued but not checkbox -- copy first
+	     aleternatively could match classes */
+	cval = myform.elements[sel.name][0].value;
+	if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
+	    sel.value=cval;
+}
+    
 	}
     }
     else {
@@ -2767,7 +2796,7 @@ var targetclass=element.className;
 var slist = srcclass.split(' ');
 var match = false;
 for (var i = 0 ; i < slist.length; i++){
-if(targetclass.indexOf(slist[i]) >=0){
+if(targetclass && targetclass.indexOf(slist[i]) >=0){
 match = true;
 }
 }
