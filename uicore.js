@@ -1389,6 +1389,10 @@ function docontrollockbutton(evt){
 var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
 var mycontainer = it.parentNode.parentNode;
 toggleClass(mycontainer,'ControlLock');
+if(mycontainer.className.indexOf('ControlLock')<0){
+    it.blur();
+    mycontainer.blur();
+}
 }
 function dosharebutton(evt){
   var evt = (evt) ? evt : ((event) ? event : null );
@@ -2210,7 +2214,12 @@ for (var i=0; i<slist.length ; i++){
 insertlang();
 }
 /* this exists to convince ios to send events to selectvalue for CSS */
-function selectvalueclick () {
+function selectvalueclick (evt) {
+    evt = (evt) ? evt : ((event) ? event : null );
+    it = (evt.currentTarget) ? evt.currentTarget : this;
+    if(it.nextSibling){
+	it.nextSibling.click();
+    }
     return true;
 }
 var Languages = new Array();
