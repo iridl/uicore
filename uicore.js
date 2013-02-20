@@ -2677,7 +2677,7 @@ var elbyname = myform.elements[sel.name];
 if(typeof(elbyname) != 'undefined'){
     if(elbyname.length){
 	/* multivalued copy -- hopefully checkbox */
-	if(elbyname[0].type != 'checkbox'){
+	if(elbyname[0].type == 'checkbox'){
 	    /* multivalued copy -- checkbox */
 	    for(var j = elbyname.length; j-- ;){
 		if(elbyname[j].value == sel.value){
