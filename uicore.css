@@ -957,15 +957,15 @@ display: inline;
 
 }
 
-@media only all and (min-width: 800px) {
+@media only all and (min-width: 750px) {
 .dlimage {
 	width: 95%;
 }
 }
 /* ipad is 1024 -- this 1024 and above */
-@media only all and (min-width: 1024px) {
+@media only all and (min-width: 900px) {
 .dlimage {
-	width: 46%;
+	width: 45%;
 }
 .dlimage.wide {
 	width: 65%;
@@ -983,7 +983,7 @@ display: inline;
 	width: 47%;
 }
 }
-@media only all and (min-width: 800px) and (orientation: landscape){
+@media only all and (min-width: 750px) and (orientation: landscape){
 .dlimage.tall {
 	width: 30%;
 }
