@@ -1434,9 +1434,13 @@ toggleClass(mycontainer,'ShowControlDownload');
 function doinfobutton (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-// location.href=appendPageForm(mylink[0].href+'index.html',mylink[0].figureimage.className);
-location.href=mylink[0].href;
+   var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+   var newloc = mylink[0].href;
+   var locq = mylink[0].href.indexOf('?');
+	if(locq>0){
+	    newloc=newloc.substr(0,locq);
+	}
+location.href=appendPageForm(newloc+'index.html',mylink[0].figureimage.className);
 }
 function DLimageResizeImage(mylink){
 var imagesrc=mylink.figureimage.src;
@@ -2352,16 +2356,28 @@ if(myform){
     /* updates values from page url */
 var achange=false;
 var inputs=myform.elements;
+var varcnts = {};
         var query = window.location.search.substring(1);
         var vars = query.split("&");
 	var pair;
         for (var i = 0; i < vars.length; i++) {
             pair = vars[i].split("=");
-            if (inputs[pair[0]]) {
+	    var iname=pair[0];
+            if (inputs[iname]) {
 	        achange=true;
 // decode and encode do not properly invert each other w.r.t. space to + conversion
 	        var hold = pair[1].replace(/[+]/g," ");
-		inputs[pair[0]].value=decodeURIComponent(hold);
+		if(!varcnts[iname]){
+		    varcnts[iname]=0;
+		}
+		var ipos=varcnts[iname];
+		if(inputs[iname].length){
+		    inputs[iname][ipos].value=decodeURIComponent(hold);
+		}
+		else {
+		    inputs[iname].value=decodeURIComponent(hold);
+		}
+		varcnts[iname] = varcnts[iname] + 1;
             }
         }
 	updatePageFormCopies(document);
@@ -2611,11 +2627,14 @@ var mybb = myform.elements['bbox'];
 var myregion = myform.elements['region'];
 var myclickpt = myform.elements['clickpt'];
 var within = false;
+if(myregion.length){
+    myregion=myregion[0];
+}
 if(myclickpt && myclickpt.value){
     within = true;
 }
 else {
-if (mybb && mybb.value.length>8 && myregion && !myregion.length && myregion.value.length > 8){
+if (mybb && mybb.value.length>8 && myregion && myregion.value.length > 8){
 var bba = parseBbox(mybb.value);
     var regiona = myregion.value.split(':',8);
     if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
@@ -2627,7 +2646,7 @@ var bba = parseBbox(mybb.value);
 }
 else 
     {
-if(myregion && !myregion.length && myregion.value.length > 8){
+if(myregion && myregion.value.length > 8){
     within = true;
 }
     }
