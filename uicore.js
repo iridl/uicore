@@ -2627,7 +2627,7 @@ var mybb = myform.elements['bbox'];
 var myregion = myform.elements['region'];
 var myclickpt = myform.elements['clickpt'];
 var within = false;
-if(myregion.length){
+if(myregion && myregion.length){
     myregion=myregion[0];
 }
 if(myclickpt && myclickpt.value){
