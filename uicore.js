@@ -656,6 +656,23 @@ if(sfigs.length){
     }
 }
 }
+function doPDFClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var pdfurl=sfigs[0].figureimage.src;
+    pdfurl = pdfurl.replace(/.gif/,'.pdf');
+    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(pdfurl){
+	var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
+	_gaq.push(['_trackSocial', 'PDF', 'asPDF']);
+    }
+}
+}
 function doarcgisClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1640,6 +1657,23 @@ gb.onclick=doWMSClick;
 gb.myonclick=doWMSClick;
 gb.clipthis = currentObj.parentNode;
 ctl.appendChild(gb);
+/* PDF */
+gb= document.createElement('div');
+gb.className='sharebutton asPDF';
+gb.setAttribute("title","PDF");
+gb.onclick=doPDFClick;
+gb.myonclick=doPDFClick;
+gb.clipthis = currentObj.parentNode;
+if(pform && !pform.elements['linkurl']){
+var ipt= document.createElement('input');
+ipt.type='hidden';
+ipt.name='linkurl';
+ipt.className='linkurl';
+pform.appendChild(ipt);
+    }
+ctl.appendChild(gb);
+
+/* add download control area to parent */
 currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 currentObj=ctl;
 /* builds fig dimension controls */
@@ -2922,51 +2956,77 @@ var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
 submitPageForm(it.href,it.className);
 return false;
 }
+/* alldisabledPageForm -- disables FormElements that are default or not in classes,
+returns true if all default values or not in classes */
+function alldisabledPageForm(classes){
+    var myform=document.getElementById('pageform');
+    var alldisabled;
+    if(myform){
+	var inputs=myform.elements;
+        for (var i = 0; i < inputs.length; i++) {
+	    inputs[i].disabled=true;
+	}
+	alldisabled=true;
+	var clist = classes.split(' ');
+	for ( var ic = 0; ic < clist.length; ic++ ){
+	    var cclass=clist[ic];
+	    var members = document.getElementsByClassName(cclass);
+	    for ( var j = 0; j < members.length; j++ )
+		if(members[j].disabled) {
+		    if(members[j].type != 'checkbox' && members[j].value){
+			members[j].disabled=false;
+			alldisabled=false;
+		    } 
+		    else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
+			var myname=members[j].name;
+			for (var k=members.length;k--;){
+			    if(members[k].disabled && members[k].name == myname){
+				members[k].disabled=false;
+			    }
+			}
+			alldisabled=false;	    
+		    }
+		}
+	}
+    }
+    return alldisabled;
+}
 /*
 submitPageForm -- submits pageform to href, appending inputs corresponding to class.
 */
-function submitPageForm(href,classes){
+function submitPageForm(href,classes,inMethod){
 var localhref=localHrefOf(href);
+var theMethod='GET';
+if(inMethod){
+    theMethod=inMethod;
+}
 if(localhref.indexOf('?')>0){
     localhref=localhref.substr(0,localhref.indexOf('?'));
 }
 var myform=document.getElementById('pageform');
 if(myform){
-var inputs=myform.elements;
-        for (var i = 0; i < inputs.length; i++) {
-inputs[i].disabled=true;
-}
-var alldisabled=true;
-var clist = classes.split(' ');
-for ( var ic = 0; ic < clist.length; ic++ ){
-var cclass=clist[ic];
-var members = document.getElementsByClassName(cclass);
-for ( var j = 0; j < members.length; j++ )
-if(members[j].disabled && members[j].value){
-members[j].disabled=false;
-alldisabled=false;
-}
-}
-if(alldisabled){
-    if(localhref.substring(0,5) =='file:'){
-if(localhref.charAt(localhref.length-1) == '/'){
-    localhref=localhref+'index.html';
-}
+    var alldisabled=alldisabledPageForm(classes);
+    if(alldisabled && theMethod == 'GET'){
+	if(localhref.substring(0,5) =='file:'){
+	    if(localhref.charAt(localhref.length-1) == '/'){
+		localhref=localhref+'index.html';
+	    }
+	}
+	document.location.href=localhref;
     }
-document.location.href=localhref;
-}
-else {
+    else {
 /* our rewrite rules do not handle Set-Language for a directory, so we avoid doing it
  */
-if(localhref.charAt(localhref.length-1) == '/'){
-    localhref=localhref+'index.html';
-}
-myform.action=localhref;
-myform.submit();
-}
+	if(localhref.charAt(localhref.length-1) == '/'){
+	    localhref=localhref+'index.html';
+	}
+	myform.action=localhref;
+	myform.method=theMethod;
+	myform.submit();
+    }
 }
 else {
-document.location.href=localhref;
+    document.location.href=localhref;
 }
 }
 /*
@@ -2976,42 +3036,18 @@ function appendPageForm(href,classes){
 var localhref=localHrefOf(href);
 var myform=document.getElementById('pageform');
 if(myform){
-var inputs=myform.elements;
-        for (var i = 0; i < inputs.length; i++) {
-inputs[i].disabled=true;
-}
-var alldisabled=true;
-var clist = classes.split(' ');
-for ( var ic = 0; ic < clist.length; ic++ ){
-var cclass=clist[ic];
-var members = document.getElementsByClassName(cclass);
-for ( var j = 0; j < members.length; j++ )
-    if(members[j].disabled) {
-	if(members[j].type != 'checkbox' && members[j].value){
-members[j].disabled=false;
-alldisabled=false;
-	} 
-	else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
-	    var myname=members[j].name;
-	    for (var k=members.length;k--;){
-		if(members[k].disabled && members[k].name == myname){
-		    members[k].disabled=false;
-	    }
-	    }
-alldisabled=false;	    
-	    }
-}
-}
+var alldisabled=alldisabledPageForm(classes);
 if(alldisabled){
 return localhref;
 }
 else {
 var action = localhref;
+var inputs=myform.elements;
 delim= '?';
         for (var i = 0; i < inputs.length; i++) {
-var myinput=inputs[i];
-	if(!myinput.disabled){
-	    if(myinput.type != 'checkbox' || myinput.checked){
+	    var myinput=inputs[i];
+	    if(!myinput.disabled){
+		if(myinput.type != 'checkbox' || myinput.checked){
 	action = action + delim + myinput.name + '=' + encodeURIComponent(myinput.value);
 	delim='&'
 	    }
