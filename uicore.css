@@ -1434,7 +1434,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-  .asKML,.asWMS,.asPDF{
+  .asKML,.asWMS,.asPDF,.asGIF,.asJPG{
     cursor: pointer;
     display: inline-block;
     padding: 2px;
@@ -1453,7 +1453,13 @@ content: "WMS";
 .asPDF::before {
 content: "PDF";
 }
-.asKML:hover,.asWMS:hover,.asPDF:hover {
+.asGIF::before {
+content: "GIF";
+}
+.asJPG::before {
+content: "JPG";
+}
+.asKML:hover,.asWMS:hover,.asPDF:hover,.asGIF:hover,.asJPG:hover {
 opacity: 1.0;
 }
 

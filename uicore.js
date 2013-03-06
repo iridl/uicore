@@ -673,6 +673,33 @@ if(sfigs.length){
     }
 }
 }
+function doGifClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var pdfurl=sfigs[0].figureimage.src;
+    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(pdfurl){
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+	_gaq.push(['_trackSocial', 'GIF', 'asGIF']);
+    }
+}
+}
+function doJpgClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var pdfurl=sfigs[0].figureimage.src;
+    pdfurl = pdfurl.replace(/.gif/,'.jpg');
+    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(pdfurl){
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+	_gaq.push(['_trackSocial', 'JPG', 'asJPG']);
+    }
+}
+}
 function doarcgisClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1671,6 +1698,22 @@ ipt.name='linkurl';
 ipt.className='linkurl';
 pform.appendChild(ipt);
     }
+ctl.appendChild(gb);
+/* GIF */
+gb= document.createElement('div');
+gb.className='sharebutton asGIF';
+gb.setAttribute("title","GIF");
+gb.onclick=doGifClick;
+gb.myonclick=doGifClick;
+gb.clipthis = currentObj.parentNode;
+ctl.appendChild(gb);
+/* JPG */
+gb= document.createElement('div');
+gb.className='sharebutton asJPG';
+gb.setAttribute("title","JPG");
+gb.onclick=doJpgClick;
+gb.myonclick=doJpgClick;
+gb.clipthis = currentObj.parentNode;
 ctl.appendChild(gb);
 
 /* add download control area to parent */
