@@ -635,8 +635,10 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasKML'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
-	location.href=myurl;
+	var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
 	_gaq.push(['_trackSocial', 'googleearth', 'clipelement']);
     }
 }
