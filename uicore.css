@@ -1133,12 +1133,15 @@ visibility: hidden;
         border: none;
 }
 @media only all and (max-width: 750px) {
+/* spread dlimagecontrols on small screens to increase usability for touch */
 .dlimage:hover > legend > div,
 .dlimage:hover > legend > div:hover {
 	width: 12pt;
 	height: 12pt;
         margin-left: 6px;
         margin-right: 6px;
+        margin-bottom: 6px;
+        margin-top: 6px;
 }
 .ui-widget-header {
 	background: LightGrey;
