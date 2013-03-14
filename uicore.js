@@ -658,49 +658,55 @@ if(sfigs.length){
     }
 }
 }
+function getFigureImage(clipthis){
+  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
+   var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
+   var figimg;
+   if(sfigimgs.length){
+       figimg=sfigimgs[0];
+   }
+   else if(sfigs.length){
+       figimg=sfigs[0].figureimage;
+   }
+   return(figimg);
+ }
 function doPDFClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var pdfurl=sfigs[0].figureimage.src;
-    pdfurl = pdfurl.replace(/.gif/,'.pdf');
-    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(pdfurl){
-	var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
-	var pform=document.getElementById('pageform');
-	pform.elements['linkurl'].value=linkurl;
-	submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-	_gaq.push(['_trackSocial', 'PDF', 'asPDF']);
-    }
-}
+   var figimg = getFigureImage(it.clipthis);
+     
+   if(figimg && figimg.src){
+       var pdfurl=figimg.src;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/.gif/,'.pdf');
+       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       var pform=document.getElementById('pageform');
+       pform.elements['linkurl'].value=linkurl;
+       submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
+       _gaq.push(['_trackSocial', 'PDF', 'asPDF']);
+   }
 }
 function doGifClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var pdfurl=sfigs[0].figureimage.src;
-    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(pdfurl){
+   var figimg = getFigureImage(it.clipthis);
+   if(figimg && figimg.src){
+       var pdfurl=figimg.src;
+       var pdfclass=figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 	_gaq.push(['_trackSocial', 'GIF', 'asGIF']);
     }
 }
-}
 function doJpgClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var pdfurl=sfigs[0].figureimage.src;
-    pdfurl = pdfurl.replace(/.gif/,'.jpg');
+   var figimg = getFigureImage(it.clipthis);
+   if(figimg && figimg.src){
+    var pdfurl = figimg.src.replace(/.gif/,'.jpg');
     var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(pdfurl){
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 	_gaq.push(['_trackSocial', 'JPG', 'asJPG']);
-    }
-}
+   }
 }
 function doarcgisClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -1136,7 +1142,10 @@ var sl = s.getElementsByTagName('legend');
 var leg;
 var ctl;
 var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
-if(!sl.length && sfigs.length){
+if(sfigs.length){
+    appendMissingClass(s,'hasFigure');
+}
+if(!sl.length){
 leg=document.createElement('legend');
 leg.className='imagecontrols';
 /* var ctl=document.createElement('img');
@@ -1151,6 +1160,8 @@ ctl.title="Redraw";
 ctl.onclick=doredrawbutton;
 leg.appendChild(ctl);
 */
+/* zoom info settings layers only if hasFigure */
+if(sfigs.length){
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol zoomout";
 ctl.title="Zoom Out";
@@ -1174,6 +1185,9 @@ ctl.title="Layers";
 ctl.onclick=dolayersbutton;
 ctl.myonclick=dolayersbutton;
 leg.appendChild(ctl);
+appendMissingClass(s,'ShowControlIvars');
+}
+/* share download buttons always appear */
 ctl=document.createElement('div');
 ctl.className="dlimagecontrol share";
 ctl.title="Share";
@@ -1193,7 +1207,6 @@ ctl.onclick=docontrollockbutton;
 ctl.myonclick=docontrollockbutton;
 leg.appendChild(ctl);
 s.insertBefore(leg,s.firstChild);
-appendMissingClass(leg.parentNode,'ShowControlIvars');
 }
 else {
 leg=sl[0];
@@ -1201,7 +1214,9 @@ leg=sl[0];
 var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
 if(sfigs.length){
     updateHasFigure(sfigs[0]);
-
+}
+else {
+DLimageBuildControls(s);
 }
 }
 }
@@ -1240,7 +1255,7 @@ var jsontxt = it.responseText;
 it.mylink.infourl=it.infourl;
 it.mylink.info=JSON.parse(jsontxt);
 /* info now has figure information */
-DLimageBuildControls(it.mylink);
+DLimageBuildControls(it.mylink.parentNode,it.mylink);
 DLimageBuildZoom(it.mylink);
 }
 	 };
@@ -1542,186 +1557,205 @@ function DLimageRemoveControls(mylink){
 /* handles building of image controls from info.json information
 invoked when load of info.json completes
 */
-function DLimageBuildControls(mylink){
-/* builds image choice controls and places them immediately after the hasFigure link 
+function DLimageBuildControls(mydlimage,mylink){
+/* builds image choice controls and places them immediately after the link if it exists, otherwise the legend
 */
-    if(!mylink.nextSibling.className || mylink.nextSibling.className.indexOf('dlcontrol') < 0){
+    var currentObj;
+    if(mylink){
+	currentObj=mylink;
+    }
+    else {
+	currentObj=mydlimage.getElementsByTagName('legend')[0];
+    }
+    if(!currentObj.nextSibling.className || currentObj.nextSibling.className.indexOf('dlcontrol') < 0){
 	var pformchanged = false;
-var currentObj=mylink;
-    var kmlurl=mylink.info['iridl:hasKML'];
-    if(kmlurl){
-	appendMissingClass(mylink.parentNode,'hasKML');
-    }
-    else {
-	removeClass(mylink.parentNode,'hasKML');
-    }
-    var kmlurl=mylink.info['iridl:hasWMS'];
-    if(kmlurl){
-	appendMissingClass(mylink.parentNode,'hasWMS');
-    }
-    else {
-	removeClass(mylink.parentNode,'hasWMS');
-    }
+	var kmlurl;
+	var wmsurl;
+	if(mylink && mylink.info){
+	    kmlurl=mylink.info['iridl:hasKML'];
+	    wmsurl=mylink.info['iridl:hasWMS'];
+	}
+	if(kmlurl){
+	    appendMissingClass(mydlimage,'hasKML');
+	}
+	else {
+	    removeClass(mydlimage,'hasKML');
+	}
+	if(wmsurl){
+	    appendMissingClass(mydlimage,'hasWMS');
+	}
+	else {
+	    removeClass(mydlimage,'hasWMS');
+	}
 /* builds layer controls */
-var layerlist =mylink.info["iridl:hasLayers"]; 
-if(layerlist){
-    var ctl=document.createElement('div');
-var pform=document.getElementById('pageform');
-var formlayers;
-if(pform){
-    formlayers = pform.elements['layers'];
-    if(formlayers && formlayers.length){
-	var arr = [];
-	for (var i = formlayers.length; i-- ; arr.unshift(formlayers[i]));
-	formlayers=arr;
-    }
-}
-    ctl.className='dlcontrol ' + 'layers';
-var ipt = document.createElement('span');
-ipt.className='controlLabel';
-ipt.innerHTML='Layers' + '  ';
-ctl.appendChild(ipt);
-    for (var i = 0; i<layerlist.length; i++) {
-	var layer=layerlist[i];
-	var layername=layer["iridl:name"];
-	var style=layer["iridl:style"];
-	var iptsp = document.createElement('label');
-	if(style.join){
-	    iptsp.className="layeroption " + style.join(" ");
+	var layerlist;
+	if(mylink && mylink.info){
+	    layerlist=mylink.info["iridl:hasLayers"]; 
 	}
-	else {
-	    iptsp.className="layeroption " + style;
-	}
-	var ipt = document.createElement('input');
-	ipt.name='layers';
-	ipt.value=layername;
-	ipt.type='checkbox';
-	ipt.className='pageformcopy';
-	ipt.onchange=pageformcopyonchange;
-	ipt.myonchange=pageformcopyonchange;
-	if(formlayers && formlayers.value==layername){
-	    ipt.checked=formlayers.checked;
-	}
-	else if(formlayers && formlayers.some(function (ele){return (ele.value==this)},layername)){
-	    var myfl = formlayers.filter(function (ele){return ele.value==this},layername)[0];
-	    ipt.checked=myfl.checked;
+	if(layerlist){
+	    var ctl=document.createElement('div');
+	    var pform=document.getElementById('pageform');
+	    var formlayers;
+	    if(pform){
+		formlayers = pform.elements['layers'];
+		if(formlayers && formlayers.length){
+		    var arr = [];
+		    for (var i = formlayers.length; i-- ; arr.unshift(formlayers[i]));
+		    formlayers=arr;
+		}
 	    }
-	else {
-	ipt.checked=true;
-	    if(location.href.indexOf('layers=')>0 && location.href.indexOf('layers='+layername)<0 ) {
-		ipt.checked=false;
+	    ctl.className='dlcontrol ' + 'layers';
+	    var ipt = document.createElement('span');
+	    ipt.className='controlLabel';
+	    ipt.innerHTML='Layers' + '  ';
+	    ctl.appendChild(ipt);
+	    for (var i = 0; i<layerlist.length; i++) {
+		var layer=layerlist[i];
+		var layername=layer["iridl:name"];
+		var style=layer["iridl:style"];
+		var iptsp = document.createElement('label');
+		if(style.join){
+		    iptsp.className="layeroption " + style.join(" ");
+		}
+		else {
+		    iptsp.className="layeroption " + style;
+		}
+		var ipt = document.createElement('input');
+		ipt.name='layers';
+		ipt.value=layername;
+		ipt.type='checkbox';
+		ipt.className='pageformcopy';
+		ipt.onchange=pageformcopyonchange;
+		ipt.myonchange=pageformcopyonchange;
+		if(formlayers && formlayers.value==layername){
+		    ipt.checked=formlayers.checked;
+		}
+		else if(formlayers && formlayers.some(function (ele){return (ele.value==this)},layername)){
+		    var myfl = formlayers.filter(function (ele){return ele.value==this},layername)[0];
+		    ipt.checked=myfl.checked;
+		}
+		else {
+		    ipt.checked=true;
+		    if(location.href.indexOf('layers=')>0 && location.href.indexOf('layers='+layername)<0 ) {
+			ipt.checked=false;
+		    }
+		    iptsp.className += " disabled";
+		    var newlay = document.createElement('input');
+		    newlay.type = 'checkbox';
+		    newlay.name = 'layers';
+		    newlay.value = layername;
+		    newlay.checked=ipt.checked;
+		    newlay.defaultChecked=ipt.checked;
+		    newlay.className = mylink.figureimage.className.split(' ')[0] + ' share';
+		    pform.appendChild(newlay);
+		    pformchanged=true;
+		}
+		iptsp.appendChild(ipt);
+		ipt=document.createElement('span');
+		ipt.appendChild(document.createTextNode(layername));
+		iptsp.appendChild(ipt);
+		ctl.appendChild(iptsp);
 	    }
-	iptsp.className += " disabled";
-	var newlay = document.createElement('input');
-	newlay.type = 'checkbox';
-	newlay.name = 'layers';
-	newlay.value = layername;
-        newlay.checked=ipt.checked;
-        newlay.defaultChecked=ipt.checked;
-	newlay.className = mylink.figureimage.className.split(' ')[0] + ' share';
-	pform.appendChild(newlay);
-	pformchanged=true;
+	    currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+	    currentObj=ctl;
 	}
-	iptsp.appendChild(ipt);
-	ipt=document.createElement('span');
-	ipt.appendChild(document.createTextNode(layername));
-	iptsp.appendChild(ipt);
-	    ctl.appendChild(iptsp);
-}
-currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-currentObj=ctl;
-}
-    var ctl=document.createElement('div');
-    ctl.className='dlcontrol ' + 'share';
-var ipt = document.createElement('span');
-ipt.className='controlLabel';
-ipt.innerHTML='Open in' + '  ';
-ctl.appendChild(ipt);
+/* creates share control */
+	var ctl=document.createElement('div');
+	ctl.className='dlcontrol ' + 'share';
+	var ipt = document.createElement('span');
+	ipt.className='controlLabel';
+	ipt.innerHTML='Open in' + '  ';
+	ctl.appendChild(ipt);
 /* evernote */
-var gb= document.createElement('div');
-gb.className='sharebutton evernote';
-gb.setAttribute("title","Save to Evernote");
-gb.onclick=doEvernoteClipElement;
-gb.myonclick=doEvernoteClipElement;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	var gb= document.createElement('div');
+	gb.className='sharebutton evernote';
+	gb.setAttribute("title","Save to Evernote");
+	gb.onclick=doEvernoteClipElement;
+	gb.myonclick=doEvernoteClipElement;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* Google Earth */
-gb= document.createElement('div');
-gb.className='sharebutton googleearth';
-gb.setAttribute("title","View in Google Earth");
-gb.onclick=doGoogleEarthClick;
-gb.myonclick=doGoogleEarthClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	if(mylink){
+	gb= document.createElement('div');
+	gb.className='sharebutton googleearth';
+	gb.setAttribute("title","View in Google Earth");
+	gb.onclick=doGoogleEarthClick;
+	gb.myonclick=doGoogleEarthClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* ArcGIS */
-gb= document.createElement('div');
-gb.className='sharebutton arcgis';
-gb.setAttribute("title","View in ArcGIS");
-gb.onclick=doarcgisClick;
-gb.myonclick=doarcgisClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
-
-currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-currentObj=ctl;
-    var ctl=document.createElement('div');
-    ctl.className='dlcontrol ' + 'download';
-var ipt = document.createElement('span');
-ipt.className='controlLabel';
-ipt.innerHTML='Download as' + '  ';
-ctl.appendChild(ipt);
-/* Google Earth */
-var gb= document.createElement('div');
-gb.className='sharebutton asKML';
-gb.setAttribute("title","KML");
-gb.onclick=doGoogleEarthClick;
-gb.myonclick=doGoogleEarthClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	gb= document.createElement('div');
+	gb.className='sharebutton arcgis';
+	gb.setAttribute("title","View in ArcGIS");
+	gb.onclick=doarcgisClick;
+	gb.myonclick=doarcgisClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+	}
+	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+	currentObj=ctl;
+/* Download Control */
+	var ctl=document.createElement('div');
+	ctl.className='dlcontrol ' + 'download';
+	var ipt = document.createElement('span');
+	ipt.className='controlLabel';
+	ipt.innerHTML='Download as' + '  ';
+	ctl.appendChild(ipt);
+	if(mylink){
+/* KML */
+	var gb= document.createElement('div');
+	gb.className='sharebutton asKML';
+	gb.setAttribute("title","KML");
+	gb.onclick=doGoogleEarthClick;
+	gb.myonclick=doGoogleEarthClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* WMS */
-gb= document.createElement('div');
-gb.className='sharebutton asWMS';
-gb.setAttribute("title","WMS");
-gb.onclick=doWMSClick;
-gb.myonclick=doWMSClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	gb= document.createElement('div');
+	gb.className='sharebutton asWMS';
+	gb.setAttribute("title","WMS");
+	gb.onclick=doWMSClick;
+	gb.myonclick=doWMSClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+	}
 /* PDF */
-gb= document.createElement('div');
-gb.className='sharebutton asPDF';
-gb.setAttribute("title","PDF");
-gb.onclick=doPDFClick;
-gb.myonclick=doPDFClick;
-gb.clipthis = currentObj.parentNode;
-if(pform && !pform.elements['linkurl']){
-var ipt= document.createElement('input');
-ipt.type='hidden';
-ipt.name='linkurl';
-ipt.className='linkurl';
-pform.appendChild(ipt);
-    }
-ctl.appendChild(gb);
+	gb= document.createElement('div');
+	gb.className='sharebutton asPDF';
+	gb.setAttribute("title","PDF");
+	gb.onclick=doPDFClick;
+	gb.myonclick=doPDFClick;
+	gb.clipthis = currentObj.parentNode;
+	if(pform && !pform.elements['linkurl']){
+	    var ipt= document.createElement('input');
+	    ipt.type='hidden';
+	    ipt.name='linkurl';
+	    ipt.className='linkurl';
+	    pform.appendChild(ipt);
+	}
+	ctl.appendChild(gb);
 /* GIF */
-gb= document.createElement('div');
-gb.className='sharebutton asGIF';
-gb.setAttribute("title","GIF");
-gb.onclick=doGifClick;
-gb.myonclick=doGifClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	gb= document.createElement('div');
+	gb.className='sharebutton asGIF';
+	gb.setAttribute("title","GIF");
+	gb.onclick=doGifClick;
+	gb.myonclick=doGifClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* JPG */
-gb= document.createElement('div');
-gb.className='sharebutton asJPG';
-gb.setAttribute("title","JPG");
-gb.onclick=doJpgClick;
-gb.myonclick=doJpgClick;
-gb.clipthis = currentObj.parentNode;
-ctl.appendChild(gb);
+	gb= document.createElement('div');
+	gb.className='sharebutton asJPG';
+	gb.setAttribute("title","JPG");
+	gb.onclick=doJpgClick;
+	gb.myonclick=doJpgClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 
 /* add download control area to parent */
-currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-currentObj=ctl;
+	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+	currentObj=ctl;
 /* builds fig dimension controls */
+	if(mylink) {
 var dimlist=mylink.info["iridl:hasDimensions"];
 if(dimlist){
 for (var i = 0; i<dimlist.length; i++) {
@@ -1825,6 +1859,7 @@ else {
 if(pformchanged){
     updatePageForm();
 }
+    }
     } // end of image (dimension) control builds
 }
 function DLimageBuildZoom(mylink){
