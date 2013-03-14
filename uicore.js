@@ -2878,8 +2878,9 @@ if(pform && pform.elements['plotaxislength'] && pform.elements['plotaxislength']
 var clientsize = Math.max(it.width,it.height); 
 var targetsize = 20*Math.round((clientsize - 20 - 72 + 9)/20,0);
 var plen = pform.elements['plotaxislength'].value;
-var delsize=targetsize-plen;
-if(delsize < -20 || delsize > 20){
+var delp = targetsize - plen;
+/* only makes image size changes greater than 20 */
+if(delp >= 20 || delp <= -20){
 pform.elements['plotaxislength'].value = targetsize;
 updatePageFormQuietly(pform.elements['plotaxislength']);
 }
