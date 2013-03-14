@@ -2857,16 +2857,17 @@ changeClass(it,'invalid-zooming','valid');
 if(it.className.indexOf('dlimg') >=0){
 if(it.mylink){
 var mynode = it.mylink.parentNode;
+/* transitions are slightly separate to avoid vibration */
 if(it.height>1.5*it.width && mynode.className.indexOf('tall')<0){
 mynode.className = mynode.className + ' tall';
 }
-if(it.height<1.5*it.width && mynode.className.indexOf('tall')>0){
+if(it.height<1.3*it.width && mynode.className.indexOf('tall')>0){
 mynode.className = mynode.className.replace(' tall','');
 }
 if(it.height*2<it.width && mynode.className.indexOf('wide')<0){
 mynode.className = mynode.className + ' wide';
 }
-if(it.height*2>it.width && mynode.className.indexOf('wide')>0){
+if(it.height*1.8>it.width && mynode.className.indexOf('wide')>0){
 mynode.className = mynode.className.replace(' wide','');
 }
 hideImageOverlay(it);
