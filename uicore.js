@@ -1924,6 +1924,10 @@ return elem;
 }
 return null;
 }
+var myobj=null;
+function clearmyobj(){
+    myobj=null;
+}
 function hello(evt){
     var myimgdiv;
     var newentrance=false;
@@ -1942,6 +1946,8 @@ else {
 if(newentrance){
 var myform=document.getElementById('pageform');
 var checkobj;
+sizeto(myimgdiv.outline,0,0);
+clearmyobj();
 if(myform){
 checkobj = myform.elements['region'];
 }
@@ -1992,10 +1998,10 @@ myimgdiv.zoomstatus.timeoutID=null;
     }
     }
 }
+clearmyobj();
 return true;
 }
 /* drag zoom routines */
-var myobj=null;
 var myx,myy;
 function doit(state){
 myit=document.getElementById("outline");
