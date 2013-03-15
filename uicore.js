@@ -664,12 +664,17 @@ function getFigureImage(clipthis){
    var figimg;
    if(sfigimgs.length){
        figimg=sfigimgs[0];
+       for(var i=sfigimgs.length;i--;){
+	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	       figimg=sfigimgs[i];
+	   }
+       }
    }
    else if(sfigs.length){
        figimg=sfigs[0].figureimage;
    }
    return(figimg);
- }
+}
 function doPDFClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -684,6 +689,22 @@ function doPDFClick(evt){
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
        _gaq.push(['_trackSocial', 'PDF', 'asPDF']);
+   }
+}
+function doFigureImageClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = it;
+
+   toggleClass(figimg,'selectedImage');
+   var mydlimage = figimg.mydlimage;
+   var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
+   if(sfigs.length){
+       for(var i= sfigs.length;i--;){
+	   if(sfigs[i] != figimg){
+	       removeClass(sfigs[i],'selectedImage');
+	   }
+       }
    }
 }
 function doGifClick(evt){
@@ -1722,38 +1743,47 @@ function DLimageBuildControls(mydlimage,mylink){
 	}
 	if(getFigureImage(mydlimage)){
 /* PDF */
-	gb= document.createElement('div');
-	gb.className='sharebutton asPDF';
-	gb.setAttribute("title","PDF");
-	gb.onclick=doPDFClick;
-	gb.myonclick=doPDFClick;
-	gb.clipthis = currentObj.parentNode;
-	if(pform && !pform.elements['linkurl']){
-	    var ipt= document.createElement('input');
-	    ipt.type='hidden';
-	    ipt.name='linkurl';
-	    ipt.className='linkurl';
-	    pform.appendChild(ipt);
-	}
-	ctl.appendChild(gb);
-/* GIF */
-	gb= document.createElement('div');
-	gb.className='sharebutton asGIF';
-	gb.setAttribute("title","GIF");
-	gb.onclick=doGifClick;
-	gb.myonclick=doGifClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-/* JPG */
-	gb= document.createElement('div');
-	gb.className='sharebutton asJPG';
-	gb.setAttribute("title","JPG");
-	gb.onclick=doJpgClick;
-	gb.myonclick=doJpgClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-	appendMissingClass(mydlimage,'hasDownload');
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asPDF';
+	    gb.setAttribute("title","PDF");
+	    gb.onclick=doPDFClick;
+	    gb.myonclick=doPDFClick;
+	    gb.clipthis = currentObj.parentNode;
+	    if(pform && !pform.elements['linkurl']){
+		var ipt= document.createElement('input');
+		ipt.type='hidden';
+		ipt.name='linkurl';
+		ipt.className='linkurl';
+		pform.appendChild(ipt);
 	    }
+	    ctl.appendChild(gb);
+/* GIF */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asGIF';
+	    gb.setAttribute("title","GIF");
+	    gb.onclick=doGifClick;
+	    gb.myonclick=doGifClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+/* JPG */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asJPG';
+	    gb.setAttribute("title","JPG");
+	    gb.onclick=doJpgClick;
+	    gb.myonclick=doJpgClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    appendMissingClass(mydlimage,'hasDownload');
+	    var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
+	    if(sfigs.length){
+		for(var i= sfigs.length;i--;){
+		    sfigs[i].onclick=doFigureImageClick;
+		    sfigs[i].onclickfn=doFigureImageClick;
+		    sfigs[i].mydlimage = mydlimage;
+		}
+		if(sfigs.length>1){appendMissingClass(sfigs[0],'selectedImage')}
+	    }
+	}
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 	currentObj=ctl;

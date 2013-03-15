@@ -531,6 +531,10 @@ display: block;
 .dlimage.ShowControlIvars .dlcontrol.ivar {
 display: block;
 }
+.dlimage.ShowControlDownload .selectedImage {
+    border-width: 2pt;
+    border-style: solid;
+}
 
 .dlimagecontrol.zoomout {
     background: url('icons/Zoom-out-16.png') center no-repeat;
@@ -841,7 +845,7 @@ display: inline;
 }
 
 img.dlimg, img.dlauximg, img.dlimgts {
-         width: 100%;
+         width: 99%;
 }
 .ui-widget {
 	}
