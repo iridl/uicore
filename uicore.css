@@ -1446,6 +1446,8 @@ opacity: 0.8;
 opacity: 1.0;
 }
   .asKML,.asWMS,.asPDF,.asGIF,.asJPG{
+    min-height: 10pt;
+    min-width: 20pt;
     cursor: pointer;
     display: inline-block;
     padding: 2px;
