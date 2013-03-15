@@ -485,15 +485,19 @@ display: inline-block;
 }
 .dlimage:hover > legend > div.settings,
 .dlimage:hover > legend > div.layers,
+.dlimage:hover > legend > div.download,
 .dlimage.ControlLock > legend > div.settings,
-.dlimage.ControlLock > legend > div.layers
+.dlimage.ControlLock > legend > div.layers,
+.dlimage.ControlLock > legend > div.download
 {
 display: none;
 }
 .dlimage.hasIvars:hover > legend > div.settings,
 .dlimage.hasLayers:hover > legend > div.layers,
+.dlimage.hasDownload:hover > legend > div.download,
 .dlimage.hasIvars.ControlLock > legend > div.settings,
-.dlimage.hasLayers.ControlLock > legend > div.layers
+.dlimage.hasLayers.ControlLock > legend > div.layers,
+.dlimage.hasDownload.ControlLock > legend > div.download
  {
 display: inline-block;
 }

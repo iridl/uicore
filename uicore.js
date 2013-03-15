@@ -1718,8 +1718,9 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doWMSClick;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+	appendMissingClass(mydlimage,'hasDownload');
 	}
-	if(getFigureImage(currentObj.parentNode)){
+	if(getFigureImage(mydlimage)){
 /* PDF */
 	gb= document.createElement('div');
 	gb.className='sharebutton asPDF';
@@ -1751,6 +1752,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doJpgClick;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+	appendMissingClass(mydlimage,'hasDownload');
 	    }
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
