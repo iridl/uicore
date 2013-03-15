@@ -219,7 +219,18 @@ border-radius: 12px;
 padding-bottom: 2px;
 padding-right: 2px;
             }
-.optionsBar::after, .optionsBar:after {
+.optionsBar:after {
+content: url(icons/iri.png);
+float: right;
+height: 54px;
+width: 54px;
+-moz-border-radius: 27px;
+border-radius: 27px;
+margin: 1px;
+border: 0px;
+margin-bottom: 0px;
+}
+.optionsBar::after {
 content: url(icons/iri.png);
 float: right;
 height: 54px;
@@ -1457,6 +1468,21 @@ opacity: 1.0;
 border-radius: 7px;
 opacity: 0.8;
   }
+.asKML:before {
+content: "KML";
+}
+.asWMS:before {
+content: "WMS";
+}
+.asPDF:before {
+content: "PDF";
+}
+.asGIF:before {
+content: "GIF";
+}
+.asJPG:before {
+content: "JPG";
+}
 .asKML::before {
 content: "KML";
 }
