@@ -3188,6 +3188,18 @@ $.ready(
 function loadmaproom(){
 if(loadmaproomneeded){
 loadmaproomneeded=false;
+if(window.name == "portaldl"){
+    var mybody = document.getElementsByTagName('body')[0];
+    if(mybody){
+	appendMissingClass(mybody,'embedded atIRI');
+    }
+}
+if(window.name == "ceos-cd-content"){
+    var mybody = document.getElementsByTagName('body')[0];
+    if(mybody){
+	appendMissingClass(mybody,'embedded atGCMD');
+    }
+}
 setPageForm();
 tabsSetup();
 insertcontrolBar();

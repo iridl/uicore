@@ -3,6 +3,13 @@ body {
 font-size: 12pt;
 	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
 }
+.embedded.atIRI #irilink,
+.embedded.atIRI #toSectionList,
+.embedded.atIRI #chooseSection,
+.embedded .hideonembed
+{
+display: none
+}
 .sharebutton{
 display: inline;
 margin: 3px;
