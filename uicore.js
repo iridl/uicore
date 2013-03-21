@@ -3191,13 +3191,15 @@ loadmaproomneeded=false;
 if(window.name == "portaldl"){
     var mybody = document.getElementsByTagName('body')[0];
     if(mybody){
-	appendMissingClass(mybody,'embedded atIRI');
+	appendMissingClass(mybody,'embedded');
+	appendMissingClass(mybody,'atIRI');
     }
 }
 if(window.name == "ceos-cd-content"){
     var mybody = document.getElementsByTagName('body')[0];
     if(mybody){
-	appendMissingClass(mybody,'embedded atGCMD');
+	appendMissingClass(mybody,'embedded');
+	appendMissingClass(mybody,'atGCMD');
     }
 }
 setPageForm();
