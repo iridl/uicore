@@ -1468,7 +1468,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-  .asKML,.asWMS,.asPDF,.asGIF,.asJPG{
+  .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1486,6 +1486,12 @@ content: "KML";
 .asWMS:before {
 content: "WMS";
 }
+.asTSV:before {
+content: "TSV table";
+}
+.asHTML:before {
+content: "table";
+}
 .asPDF:before {
 content: "PDF";
 }
@@ -1501,6 +1507,12 @@ content: "KML";
 .asWMS::before {
 content: "WMS";
 }
+.asHTML::before {
+content: "table";
+}
+.asTSV::before {
+content: "TSV table";
+}
 .asPDF::before {
 content: "PDF";
 }
@@ -1510,7 +1522,7 @@ content: "GIF";
 .asJPG::before {
 content: "JPG";
 }
-.asKML:hover,.asWMS:hover,.asPDF:hover,.asGIF:hover,.asJPG:hover {
+.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asGIF:hover,.asJPG:hover {
 opacity: 1.0;
 }
 

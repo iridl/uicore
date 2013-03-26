@@ -675,6 +675,45 @@ function getFigureImage(clipthis){
    }
    return(figimg);
 }
+function getTable(clipthis){
+  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasTable');
+   var figimg;
+   if(sfigimgs.length){
+       figimg=sfigimgs[0];
+       for(var i=sfigimgs.length;i--;){
+	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	       figimg=sfigimgs[i];
+	   }
+       }
+   }
+   return(figimg);
+}
+function doTSVClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getTable(it.clipthis);
+     
+   if(figimg && figimg.href){
+       var pdfurl=figimg.href;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/[?].*/,'') + '+.tsv';
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+       _gaq.push(['_trackSocial', 'Table', 'asTSV']);
+   }
+}
+function doHTMLClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getTable(it.clipthis);
+     
+   if(figimg && figimg.href){
+       var pdfurl=figimg.href;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/[?].*/,'') + '+.html';
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+       _gaq.push(['_trackSocial', 'Table', 'asHTML']);
+   }
+}
 function doPDFClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1740,6 +1779,23 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 	appendMissingClass(mydlimage,'hasDownload');
+	}
+	if(getTable(mydlimage)){
+/* tsv */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asHTML';
+	    gb.setAttribute("title","HTML");
+	    gb.onclick=doHTMLClick;
+	    gb.myonclick=doHTMLClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asTSV';
+	    gb.setAttribute("title","TSV");
+	    gb.onclick=doTSVClick;
+	    gb.myonclick=doTSVClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
 	}
 	if(getFigureImage(mydlimage)){
 /* PDF */
