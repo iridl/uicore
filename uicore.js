@@ -696,7 +696,7 @@ function doTSVClick(evt){
    if(figimg && figimg.href){
        var pdfurl=figimg.href;
        var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/[?].*/,'') + '+.tsv';
+       pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
        _gaq.push(['_trackSocial', 'Table', 'asTSV']);
    }
@@ -709,7 +709,7 @@ function doHTMLClick(evt){
    if(figimg && figimg.href){
        var pdfurl=figimg.href;
        var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/[?].*/,'') + '+.html';
+       pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
        _gaq.push(['_trackSocial', 'Table', 'asHTML']);
    }
