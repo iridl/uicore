@@ -2108,7 +2108,6 @@ if(mytarget.myoverlay){
 else {
     myimgdiv = mytarget;
 }
-
 if(myimgdiv){
     if(!evt.relatedTarget || (evt.relatedTarget.className.indexOf('imageoverlaypart') == -1 && evt.relatedTarget != myimgdiv.inputimage  && evt.relatedTarget.parentNode != myimgdiv.outlineimage )){
     changeClass(myimgdiv,'active','inactive');
@@ -2122,7 +2121,6 @@ myimgdiv.zoomstatus.timeoutID=null;
     }
     }
 }
-clearmyobj();
 return true;
 }
 /* drag zoom routines */
