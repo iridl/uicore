@@ -681,7 +681,7 @@ function getTable(clipthis){
    if(sfigimgs.length){
        figimg=sfigimgs[0];
        for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	   if(sfigimgs[i].parentNode.getElementsByClassName("selectedImage").length > 0){
 	       figimg=sfigimgs[i];
 	   }
        }
