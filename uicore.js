@@ -2085,10 +2085,10 @@ resclass = res.value + "&deg; box";
 }
 // adds pickRegion if necessary to indicate that we could pick a point or choose an area
 appendMissingClass(myimgdiv,'pickRegion');
-mypar.innerHTML="click for " + resclass +"<br /> click & drag down-and-right for larger or to zoom in";
+mypar.innerHTML="click for " + resclass +"<br /> click, drag down-and-right, and release for larger or to zoom in";
 }
 else {
-mypar.innerHTML="click & drag down-and-right to zoom in";
+mypar.innerHTML="click, drag down-and-right, and release to zoom in";
 }
 mypar.style.visibility="visible";
 mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},3000);
