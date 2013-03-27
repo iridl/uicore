@@ -1796,6 +1796,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.myonclick=doTSVClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
+	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getFigureImage(mydlimage)){
 /* PDF */
