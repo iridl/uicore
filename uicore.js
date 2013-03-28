@@ -870,14 +870,15 @@ xmlhttp.send();
 function insertchooseSection(){
 var s=document.getElementById('chooseSection');
 var sl=document.getElementById('toSectionList');
-if (s && sl){
+var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
+if (s && sl  && titleobj){
 var sels=s.getElementsByTagName('select');
 if(sels.length < 1){
 var sel=document.createElement('span');
 sel.className='selectvalue';
 sel.onclick=selectvalueclick;
 sel.onclickFn=selectvalueclick;
-sel.innerHTML=getElementsByAttribute(document,'*','property','term:title')[0].innerHTML;
+sel.innerHTML=titleobj.innerHTML;
 s.appendChild(sel);
 sel=document.createElement('select');
 sel.name="mapsel";
@@ -1564,6 +1565,7 @@ function doinfobutton (evt) {
 location.href=appendPageForm(newloc+'index.html',mylink[0].figureimage.className);
 }
 function DLimageResizeImage(mylink){
+    if(mylink.figureimage){
 var imagesrc=mylink.figureimage.src;
 var patt = new RegExp('//plotaxislength.([0-9]*).psdef');
 var csize = imagesrc.match(patt);
@@ -1602,6 +1604,7 @@ ipt.value=targetsize;
 var newsrc=appendPageForm(mylink.figureimage.src,mylink.figureimage.className);
 mylink.figureimage.src=newsrc;
 }
+    }
 }
 function DLimageRemoveControls(mylink){
     var myimage = mylink.figureimage;
@@ -1625,7 +1628,10 @@ function DLimageBuildControls(mydlimage,mylink){
 	currentObj=mylink;
     }
     else {
-	currentObj=mydlimage.getElementsByTagName('legend')[0];
+	var llist = mydlimage.getElementsByTagName('legend');
+	if(llist.length > 0){
+	currentObj=llist[0];
+	}
     }
     if(!currentObj.nextSibling.className || currentObj.nextSibling.className.indexOf('dlcontrol') < 0){
 	var pformchanged = false;
