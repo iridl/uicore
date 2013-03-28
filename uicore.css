@@ -1334,7 +1334,24 @@ clear: both;
 A.titleLink:link, A.titleLink:visited, A.titleLink:active {text-decoration: none;
 color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
-
+@media only all and (max-width: 970px){
+.searchDescription {
+width: 48%;
+}
+.rightcol {
+width: 48%;
+}
+}
+@media only all and (max-width: 700px) {
+.searchDescription {
+width: 100%;
+max-width: 750px;
+}
+.rightcol {
+width: 100%;
+max-width: 750px;
+}
+}
 @media only all and (min-width: 1250px) {
  .itemIcon {
 padding-top: 16px;
