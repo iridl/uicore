@@ -658,6 +658,20 @@ if(sfigs.length){
     }
 }
 }
+function doGeoTiffClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var kmlurl=sfigs[0].info['iridl:hasGeoTiff'];
+    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(kmlurl){
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	location.href=myurl;
+	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);
+    }
+}
+}
 function getFigureImage(clipthis){
   var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
    var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
@@ -698,7 +712,7 @@ function doTSVClick(evt){
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-       _gaq.push(['_trackSocial', 'Table', 'asTSV']);
+       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);
    }
 }
 function doHTMLClick(evt){
@@ -711,7 +725,7 @@ function doHTMLClick(evt){
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-       _gaq.push(['_trackSocial', 'Table', 'asHTML']);
+       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);
    }
 }
 function doPDFClick(evt){
@@ -1640,6 +1654,8 @@ function DLimageBuildControls(mydlimage,mylink){
 	if(mylink && mylink.info){
 	    kmlurl=mylink.info['iridl:hasKML'];
 	    wmsurl=mylink.info['iridl:hasWMS'];
+	    sdataurl=mylink.info['iridl:hasSelectedData'];
+	    tiffurl=mylink.info['iridl:hasGeoTiff'];
 	}
 	if(kmlurl){
 	    appendMissingClass(mydlimage,'hasKML');
@@ -1652,6 +1668,18 @@ function DLimageBuildControls(mydlimage,mylink){
 	}
 	else {
 	    removeClass(mydlimage,'hasWMS');
+	}
+	if(sdataurl){
+	    appendMissingClass(mydlimage,'hasSelectedData');
+	}
+	else {
+	    removeClass(mydlimage,'hasSelectedData');
+	}
+	if(tiffurl){
+	    appendMissingClass(mydlimage,'hasGeoTiff');
+	}
+	else {
+	    removeClass(mydlimage,'hasGeoTiff');
 	}
 /* builds layer controls */
 	var layerlist;
@@ -1782,6 +1810,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.setAttribute("title","WMS");
 	gb.onclick=doWMSClick;
 	gb.myonclick=doWMSClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+/* GeoTiff */
+	gb= document.createElement('div');
+	gb.className='sharebutton asGeoTiff';
+	gb.setAttribute("title","GeoTiff");
+	gb.onclick=doGeoTiffClick;
+	gb.myonclick=doGeoTiffClick;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 	appendMissingClass(mydlimage,'hasDownload');
