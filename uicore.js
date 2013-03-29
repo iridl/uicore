@@ -1651,6 +1651,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	var pformchanged = false;
 	var kmlurl;
 	var wmsurl;
+	var sdataurl;
 	if(mylink && mylink.info){
 	    kmlurl=mylink.info['iridl:hasKML'];
 	    wmsurl=mylink.info['iridl:hasWMS'];
