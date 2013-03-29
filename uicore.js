@@ -2114,6 +2114,7 @@ else {
 }
 if(newentrance){
 var myform=document.getElementById('pageform');
+var myinfo = myimgdiv.inputimage.mylink.info;
 var checkobj;
 sizeto(myimgdiv.outline,0,0);
 clearmyobj();
@@ -2126,14 +2127,19 @@ if(checkobj){
 var res = myform.elements['resolution'];
 var resclass="point";
 if(parseFloat(res.value) != 'NaN'){
+    if(myinfo['wms:CRS'] == 'EPSG:4326'){
 resclass = res.value + "&deg; box";
+    }
+    else {
+resclass = res.value + "m box";
+    }
 }
 // adds pickRegion if necessary to indicate that we could pick a point or choose an area
 appendMissingClass(myimgdiv,'pickRegion');
-mypar.innerHTML="click for " + resclass +"<br /> click, drag down-and-right, and release for larger or to zoom in";
+mypar.innerHTML="click for " + resclass +"<br /> click-drag-release for larger or to zoom in";
 }
 else {
-mypar.innerHTML="click, drag down-and-right, and release to zoom in";
+mypar.innerHTML="click-drag-release to zoom in";
 }
 mypar.style.visibility="visible";
 mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},3000);
