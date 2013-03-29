@@ -527,15 +527,18 @@ display: inline-block;
 .dlimage div.arcgis,
 .dlimage div.googleearth,
 .dlimage div.asKML,
+.dlimage div.asGeoTiff,
 .dlimage div.asWMS {
 display: none;
 }
 .dlimage.hasKML div.googleearth,
-.dlimage.hasKML div.asKML {
+.dlimage.hasKML div.asKML,
+ {
 display: inline-block;
 }
 .dlimage.hasWMS div.arcgis,
-.dlimage.hasWMS div.asWMS
+.dlimage.hasWMS div.asWMS,
+.dlimage.hasGeoTiff div.asGeoTiff
  {
 display: inline-block;
 }
