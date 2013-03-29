@@ -532,8 +532,7 @@ display: inline-block;
 display: none;
 }
 .dlimage.hasKML div.googleearth,
-.dlimage.hasKML div.asKML,
- {
+.dlimage.hasKML div.asKML {
 display: inline-block;
 }
 .dlimage.hasWMS div.arcgis,
@@ -1488,7 +1487,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-  .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
+  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1500,6 +1499,9 @@ opacity: 1.0;
 border-radius: 7px;
 opacity: 0.8;
   }
+.asGeoTiff:before {
+content: "GeoTiff";
+}
 .asKML:before {
 content: "KML";
 }
@@ -1520,6 +1522,9 @@ content: "GIF";
 }
 .asJPG:before {
 content: "JPG";
+}
+.asGeoTiff::before {
+content: "GeoTiff";
 }
 .asKML::before {
 content: "KML";
