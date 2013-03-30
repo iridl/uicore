@@ -672,6 +672,20 @@ if(sfigs.length){
     }
 }
 }
+function doGeoTiffPCClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+    var kmlurl=sfigs[0].info['iridl:hasGeoTiffPaletteColor'];
+    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+    if(kmlurl){
+	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	location.href=myurl;
+	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);
+    }
+}
+}
 function getFigureImage(clipthis){
   var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
    var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
@@ -777,7 +791,7 @@ function doJpgClick(evt){
    var figimg = getFigureImage(it.clipthis);
    if(figimg && figimg.src){
     var pdfurl = figimg.src.replace(/.gif/,'.jpg');
-    var pdfclass = sfigs[0].figureimage.className.split(' ')[0];
+    var pdfclass = figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 	_gaq.push(['_trackSocial', 'JPG', 'asJPG']);
    }
@@ -1653,11 +1667,13 @@ function DLimageBuildControls(mydlimage,mylink){
 	var wmsurl;
 	var sdataurl;
 	var tiffurl;
+	var tiffpcurl;
 	if(mylink && mylink.info){
 	    kmlurl=mylink.info['iridl:hasKML'];
 	    wmsurl=mylink.info['iridl:hasWMS'];
 	    sdataurl=mylink.info['iridl:hasSelectedData'];
 	    tiffurl=mylink.info['iridl:hasGeoTiff'];
+	    tiffpcurl=mylink.info['iridl:hasGeoTiffPaletteColor'];
 	}
 	if(kmlurl){
 	    appendMissingClass(mydlimage,'hasKML');
@@ -1682,6 +1698,12 @@ function DLimageBuildControls(mydlimage,mylink){
 	}
 	else {
 	    removeClass(mydlimage,'hasGeoTiff');
+	}
+	if(tiffpcurl){
+	    appendMissingClass(mydlimage,'hasGeoTiffPaletteColor');
+	}
+	else {
+	    removeClass(mydlimage,'hasGeoTiffPaletteColor');
 	}
 /* builds layer controls */
 	var layerlist;
@@ -1814,10 +1836,18 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doWMSClick;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+/* GeoTiffPC */
+	gb= document.createElement('div');
+	gb.className='sharebutton asGeoTiffPaletteColor';
+	gb.setAttribute("title","GeoTiff");
+	gb.onclick=doGeoTiffPCClick;
+	gb.myonclick=doGeoTiffPCClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* GeoTiff */
 	gb= document.createElement('div');
 	gb.className='sharebutton asGeoTiff';
-	gb.setAttribute("title","GeoTiff");
+	gb.setAttribute("title","data GeoTiff");
 	gb.onclick=doGeoTiffClick;
 	gb.myonclick=doGeoTiffClick;
 	gb.clipthis = currentObj.parentNode;

@@ -528,6 +528,7 @@ display: inline-block;
 .dlimage div.googleearth,
 .dlimage div.asKML,
 .dlimage div.asGeoTiff,
+.dlimage div.asGeoTiffPaletteColor,
 .dlimage div.asWMS {
 display: none;
 }
@@ -537,6 +538,7 @@ display: inline-block;
 }
 .dlimage.hasWMS div.arcgis,
 .dlimage.hasWMS div.asWMS,
+.dlimage.hasGeoTiffPaletteColor div.asGeoTiffPaletteColor,
 .dlimage.hasGeoTiff div.asGeoTiff
  {
 display: inline-block;
@@ -1487,7 +1489,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1499,8 +1501,11 @@ opacity: 1.0;
 border-radius: 7px;
 opacity: 0.8;
   }
-.asGeoTiff:before {
+.asGeoTiffPaletteColor:before {
 content: "GeoTiff";
+}
+.asGeoTiff:before {
+content: "data GeoTiff";
 }
 .asKML:before {
 content: "KML";
@@ -1523,8 +1528,11 @@ content: "GIF";
 .asJPG:before {
 content: "JPG";
 }
-.asGeoTiff::before {
+.asGeoTiffPaletteColor::before {
 content: "GeoTiff";
+}
+.asGeoTiff::before {
+content: "data GeoTiff";
 }
 .asKML::before {
 content: "KML";
