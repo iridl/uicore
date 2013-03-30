@@ -213,7 +213,8 @@ if (!('some' in Array.prototype)) {
 }
 function dosectionsel(){
 it=document.getElementById('mapselect');
-it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;
+if(it.options[it.selectedIndex].parentNode.label){
+    it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;}
 it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
 
 var opt=it.options[it.selectedIndex];
