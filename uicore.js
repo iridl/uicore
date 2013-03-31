@@ -1002,7 +1002,8 @@ fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
 if(fullpathname.indexOf("#") >= 0){
 fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
 }
-if (sel.hrefroot + anchref == fullpathname){
+var altpathname = fullpathname + 'index.html';
+if (sel.hrefroot + anchref == fullpathname || sel.hrefroot + anchref == altpathname){
 opt.selected=true;
 }
 /* IE8 has strange optgroup behavior */
