@@ -1393,6 +1393,8 @@ update=true;
 }
 var myin = myform.elements['region'];
 var res = myform.elements['resolution'];
+var resf = myform.elements['resolutionFilter'];
+var ress,resfs,myins;
 if(myin){
     var myins;
 if(myin.length) {
@@ -1401,11 +1403,18 @@ if(myin.length) {
 else {
     myins=[myin];
 }
-if(res.length) {
+if(res && res.length) {
     ress=res;
 }
 else {
     ress=[res];
+}
+
+if(resf && resf.length) {
+    resfs=resf;
+}
+else {
+    resfs=[resf];
 }
 var clickpt = myform.elements['clickpt'];
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
@@ -1415,13 +1424,39 @@ within=true;
     for (iin=0 ; iin < myins.length ; iin++){
 	myin = myins[iin];
 	res = ress[iin];
+	resf = resfs[iin];
 // none -- return pt:[x,y]
 // number -- return bbox of that size bb:[x,y,x+res,y+res]
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
-    invalidatePageInput('region');
-    var resurl = "http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/geoselect//string/as.json";
-    resurl = resurl + '?clickpt=' + encodeURIComponent(clickpt.value) + '&resolution=' + encodeURIComponent(res.value);
+    invalidatePageInput(myin);
+    var resurl = "http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
+    resclasses="";
+    if(res && res.className){
+	resclasses = resclasses + ' ' + res.className;
+    }
+    if(resf && resf.className){
+	resclasses = resclasses + ' ' + resf.className;
+    }
+    if(resclasses){
+	resurl = appendPageForm(resurl,resclasses);
+    }
+    var delim = '?';
+    if(resurl.indexOf('?')>0){
+	delim="&";
+    }
+    resurl = resurl + delim + 'clickpt=' + encodeURIComponent(clickpt.value);
+    if(!res.className){
+	resurl = resurl + '&resolution=' + encodeURIComponent(res.value);
+    }
+    if(resf && !resf.className){
+	if(resf.value.indexOf('{')<0){
+	resurl=resurl + '&resolutionFilter=' + encodeURIComponent('{' + resf.value + '}');
+	}
+	else{
+	resurl=resurl + '&resolutionFilter=' + encodeURIComponent(resf.value);
+	}
+    }
 var xmlhttp= getXMLhttp();
 xmlhttp.myurl=resurl;
 xmlhttp.myin=myin;
@@ -1437,7 +1472,7 @@ var result;
 if(result["value"]){
     var myin = it.myin;
     if(myin.value == result["value"]){
-    validatePageInput('region');
+    validatePageInput(myin);
     }
     else {
     myin.value=result["value"];
@@ -1607,9 +1642,6 @@ else {
 }
 var pform=document.getElementById('pageform');
 var ckres=pform.elements['resolution'];
-if(ckres){
-    appendMissingClass(ckres,'transformRegion');
-}
 var ipt=pform.elements['clickpt'];
 if(!ipt){
 ipt= document.createElement('input');
@@ -2766,7 +2798,13 @@ function validatePageInput(iname){
 function ChangeClassPageInput(iname,fromclass,toclass){
     var myform=document.getElementById('pageform');
     if(myform){
-	var myinput=myform.elements[iname];
+	var myinput;
+	if(iname.form){
+	    myinput = iname;
+	}
+	else {
+	    myinput=myform.elements[iname];
+	}
 	if(myinput){
 	    if(myinput.className){
 	    var clist = myinput.className.split(' ');
