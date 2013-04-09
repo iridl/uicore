@@ -640,7 +640,7 @@ if(sfigs.length){
 	var pform=document.getElementById('pageform');
 	pform.elements['linkurl'].value=linkurl;
 	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
-	_gaq.push(['_trackSocial', 'googleearth', 'clipelement']);
+	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);
     }
 }
 }
@@ -808,7 +808,7 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
 	/*	location.href=myurl; */
-	_gaq.push(['_trackSocial', 'arcgis', 'toArgGIS']);
+	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);
     }
 }
 }
