@@ -756,7 +756,7 @@ function doPDFClick(evt){
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-       _gaq.push(['_trackSocial', 'PDF', 'asPDF']);
+       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);
    }
 }
 function doFigureImageClick(evt){
@@ -783,7 +783,7 @@ function doGifClick(evt){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-	_gaq.push(['_trackSocial', 'GIF', 'asGIF']);
+	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);
     }
 }
 function doJpgClick(evt){
@@ -794,7 +794,7 @@ function doJpgClick(evt){
     var pdfurl = figimg.src.replace(/.gif/,'.jpg');
     var pdfclass = figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-	_gaq.push(['_trackSocial', 'JPG', 'asJPG']);
+	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);
    }
 }
 function doarcgisClick(evt){
