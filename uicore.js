@@ -2777,12 +2777,22 @@ appendMissingClass(members[j],'valid');
 }
 }
 }
+/* pageformcopy form elements copy their values to the pageform */
 var stag = document.getElementsByClassName('pageformcopy');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
 if(typeof(sel.onchange) != 'function'){
 sel.onchange=pageformcopyonchange;
 sel.onchangefn=pageformcopyonchange;
+}
+}
+/* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
+var stag = document.getElementsByClassName('RegionMenu');
+for (var i=0; i< stag.length ; i++){
+var sel=stag[i];
+if(typeof(sel.onchange) != 'function'){
+sel.onchange=regiononchange;
+sel.onchangefn=regiononchange;
 }
 }
 updatePageForm();
