@@ -2789,7 +2789,8 @@ sel.onchangefn=pageformcopyonchange;
 /* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
 var stag = document.getElementsByClassName('RegionMenu');
 for (var i=0; i< stag.length ; i++){
-var sel=stag[i];
+var sel=stag[i]
+    appendMissingClass(sel,'pageformcopy');;
 if(typeof(sel.onchange) != 'function'){
 sel.onchange=regiononchange;
 sel.onchangefn=regiononchange;
