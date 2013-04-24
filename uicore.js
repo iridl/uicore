@@ -2576,6 +2576,13 @@ Languages["in"]="bahasa";
 Languages["fr"]="fran&ccedil;ais";
 Languages["id"]="bahasa";
 Languages["ru"]="русский";
+var LanguageTitle = new Array();
+LanguageTitle["en"]="Language";
+LanguageTitle["es"]="Idioma";
+LanguageTitle["in"]="Bahasa";
+LanguageTitle["fr"]="Langue";
+LanguageTitle["id"]="Bahasa";
+LanguageTitle["ru"]="язык";
 function languageChange(){
 var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
@@ -2612,6 +2619,7 @@ else {
 opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
 }
 opt.innerHTML=Languages[opt.value];
+leg.innerHTML=LanguageTitle[opt.value];
 opt.value="";
 sel.appendChild(opt);
 for( var i=0 ; i < langList.length ; i++){
