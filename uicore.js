@@ -1190,7 +1190,8 @@ and calls runPureOnContext.
  */
 function updateHasJSON(myLink){
 var xmlhttp= getXMLhttp();
-xmlhttp.infourl = myLink.href;
+var localurl = localHrefOf(myLink.href);
+xmlhttp.infourl = localurl;
 xmlhttp.myContext = myLink.parentNode;
 xmlhttp.myLink=myLink;
 changeClassWithin(myLink.parentNode,'valid','invalid');
@@ -1199,7 +1200,7 @@ xmlhttp.onreadystatechange = function(evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
-if(it.myLink.href == it.infourl){
+if(localurl == it.infourl){
     it.myContext.parsedJSON=JSON.parse(jsontxt);
     runPureOnContext(it.myContext);
     updatePageFormCopies(it.myContext);
