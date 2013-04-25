@@ -2582,7 +2582,7 @@ LanguageTitle["es"]="Idioma";
 LanguageTitle["in"]="Bahasa";
 LanguageTitle["fr"]="Langue";
 LanguageTitle["id"]="Bahasa";
-LanguageTitle["ru"]="язык";
+LanguageTitle["ru"]="Язык";
 function languageChange(){
 var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
