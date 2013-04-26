@@ -690,7 +690,7 @@ display: none;
 #homelink {
 height: 36px;
 width: 36px;
-    background: url('icons/iri.png') center no-repeat;
+    background: url('icons/iri36.png') center no-repeat;
 background-size: 100%;
 }
 #homelink:hover{
@@ -849,6 +849,8 @@ img.dlimg, img.dlauximg, img.dlimgts {
  #homelink {
 height: 30px;
 width: 30px;
+    background: url('icons/iri30.png') center no-repeat;
+background-size: 100%;
 }
 .controlBar:hover #homelink {
 height: 36px;
