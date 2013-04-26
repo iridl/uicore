@@ -601,7 +601,19 @@ tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr
  _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
 window.open(tumblr_url);
 }
-
+function homelinkclick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var myurl;
+var homelinks=getElementsByAttribute(document,'link','rel','home');
+if(homelinks.length>0){
+myurl=homelinks[0].href;
+}
+else {
+myurl="http://iri.columbia.edu/";
+}
+document.location.href=myurl;
+}
 function doEvernoteClip(){
 var clipargs = {};
 clipargs.contentId = 'content';
@@ -2515,33 +2527,15 @@ shiftby(myit,newx-cleft,newy-ctop);
 }
 /* end of drag zoom routines */
 function insertcontrolBar(){
-var s=document.getElementById('irilink');
+var s=document.getElementById('homelink');
 if(!s){
     var mylist=document.getElementsByClassName("controlBar");
 if(mylist.length>0){
 var cont=mylist[0];
-var gb= document.createElement('a');
-gb.id='irilink';
-gb.href="http://iri.columbia.edu/";
-var hasSVG = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.1");
-if(hasSVG && navigator.appVersion.indexOf('MSIE 9')<0 && navigator.appVersion.indexOf('MSIE 8')<0 ){
-var ob= document.createElement('object');
-ob.data=scriptroot + "icons/iri.svg";
-ob.type="image/svg+xml";
-ob.className="iriicon";
-gb.appendChild(ob);
-}
-else {
-var obim = document.createElement('img');
-obim.className="iriicon";
-        if(document.width < 750){
-	    obim.src = scriptroot + 'icons/iri32.png';
-}
-else {
-	    obim.src = scriptroot + 'icons/iri.png';
-}
-gb.appendChild(obim);
-}
+var gb= document.createElement('div');
+gb.id='homelink';
+gb.onclick=homelinkclick;
+gb.myonclick=homelinkclick;
 cont.insertBefore(gb,cont.firstChild);
 var slist = cont.getElementsByTagName('select');
 for (var i=0; i<slist.length ; i++){

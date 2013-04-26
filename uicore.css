@@ -156,43 +156,20 @@ cursor: pointer;
 -ms-user-select: none;
 user-select: none;
 }
-.iriicon {
+#homelink {
 float: left;
-height: 54px;
-width: 54px;
--moz-border-radius: 27px;
-border-radius: 27px;
+height: 52px;
+width: 52px;
 margin: 1px;
 border: 0px;
-margin-bottom: 0px;
-color: #19398A;
+    background: url('icons/iri.png') center no-repeat;
+        background-color: WhiteSmoke;
+	background-size: 100%;
 }
-.iriiconsvg * {
-color: #19398A;
-fill: #19398A;
-}
-.iriiconright {
-float: right;
+#homelink:hover{
 height: 54px;
 width: 54px;
--moz-border-radius: 27px;
-border-radius: 27px;
-margin: 1px;
-border: 0px;
-margin-bottom: 0px;
-}
-.iriicon:hover {
-float: left;
-height: 56px;
-width: 56px;
--moz-border-radius: 28px;
-border-radius: 28px;
-margin: 0px;
-color: blue;
-}
-.iriiconsvg:hover * {
-color: blue;
-fill: blue;
+margin: 0px
 }
 .controlBar {
              border-style: outset;
@@ -710,26 +687,16 @@ display: inline;
 .selectvalue + select {
 display: none;
 }
-.iriicon {
-height: 32px;
-width: 32px;
--moz-border-radius: 16px;
-border-radius: 16px;
-margin: 2px;
+#homelink {
+height: 36px;
+width: 36px;
+    background: url('icons/iri.png') center no-repeat;
+background-size: 100%;
 }
-.iriiconright {
-height: 32px;
-width: 32px;
--moz-border-radius: 16px;
-border-radius: 16px;
-margin: 2px;
-}
-.iriicon:hover {
+#homelink:hover{
 height: 38px;
 width: 38px;
--moz-border-radius: 19px;
-border-radius: 19px;
-margin: 0px;
+margin: 0px
 }
 .navlink {
          font-size: 10pt;
@@ -789,16 +756,6 @@ display: none;
 
 .lang:hover select {
 display: inline;
-}
-.controlBar:hover .iriicon {
-float: left;
-height: 36px;
-width: 36px;
--moz-border-radius: 18px;
-border-radius: 18px;
-margin: 1px;
-border: 0px;
-margin-bottom: 0px;
 }
 .controlBar:hover .navlink {
 }
@@ -889,15 +846,18 @@ img.dlimg, img.dlauximg, img.dlimgts {
 .dlimage, .dlimage.wide, .dlimage.tall {
 	width: 89%;
 }
-.iriicon {
-float: left;
-height: 30px !important;
-width: 30px !important;
--moz-border-radius: 15px !important;
-border-radius: 15px !important;
-margin: 1px;
-border: 0px;
-margin-bottom: 0px;
+ #homelink {
+height: 30px;
+width: 30px;
+}
+.controlBar:hover #homelink {
+height: 36px;
+width: 36px;
+}
+.controlBar:hover #homelink:hover{
+height: 38px;
+width: 38px;
+margin: 0px
 }
 .optionsBar {
 min-height: 32px;
