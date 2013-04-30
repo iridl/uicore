@@ -211,6 +211,33 @@ if (!('some' in Array.prototype)) {
         return false;
     };
 }
+function dohomesel(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var opt=it.options[it.selectedIndex];
+var fullpathname = document.location.href;
+var optvalue = opt.value;
+var optclass = "carryup";
+if(optvalue){
+if(optvalue.indexOf('@')>0){
+    optclass = optvalue.split('@')[1];
+    optvalue = optvalue.split('@')[0];
+}
+if(optvalue.substring(0,5)!='http:'){
+if(fullpathname.indexOf("?")>= 0){
+fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
+}
+if(fullpathname.indexOf("#")>= 0){
+fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
+}
+if (it.hrefroot + optvalue != fullpathname){
+submitPageForm(it.hrefroot + optvalue,optclass);
+}
+} else {
+submitPageForm(optvalue,optclass);
+}
+}
+    }
 function dosectionsel(){
 it=document.getElementById('mapselect');
 if(it.options[it.selectedIndex].parentNode.label){
@@ -601,18 +628,35 @@ tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr
  _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
 window.open(tumblr_url);
 }
+function homelinkhover(evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var myselects=it.getElementsByTagName('select');
+   if(myselects.length > 0){
+   var myselect=myselects[0];
+       myselect.focus();
+       //       myselect.click();
+  var evObj = document.createEvent('MouseEvent');
+                    evObj.initEvent('mousedown', true, true);
+                    myselect.dispatchEvent(evObj);
+       }
+}
 function homelinkclick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
    var myurl;
 var homelinks=getElementsByAttribute(document,'link','rel','home');
-if(homelinks.length>0){
+if(homelinks.length == 1){
 myurl=homelinks[0].href;
+document.location.href=myurl;
+}
+else if(homelinks.length == 0){
+myurl="http://iri.columbia.edu/";
+document.location.href=myurl;
 }
 else {
-myurl="http://iri.columbia.edu/";
+    homelinkhover(evt);
 }
-document.location.href=myurl;
 }
 function doEvernoteClip(){
 var clipargs = {};
@@ -2534,13 +2578,46 @@ if(mylist.length>0){
 var cont=mylist[0];
 var gb= document.createElement('div');
 gb.id='homelink';
+var homelinks=getElementsByAttribute(document,'link','rel','home');
+var homelinkjson=getElementsByAttribute(document,'link','rel','home alternate');
+gb.onmouseover=homelinkhover;
+gb.myonmouseover=homelinkhover;
 gb.onclick=homelinkclick;
 gb.myonclick=homelinkclick;
+if(false //homelinkjson.length == 1
+) {
+    // menu from json
+alert(homelinkjson[0].type);
+    }
+else if(homelinks.length > 1) {
+    // menu from flat list of links
+    var sel = document.createElement('select');
+    sel.name = 'homelinksel';
+    sel.onchange=dohomesel;
+    sel.myonchange=dohomesel;
+	var opt=document.createElement('option');
+	opt.innerHTML='<hr />';
+	opt.value='';
+	sel.appendChild(opt);
+	var cnt=1;
+    for(var i = 0; i < homelinks.length ; i++){
+	var title = homelinks[i].title;
+	if(title){
+	var opt=document.createElement('option');
+	opt.innerHTML=title;
+	opt.value=homelinks[i].href;
+	sel.appendChild(opt);
+	cnt = cnt + 1;
+	}
+    }
+    sel.selectedIndex=-1;
+    gb.appendChild(sel);
+}
 cont.insertBefore(gb,cont.firstChild);
 var slist = cont.getElementsByTagName('select');
 for (var i=0; i<slist.length ; i++){
     var mysel = slist[i];
-    if(mysel.previousSibling.className != "selectvalue"){
+    if(mysel.previousSibling && mysel.previousSibling.className != "selectvalue"){
 	var sv = document.createElement('span');
 	sv.className='selectvalue';
 	sv.onclick=selectvalueclick;
@@ -2559,8 +2636,8 @@ insertlang();
 function selectvalueclick (evt) {
     evt = (evt) ? evt : ((event) ? event : null );
     it = (evt.currentTarget) ? evt.currentTarget : this;
-    if(it.nextSibling){
-	it.nextSibling.click();
+    if(it.nextSibling && it.nextSibling.dispatchEvent){
+	it.nextSibling.dispatchEvent(evt);
     }
     return true;
 }
