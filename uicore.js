@@ -628,19 +628,6 @@ tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr
  _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
 window.open(tumblr_url);
 }
-function homelinkhover(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var myselects=it.getElementsByTagName('select');
-   if(myselects.length > 0){
-   var myselect=myselects[0];
-       myselect.focus();
-       //       myselect.click();
-  var evObj = document.createEvent('MouseEvent');
-                    evObj.initEvent('mousedown', true, true);
-                    myselect.dispatchEvent(evObj);
-       }
-}
 function homelinkclick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -653,9 +640,6 @@ document.location.href=myurl;
 else if(homelinks.length == 0){
 myurl="http://iri.columbia.edu/";
 document.location.href=myurl;
-}
-else {
-    homelinkhover(evt);
 }
 }
 function doEvernoteClip(){
@@ -2580,23 +2564,24 @@ var gb= document.createElement('div');
 gb.id='homelink';
 var homelinks=getElementsByAttribute(document,'link','rel','home');
 var homelinkjson=getElementsByAttribute(document,'link','rel','home alternate');
-gb.onmouseover=homelinkhover;
-gb.myonmouseover=homelinkhover;
+gb.inout='out';
 gb.onclick=homelinkclick;
 gb.myonclick=homelinkclick;
 if(false //homelinkjson.length == 1
 ) {
     // menu from json
 alert(homelinkjson[0].type);
+appendMissingClass(gb,'HomeSelect');
     }
 else if(homelinks.length > 1) {
     // menu from flat list of links
     var sel = document.createElement('select');
+    appendMissingClass(gb,'HomeSelect');
     sel.name = 'homelinksel';
     sel.onchange=dohomesel;
     sel.myonchange=dohomesel;
 	var opt=document.createElement('option');
-	opt.innerHTML='<hr />';
+	opt.innerHTML=' ';
 	opt.value='';
 	sel.appendChild(opt);
 	var cnt=1;

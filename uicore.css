@@ -157,30 +157,39 @@ cursor: pointer;
 user-select: none;
 }
 #homelink {
+position: relative;
 float: left;
 height: 52px;
 width: 52px;
 margin: 1px;
 border: 0px;
+z-index: 0;
     background: url('icons/iri.png') center no-repeat;
         background-color: WhiteSmoke;
-	background-size: 100%;
+	background-size: 52px;
 }
 #homelink:hover{
-height: 54px;
-width: 54px;
-margin: 0px
+background-size: 54px;
 }
 #homelink select {
-position: relative;
-left: -2px;
-top: 32px;
+position: absolute;
+left: 0px;
+bottom: 0px;
 opacity: 0.0;
+-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=05)";
+height: 52px;
+min-width: 52px;
 }
-#homelink:hover select,
-#homelink select:focus,
-#homelink select:hover {
-visibility: visible;
+#homelink + .navitem {
+z-index: 2;
+}
+#homelink.HomeSelect::after{
+position: absolute;
+font-size: 65%;
+text-align: bottom;
+content: "\25BC";
+left: 42px;
+top: 42px;
 }
 .controlBar {
              border-style: outset;
@@ -699,18 +708,22 @@ display: inline;
 display: none;
 }
 #homelink {
-height: 36px;
-width: 36px;
+height: 37px;
+width: 37px;
     background: url('icons/iri36.png') center no-repeat;
-background-size: 100%;
+background-size: 36px;
+margin: 2px;
 }
 #homelink:hover{
-height: 38px;
-width: 38px;
-margin: 0px
+background-size: 37px;
+}
+#homelink.HomeSelect::after{
+left: 29px;
+top: 29px;
 }
 #homelink select {
-top: 18px;
+height: 37px;
+width: 37px;
 }
 .navlink {
          font-size: 10pt;
@@ -864,19 +877,32 @@ img.dlimg, img.dlauximg, img.dlimgts {
 height: 30px;
 width: 30px;
     background: url('icons/iri30.png') center no-repeat;
-background-size: 100%;
+background-size: 30px;
 }
 #homelink select {
-top: 14px;
+height: 30px;
+width: 30px;
+}
+#homelink.HomeSelect::after{
+left: 24px;
+top: 24px;
+}
+.controlBar:hover #homelink.HomeSelect::after{
+left: 30px;
+top: 30px;
 }
 .controlBar:hover #homelink {
-height: 36px;
-width: 36px;
+height: 37px;
+width: 37px;
+    background: url('icons/iri36.png') center no-repeat;
+background-size: 36px;
 }
 .controlBar:hover #homelink:hover{
-height: 38px;
-width: 38px;
-margin: 0px
+background-size: 37px;
+}
+.controlBar:hover #homelink select {
+height: 37px;
+width: 37px;
 }
 .optionsBar {
 min-height: 32px;
