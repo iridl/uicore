@@ -181,8 +181,11 @@ opacity: 0.0;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=05)";
 height: 52px;
 min-width: 52px;
+z-index: 1;
+padding: 2px;
 }
 #homelink + .navitem {
+position: relative;
 z-index: 2;
 }
 #homelink.HomeSelect::after{
