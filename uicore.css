@@ -52,12 +52,14 @@ opacity: 0.3;
  transition: opacity 0.1s linear 0s;
  -webkit-transition: opacity 0.1s linear 0s;
  -moz-transition: opacity 0.1s linear 0s;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 .invalid {
 opacity: 0.3;
  transition: opacity 1s linear 1s;
  -webkit-transition: opacity 1s linear 1s;
  -moz-transition: opacity 1s linear 1s;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
 .bold {
@@ -176,7 +178,7 @@ position: absolute;
 left: 0px;
 bottom: 0px;
 opacity: 0.0;
--ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=05)";
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=05)";
 height: 52px;
 min-width: 52px;
 }
