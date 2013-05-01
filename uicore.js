@@ -110,7 +110,7 @@ return lhref;
 /* replacement for getElementsByClassName when missing */
 if (typeof document.getElementsByClassName!='function') {
 document.getElementsByClassName = function() {
-        var elms = document.getElementsByTagName('*');
+        var elms = this.getElementsByTagName('*');
         var ei = new Array();
         for (i=0;i<elms.length;i++) {
             if (elms[i].getAttribute('class')) {
@@ -1254,7 +1254,7 @@ function runPureOnContext(myContext){
     var holdonchange = mytems[0].onchange;
     var holdjson = myContext.parsedJSON;
     $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
-    if(holdonchange){
+    if(typeof(holdonchange)=='function' ){
 	mytems[0].onchange=holdonchange;
 	mytems[0].myonchange=holdonchange;
     }
@@ -2562,7 +2562,7 @@ gb.inout='out';
 gb.onclick=homelinkclick;
 gb.myonclick=homelinkclick;
 if(homelinkjson.length == 1
-) {
+&& navigator.appVersion.indexOf('MSIE 8')<0) {
     // menu from json
     appendMissingClass(gb,'HomeSelect');
     var mylink = document.createElement('a');
@@ -2594,18 +2594,13 @@ if(homelinkjson.length == 1
     sel.name = 'homelinksel';
     sel.onchange=dohomesel;
     sel.myonchange=dohomesel;
-    sel.className='template homeselect';
-    var opt=document.createElement('option');
-    opt.innerHTML=' ';
-    opt.value='';
-    sel.appendChild(opt);
-    gb.appendChild(sel);
+    sel.className='template homeselect pageformcopy';
+    var opt;
     opt=document.createElement('option');
     opt.innerHTML=' ';
     opt.value='';
     opt.className='toplist';
     sel.appendChild(opt);
-    gb.appendChild(sel);
     opt=document.createElement('optgroup');
     opt.innerHTML=' ';
     opt.value='';
@@ -2615,6 +2610,14 @@ if(homelinkjson.length == 1
     opt.appendChild(oopt);
     sel.appendChild(opt);
     gb.appendChild(sel);
+var myform=document.getElementById('pageform');
+if(myform){
+    var ipt = document.createElement('input');
+    ipt.name='homelinksel';
+    ipt.type='hidden';
+    ipt.value='unseturl';
+    myform.appendChild(ipt);
+}
     }
 else if(homelinks.length > 1) {
     // menu from flat list of links
