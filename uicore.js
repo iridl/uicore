@@ -219,6 +219,7 @@ var fullpathname = document.location.href;
 var optvalue = opt.value;
 var optclass = "carryup";
 if(optvalue){
+    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]);
     document.location.href=localHrefOf(optvalue);
 }
     }
@@ -447,7 +448,7 @@ gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='evernote';
 gba = document.createElement('a');
-gba.setAttribute("title","Save to Evernote");
+gba.setAttribute("title","Save to Evernote with link back");
 gba.onclick=doEvernoteClip;
 gb.appendChild(gba);
 s.appendChild(gb);
@@ -456,7 +457,7 @@ gb.className='sharebutton';
 gb.id='tumblr';
     var tumblr_button = document.createElement("a");
 	tumblr_button.onclick=doTumblrClip;
-    tumblr_button.setAttribute("title", "Share on Tumblr");
+    tumblr_button.setAttribute("title", "Share on Tumblr with link back");
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
 /* facebook */
@@ -1856,7 +1857,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* evernote */
 	var gb= document.createElement('div');
 	gb.className='sharebutton evernote';
-	gb.setAttribute("title","Save to Evernote");
+	gb.setAttribute("title","Save to Evernote with link back");
 	gb.onclick=doEvernoteClipElement;
 	gb.myonclick=doEvernoteClipElement;
 	gb.clipthis = currentObj.parentNode;
@@ -1892,7 +1893,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* KML */
 	var gb= document.createElement('div');
 	gb.className='sharebutton asKML';
-	gb.setAttribute("title","KML");
+	gb.setAttribute("title","KML with link back");
 	gb.onclick=doGoogleEarthClick;
 	gb.myonclick=doGoogleEarthClick;
 	gb.clipthis = currentObj.parentNode;
@@ -1945,7 +1946,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* PDF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPDF';
-	    gb.setAttribute("title","PDF");
+	    gb.setAttribute("title","PDF image with link back");
 	    gb.onclick=doPDFClick;
 	    gb.myonclick=doPDFClick;
 	    gb.clipthis = currentObj.parentNode;
@@ -1960,7 +1961,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* GIF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asGIF';
-	    gb.setAttribute("title","GIF");
+	    gb.setAttribute("title","GIF image");
 	    gb.onclick=doGifClick;
 	    gb.myonclick=doGifClick;
 	    gb.clipthis = currentObj.parentNode;
