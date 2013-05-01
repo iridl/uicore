@@ -219,23 +219,7 @@ var fullpathname = document.location.href;
 var optvalue = opt.value;
 var optclass = "carryup";
 if(optvalue){
-if(optvalue.indexOf('@')>0){
-    optclass = optvalue.split('@')[1];
-    optvalue = optvalue.split('@')[0];
-}
-if(optvalue.substring(0,5)!='http:'){
-if(fullpathname.indexOf("?")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
-}
-if(fullpathname.indexOf("#")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
-}
-if (it.hrefroot + optvalue != fullpathname){
-submitPageForm(it.hrefroot + optvalue,optclass);
-}
-} else {
-submitPageForm(optvalue,optclass);
-}
+    document.location.href=localHrefOf(optvalue);
 }
     }
 function dosectionsel(){
@@ -1263,7 +1247,13 @@ function runPureOnContext(myContext){
     if(!myContext.pureTemplateFunction){
 	myContext.pureTemplateFunction= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
     }
+    var mytems = myContext.getElementsByClassName("template");
+    var holdonchange = mytems[0].onchange;
     $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
+    if(holdonchange){
+	mytems[0].onchange=holdonchange;
+	mytems[0].myonchange=holdonchange;
+    }
 changeClassWithin(myContext,'invalid','valid');
 }
 function initializeDLimage(){
@@ -2567,11 +2557,59 @@ var homelinkjson=getElementsByAttribute(document,'link','rel','home alternate');
 gb.inout='out';
 gb.onclick=homelinkclick;
 gb.myonclick=homelinkclick;
-if(false //homelinkjson.length == 1
+if(homelinkjson.length == 1
 ) {
     // menu from json
-alert(homelinkjson[0].type);
-appendMissingClass(gb,'HomeSelect');
+    appendMissingClass(gb,'HomeSelect');
+    var mylink = document.createElement('a');
+    mylink.setAttribute('rel','iridl:hasJSON');
+    mylink.href=homelinkjson[0].href;
+    gb.appendChild(mylink);
+    gb.pureTemplateFunction = {
+	'option.toplist' : {
+	    'opt<-options':{
+		'.': 'opt.title',
+		'.@value': 'opt.href',
+	    }
+	},	
+	'optgroup' : {
+	    'grp<-groups':{
+		'.@label': 'grp.title',
+		'option' : {
+		    'oopt<-grp.links':{
+			'.': 'oopt.title',
+			'.@value': 'oopt.href',
+		    }
+		}	
+
+	    }
+	}
+    }
+    var sel = document.createElement('select');
+    sel.name = 'homelinksel';
+    sel.onchange=dohomesel;
+    sel.myonchange=dohomesel;
+    sel.className='template homeselect';
+    var opt=document.createElement('option');
+    opt.innerHTML=' ';
+    opt.value='';
+    sel.appendChild(opt);
+    gb.appendChild(sel);
+    opt=document.createElement('option');
+    opt.innerHTML=' ';
+    opt.value='';
+    opt.className='toplist';
+    sel.appendChild(opt);
+    gb.appendChild(sel);
+    opt=document.createElement('optgroup');
+    opt.innerHTML=' ';
+    opt.value='';
+    var oopt=document.createElement('option');
+    oopt.innerHTML=' ';
+    oopt.value='';
+    opt.appendChild(oopt);
+    sel.appendChild(opt);
+    gb.appendChild(sel);
     }
 else if(homelinks.length > 1) {
     // menu from flat list of links
