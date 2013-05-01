@@ -2563,6 +2563,7 @@ if(homelinkjson.length == 1
     appendMissingClass(gb,'HomeSelect');
     var mylink = document.createElement('a');
     mylink.setAttribute('rel','iridl:hasJSON');
+    mylink.className=homelinkjson[0].className;
     mylink.href=homelinkjson[0].href;
     gb.appendChild(mylink);
     gb.pureTemplateFunction = {
