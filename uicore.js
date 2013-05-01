@@ -1203,7 +1203,7 @@ updatePageForm(changed);
 function loadHasJSON(){
 var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
 for (var i=0 ; i<sfigs.length ; i++){
-    updateHasJSON(sfigs[i]);
+    if(!sfigs[i].parentNode.parsedJSON){updateHasJSON(sfigs[i])};
 }
 }
 /* reads JSON file referred to by a link object
@@ -1215,6 +1215,8 @@ and calls runPureOnContext.
 function updateHasJSON(myLink){
 var xmlhttp= getXMLhttp();
 var localurl = localHrefOf(myLink.href);
+if(myLink.parentNode.localurl != localurl){
+myLink.parentNode.localurl = localurl;
 xmlhttp.infourl = localurl;
 xmlhttp.myContext = myLink.parentNode;
 xmlhttp.myLink=myLink;
@@ -1236,6 +1238,7 @@ xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",xmlhttp.infourl,true);
 xmlhttp.send();
 }
+}
 /*
 runs pure on what I am calling a context.  It only runs on elements
 within the context which have class "template".
@@ -1249,6 +1252,7 @@ function runPureOnContext(myContext){
     }
     var mytems = myContext.getElementsByClassName("template");
     var holdonchange = mytems[0].onchange;
+    var holdjson = myContext.parsedJSON;
     $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
     if(holdonchange){
 	mytems[0].onchange=holdonchange;
@@ -2641,7 +2645,7 @@ cont.insertBefore(gb,cont.firstChild);
 var slist = cont.getElementsByTagName('select');
 for (var i=0; i<slist.length ; i++){
     var mysel = slist[i];
-    if(mysel.previousSibling && mysel.previousSibling.className != "selectvalue"){
+    if(mysel.name != 'homelinksel' && mysel.previousSibling && mysel.previousSibling.className != "selectvalue"){
 	var sv = document.createElement('span');
 	sv.className='selectvalue';
 	sv.onclick=selectvalueclick;
@@ -3500,8 +3504,8 @@ initializeDLimage();
 insertchooseSection();
 insertRegion();
 insertshare();
-loadHasJSON();
 setupPageFormLinks();
+loadHasJSON();
 }
 }
 );

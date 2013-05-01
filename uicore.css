@@ -729,6 +729,7 @@ top: 29px;
 #homelink select {
 height: 37px;
 width: 37px;
+min-width: 37px;
 }
 .navlink {
          font-size: 10pt;
@@ -887,6 +888,7 @@ background-size: 30px;
 #homelink select {
 height: 30px;
 width: 30px;
+min-width: 30px;
 }
 #homelink.HomeSelect::after{
 left: 24px;
@@ -908,6 +910,7 @@ background-size: 37px;
 .controlBar:hover #homelink select {
 height: 37px;
 width: 37px;
+min-width: 37px;
 }
 .optionsBar {
 min-height: 32px;
