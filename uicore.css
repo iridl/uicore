@@ -24,10 +24,10 @@ padding: 0px;
 vertical-align: middle;
 }
 .regionwithinbbox {
-display: none;
+display: none !important;
 }
 body.regioniswithinbbox .regionwithinbbox {
-display: inline;
+display: inline !important;
 }
 /* while pageform inputs are mostly type hidden so this is not currently
 necessary, adding this css allows adding hidden checkbox support in the
