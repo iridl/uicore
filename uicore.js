@@ -1256,14 +1256,14 @@ Because this can be called more than once, I use the compile/render
 form of pure.
 
 Note that you can now explicitly set the template, called a 'directive' by PURE,
-by using a script type="application/json" class="pureDirective" in your context.
+by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
  */
 function runPureOnContext(myContext){
     if(!myContext.pureDirective){
-	var myscripts = getElementsByAttribute(myContext,'script','class','pureDirective');
+	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
 	if(myscripts.length > 0){
 	    var holdtxt = myscripts[0].textContent;
-	    myContext.pureDirective = JSON.parse(holdtxt);
+	    myContext.pureDirective = JSON.parse(holdtxt.replace(/&lt;/g,'<'));
 	    if(!myContext.pureDirective){
 		alert('probable parse error in ' + holdtxt);
 	    }
