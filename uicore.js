@@ -1254,6 +1254,9 @@ within the context which have class "template".
 
 Because this can be called more than once, I use the compile/render
 form of pure.
+
+Note that you can now explicitly set the template, called a 'directive' by PURE,
+by using a script type="application/json" class="pureDirective" in your context.
  */
 function runPureOnContext(myContext){
     if(!myContext.pureDirective){
