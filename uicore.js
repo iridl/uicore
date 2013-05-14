@@ -1256,13 +1256,23 @@ Because this can be called more than once, I use the compile/render
 form of pure.
  */
 function runPureOnContext(myContext){
-    if(!myContext.pureTemplateFunction){
-	myContext.pureTemplateFunction= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
+    if(!myContext.pureDirective){
+	var myscripts = getElementsByAttribute(myContext,'script','class','pureDirective');
+	if(myscripts.length > 0){
+	    var holdtxt = myscripts[0].textContent;
+	    myContext.pureDirective = JSON.parse(holdtxt);
+	    if(!myContext.pureDirective){
+		alert('probable parse error in ' + holdtxt);
+	    }
+	}
+	else {
+	myContext.pureDirective= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
+	}
     }
     var mytems = myContext.getElementsByClassName("template");
     var holdonchange = mytems[0].onchange;
     var holdjson = myContext.parsedJSON;
-    $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureTemplateFunction);
+    $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureDirective);
     if(typeof(holdonchange)=='function' ){
 	mytems[0].onchange=holdonchange;
 	mytems[0].myonchange=holdonchange;
@@ -2579,7 +2589,7 @@ if(homelinkjson.length == 1
     mylink.className=homelinkjson[0].className;
     mylink.href=homelinkjson[0].href;
     gb.appendChild(mylink);
-    gb.pureTemplateFunction = {
+    gb.pureDirective = {
 	'option.toplist' : {
 	    'opt<-options':{
 		'.': 'opt.title',
