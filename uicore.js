@@ -1228,7 +1228,15 @@ xmlhttp.onreadystatechange = function(evt) {
 if(it.readyState == 4){
 var jsontxt = it.responseText;
 if(localurl == it.infourl){
-    it.myContext.parsedJSON=JSON.parse(jsontxt);
+    if(it.myLink.id){
+	if(!it.myContext.parsedJSON){
+	    it.myContext.parsedJSON = {};
+	}
+	it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+    }
+    else {
+	it.myContext.parsedJSON=JSON.parse(jsontxt);
+    }
     runPureOnContext(it.myContext);
     updatePageFormCopies(it.myContext);
     validateAndCorrectPageForm(it.myContext);
