@@ -683,8 +683,14 @@ display: inline;
 .selectvalue + select {
 display: none;
 }
-.dlimage, .dlimage.wide, .dlimage.tall {
+.dlimage, .dlimage.wide, .dlimage.tall{
 	width: 95%;
+}
+.dlimage.tall{
+	width: 50%;
+}
+.dlimage.narrow{
+	width: 30%;
 }
 .navitem {
 font-size: 10pt;
@@ -871,12 +877,15 @@ img.dlimg, img.dlauximg, img.dlimgts {
 	 font-size: 9pt;
 }
 @media only all and (max-width: 600px) {
-.dlimage, .dlimage.wide, .dlimage.tall {
+.dlimage, .dlimage.wide, .dlimage.tall{
 	width: 92%;
+}
+.dlimage.narrow {
+	width: 40%;
 }
 }
 @media only all and (max-width: 479px) {
-.dlimage, .dlimage.wide, .dlimage.tall {
+.dlimage, .dlimage.wide, .dlimage.tall, .dlimage.narrow {
 	width: 89%;
 }
  #homelink {
@@ -1009,6 +1018,12 @@ display: inline;
 .dlimage {
 	width: 95%;
 }
+.dlimage.tall {
+	width: 50%;
+}
+.dlimage.narrow {
+	width: 25%;
+}
 }
 /* ipad is 1024 -- this 1024 and above */
 @media only all and (min-width: 900px) {
@@ -1017,6 +1032,9 @@ display: inline;
 }
 .dlimage.wide {
 	width: 65%;
+}
+.dlimage.narrow {
+	width: 20%;
 }
 .selectvalue {
 display: none;
@@ -1030,10 +1048,16 @@ display: inline;
 .dlimage {
 	width: 47%;
 }
+.dlimage.narrow {
+	width: 27%;
+}
 }
 @media only all and (min-width: 750px) and (orientation: landscape){
 .dlimage.tall {
-	width: 30%;
+	width: 25%;
+}
+.dlimage.narrow {
+	width: 15%;
 }
 }
 .ui-widget-header .ui-state-default {
