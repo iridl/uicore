@@ -4,6 +4,7 @@ font-size: 12pt;
 	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
 }
 .embedded.atIRI #irilink,
+.embedded.atIRI #homelink,
 .embedded.atIRI #toSectionList,
 .embedded.atIRI #chooseSection select,
 .embedded.atIRI #chooseSection .selectvalue:after,
