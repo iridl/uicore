@@ -1171,9 +1171,14 @@ if(pform){
     var elbyname = pform.elements[it.name];
 if(elbyname){
     var changed = "";
-if(it.option){
+if(it.options){
     changed = pform.elements[it.name];
+    if(changed.length){
+changed[0].value=it.options[it.selectedIndex].value;
+    }
+    else {
 changed.value=it.options[it.selectedIndex].value;
+    }
 }
 else if(elbyname.length) {
 	/* multivalued copy -- hopefully checkbox */
@@ -2997,7 +3002,12 @@ if(myform){
 updatePageFormConditionalClassesAndFlags(true);
 var clist;
 if(changedInput){
+    if(changedInput.className){
 clist = changedInput.className.split(' ');
+    }
+    else {
+	clist = [];
+    }
 if(newvalue){
 changedInput.value=newvalue;
 }
