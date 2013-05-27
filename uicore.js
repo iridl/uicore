@@ -1267,11 +1267,12 @@ function runPureOnContext(myContext){
     if(!myContext.pureDirective){
 	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
 	if(myscripts.length > 0){
-	    var holdtxt = myscripts[0].textContent;
-	    myContext.pureDirective = JSON.parse(holdtxt.replace(/&lt;/g,'<'));
-	    if(!myContext.pureDirective){
+	    var holdtxt = myscripts[0].textContent.replace(/&lt;/g,'<');
+	    var directive  = JSON.parse(holdtxt);
+	    if(!directive){
 		alert('probable parse error in ' + holdtxt);
 	    }
+	    myContext.pureDirective= $p(myContext.getElementsByClassName("template")).compile(directive);
 	}
 	else {
 	myContext.pureDirective= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
