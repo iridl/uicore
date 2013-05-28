@@ -1174,10 +1174,12 @@ if(elbyname){
 if(it.options){
     changed = pform.elements[it.name];
     if(changed.length){
-changed[0].value=it.options[it.selectedIndex].value;
+	    /* multivalued but not checkbox -- copy first
+	     alternatively could match classes */
+	changed[0].value=it.options[it.selectedIndex].value;
     }
     else {
-changed.value=it.options[it.selectedIndex].value;
+	changed.value=it.options[it.selectedIndex].value;
     }
 }
 else if(elbyname.length) {
@@ -2252,6 +2254,10 @@ var mypar=myimgdiv.zoomstatus;
 if(mypar){
 if(checkobj){
 var res = myform.elements['resolution'];
+    if(res && res.length){
+	/* if multiple resolutions, uses first */
+	res = res[0];
+    }
 var resclass="point";
 if(parseFloat(res.value) != 'NaN'){
     if(myinfo['wms:CRS'] == 'EPSG:4326'){
@@ -3190,7 +3196,7 @@ if(typeof(elbyname) != 'undefined'){
 	}
 	else {
 	    /* multivalued but not checkbox -- copy first
-	     aleternatively could match classes */
+	     alternatively could match classes */
 	cval = myform.elements[sel.name][0].value;
 	if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
 	    sel.value=cval;
