@@ -2258,15 +2258,34 @@ var res = myform.elements['resolution'];
 	/* if multiple resolutions, uses first */
 	res = res[0];
     }
-var resclass="point";
-if(parseFloat(res.value) != 'NaN'){
-    if(myinfo['wms:CRS'] == 'EPSG:4326'){
-resclass = res.value + "&deg; box";
+    var resclass="point";
+/* if there is a resolution select menu, uses its labels */
+    var resselect = document.getElementsByClassName('pageformcopy');
+    if(resselect.length>0){
+	for(var i=resselect.length;i--;){
+	    if(resselect[i].name=='resolution'){
+		for (var j=resselect[i].options.length;j--;){
+		    if(resselect[i].options[j].value==res.value){
+			resclass=resselect[i].options[j].text;
+		    }
+		}
+	    }
+	}
     }
-    else {
-resclass = res.value + "m box";
+    if(resclass=='point'){
+	if(res.value.substring && res.value.substring(0,6)=='irids:'){
+	    var parts = res.value.split(':');
+	    resclass = parts[parts.length-2];
+	}
+	else {
+	    if(myinfo['wms:CRS'] == 'EPSG:4326'){
+		resclass = res.value + "&deg; box";
+	    }
+	    else {
+		resclass = res.value + "m box";
+	    }
+	}
     }
-}
 // adds pickRegion if necessary to indicate that we could pick a point or choose an area
 appendMissingClass(myimgdiv,'pickRegion');
 mypar.innerHTML="click for " + resclass +"<br /> click-drag-release for larger or to zoom in";
