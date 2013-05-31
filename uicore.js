@@ -1,6 +1,17 @@
 /*
 MBB 2012 -- maproom implementation in javascript
-
+*/
+var uicoreConfig;
+if(!uicoreConfig){
+    uicoreConfig={};
+}
+	    if(!uicoreConfig.resolutionQueryServers){
+		uicoreConfig.resolutionQueryServers = {
+		    "default": "iridl.ldeo.columbia.edu",
+		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "www.ethiometmaprooms.gov.et:8082"
+		}
+	    }
+/*
 $.ready runs a function at DOMContentLoaded if possible, otherwise onload
 runs immediately if already loaded.  It is invoked at the end of this file.
 */
@@ -1533,7 +1544,14 @@ within=true;
 // uri -- returns geoobject of that class/type 
 if(res.value && res.value.substr(0,6) == 'irids:'){
     invalidatePageInput(myin);
-    var resurl = "http://iridl.ldeo.columbia.edu/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
+    var queryserver=uicoreConfig.resolutionQueryServers[res.value];
+    if(!queryserver){
+	queryserver=uicoreConfig.resolutionQueryServers['default'];
+    }
+    if(!queryserver){
+	queryserver="iridl.ldeo.columbia.edu";
+    }
+    var resurl = "http://" + queryserver + "/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
     resclasses="";
     if(res && res.className){
 	resclasses = resclasses + ' ' + res.className;
@@ -1570,7 +1588,7 @@ if(it.readyState == 4){
 var jsontxt = it.responseText;
 var result;
     try{result=JSON.parse(jsontxt)}
-    catch(err){alert(err + ' in parsing ' + jsontxt + ' from ' + resurl)}
+    catch(err){alert(err + ' in parsing from ' + resurl + ' parsing ' + jsontxt)}
 /* info now has figure information */
 if(result["value"]){
     var myin = it.myin;
