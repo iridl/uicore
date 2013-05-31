@@ -1285,19 +1285,20 @@ function runPureOnContext(myContext){
 		myContext.pureTemplateClass=myscripts[0].className;
 	    }
 	}
-    }
     var mytems0 = myContext.getElementsByClassName(myContext.pureTemplateClass);
-    var mytems = [];
     for (var i=0 ; i< mytems0.length;i++){
 	if(mytems0[i].tagName != 'SCRIPT'){
-	    mytems.push( mytems0[i]);
+	    appendMissingClass(mytems0[i],'isAPureTemplate')
 	}
     }
+    myContext.pureTemplates=myContext.getElementsByClassName(myContext.pureTemplateClass + ' isAPureTemplate')
+    }
+    var mytems = myContext.pureTemplates;
     if(!myContext.pureCompiledTemplates){
 	myContext.pureCompiledTemplates = [];
 	if(myContext.pureDirective) {
-	    if (mytems.length == 1 && mytems[0].tagName=='SELECT') {
-		myContext.pureCompiledTemplates[0] = $p(myContext.getElementsByClassName(myContext.pureTemplateClass)).compile(myContext.pureDirective);
+	    if (mytems.length == 1) {
+		myContext.pureCompiledTemplates[0] = $p(mytems).compile(myContext.pureDirective);
 	    }
 	    else {
 	    for (var i =mytems.length;i--;){
@@ -1311,11 +1312,11 @@ function runPureOnContext(myContext){
 	    }
 	}
     }
-    if (mytems.length == 1 && mytems[0].tagName=='SELECT') {
+    if (mytems.length == 1) {
 	/* special code so select as template will work */
 	var i=0;
-    var holdonchange = mytems[i].onchange;
-    $p(myContext.getElementsByClassName(myContext.pureTemplateClass)).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
+	var holdonchange = mytems[i].onchange;
+	$p(mytems).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
     if(typeof(holdonchange)=='function' ){
 	mytems[i].onchange=holdonchange;
 	mytems[i].myonchange=holdonchange;
@@ -1323,7 +1324,7 @@ function runPureOnContext(myContext){
     }
     else {
     for (var i=mytems.length;i--;){
-    $p(mytems[i]).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
+	$p(mytems[i]).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
     }
     }
 changeClassWithin(myContext,'invalid','valid');
