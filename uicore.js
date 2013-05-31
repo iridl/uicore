@@ -1257,7 +1257,7 @@ xmlhttp.send();
 }
 /*
 runs pure on what I am calling a context.  It only runs on elements
-within the context which have class "template".
+within the context which have a class that matches the directive element (default value "template" if no directive element).
 
 Because this can be called more than once, I use the compile/render
 form of pure.
@@ -1266,27 +1266,65 @@ Note that you can now explicitly set the template, called a 'directive' by PURE,
 by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
  */
 function runPureOnContext(myContext){
-    if(!myContext.pureDirective){
+    if(!myContext.pureCompiledTemplates){
+	/* run for the first time -- needs to survey iridl:hasPUREdirective(s) for directives and templateClasses */
+	if(!myContext.pureTemplateClass){
+	    myContext.pureTemplateClass = 'template';
+	}
 	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
 	if(myscripts.length > 0){
 	    var holdtxt = myscripts[0].textContent.replace(/&lt;/g,'<');
-	    var directive  = JSON.parse(holdtxt);
-	    if(!directive){
-		alert('probable parse error in ' + holdtxt);
+	    if(holdtxt){
+		var directive  = JSON.parse(holdtxt);
+		if(!directive){
+			alert('probable parse error in ' + holdtxt);
+		}
+		myContext.pureDirective=directive;
 	    }
-	    myContext.pureDirective= $p(myContext.getElementsByClassName("template")).compile(directive);
-	}
-	else {
-	myContext.pureDirective= $p(myContext.getElementsByClassName("template")).compile(false,myContext.parsedJSON);
+	    if(myscripts[0].className){
+		myContext.pureTemplateClass=myscripts[0].className;
+	    }
 	}
     }
-    var mytems = myContext.getElementsByClassName("template");
-    var holdonchange = mytems[0].onchange;
-    var holdjson = myContext.parsedJSON;
-    $p(myContext.getElementsByClassName("template")).render(myContext.parsedJSON,myContext.pureDirective);
+    var mytems0 = myContext.getElementsByClassName(myContext.pureTemplateClass);
+    var mytems = [];
+    for (var i=0 ; i< mytems0.length;i++){
+	if(mytems0[i].tagName != 'SCRIPT'){
+	    mytems.push( mytems0[i]);
+	}
+    }
+    if(!myContext.pureCompiledTemplates){
+	myContext.pureCompiledTemplates = [];
+	if(myContext.pureDirective) {
+	    if (mytems.length == 1 && mytems[0].tagName=='SELECT') {
+		myContext.pureCompiledTemplates[0] = $p(myContext.getElementsByClassName(myContext.pureTemplateClass)).compile(myContext.pureDirective);
+	    }
+	    else {
+	    for (var i =mytems.length;i--;){
+		myContext.pureCompiledTemplates[i] = $p(mytems[i]).compile(myContext.pureDirective);
+	    }
+	    }
+	}
+	else{
+	    for (var i =mytems.length;i--;){
+		myContext.pureCompiledTemplates[i] = $p(mytems[i]).compile(false,myContext.parsedJSON);
+	    }
+	}
+    }
+    if (mytems.length == 1 && mytems[0].tagName=='SELECT') {
+	/* special code so select as template will work */
+	var i=0;
+    var holdonchange = mytems[i].onchange;
+    $p(myContext.getElementsByClassName(myContext.pureTemplateClass)).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
     if(typeof(holdonchange)=='function' ){
-	mytems[0].onchange=holdonchange;
-	mytems[0].myonchange=holdonchange;
+	mytems[i].onchange=holdonchange;
+	mytems[i].myonchange=holdonchange;
+    }
+    }
+    else {
+    for (var i=mytems.length;i--;){
+    $p(mytems[i]).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
+    }
     }
 changeClassWithin(myContext,'invalid','valid');
 }
@@ -1474,7 +1512,6 @@ if(res && res.length) {
 else {
     ress=[res];
 }
-
 if(resf && resf.length) {
     resfs=resf;
 }
@@ -2623,6 +2660,7 @@ if(homelinkjson.length == 1
     mylink.className=homelinkjson[0].className;
     mylink.href=homelinkjson[0].href;
     gb.appendChild(mylink);
+    gb.pureTemplateClass = 'homeTemplate';
     gb.pureDirective = {
 	'option.toplist' : {
 	    'opt<-options':{
@@ -2647,7 +2685,7 @@ if(homelinkjson.length == 1
     sel.name = 'homelinksel';
     sel.onchange=dohomesel;
     sel.myonchange=dohomesel;
-    sel.className='template homeselect pageformcopy';
+    sel.className='homeTemplate homeselect pageformcopy';
     var opt;
     opt=document.createElement('option');
     opt.innerHTML=' ';
