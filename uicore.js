@@ -7,8 +7,9 @@ if(!uicoreConfig){
 }
 	    if(!uicoreConfig.resolutionQueryServers){
 		uicoreConfig.resolutionQueryServers = {
-		    "default": "iridl.ldeo.columbia.edu",
-		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "www.ethiometmaprooms.gov.et:8082"
+		    "default": "http://iridl.ldeo.columbia.edu/",
+		    "default": "/",
+		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/"
 		}
 	    }
 /*
@@ -115,6 +116,9 @@ lhref = maproomroot + ghref.substr(maproomurl.length);
 }
 else {
 lhref= ghref;
+}
+if(lhref.substr(0,1) == '/'){
+    lhref = location.protocol + '//' + location.host + lhref;
 }
 return lhref;
 }
@@ -1549,9 +1553,9 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
 	queryserver=uicoreConfig.resolutionQueryServers['default'];
     }
     if(!queryserver){
-	queryserver="iridl.ldeo.columbia.edu";
+	queryserver="http://iridl.ldeo.columbia.edu/";
     }
-    var resurl = "http://" + queryserver + "/expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
+    var resurl = queryserver + "expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
     resclasses="";
     if(res && res.className){
 	resclasses = resclasses + ' ' + res.className;
