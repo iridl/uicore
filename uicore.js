@@ -1559,9 +1559,7 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
     if(resf && resf.className){
 	resclasses = resclasses + ' ' + resf.className;
     }
-    if(resclasses){
-	resurl = appendPageForm(resurl,resclasses);
-    }
+    resurl = appendPageForm(resurl,resclasses);
     var delim = '?';
     if(resurl.indexOf('?')>0){
 	delim="&";
