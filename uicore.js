@@ -1556,9 +1556,6 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
     }
     var resurl = queryserver + "expert/%28irids:SOURCES:Features:Political:Africa:Districts:ds%29//resolution/parameter/%28pt:4:10:pt%29//clickpt/parameter/" + encodeURIComponent('{}')+"//resolutionFilter/parameter/geoselect//string/as.json";
     resclasses="";
-    if(res && res.className){
-	resclasses = resclasses + ' ' + res.className;
-    }
     if(resf && resf.className){
 	resclasses = resclasses + ' ' + resf.className;
     }
