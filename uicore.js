@@ -1280,68 +1280,106 @@ Note that you can now explicitly set the template, called a 'directive' by PURE,
 by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
  */
 function runPureOnContext(myContext){
-    if(!myContext.pureCompiledTemplates){
+    if(!myContext.byDirective){
 	/* run for the first time -- needs to survey iridl:hasPUREdirective(s) for directives and templateClasses */
-	if(!myContext.pureTemplateClass){
-	    myContext.pureTemplateClass = 'template';
-	}
+	/* stores context directives in an array so there can be multiple templates with multiple structures*/
+	myContext.byDirective=[];
+	/* loops over script iridl:hasPUREdirective elements for directives */
 	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
 	if(myscripts.length > 0){
-	    var holdtxt = myscripts[0].textContent.replace(/&lt;/g,'<');
-	    if(holdtxt){
-		var directive  = JSON.parse(holdtxt);
-		if(!directive){
+	    for (var iscript = 0 ; iscript<myscripts.length ; iscript++){
+		var myscript = myscripts[iscript];
+	        if(myscript.parentNode == myContext){
+		var holdtxt = myscript.textContent.replace(/&lt;/g,'<');
+		var mystuff = {};
+		mystuff.pureDirective="";
+		if(holdtxt){
+		    var directive  = JSON.parse(holdtxt);
+		    if(!directive){
 			alert('probable parse error in ' + holdtxt);
+		    }
+		    mystuff.pureDirective=directive;
 		}
-		myContext.pureDirective=directive;
-	    }
-	    if(myscripts[0].className){
-		myContext.pureTemplateClass=myscripts[0].className;
+		if(myscript.className){
+		    mystuff.pureTemplateClass=myscript.className;
+		}
+		else {
+		    mystuff.pureTemplateClass='template';
+		}
+		alert(iscript + ' ' + mystuff.pureTemplateClass + ' ' + holdtxt);
+		myContext.byDirective.push(mystuff);
+		}
 	    }
 	}
-    var mytems0 = myContext.getElementsByClassName(myContext.pureTemplateClass);
-    for (var i=0 ; i< mytems0.length;i++){
-	if(mytems0[i].tagName != 'SCRIPT'){
-	    appendMissingClass(mytems0[i],'isAPureTemplate')
+	else {
+	/* does default single directive or not*/
+	    myContext.byDirective[0]={};
+	    myContext.byDirective[0].pureDirective=myContext.pureDirective;
+	    if(myContext.pureTemplateClass){
+	    	    myContext.byDirective[0].pureTemplateClass=myContext.pureTemplateClass;
+		    }
+		    else {
+	    	    myContext.byDirective[0].pureTemplateClass='template';
+		    }
+	}
+	/* finds templates for each directive */
+	var mydirs = myContext.byDirective;
+	for (var iscript = 0 ; iscript<mydirs.length ; iscript++){
+	    var myscript = mydirs[iscript];
+	    var mytems0 = myContext.getElementsByClassName(myscript.pureTemplateClass);
+	    for (var i=0 ; i< mytems0.length;i++){
+		if(mytems0[i].tagName != 'SCRIPT'){
+		    appendMissingClass(mytems0[i],'isAPureTemplate');
+		}
+	    }
+	    myscript.pureTemplates=myContext.getElementsByClassName(myscript.pureTemplateClass + ' isAPureTemplate');
 	}
     }
-    myContext.pureTemplates=myContext.getElementsByClassName(myContext.pureTemplateClass + ' isAPureTemplate')
-    }
-    var mytems = myContext.pureTemplates;
-    if(!myContext.pureCompiledTemplates){
-	myContext.pureCompiledTemplates = [];
-	if(myContext.pureDirective) {
-	    if (mytems.length == 1) {
-		myContext.pureCompiledTemplates[0] = $p(mytems).compile(myContext.pureDirective);
+    /* we have a directives list */
+    var mydirs = myContext.byDirective;
+    for (var iscript = 0 ; iscript<mydirs.length ; iscript++){
+	var myscript = mydirs[iscript];
+	var mytems = myscript.pureTemplates;
+	if(!myscript.pureCompiledTemplates){
+	    myscript.pureCompiledTemplates = [];
+	    if(myscript.pureDirective) {
+		if (mytems.length == 1) {
+		    myscript.pureCompiledTemplates[0] = $p(mytems).compile(myscript.pureDirective);
+		}
+		else {
+		    for (var i =mytems.length;i--;){
+			myscript.pureCompiledTemplates[i] = $p(mytems[i]).compile(myscript.pureDirective);
+		    }
+		}
 	    }
-	    else {
-	    for (var i =mytems.length;i--;){
-		myContext.pureCompiledTemplates[i] = $p(mytems[i]).compile(myContext.pureDirective);
-	    }
+	    else{
+		for (var i =mytems.length;i--;){
+		    myscript.pureCompiledTemplates[i] = $p(mytems[i]).compile(false,myContext.parsedJSON);
+		}
 	    }
 	}
-	else{
-	    for (var i =mytems.length;i--;){
-		myContext.pureCompiledTemplates[i] = $p(mytems[i]).compile(false,myContext.parsedJSON);
-	    }
-	}
-    }
-    if (mytems.length == 1) {
-	/* special code so select as template will work */
-	var i=0;
+   	 if (mytems.length == 1) {
+	 /* special code so select as template will work */
+	    var i=0;
+	    var holdonchange = mytems[i].onchange;
+	    $p(mytems).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
+            if(typeof(holdonchange)=='function' ){
+	        mytems[i].onchange=holdonchange;
+	       mytems[i].myonchange=holdonchange;
+            }
+        }
+	else {
+    for (var i=mytems.length;i--;){
 	var holdonchange = mytems[i].onchange;
-	$p(mytems).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
+	$p(mytems[i]).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
     if(typeof(holdonchange)=='function' ){
 	mytems[i].onchange=holdonchange;
 	mytems[i].myonchange=holdonchange;
     }
     }
-    else {
-    for (var i=mytems.length;i--;){
-	$p(mytems[i]).render(myContext.parsedJSON,myContext.pureCompiledTemplates[i]);
     }
     }
-changeClassWithin(myContext,'invalid','valid');
+    changeClassWithin(myContext,'invalid','valid');
 }
 function initializeDLimage(){
     var mylist=document.getElementsByClassName("dlimage");
