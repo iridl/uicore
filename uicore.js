@@ -1306,7 +1306,6 @@ function runPureOnContext(myContext){
 		else {
 		    mystuff.pureTemplateClass='template';
 		}
-		alert(iscript + ' ' + mystuff.pureTemplateClass + ' ' + holdtxt);
 		myContext.byDirective.push(mystuff);
 		}
 	    }
