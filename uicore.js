@@ -1290,8 +1290,8 @@ function runPureOnContext(myContext){
 	    for (var iscript = 0 ; iscript<myscripts.length ; iscript++){
 		var myscript = myscripts[iscript];
 	        if(myscript.parentNode == myContext){
-		var holdtxt = myscript.textContent.replace(/&lt;/g,'<');
-		var mystuff = {};
+                   var holdtxt = myscript.text.replace(/&lt;/g,'<');
+		   var mystuff = {};
 		mystuff.pureDirective="";
 		if(holdtxt){
 		    var directive  = JSON.parse(holdtxt);
