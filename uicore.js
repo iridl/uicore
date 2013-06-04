@@ -1279,11 +1279,14 @@ form of pure.
 Note that you can now explicitly set the template, called a 'directive' by PURE,
 by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
  */
+var contextcount=0;
 function runPureOnContext(myContext){
     if(!myContext.byDirective){
 	/* run for the first time -- needs to survey iridl:hasPUREdirective(s) for directives and templateClasses */
 	/* stores context directives in an array so there can be multiple templates with multiple structures*/
 	myContext.byDirective=[];
+	myContext.contextcount=contextcount;
+	contextcount=contextcount+1;
 	/* loops over script iridl:hasPUREdirective elements for directives */
 	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
 	if(myscripts.length > 0){
@@ -1325,13 +1328,15 @@ function runPureOnContext(myContext){
 	var mydirs = myContext.byDirective;
 	for (var iscript = 0 ; iscript<mydirs.length ; iscript++){
 	    var myscript = mydirs[iscript];
+	    var mytclass = myscript.pureTemplateClass + 'isAPureTemplateFor' + myContext.contextcount;
 	    var mytems0 = myContext.getElementsByClassName(myscript.pureTemplateClass);
 	    for (var i=0 ; i< mytems0.length;i++){
 		if(mytems0[i].tagName != 'SCRIPT'){
-		    appendMissingClass(mytems0[i],'isAPureTemplate');
+		    appendMissingClass(mytems0[i],mytclass);
 		}
 	    }
-	    myscript.pureTemplates=myContext.getElementsByClassName(myscript.pureTemplateClass + ' isAPureTemplate');
+	    myscript.pureTemplates=myContext.getElementsByClassName(mytclass);
+	    myscript.pureTClass='.' + mytclass;
 	}
     }
     /* we have a directives list */
@@ -1339,11 +1344,12 @@ function runPureOnContext(myContext){
     for (var iscript = 0 ; iscript<mydirs.length ; iscript++){
 	var myscript = mydirs[iscript];
 	var mytems = myscript.pureTemplates;
+	var mytclass = myscript.pureTClass;
 	if(!myscript.pureCompiledTemplates){
 	    myscript.pureCompiledTemplates = [];
 	    if(myscript.pureDirective) {
 		if (mytems.length == 1) {
-		    myscript.pureCompiledTemplates[0] = $p(mytems).compile(myscript.pureDirective);
+		    myscript.pureCompiledTemplates[0] = $p(mytclass).compile(myscript.pureDirective);
 		}
 		else {
 		    for (var i =mytems.length;i--;){
@@ -1361,7 +1367,7 @@ function runPureOnContext(myContext){
 	 /* special code so select as template will work */
 	    var i=0;
 	    var holdonchange = mytems[i].onchange;
-	    $p(mytems).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
+	    $p(mytclass).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
             if(typeof(holdonchange)=='function' ){
 	        mytems[i].onchange=holdonchange;
 	       mytems[i].myonchange=holdonchange;
