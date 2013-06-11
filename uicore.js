@@ -1345,44 +1345,18 @@ function runPureOnContext(myContext){
 	var myscript = mydirs[iscript];
 	var mytems = myscript.pureTemplates;
 	var mytclass = myscript.pureTClass;
-	if(!myscript.pureCompiledTemplates){
-	    myscript.pureCompiledTemplates = [];
-	    if(myscript.pureDirective) {
-		if (mytems.length == 1) {
-		    myscript.pureCompiledTemplates[0] = $p(mytclass).compile(myscript.pureDirective);
-		}
-		else {
-		    for (var i =mytems.length;i--;){
-			myscript.pureCompiledTemplates[i] = $p(mytems[i]).compile(myscript.pureDirective);
-		    }
-		}
-	    }
-	    else{
-		for (var i =mytems.length;i--;){
-		    myscript.pureCompiledTemplates[i] = $p(mytems[i]).compile(false,myContext.parsedJSON);
-		}
-	    }
-	}
-   	 if (mytems.length == 1) {
-	 /* special code so select as template will work */
 	    var i=0;
 	    var holdonchange = mytems[i].onchange;
-	    $p(mytclass).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
+	     if(myscript.pureDirective){
+	    $p(mytclass).render(myContext.parsedJSON,myscript.pureDirective);
+	     }
+	     else {
+	    $p(mytclass).autoRender(myContext.parsedJSON);
+	     }
             if(typeof(holdonchange)=='function' ){
 	        mytems[i].onchange=holdonchange;
 	       mytems[i].myonchange=holdonchange;
             }
-        }
-	else {
-    for (var i=mytems.length;i--;){
-	var holdonchange = mytems[i].onchange;
-	$p(mytems[i]).render(myContext.parsedJSON,myscript.pureCompiledTemplates[i]);
-    if(typeof(holdonchange)=='function' ){
-	mytems[i].onchange=holdonchange;
-	mytems[i].myonchange=holdonchange;
-    }
-    }
-    }
     }
     changeClassWithin(myContext,'invalid','valid');
 }
