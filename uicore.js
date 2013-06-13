@@ -1582,9 +1582,7 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
 	delim="&";
     }
     resurl = resurl + delim + 'clickpt=' + encodeURIComponent(clickpt.value);
-    if(!res.className){
-	resurl = resurl + '&resolution=' + encodeURIComponent(res.value);
-    }
+    resurl = resurl + '&resolution=' + encodeURIComponent(res.value);
     if(resf && !resf.className){
 	if(resf.value.indexOf('{')<0){
 	resurl=resurl + '&resolutionFilter=' + encodeURIComponent('{' + resf.value + '}');
