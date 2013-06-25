@@ -410,6 +410,8 @@ cursor: crosshair;
 }
 .zoomArea {
 cursor: se-resize !important;
+border-color: red;
+border-width: 2px;
 }
 .imageOverlayDiv+img{
 cursor: crosshair;
@@ -417,8 +419,12 @@ cursor: crosshair;
 .imageOverlayDiv.pickRegion+img {
 cursor: crosshair;
 }
+/* switch to resize cursor during active zoom
+   also fade the base image slightly during active zoom 
+   to make the selected area clearer */
 .zoomArea+img {
 cursor: se-resize !important;
+opacity: 0.6;
 }
 
 .imageOverlayDiv.inactive {
