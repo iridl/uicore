@@ -466,6 +466,12 @@ gba.setAttribute("title","Save to Evernote with link back");
 gba.onclick=doEvernoteClip;
 gb.appendChild(gba);
 s.appendChild(gb);
+/* Pinterest */
+gb= document.createElement('div');
+gb.className='sharebutton pinterest';
+gb.onclick=doPinterestClip;
+/* s.appendChild(gb); */
+/* tumblr */
 gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='tumblr';
@@ -519,6 +525,10 @@ s.appendChild(po);
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = "http://static.evernote.com/noteit.js";
 s.appendChild(ga);
+/* var pi = document.createElement('script'); pi.type = 'text/javascript'; pi.async = true;
+    pi.src = "//assets.pinterest.com/js/pinit.js";
+s.appendChild(pi);
+*/
 }
 }
 function loadFB(){
@@ -652,6 +662,27 @@ return arg;
 };
 _gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);
 Evernote.doClip(clipargs);
+}
+function doPinterestClip(){
+    var tpar = getElementsByAttribute(document,'h2','property','term:title');
+    var dpar = getElementsByAttribute(document,'p','property','term:description');
+    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var ttype='';
+    var title="";
+	if(tpar.length>0){
+	title=tpar[0].innerHTML;
+	}
+	if(!title)title=document.title;
+    var description="";
+	if(dpar.length>0){
+	description=dpar[0].innerHTML;
+	}
+      var tumblr_url;
+      /*_gaq.push(['_trackSocial', 'Pinterest', 'clipPage', clipargs.url]); */
+    var pinterest_link_url = url;
+    var pinterest_link_description = title + ":  " +description;
+pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
+window.open(pinterest_url)
 }
 function doEvernoteClipElement(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -796,6 +827,37 @@ function doPDFClick(evt){
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
        _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);
+   }
+}
+function doPinterestClipElement(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+     
+   if(figimg && figimg.src){
+       var pinurl=figimg.src;
+       var pinclass=figimg.className;
+       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       pinurl = pinurl.substr(0,8) + pinurl.substring(8).replace(/[/][/]([^/+]+)/g,function(match){
+		   return '(' + match.substring(2,match.length) + ')cvn';
+	       });
+    var tpar = getElementsByAttribute(document,'h2','property','term:title');
+    var dpar = getElementsByAttribute(document,'p','property','term:description')
+
+    var title="";
+	if(tpar.length>0){
+	title=tpar[0].innerHTML;
+	}
+	if(!title)title=document.title;
+    var description="";
+	if(dpar.length>0){
+	description=dpar[0].innerHTML;
+	}
+    var pinterest_link_description = title + ":  " +description;
+
+    /*       _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']); */
+       pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
+           window.open(pinterest_url); 
    }
 }
 function doFigureImageClick(evt){
@@ -1958,6 +2020,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.setAttribute("title","Save to Evernote with link back");
 	gb.onclick=doEvernoteClipElement;
 	gb.myonclick=doEvernoteClipElement;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+/* pinterest */
+	var gb= document.createElement('div');
+	gb.className='sharebutton pinterest';
+	gb.setAttribute("title","Save to Pinterest with link back");
+	gb.onclick=doPinterestClipElement;
+	gb.myonclick=doPinterestClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 /* Google Earth */
