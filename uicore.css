@@ -567,7 +567,8 @@ display: block;
 .dlimage.ShowControlIvars .dlcontrol.ivar {
 display: block;
 }
-.dlimage.ShowControlDownload .selectedImage {
+.dlimage.ShowControlDownload .selectedImage,
+.dlimage.ShowControlShare .selectedImage {
     border-width: 2pt;
     border-style: solid;
 }
@@ -1499,6 +1500,22 @@ opacity: 0.8;
 .evernote:hover {
 opacity: 1.0;
 }
+  .pinterest{
+    cursor: pointer;
+    height: 22px;
+   width: 22px;
+    display: inline-block;
+    padding: 2px;
+    background: url('icons/pinterest_badge_red22.png') center no-repeat;
+    border: 1px solid #ccc;
+text-indent:-9999px; overflow:hidden; 
+-moz-border-radius: 12px;
+border-radius: 12px;
+opacity: 0.8;
+  }
+.pinterest:hover {
+opacity: 1.0;
+}
 /* googleearth share element */
   .googleearth{
     cursor: pointer;
@@ -1654,4 +1671,21 @@ background-color: white;
 .datasetdocumentation dd {margin: 0;}
 .datasetdocumentation dt {float: left; clear: left; font-weight: bold; padding-right: .8em;}
 .datasetdocumentation dt::after {content: ":"}
-
+/* special support for multiple dlimages:  if the .dlimage.regionwithinbbox division is immediately followed by a .dlimage
+*/
+@media only all and (min-width: 800px) {
+.regioniswithinbbox .dlimage.regionwithinbbox + .dlimage {
+width: 45%;
+}
+}
+@media only all and (min-width: 1200px) {
+.regioniswithinbbox .dlimage.regionwithinbbox + .dlimage {
+width: 30%;
+}
+.regioniswithinbbox .dlimage.regionwithinbbox + .dlimage.narrow {
+width: 25%;
+}
+.regioniswithinbbox .dlimage.regionwithinbbox + .dlimage.wide {
+width: 45%;
+}
+}
