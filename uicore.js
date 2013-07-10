@@ -677,8 +677,7 @@ function doPinterestClip(){
 	if(dpar.length>0){
 	description=dpar[0].innerHTML;
 	}
-      var tumblr_url;
-      /*_gaq.push(['_trackSocial', 'Pinterest', 'clipPage', clipargs.url]); */
+      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); 
     var pinterest_link_url = url;
     var pinterest_link_description = title + ":  " +description;
 pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
