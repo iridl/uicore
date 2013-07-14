@@ -854,7 +854,7 @@ function doPinterestClipElement(evt){
 	}
     var pinterest_link_description = title + ":  " +description;
 
-    /*       _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']); */
+           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);
        pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
            window.open(pinterest_url); 
    }
