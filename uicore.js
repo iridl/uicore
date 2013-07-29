@@ -2792,11 +2792,6 @@ if(homelinkjson.length == 1
     opt=document.createElement('option');
     opt.innerHTML=' ';
     opt.value='';
-    opt.className='emptyOption';
-    sel.appendChild(opt);
-    opt=document.createElement('option');
-    opt.innerHTML=' ';
-    opt.value='';
     opt.className='toplist';
     sel.appendChild(opt);
     opt=document.createElement('optgroup');
@@ -2806,6 +2801,11 @@ if(homelinkjson.length == 1
     oopt.innerHTML=' ';
     oopt.value='';
     opt.appendChild(oopt);
+    sel.appendChild(opt);
+    opt=document.createElement('option');
+    opt.innerHTML=' ';
+    opt.value='';
+    opt.className='emptyOption';
     sel.appendChild(opt);
     gb.appendChild(sel);
 var myform=document.getElementById('pageform');
