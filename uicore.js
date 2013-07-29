@@ -2784,10 +2784,16 @@ if(homelinkjson.length == 1
     }
     var sel = document.createElement('select');
     sel.name = 'homelinksel';
+    sel.id = 'homelinksel';
     sel.onchange=dohomesel;
     sel.myonchange=dohomesel;
     sel.className='homeTemplate homeselect pageformcopy';
     var opt;
+    opt=document.createElement('option');
+    opt.innerHTML=' ';
+    opt.value='';
+    opt.className='emptyOption';
+    sel.appendChild(opt);
     opt=document.createElement('option');
     opt.innerHTML=' ';
     opt.value='';
@@ -2806,6 +2812,7 @@ var myform=document.getElementById('pageform');
 if(myform){
     var ipt = document.createElement('input');
     ipt.name='homelinksel';
+    ipt.id = 'homelinksel';
     ipt.type='hidden';
     ipt.value='unseturl';
     myform.appendChild(ipt);
@@ -2815,6 +2822,7 @@ else if(homelinks.length > 1) {
     // menu from flat list of links
     var sel = document.createElement('select');
     appendMissingClass(gb,'HomeSelect');
+    sel.name = 'homelinksel';
     sel.name = 'homelinksel';
     sel.onchange=dohomesel;
     sel.myonchange=dohomesel;
@@ -2906,6 +2914,7 @@ fs.appendChild(leg);
 var sel=document.createElement('select');
 sel.name="Set-Language";
 sel.onchange=languageChange;
+sel.onchangefn=languageChange;
 var opt=document.createElement('option');
 if(document.getElementsByTagName('html')[0].hasAttribute("xml:lang")){
 opt.value=document.getElementsByTagName('html')[0].getAttribute("xml:lang");
