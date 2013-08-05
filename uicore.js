@@ -1570,6 +1570,22 @@ updatePageForm();
 }
 }
 }
+function clearregionwithin () {
+var myform=document.getElementById('pageform');
+if(myform){
+    var myin;
+myin = myform.elements['clickpt'];
+if(myin){
+myin.value='';
+}
+myin = myform.elements['region'];
+var mybbox = myform.elements['bbox'];
+if(myin && mybbox){
+    myin.value=mybbox.value;
+updatePageForm();
+}
+}
+}
 function setbbox (newbbox,crs) {
 var update=false;
 var within=false;
@@ -3102,11 +3118,20 @@ sel.onchangefn=pageformcopyonchange;
 /* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
 var stag = document.getElementsByClassName('RegionMenu');
 for (var i=0; i< stag.length ; i++){
-var sel=stag[i]
-    appendMissingClass(sel,'pageformcopy');;
+    var sel=stag[i];
+    appendMissingClass(sel,'pageformcopy');
 if(typeof(sel.onchange) != 'function'){
 sel.onchange=regiononchange;
 sel.onchangefn=regiononchange;
+}
+}
+/* popup regionwithinbbox:  sets region to match bbox and clears clickpt */
+var stag = document.getElementsByClassName('popup regionwithinbbox');
+for (var i=0; i< stag.length ; i++){
+    var sel=stag[i];
+if(typeof(sel.onchange) != 'function'){
+sel.onclick=clearregionwithin;
+sel.onclickfn=clearregionwithin;
 }
 }
 updatePageForm();

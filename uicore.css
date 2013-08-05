@@ -384,6 +384,26 @@ border-color: #AAAAAA;
        border-width: 3px;
 	width: 40%;
 }
+/* so dlimage will provide as basis for absolute images within */
+.dlimage {
+position: relative;
+}
+  .popup {
+display: none;
+  position: absolute;
+  background-color: white;
+  top: 12px;
+  left: 0px;
+  z-index: 25;
+-moz-border-radius-topleft: 8pt;
+border-top-left-radius: 8pt;
+-moz-border-radius: 8pt;
+border-radius: 8pt;
+  }
+.regioniswithinbbox .popup.regionwithinbbox {
+display: block
+}
+
 .dlimage wide {
 width: 50%;
 }
