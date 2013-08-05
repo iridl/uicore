@@ -837,6 +837,7 @@ function doPinterestClipElement(evt){
        var pinurl=figimg.src;
        var pinclass=figimg.className;
        var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       pinrul = pinurl.replace(/[/]expert[/]/,'/');
        pinurl = pinurl.substr(0,8) + pinurl.substring(8).replace(/[/][/]([^/+]+)/g,function(match){
 		   return '(' + match.substring(2,match.length) + ')cvn';
 	       });
