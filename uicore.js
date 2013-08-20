@@ -1473,7 +1473,9 @@ ctl.title="Layers";
 ctl.onclick=dolayersbutton;
 ctl.myonclick=dolayersbutton;
 leg.appendChild(ctl);
+if(s.className.indexOf('NoDefaultIvars')<0){
 appendMissingClass(s,'ShowControlIvars');
+}
 }
 /* share download buttons always appear */
 ctl=document.createElement('div');
