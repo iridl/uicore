@@ -2898,6 +2898,7 @@ Languages["in"]="bahasa";
 Languages["fr"]="fran&ccedil;ais";
 Languages["id"]="bahasa";
 Languages["ru"]="русский";
+Languages["sw"]="swahili";
 var LanguageTitle = new Array();
 LanguageTitle["en"]="Language";
 LanguageTitle["es"]="Idioma";
@@ -2905,6 +2906,7 @@ LanguageTitle["in"]="Bahasa";
 LanguageTitle["fr"]="Langue";
 LanguageTitle["id"]="Bahasa";
 LanguageTitle["ru"]="Язык";
+LanguageTitle["sw"]="Lugha";
 function languageChange(){
 var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
