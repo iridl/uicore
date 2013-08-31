@@ -443,11 +443,6 @@ s.insertBefore(ls,s.firstChild);
 sl = document.getElementById('googleplus');
 if(!sl){
     /* google+ */
-var gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='googleplusbutton';
-gb.innerHTML='<div class="g-plusone" data-count="false" ></div>';
-s.appendChild(gb);
 /* twitter */
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -480,6 +475,15 @@ gb.id='tumblr';
     tumblr_button.setAttribute("title", "Share on Tumblr with link back");
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
+/* code to add Mail buttons */
+gb= document.createElement('div');
+gb.className='sharebutton';
+gb.id='mailbutton';
+    tumblr_button = document.createElement("a");
+	tumblr_button.onclick=doMail;
+    tumblr_button.setAttribute("title", "Share with e-mail");
+    gb.appendChild(tumblr_button);
+s.appendChild(gb);
 /* facebook */
 gb=document.createElement('div');
 // FB with url following share variables 
@@ -496,7 +500,8 @@ gb.setAttribute("data-layout","button_count");
 gb.setAttribute("data-width","24");
 gb.setAttribute("data-show-faces","true");
 var s = document.getElementById('custom-tweet-button').parentNode;
-s.insertBefore(gb,document.getElementById('custom-tweet-button'));
+/* s.insertBefore(gb,document.getElementById('custom-tweet-button')); */
+    s.appendChild(gb);
 loadFB();
 /* code to add GMail buttons
 gb= document.createElement('div');
@@ -508,14 +513,10 @@ gb.id='gmailbutton';
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
 */
-/* code to add Mail buttons */
-gb= document.createElement('div');
+var gb= document.createElement('div');
 gb.className='sharebutton';
-gb.id='mailbutton';
-    tumblr_button = document.createElement("a");
-	tumblr_button.onclick=doMail;
-    tumblr_button.setAttribute("title", "Share with e-mail");
-    gb.appendChild(tumblr_button);
+gb.id='googleplusbutton';
+gb.innerHTML='<div class="g-plusone" data-annotation="inline" ></div>';
 s.appendChild(gb);
 }
 // adds scripts to share to activate buttons
