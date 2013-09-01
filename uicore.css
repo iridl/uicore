@@ -226,6 +226,7 @@ height: 0px;
              margin: 1px;
 	     margin-bottom: 3px;
              min-height: 54px;
+	     max-width: 100%;
 	font-size: 12pt;
     background: url('icons/iri.png') right no-repeat;
 	background-size: 50pt;
