@@ -516,7 +516,9 @@ s.appendChild(gb);
 var gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='googleplusbutton';
-gb.innerHTML='<div class="g-plusone" data-annotation="inline" ></div>';
+    var annote = "inline";
+    if(window.innerWidth < 480)annote="bubble";
+gb.innerHTML='<div class="g-plusone" data-annotation="' + annote + '" ></div>';
 s.appendChild(gb);
 }
 // adds scripts to share to activate buttons
