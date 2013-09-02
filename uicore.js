@@ -403,33 +403,37 @@ function tabsSetup(){
     for (var i= 0; i<mylist.length; i++){
 	var tabset=mylist[i];
 	var tablist=tabset.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	var activetab=0
 	for (var j=0; j<tablist.length; j++){
-	var atab=tablist[j];
-	if(!atab.children[0].onclick) {
-        atab.onmousedown=tabclickevent;
-	atab.onfocus=tabclickevent;
-	atab.onclick=tabclickevent;
-	if(j != 0){
-        atab.className='ui-state-default';
-        var sid = atab.children[0].hash.substr(1);
-	if(!!sid){
-	    if(document.getElementById(sid)){
-        document.getElementById(sid).className="ui-tabs-panel-hidden";
+	    if(tablist[j].className=='ui-state-active')activetab=j
 	}
+	for (var j=0; j<tablist.length; j++){
+	    var atab=tablist[j];
+	    if(!atab.children[0].onclick) {
+		atab.onmousedown=tabclickevent;
+		atab.onfocus=tabclickevent;
+		atab.onclick=tabclickevent;
+		if(j != activetab){
+		    atab.className='ui-state-default';
+		    var sid = atab.children[0].hash.substr(1);
+		    if(!!sid){
+			if(document.getElementById(sid)){
+			    document.getElementById(sid).className="ui-tabs-panel-hidden";
+			}
+		    }
+		}
+		else {
+		    atab.className='ui-state-active';
+		    var sid = atab.children[0].hash.substr(1);
+		    if(!!sid){
+			if(document.getElementById(sid))
+			{document.getElementById(sid).className="ui-tabs-panel";}
+		    }
+		}
+		atab.children[0].onclick=tabtarget;
+	    }
 	}
-	}
-	else {
-        atab.className='ui-state-active';
-        var sid = atab.children[0].hash.substr(1);
-	if(!!sid){
-	    if(document.getElementById(sid))
-		{document.getElementById(sid).className="ui-tabs-panel";}
-	}
-	}
-        atab.children[0].onclick=tabtarget;
-	}
-	}
-	}
+    }
 }
 function insertshare(){
 var s = document.getElementById('share');
