@@ -1493,6 +1493,23 @@ opacity: 0.8;
 .evernote:hover {
 opacity: 1.0;
 }
+/* tumblr share element */
+  .tumblr{
+    cursor: pointer;
+    height: 20px;
+   width: 20px;
+    display: inline-block;
+    padding: 2px;
+    background: url('http://platform.tumblr.com/v1/share_4.png') center no-repeat;
+    border: 1px solid #ccc;
+text-indent:-9999px; overflow:hidden; 
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+  }
+.tumblr:hover {
+opacity: 1.0;
+}
   .pinterest{
     cursor: pointer;
     height: 22px;
