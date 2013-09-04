@@ -2626,6 +2626,8 @@ if(mytarget.myoverlay){
 else {
     myimgdiv = mytarget;
 }
+/* makes sure myimgdiv is active, otherwise will not have valid position */
+    changeClass(myimgdiv,'inactive','active');
 var myworld = myimgdiv.mycontainer;
 if(myworld){
 var myinfo = myimgdiv.inputimage.mylink.info;
