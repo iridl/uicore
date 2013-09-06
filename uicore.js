@@ -644,6 +644,52 @@ tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr
  _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
 window.open(tumblr_url);
 }
+function doTumblrClipElement(){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+
+    var content = document.getElementById("content");
+    var tpar = getElementsByAttribute(document,'h2','property','term:title');
+    var dpar = getElementsByAttribute(document,'p','property','term:description');
+    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var ttype='';
+    var title="";
+	if(tpar.length>0){
+	title=tpar[0].innerHTML;
+	}
+	if(!title)title=document.title;
+    var description="";
+	if(dpar.length>0){
+	description=dpar[0].innerHTML;
+	}
+      var tumblr_url;
+    var tumblr_photo_source = "";
+    var tumblr_photo_caption = "";
+	if(description){
+	tumblr_photo_caption = description;
+	}
+	else {
+	tumblr_photo_caption = title;
+	}
+    if(figimg && figimg.src){
+	tumblr_photo_source = figimg.src
+	}
+	var tumblr_photo_click_thru = url;
+	if(tumblr_photo_source){
+	    ttype='photo';
+tumblr_url = "http://www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
+}
+else {
+	    ttype='link';
+    var tumblr_link_url = url;
+    var tumblr_link_name = title;
+    var tumblr_link_description = description;
+tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
+}
+ _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
+window.open(tumblr_url);
+}
 function homelinkclick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -2047,6 +2093,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doEvernoteClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+/* tumblr */
+	var gb= document.createElement('div');
+	gb.className='sharebutton tumblr';
+	gb.setAttribute("title","Save to Tumblr with link back");
+	gb.onclick=doTumblrClipElement;
+	gb.myonclick=doTumblrClipElement;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
 /* pinterest */
 	var gb= document.createElement('div');
 	gb.className='sharebutton pinterest';
@@ -2572,6 +2626,8 @@ if(mytarget.myoverlay){
 else {
     myimgdiv = mytarget;
 }
+/* makes sure myimgdiv is active, otherwise will not have valid position */
+    changeClass(myimgdiv,'inactive','active');
 var myworld = myimgdiv.mycontainer;
 if(myworld){
 var myinfo = myimgdiv.inputimage.mylink.info;
