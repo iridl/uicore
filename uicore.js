@@ -1062,6 +1062,7 @@ sel.className='selectvalue';
 sel.onclick=selectvalueclick;
 sel.onclickFn=selectvalueclick;
 sel.innerHTML=titleobj.innerHTML;
+    sel.setAttribute('value',titleobj.innerHTML);
 s.appendChild(sel);
 sel=document.createElement('select');
 sel.name="mapsel";
@@ -1190,6 +1191,7 @@ sel.className='selectvalue';
 sel.onclick=selectvalueclick;
 sel.onclickFn=selectvalueclick;
 sel.innerHTML='Global';
+    sel.setAttribute('value','Global');
 theregion.appendChild(sel);
 sel=document.createElement('select');
 sel.size=1;
@@ -1269,6 +1271,7 @@ function regiononchange(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
 /* updates selectvalue element*/
 it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
+    it.previousSibling.setAttribute('value',it.options[it.selectedIndex].innerHTML);
 var pform=document.getElementById('pageform');
 if(pform){
 if(it.name == 'bbox'){
@@ -2937,6 +2940,7 @@ for (var i=0; i<slist.length ; i++){
 	sv.onclickFn=selectvalueclick;
 	if(mysel.selectedIndex >=0){
 	sv.innerHTML=mysel.options[mysel.selectedIndex].innerHTML;
+	    sv.setAttribute('value',sv.innerHTML);
 	}
 	mysel.parentNode.insertBefore(sv,mysel);
     }
@@ -3489,12 +3493,14 @@ var options=sel.options;
 sel.selectedIndex=-1;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML="";
+    sel.previousSibling.setAttribute('value',"");
 }
 for (var j=0; j < options.length ; j++){
 if(options[j].value == cval){
 sel.selectedIndex=j;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+    sel.previousSibling.setAttribute('value',sel.previousSibling.innerHTML);
 }
 break;
 }
@@ -3521,6 +3527,7 @@ if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
 myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+    sel.previousSibling.setAttribute('value',sel.previousSibling.innerHTML);
 }
  }   
 }
