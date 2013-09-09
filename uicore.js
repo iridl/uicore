@@ -3410,21 +3410,30 @@ else {
 /* does bodyClasses */
 if(!doflags){
 if(myform.className.indexOf('bodyClass')>=0){
-var mylist = myform.elements;
-var thebody = document.getElementsByTagName('body')[0];
-for (var i=0 ; i < mylist.length ; i++){
-    if(mylist[i].className.indexOf('bodyClass')>=0){
-	var value = mylist[i].name + mylist[i].value.replace(/[: .,@#]/g,'');
-	if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
-	    var cclassi = thebody.className.indexOf(mylist[i].name);
-	    if(cclassi>=0){
-		var oldclass = "" + thebody.className.substr(cclassi).split(" ")[0];
-		removeClass(thebody,oldclass);
+    var mylist = myform.elements;
+    var thebody = document.getElementsByTagName('body')[0];
+    for (var i=0 ; i < mylist.length ; i++){
+	if(mylist[i].className.indexOf('bodyClass')>=0){
+	    var value = mylist[i].name + mylist[i].value.replace(/[: .,@#]/g,'');
+	    if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
+		var cclassi = thebody.className.indexOf(mylist[i].name);
+		if(cclassi>=0){
+		    var oldclass = "" + thebody.className.substr(cclassi).split(" ")[0];
+		    removeClass(thebody,oldclass);
+		}
+		appendMissingClass(thebody,value);
 	    }
-	    appendMissingClass(thebody,value);
 	}
     }
 }
+if(myform.className.indexOf('bodyAttribute')>=0){
+    var mylist = myform.elements;
+    var thebody = document.getElementsByTagName('body')[0];
+    for (var i=0 ; i < mylist.length ; i++){
+	if(mylist[i].className.indexOf('bodyAttribute')>=0){
+	    thebody.setAttribute(mylist[i].name,mylist[i].value);
+	}
+    }
 }
 }
 }
