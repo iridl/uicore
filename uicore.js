@@ -1271,7 +1271,7 @@ function regiononchange(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
 /* updates selectvalue element*/
 it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
-    it.previousSibling.setAttribute('value',it.options[it.selectedIndex].innerHTML);
+it.previousSibling.setAttribute('value',it.options[it.selectedIndex].value);
 var pform=document.getElementById('pageform');
 if(pform){
 if(it.name == 'bbox'){
@@ -3500,7 +3500,7 @@ if(options[j].value == cval){
 sel.selectedIndex=j;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
-    sel.previousSibling.setAttribute('value',sel.previousSibling.innerHTML);
+    sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
 }
 break;
 }
@@ -3527,7 +3527,7 @@ if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
 myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
-    sel.previousSibling.setAttribute('value',sel.previousSibling.innerHTML);
+    sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
 }
  }   
 }
