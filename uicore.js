@@ -1918,6 +1918,7 @@ ipt= document.createElement('input');
 ipt.className = 'transformRegion';
 ipt.name = 'clickpt';
 ipt.type='hidden';
+    ipt.initialValue='';
 pform.appendChild(ipt);
 }
 ipt=pform.elements['plotaxislength'];
