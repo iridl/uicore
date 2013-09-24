@@ -3279,7 +3279,7 @@ clist = changedInput.className.split(' ');
     else {
 	clist = [];
     }
-if(newvalue){
+    if(typeof(newvalue)!='undefined'){
 changedInput.value=newvalue;
 }
 }
