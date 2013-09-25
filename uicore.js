@@ -1687,10 +1687,12 @@ else {
     resfs=[resf];
 }
 var clickpt = myform.elements['clickpt'];
+    var historyid;
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
 // click -- return depends on resolution res
 within=true;
     clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
+    historyid = clickpt.value;
     for (iin=0 ; iin < myins.length ; iin++){
 	myin = myins[iin];
 	res = ress[iin];
@@ -1730,6 +1732,7 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
 var xmlhttp= getXMLhttp();
 xmlhttp.myurl=resurl;
 xmlhttp.myin=myin;
+    xmlhttp.historyid=historyid;
 xmlhttp.onreadystatechange= function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1746,7 +1749,8 @@ if(result["value"]){
     }
     else {
     myin.value=result["value"];
-    updatePageForm();
+	
+	updatePageForm(undefined,undefined,undefined,it.historyid);
     }
 }
 }
@@ -1780,7 +1784,7 @@ else {
 update=true;
 }
 if(update){
-updatePageForm();
+	updatePageForm(undefined,undefined,undefined,historyid);
 }
 }
 }
@@ -2343,7 +2347,7 @@ else {
     removeClass(mylink.parentNode,'hasLayers');
 }
 if(pformchanged){
-    updatePageForm();
+    updatePageFormNoHistory();
 }
     }
     } // end of image (dimension) control builds
@@ -3118,12 +3122,11 @@ var varcnts = {};
 }
     if(history && history.pushState){
 	var url = location.href;
-	if(location.href != url){
-	    history.replaceState(url,'initial',url);
-	}
+	history.replaceState(url,'initial',url);
     }
 
 }
+/* onpopstate handler */
 function updatePageFormFromUrl(){
     /* updates values from page url */
 var myform=document.getElementById('pageform');
@@ -3164,7 +3167,7 @@ var varcnts = {};
 		}
 		var ipos=varcnts[iname];
 		if(inputs[iname].length){
-		    if(typeof(inputs[iname][ipos].checked) != 'undefined'){
+		    if(inputs[iname][ipos].type == 'checkbox'){
 			var newvalue = decodeURIComponent(hold);
 			for (var j = ipos; j < inputs[iname].length; j++){
 			    if(varcnts[iname] == 0){
@@ -3290,7 +3293,7 @@ sel.onclick=clearregionwithin;
 sel.onclickfn=clearregionwithin;
 }
 }
-updatePageForm();
+updatePageFormNoHistory();
 }
 }
 
@@ -3345,19 +3348,19 @@ If supplied with the input element that changed,
 1) only checks the classes that correspond, and
 2) uses guessvalue to do readahead, resetting when done. 
 */
-function updatePageFormQuietly(changedInput, newvalue, guessvalue){
+function updatePageFormQuietly(changedInput, newvalue, guessvalue,historyid){
 var addhistory=true;
-    updatePageFormSub(true,changedInput, newvalue, guessvalue,addhistory);
+    updatePageFormSub(true,changedInput, newvalue, guessvalue,historyid,addhistory);
 }
-function updatePageForm(changedInput, newvalue, guessvalue){
+function updatePageForm(changedInput, newvalue, guessvalue,historyid){
 var addhistory=true;
-    updatePageFormSub(false,changedInput, newvalue, guessvalue,addhistory);
+    updatePageFormSub(false,changedInput, newvalue, guessvalue,historyid,addhistory);
 }
 function updatePageFormNoHistory(changedInput, newvalue, guessvalue){
 var addhistory=false;
-    updatePageFormSub(false,changedInput, newvalue, guessvalue,addhistory);
+    updatePageFormSub(false,changedInput, newvalue, guessvalue,undefined,addhistory);
 }
-function updatePageFormSub(quietflag,changedInput, newvalue, guessvalue,addhistory){
+function updatePageFormSub(quietflag,changedInput, newvalue, guessvalue,historyid,addhistory){
 var myform=document.getElementById('pageform');
 if(myform){
 updatePageFormConditionalClassesAndFlags(true);
@@ -3463,8 +3466,18 @@ updatePageFormCopies(document);
 updatePageFormConditionalClassesAndFlags(false);
     if(addhistory && history && history.pushState){
 	var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var currentstate = history.state;
 	if(location.href != url){
-	    history.pushState(url,'update',url);
+	    var newstate = historyid;
+	    if(!historyid){
+		newstate=url;
+	    }
+	    if(historyid && currentstate == historyid){
+	    history.replaceState(newstate,'update',url);
+	    }
+	    else {
+	    history.pushState(newstate,'update',url);
+	    }
 	}
     }
 }
@@ -3628,7 +3641,11 @@ sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
  }   
 }
 if(!valid){
-    updatePageForm();
+    var historyid;
+    if(history){
+	    historyid = history.state;
+    }
+    updatePageForm(undefined,undefined,undefined,historyid);
 }
 }
 }
@@ -3811,9 +3828,22 @@ function alldisabledPageForm(classes){
 	    for ( var j = 0; j < members.length; j++ )
 		if(members[j].disabled) {
 		    if(members[j].type != 'checkbox' && members[j].value){
-			members[j].disabled=false;
+			if(members[j].initialValue){
+			    if(members[j].initialValue != members[j].value){
 			alldisabled=false;
-		    } 
+			var myname=members[j].name;
+			for (var k=members.length;k--;){
+			    if(members[k].disabled && members[k].name == myname){
+				members[k].disabled=false;
+			    }
+			}
+			    }
+			}
+			    else {
+				members[j].disabled=false;
+			alldisabled=false;
+			    }
+		    }
 		    else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
 			var myname=members[j].name;
 			for (var k=members.length;k--;){
