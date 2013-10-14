@@ -8,7 +8,8 @@ if(!uicoreConfig){
 	    if(!uicoreConfig.resolutionQueryServers){
 		uicoreConfig.resolutionQueryServers = {
 		    "default": "http://iridl.ldeo.columbia.edu/",
-		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/"
+		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/",
+		    "irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds": "http://maproom.meteo.go.tz/"
 		}
 	    }
 /*
