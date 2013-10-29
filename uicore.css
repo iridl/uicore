@@ -1687,6 +1687,9 @@ background-color: white;
 .regioniswithinbbox .dlimage.regionwithinbbox + .dlimage {
 width: 45%;
 }
+.regioniswithinbbox .dlimage.regionwithinbbox + .dlimage.wide {
+width: 45%;
+}
 }
 @media only all and (min-width: 1200px) {
 .regioniswithinbbox .dlimage.regionwithinbbox + .dlimage {
