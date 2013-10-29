@@ -1587,7 +1587,7 @@ xmlhttp.mylink=myfig;
 xmlhttp.infourl=infourl;
 var imglist=s.getElementsByTagName('img');
 for (var i = 0; i<imglist.length; i++){
-if(imglist[i].className == 'dlimg'){
+    if(imglist[i].className.indexOf('dlimg')>-1){
 myfig.figureimage=imglist[i];
 myfig.figureimage.mylink=xmlhttp.mylink;
 /* sets the infourl so that we know what we are "seeking" */
@@ -1600,12 +1600,13 @@ xmlhttp.onreadystatechange= function(evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
-/* sets the infourl so that we know what we have parsed */
-it.mylink.infourl=it.infourl;
+/* checks the infourl so that we know we have the current json */
+    if(it.mylink.infourl==it.infourl){
 it.mylink.info=JSON.parse(jsontxt);
 /* info now has figure information */
 DLimageBuildControls(it.mylink.parentNode,it.mylink);
 DLimageBuildZoom(it.mylink);
+    }
 }
 	 };
 	 xmlhttp.myfn=xmlhttp.onreadystatechange;
