@@ -8,7 +8,8 @@ if(!uicoreConfig){
 	    if(!uicoreConfig.resolutionQueryServers){
 		uicoreConfig.resolutionQueryServers = {
 		    "default": "http://iridl.ldeo.columbia.edu/",
-		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/"
+		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/",
+		    "irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds": "http://maproom.meteo.go.tz/"
 		}
 	    }
 /*
@@ -2972,6 +2973,7 @@ Languages["fr"]="fran&ccedil;ais";
 Languages["id"]="bahasa";
 Languages["ru"]="русский";
 Languages["sw"]="swahili";
+Languages["mg"]="malagasy";
 var LanguageTitle = new Array();
 LanguageTitle["en"]="Language";
 LanguageTitle["es"]="Idioma";
@@ -2980,6 +2982,7 @@ LanguageTitle["fr"]="Langue";
 LanguageTitle["id"]="Bahasa";
 LanguageTitle["ru"]="Язык";
 LanguageTitle["sw"]="Lugha";
+LanguageTitle["mg"]="Teny";
 function languageChange(){
 var s=document.getElementById('chooseLanguage');
 var sel=s.getElementsByTagName('select')[0];
