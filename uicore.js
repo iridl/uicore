@@ -1,17 +1,19 @@
 /*
 MBB 2012 -- maproom implementation in javascript
 */
-var uicoreConfig;
-if(!uicoreConfig){
-    uicoreConfig={};
+var uicoreConfig = uicoreConfig || {};
+if(!uicoreConfig.resolutionQueryServers){
+    uicoreConfig.resolutionQueryServers = {};
 }
-	    if(!uicoreConfig.resolutionQueryServers){
-		uicoreConfig.resolutionQueryServers = {
-		    "default": "http://iridl.ldeo.columbia.edu/",
-		    "irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds": "http://www.ethiometmaprooms.gov.et:8082/",
-		    "irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds": "http://maproom.meteo.go.tz/"
-		}
-	    }
+/* to change the GoogleAnalyticsId, redefine this after udunits.js */
+uicoreConfig.GoogleAnalyticsId='UA-432152-4';
+/* to add a server for a new resolution, run something like the following */
+uicoreConfig.resolutionQueryServers["irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds"] = "http://www.ethiometmaprooms.gov.et:8082/";
+
+/* additional default uicoreConfig settings */
+uicoreConfig.resolutionQueryServers["default"]= "http://iridl.ldeo.columbia.edu/";
+uicoreConfig.resolutionQueryServers["irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds"]= "http://maproom.meteo.go.tz/";
+
 /*
 $.ready runs a function at DOMContentLoaded if possible, otherwise onload
 runs immediately if already loaded.  It is invoked at the end of this file.
@@ -3039,14 +3041,11 @@ cont.insertBefore(fs,cont.firstChild);
 }
 }
 var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-432152-4']);
-  _gaq.push(['_trackPageview']);
-  _gaq.push(['_trackPageLoadTime']); 
- (function() {
+function setupGA() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+  }
 
 function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
@@ -3959,6 +3958,12 @@ insertRegion();
 insertshare();
 setupPageFormLinks();
 loadHasJSON();
+if(uicoreConfig.GoogleAnalyticsId){
+  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
+  _gaq.push(['_trackPageview']);
+  _gaq.push(['_trackPageLoadTime']); 
+}
+    setupGA();
 }
 }
 );
