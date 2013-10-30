@@ -1378,8 +1378,8 @@ and calls runPureOnContext.
 function updateHasJSON(myLink){
 var xmlhttp= getXMLhttp();
 var localurl = localHrefOf(myLink.href);
-if(myLink.parentNode.localurl != localurl){
-myLink.parentNode.localurl = localurl;
+if(myLink.localurl != localurl){
+myLink.localurl = localurl;
 xmlhttp.infourl = localurl;
 xmlhttp.myContext = myLink.parentNode;
 xmlhttp.myLink=myLink;
@@ -1389,7 +1389,7 @@ xmlhttp.onreadystatechange = function(evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
 var jsontxt = it.responseText;
-if(localurl == it.infourl){
+if(it.myLink.localurl == it.infourl){
     if(it.myLink.id){
 	if(!it.myContext.parsedJSON){
 	    it.myContext.parsedJSON = {};
