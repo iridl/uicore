@@ -3657,6 +3657,15 @@ function validateAndCorrectPageForm(context){
 var myform=document.getElementById('pageform');
 if(myform){
     var valid=true;
+/* checks for null region and bbox not null */
+    var region = myform.elements['region'];
+    var bbox = myform.elements['bbox'];
+    if(typeof(region.value)!='undefined'){
+	if((!region.value) && typeof(bbox)!='undefined' && bbox.value !=''){
+	    region.value = bbox.value;
+	    valid=false;
+	}
+    }
     var stag = mycontext.getElementsByClassName('containsAllValids');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
