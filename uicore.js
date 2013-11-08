@@ -1745,7 +1745,7 @@ if(res.value && res.value.substr(0,6) == 'irids:'){
     }
     resurl = resurl + delim + 'clickpt=' + encodeURIComponent(clickpt.value);
     resurl = resurl + '&resolution=' + encodeURIComponent(res.value);
-    if(resf && !resf.className){
+    if(resf){
 	if(resf.value.indexOf('{')<0){
 	resurl=resurl + '&resolutionFilter=' + encodeURIComponent('{' + resf.value + '}');
 	}
