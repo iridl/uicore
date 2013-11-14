@@ -236,8 +236,8 @@ var fullpathname = document.location.href;
 var optvalue = opt.value;
 var optclass = "carryup";
 if(optvalue){
-    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]);
-/*    ga('social', 'HomeMenu', opt.innerHTML); */
+/*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
+    ga('social', 'HomeMenu', opt.innerHTML);
     document.location.href=localHrefOf(optvalue);
 }
     }
@@ -558,8 +558,8 @@ var js, id = 'facebook-jssdk', ref = document.getElementsByTagName('script')[0];
             xfbml      : true  // parse XFBML
 	    }); */
            FB.Event.subscribe('edge.create', function(targetUrl) {
-              _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);
-/*            ga('social', 'facebook','like', targetUrl); */
+/*              _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);*/
+            ga('social', 'facebook','like', targetUrl);
              });
 };
            js = document.createElement('script'); js.id = id; js.async = true;
@@ -581,8 +581,8 @@ function doTwitter(){
 	}
 	if(!title)title=document.title;
 var twitter_url = "https://twitter.com/share?via=iridl&hashtags=dataviz&url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(title);
- _gaq.push(['_trackSocial', 'twitter', 'tweet', url]);
-/*    ga('social', 'twitter','tweet', url); */
+/* _gaq.push(['_trackSocial', 'twitter', 'tweet', url]);*/
+    ga('social', 'twitter','tweet', url);
 window.open(twitter_url);
 }
 function doGMail(){
@@ -603,8 +603,8 @@ function doMail(){
 	}
 	if(!title)title=document.title;
 var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
- _gaq.push(['_trackSocial', 'mail', 'mail', url]);
-/*    ga('social', 'mail','mail', url); */
+/* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
+    ga('social', 'mail','mail', url);
 window.open(m);
 }
 function doTumblrClip(){
@@ -648,8 +648,8 @@ else {
     var tumblr_link_description = description;
 tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
 }
- _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
-/*    ga('social', 'tumblr',ttype, url); */
+/* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
+    ga('social', 'tumblr',ttype, url);
 window.open(tumblr_url);
 }
 function doTumblrClipElement(){
@@ -695,8 +695,8 @@ else {
     var tumblr_link_description = description;
 tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
 }
- _gaq.push(['_trackSocial', 'tumblr', ttype , url]);
-/*    ga('social', 'tumblr',ttype, url); */
+/* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
+    ga('social', 'tumblr',ttype, url);
 window.open(tumblr_url);
 }
 function homelinkclick(evt){
@@ -722,8 +722,8 @@ if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 |
 return arg;
 }
 };
-_gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);
-/*    ga('social', 'evernote','clip', clipargs.url); */
+/* _gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);*/
+    ga('social', 'evernote','clip', clipargs.url);
 Evernote.doClip(clipargs);
 }
 function doPinterestClip(){
@@ -740,8 +740,8 @@ function doPinterestClip(){
 	if(dpar.length>0){
 	description=dpar[0].innerHTML;
 	}
-      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); 
-/*    ga('social', 'Pinterest','clipPage'); */
+/*      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); */
+    ga('social', 'Pinterest','clipPage'); 
     var pinterest_link_url = url;
     var pinterest_link_description = title + ":  " +description;
 pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
@@ -758,8 +758,8 @@ clipargs.filter= function (arg){
 return arg;
 }
 };
- _gaq.push(['_trackSocial', 'evernote', 'clipelement']);
-/*    ga('social', 'evernote','clipelement'); */
+/* _gaq.push(['_trackSocial', 'evernote', 'clipelement']);*/
+    ga('social', 'evernote','clipelement');
 Evernote.doClip(clipargs);
 }
 function doGoogleEarthClick(evt){
@@ -774,8 +774,8 @@ if(sfigs.length){
 	var pform=document.getElementById('pageform');
 	pform.elements['linkurl'].value=linkurl;
 	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
-	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);
-/*    ga('social', 'googleearth','asKML'); */
+/*	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);*/
+    ga('social', 'googleearth','asKML');
     }
 }
 }
@@ -790,8 +790,8 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	alert(myurl);
 	/*	location.href=myurl; */
-	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);
-/*    ga('social', 'WMS','asWMS'); */
+/*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
+    ga('social', 'WMS','asWMS');
     }
 }
 }
@@ -805,8 +805,8 @@ if(sfigs.length){
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
-	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);
-/*    ga('social', 'DataDownload','asGeoTiff'); */
+/*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);*/
+    ga('social', 'DataDownload','asGeoTiff');
     }
 }
 }
@@ -820,8 +820,8 @@ if(sfigs.length){
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
-	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);
-/*    ga('social', 'DataDownload','asGeoTiffPC'); */
+/*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);*/
+    ga('social', 'DataDownload','asGeoTiffPC');
     }
 }
 }
@@ -865,8 +865,8 @@ function doTSVClick(evt){
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);
-/*    ga('social', 'DataDownload','asTSV'); */
+/*       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);*/
+    ga('social', 'DataDownload','asTSV');
    }
 }
 function doHTMLClick(evt){
@@ -879,8 +879,8 @@ function doHTMLClick(evt){
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);
-/*    ga('social', 'DataDownload','asHTML'); */
+/*       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);*/
+    ga('social', 'DataDownload','asHTML');
    }
 }
 function doPDFClick(evt){
@@ -896,8 +896,8 @@ function doPDFClick(evt){
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);
-/*    ga('social', 'ImageDownload','asPDF'); */
+/*       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);*/
+    ga('social', 'ImageDownload','asPDF');
    }
 }
 function doPinterestClipElement(evt){
@@ -927,8 +927,8 @@ function doPinterestClipElement(evt){
 	}
     var pinterest_link_description = title + ":  " +description;
 
-           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);
-/*    ga('social', 'Pinterest','clipelement'); */
+/*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
+    ga('social', 'Pinterest','clipelement');
        pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
            window.open(pinterest_url); 
    }
@@ -957,8 +957,8 @@ function doGifClick(evt){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);
-/*       ga('social', 'ImageDownload', 'asGIF'); */
+/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);*/
+       ga('social', 'ImageDownload', 'asGIF');
     }
 }
 function doJpgClick(evt){
@@ -969,8 +969,8 @@ function doJpgClick(evt){
     var pdfurl = figimg.src.replace(/.gif/,'.jpg');
     var pdfclass = figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);
-/*       ga('social', 'ImageDownload', 'asJPG'); */
+/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);*/
+       ga('social', 'ImageDownload', 'asJPG');
    }
 }
 function doarcgisClick(evt){
@@ -984,8 +984,8 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
 	/*	location.href=myurl; */
-	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);
-/*       ga('social', 'arcgis', 'asWMS'); */
+/*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
+       ga('social', 'arcgis', 'asWMS');
     }
 }
 }
@@ -3062,12 +3062,12 @@ cont.insertBefore(fs,cont.firstChild);
 }
 }
 /* set up old style Google Analytics */
-var _gaq = _gaq || [];
+/*var _gaq = _gaq || [];
 function setupGA() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  }
+  } */
 /* set up Google Universal Analytics */
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -3660,7 +3660,7 @@ if(myform){
 /* checks for null region and bbox not null */
     var region = myform.elements['region'];
     var bbox = myform.elements['bbox'];
-    if(typeof(region.value)!='undefined'){
+    if(region && typeof(region.value)!='undefined'){
 	if((!region.value) && typeof(bbox)!='undefined' && bbox.value !=''){
 	    region.value = bbox.value;
 	    valid=false;
@@ -3996,14 +3996,13 @@ insertshare();
 setupPageFormLinks();
 loadHasJSON();
 if(uicoreConfig.GoogleAnalyticsId){
-  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
+/*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
   _gaq.push(['_trackPageLoadTime']); 
-/*
-  ga('create', uicoreConfig.GoogleUniversalAnalyticsId, 'columbia.edu');
-  ga('send', 'pageview');
-*/
     setupGA();
+*/
+  ga('create', uicoreConfig.GoogleAnalyticsId, 'columbia.edu');
+  ga('send', 'pageview');
 }
 }
 }
