@@ -898,7 +898,6 @@ function doPDFClick(evt){
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
 /*       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);*/
        ga('send','social', 'ImageDownload','asPDF',location.href);
-       alert('wait');
    }
 }
 function doPinterestClipElement(evt){
