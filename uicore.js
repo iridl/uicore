@@ -237,7 +237,7 @@ var optvalue = opt.value;
 var optclass = "carryup";
 if(optvalue){
 /*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
-    ga('send','social', 'HomeMenu', opt.innerHTML);
+    ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
     document.location.href=localHrefOf(optvalue);
 }
     }
@@ -741,7 +741,7 @@ function doPinterestClip(){
 	description=dpar[0].innerHTML;
 	}
 /*      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); */
-    ga('send','social', 'Pinterest','clipPage'); 
+    ga('send','social', 'Pinterest','clipPage',location.href); 
     var pinterest_link_url = url;
     var pinterest_link_description = title + ":  " +description;
 pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
@@ -759,7 +759,7 @@ return arg;
 }
 };
 /* _gaq.push(['_trackSocial', 'evernote', 'clipelement']);*/
-    ga('send','social', 'evernote','clipelement');
+    ga('send','social', 'evernote','clipelement',location.href);
 Evernote.doClip(clipargs);
 }
 function doGoogleEarthClick(evt){
@@ -775,7 +775,7 @@ if(sfigs.length){
 	pform.elements['linkurl'].value=linkurl;
 	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
 /*	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);*/
-    ga('send','social', 'googleearth','asKML');
+	ga('send','social', 'googleearth','asKML',location.href);
     }
 }
 }
@@ -791,7 +791,7 @@ if(sfigs.length){
 	alert(myurl);
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
-    ga('send','social', 'WMS','asWMS');
+	ga('send','social', 'WMS','asWMS',location.href);
     }
 }
 }
@@ -806,7 +806,7 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
 /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);*/
-    ga('send','social', 'DataDownload','asGeoTiff');
+	ga('send','social', 'DataDownload','asGeoTiff',location.href);
     }
 }
 }
@@ -821,7 +821,7 @@ if(sfigs.length){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
 	location.href=myurl;
 /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);*/
-    ga('send','social', 'DataDownload','asGeoTiffPC');
+	ga('send','social', 'DataDownload','asGeoTiffPC',location.href);
     }
 }
 }
@@ -866,7 +866,7 @@ function doTSVClick(evt){
        pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 /*       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);*/
-    ga('send','social', 'DataDownload','asTSV');
+       ga('send','social', 'DataDownload','asTSV',location.href);
    }
 }
 function doHTMLClick(evt){
@@ -880,7 +880,7 @@ function doHTMLClick(evt){
        pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 /*       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);*/
-    ga('send','social', 'DataDownload','asHTML');
+       ga('send','social', 'DataDownload','asHTML',location.href);
    }
 }
 function doPDFClick(evt){
@@ -897,7 +897,8 @@ function doPDFClick(evt){
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
 /*       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);*/
-    ga('send','social', 'ImageDownload','asPDF');
+       ga('send','social', 'ImageDownload','asPDF',location.href);
+       alert('wait');
    }
 }
 function doPinterestClipElement(evt){
@@ -928,7 +929,7 @@ function doPinterestClipElement(evt){
     var pinterest_link_description = title + ":  " +description;
 
 /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
-    ga('send','social', 'Pinterest','clipelement');
+ga('send','social', 'Pinterest','clipelement',location.href);
        pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
            window.open(pinterest_url); 
    }
@@ -958,7 +959,7 @@ function doGifClick(evt){
        var pdfclass=figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 /*	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);*/
-       ga('send','social', 'ImageDownload', 'asGIF');
+       ga('send','social', 'ImageDownload', 'asGIF',location.href);
     }
 }
 function doJpgClick(evt){
@@ -970,7 +971,7 @@ function doJpgClick(evt){
     var pdfclass = figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
 /*	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);*/
-       ga('send','social', 'ImageDownload', 'asJPG');
+       ga('send','social', 'ImageDownload', 'asJPG',location.href);
    }
 }
 function doarcgisClick(evt){
@@ -985,7 +986,7 @@ if(sfigs.length){
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
-       ga('send','social', 'arcgis', 'asWMS');
+	ga('send','social', 'arcgis', 'asWMS',location.href);
     }
 }
 }
