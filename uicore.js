@@ -112,10 +112,15 @@ jsDependsOn(puredir + 'pure.js');
 function localHrefOf(ghref){
 var lhref;
 var ifmap  = ghref.lastIndexOf('/maproom/');
+var ifscript  = ghref.lastIndexOf('/uicore/');
 if(ifmap > -1){
 var maproomurl = ghref.substr(0,ifmap+9);
 lhref = maproomroot + ghref.substr(maproomurl.length);
 }
+    else if(ifscript > -1){
+var scripturl = ghref.substr(0,ifscript+8);
+lhref = scriptroot + ghref.substr(scripturl.length);
+    }
 else {
 lhref= ghref;
 }
@@ -2854,6 +2859,44 @@ ctop=parseInt(myit.style.top);
 shiftby(myit,newx-cleft,newy-ctop);
 }
 /* end of drag zoom routines */
+function insertInstructions(){
+    var mylist=document.getElementsByClassName("buttonInstructions");
+    if(mylist.length>0){
+	var cont=mylist[0];
+	if(typeof(cont.filledOut)=='undefined'){
+	    cont.filledOut=true;
+	    var el = document.createElement('a');
+	    el.rel="iridl:hasJSON";
+	    el.className="carryLanguage";
+	    el.href="/uicore/toolinfo/buttoninfo.json";
+	    cont.appendChild(el);
+	    el = document.createElement('script');
+	    el.type = "application/json";
+            el.setAttribute('property','iridl:hasPUREdirective');
+	    el.text='{".button" : {"button<-uicore:buttonList":{".icon@class+": "button.uicore:icon",".label": "button.term:label",".description": "button.term:description"}}}';
+	    cont.appendChild(el);
+	    el=document.createElement('div');
+	    el.className="template";
+	    cont.appendChild(el);
+	    var el2=document.createElement('div');
+	    el2.className="button";
+	    el.appendChild(el2);
+	    el=document.createElement('div');
+	    el.className="dlimagecontrol icon ";
+	    el2.appendChild(el);
+	    el=document.createTextNode(' ');
+	    el2.appendChild(el);
+	    el=document.createElement('span');
+	    el.className="label";
+	    el2.appendChild(el);
+	    el=document.createTextNode(' ');
+	    el2.appendChild(el);
+	    el=document.createElement('span');
+	    el.className="description";
+	    el2.appendChild(el);
+	}
+    }
+}
 function insertcontrolBar(){
 var s=document.getElementById('homelink');
 if(!s){
@@ -3993,6 +4036,7 @@ initializeDLimage();
 insertchooseSection();
 insertRegion();
 insertshare();
+insertInstructions();
 setupPageFormLinks();
 loadHasJSON();
 if(uicoreConfig.GoogleAnalyticsId){

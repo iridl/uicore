@@ -442,7 +442,17 @@ display: none;
 margin-left: auto; 
 margin-right: 0pt; 
 }
-.dlimage > legend > div {
+
+.button > .label {
+font-weight: bold;
+}
+.button > .icon {
+opacity: 0.6;
+}
+
+
+.dlimage > legend > div, .dlimagecontrol {
+        display: inline-block;
 	width: 10pt;
 	height: 10pt;
 	padding: 2pt;
@@ -498,7 +508,7 @@ zindex: 10;
 .dlimage > .dlcontrol input {
 	text-align: center;
 }
-.dlimage > legend > .dlimageswitch {
+.dlimageswitch {
     background: url('icons/onoff16.png') center no-repeat;
         background-color: WhiteSmoke;
 	background-size: 10pt;
