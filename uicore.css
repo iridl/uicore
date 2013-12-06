@@ -639,6 +639,11 @@ opacity: 0.6;
     background: url('icons/download_16.png') center no-repeat;
     background-size: 10pt;
 }
+.dlimagecontrol.downloadselect {
+border-width: 2pt;
+border-radius: 0px;
+opacity: 1.0;
+}
 /* slightly darker control button on hover */
 .dlimage:hover > legend > .dlimagecontrol:hover,
 .dlimage:hover > legend > .dlimageswitch:hover

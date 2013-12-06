@@ -38,6 +38,11 @@
 "term:description": "Allows downloading the current image in various formats and protocols, the level of information varies depending on the format.  KML, WMS and PDF includes links back to this page."
 },
 {
+"uicore:icon": "downloadselect",
+"term:label": "Multiple image sections",
+"term:description": "show the currently-selected image with a black border when either sharing or downloading images.  Clicking on another image will change the currently selected image."
+},
+{
 "uicore:icon": "dlimageswitch",
 "term:label": "Control Lock",
 "term:description": "When this button is fully engaged, the controls remain visible; otherwise the controls appear and this button partially engages automatically when the image is active."
