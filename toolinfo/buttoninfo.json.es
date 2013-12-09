@@ -3,49 +3,49 @@
 "uicore":"http://iridl.ldeo.columbia.edu/uicore/",
 "term": "http://iridl.ldeo.columbia.edu/ontologies/iriterms.owl#",
 "uicore:buttonList": {"@container": "@list"},
-"term:label": {"@language": "en"},
-"term:description": {"@language": "en"}
+"term:label": {"@language": "es"},
+"term:description": {"@language": "es"}
 },
 "uicore:buttonList": [
 {
 "uicore:icon": "zoomout",
-"term:label": "Zoom Out",
-"term:description": "restores default view by removing any zoom requests.  Note that the back button undoes the most recent zoom on modern browsers."
+"term:label": "Alejarse",
+"term:description": "Restaura la visualización por defecto al cancelar las solicitudes de acercamiento anteriores. Note que el botón atrás cancela al acercamiento mas reciente en los navegadores modernos."
 },
 {
 "uicore:icon": "info",
-"term:label": "More Information",
-"term:description": "Opens a page in the source data library which gives additional detail and options for the current image."
+"term:label": "Mas Información",
+"term:description": "Abre una página en la data library con más detalles y opciones sobre la imagen visualizada."
 },
 {
 "uicore:icon": "settings",
-"term:label": "Independent Variables",
-"term:description": "Controls the setting of the independent variables such as time or height.  Only appears when there are choices to be made."
+"term:label": "Variables Independientes",
+"term:description": "Controla la configuración de las variables independientes como el tiempo o la altura. Aparece solamente cuando hay opciones."
 },
 {
 "uicore:icon": "layers",
-"term:label": "Layers",
-"term:description": "Switches layers on and off in images that are displaying multiple layers of information.  Only appears when there are choices to be made,"
+"term:label": "Capas",
+"term:description": "Activa o desactiva las capas en imágenes que tienen más de una capa de información. Aparece solamente cuando hay opciones."
 },
 {
 "uicore:icon": "share",
-"term:label": "Share",
-"term:description": "Allows sharing the current image with variable online tools and social media sites.  Map-oriented tools are not given as options if the image is not a map."
+"term:label": "Compartir",
+"term:description": "Permite compartir la imagen visualizada con diferentes herramientas online y sitios de redes sociales. Las opciones para herramientas de cartografía no están disponibles cuando la imagen no es une mapa."
 },
 {
 "uicore:icon": "download",
-"term:label": "Download",
-"term:description": "Allows downloading the current image in various formats and protocols, the level of information varies depending on the format.  KML, WMS and PDF includes links back to this page."
+"term:label": "Bajar",
+"term:description": "Permite bajar la imagen visualizada en diferentes formatos y protocoles. El nivel de información depende del formato: sólo KML, WMS y PDF incluyen un enlace hacia esta página."
 },
 {
 "uicore:icon": "downloadselect",
-"term:label": "Multiple image sections",
-"term:description": "show the currently-selected image with a black border when either sharing or downloading images.  Clicking on another image will change the currently selected image."
+"term:label": "Secciones con varias imágenes",
+"term:description": "Indica con un cuadro negro la imagen seleccionada para compartir o bajar. Haga click sobre otra imagen para cambiar la selección."
 },
 {
 "uicore:icon": "dlimageswitch",
-"term:label": "Control Lock",
-"term:description": "When this button is fully engaged, the controls remain visible; otherwise the controls appear and this button partially engages automatically when the image is active."
+"term:label": "Controles Bloqueados",
+"term:description": "Al pulsar este botón, los controles permanecen visibles; de lo contrario, los controles aparecen y el botón está parcialmente pulsado, automáticamente, al activar la imagen."
 }
 
 

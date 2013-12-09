@@ -10,7 +10,7 @@
 {
 "uicore:icon": "zoomout",
 "term:label": "Zoom Out",
-"term:description": "restores default view by removing any zoom requests.  Note that the back button undoes the most recent zoom on modern browsers."
+"term:description": "Restores default view by removing any zoom requests.  Note that the back button undoes the most recent zoom on modern browsers."
 },
 {
 "uicore:icon": "info",
@@ -25,7 +25,7 @@
 {
 "uicore:icon": "layers",
 "term:label": "Layers",
-"term:description": "Switches layers on and off in images that are displaying multiple layers of information.  Only appears when there are choices to be made,"
+"term:description": "Switches layers on and off in images that are displaying multiple layers of information.  Only appears when there are choices to be made."
 },
 {
 "uicore:icon": "share",
@@ -35,12 +35,12 @@
 {
 "uicore:icon": "download",
 "term:label": "Download",
-"term:description": "Allows downloading the current image in various formats and protocols, the level of information varies depending on the format.  KML, WMS and PDF includes links back to this page."
+"term:description": "Allows downloading the current image in various formats and protocols. The level of information varies depending on the format: only KML, WMS and PDF include links back to this page."
 },
 {
 "uicore:icon": "downloadselect",
 "term:label": "Multiple image sections",
-"term:description": "show the currently-selected image with a black border when either sharing or downloading images.  Clicking on another image will change the currently selected image."
+"term:description": "Shows the currently-selected image with a black border when either sharing or downloading images.  Clicking on another image will change the currently selected image."
 },
 {
 "uicore:icon": "dlimageswitch",
