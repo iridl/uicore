@@ -3538,7 +3538,7 @@ changedInput.value=newvalue;
 updatePageFormCopies(document);
 updatePageFormConditionalClassesAndFlags(false);
     if(addhistory && history && history.pushState){
-	var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var url = appendPageForm(location.href.replace(/[?].*/,''),'share carryLanguage');
 	var currentstate = history.state;
 	if(location.href != url){
 	    var newstate = historyid;
