@@ -1538,6 +1538,7 @@ ctl=document.createElement('div');
 ctl.className="dlimagecontrol zoomout";
 ctl.title="Zoom Out";
 ctl.onclick=dozoomout;
+ctl.myonclick=dozoomout;
 leg.appendChild(ctl);
  ctl=document.createElement('div');
 ctl.className="dlimagecontrol info";
@@ -1641,6 +1642,10 @@ DLimageResizeImage(xmlhttp.mylink);
 }
 }
 function dozoomout () {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+   var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var myclasses = mylink[0].figureimage.className;
 var myform=document.getElementById('pageform');
 if(myform){
 var myin = myform.elements['region'];
@@ -1653,10 +1658,32 @@ myin.value='';
 }
 myin = myform.elements['bbox'];
 if(myin){
+    if(myin.length){
+	for (var i = 0;i < myin.length;i++){
+	    if(matchToken(myin[i].className,myclasses)){
+		myin[i].value='';
+		break;
+	    }
+	}
+    }
+    else {
 myin.value='';
+    }
 updatePageForm();
 }
 }
+}
+function matchToken(astring,bstring){
+    var alist = astring.split(' ');
+    var blist = bstring.split(' ');
+    for (var j=0;j<alist.length;j++){
+	for (var k=0; k<blist.length;k++){
+	    if(blist[k] == alist[j]){
+		return true;
+	    }
+	}
+    }
+    return false;
 }
 function clearregionwithin () {
 var myform=document.getElementById('pageform');
@@ -1669,12 +1696,17 @@ myin.value='';
 myin = myform.elements['region'];
 var mybbox = myform.elements['bbox'];
 if(myin && mybbox){
+    if(mybbox.length){
+    myin.value=mybbox[0].value;
+    }
+    else {
     myin.value=mybbox.value;
+    }
 updatePageForm();
 }
 }
 }
-function setbbox (newbbox,crs) {
+function setbbox (newbbox,crs,myclasses) {
 var update=false;
 var within=false;
 var myform=document.getElementById('pageform');
@@ -1687,7 +1719,18 @@ if(newbbox[0] != newbbox[2]){
 var myin = myform.elements['bbox'];
 if(myin){
     /*    myin.value=JSON.stringify(newbbox);  */
-    myin.value='bb:' + newbbox.join(':') + ifCRS + ':bb';
+    var newbb = 'bb:' + newbbox.join(':') + ifCRS + ':bb'; 
+    if(myin.length){
+	for (var i = 0;i < myin.length;i++){
+	    if(matchToken(myin[i].className,myclasses)){
+		myin[i].value=newbb;
+		break;
+	    }
+	}
+    }
+    else {
+	myin.value= newbb;
+    }
 update=true;
 }
 }
@@ -2601,6 +2644,7 @@ else {
     myimgdiv = mytarget;
 }
 var myinfo = myimgdiv.inputimage.mylink.info;
+    var myclasses = myimgdiv.inputimage.className;
 removeClass(myimgdiv,'zoomArea');
 var myvals;
 if(myobj != null && myinfo){
@@ -2620,7 +2664,7 @@ dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
 }
 myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
 }
-setbbox(myvals,myinfo["wms:CRS"]);
+    setbbox(myvals,myinfo["wms:CRS"],myclasses);
 }
 if(myobj != null && myobj.style.visibility == 'visible'){
 evt.cancelBubble = true;
