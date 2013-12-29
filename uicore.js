@@ -2835,6 +2835,7 @@ X0 = myA[0];
 Y0 = myA[1];
 X1 = myA[2];
 Y1 = myA[3];
+    alert('Got '+ myA + ' ' + Xaxislength + ' ' + Yaxislength + ' ' + plotaxislength);
 if(X1>X0) {
     DX = X1-X0;
 } else {
@@ -2845,12 +2846,12 @@ if(Y1>Y0) {
 } else {
     DY = Y0 - Y1;
 }
-if(DX >= DY) {
-Yaxislength = Math.round((plotaxislength * DY)/DX);
+if(Xaxislength >= Yaxislength) {
+Yaxislength = Math.round((plotaxislength * Yaxislength)/Xaxislength);
 Xaxislength = plotaxislength;
 }
 else {
-    Xaxislength = Math.round((plotaxislength * DX)/DY);
+    Xaxislength = Math.round((plotaxislength * Xaxislength)/Yaxislength);
 Yaxislength = plotaxislength;
 }
 frac = imagewidth/(parseFloat(plotborderleft) + parseFloat(Xaxislength) + parseFloat(plotborderright));
