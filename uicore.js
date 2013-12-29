@@ -3968,21 +3968,16 @@ function alldisabledPageForm(classes){
 	    for ( var j = 0; j < members.length; j++ )
 		if(members[j].disabled) {
 		    if(members[j].type != 'checkbox' && members[j].value){
-			if(members[j].initialValue){
-			    if(members[j].initialValue != members[j].value){
-			alldisabled=false;
-			var myname=members[j].name;
-			for (var k=members.length;k--;){
-			    if(members[k].disabled && members[k].name == myname){
-				members[k].disabled=false;
+			if(members[j].initialValue != members[j].value){
+			    alldisabled=false;
+			    var myname=members[j].name;
+			    members[j].disabled=false;
+			    for (var k=j;k--;){
+				if(members[k].disabled && members[k].name == myname){
+				    members[k].disabled=false;
+				}
 			    }
 			}
-			    }
-			}
-			    else {
-				members[j].disabled=false;
-			alldisabled=false;
-			    }
 		    }
 		    else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
 			var myname=members[j].name;
