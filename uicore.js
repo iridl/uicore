@@ -1874,14 +1874,28 @@ mybbox=JSON.parse(bboxstr);
     }
     return mybbox;
 }
-function getbbox (myinfo) {
+function getbbox (myinfo,myclasses) {
 var mybbox;
 var myform=document.getElementById('pageform');
 if(myform){
 var myin = myform.elements['bbox'];
 /* parses a non-blank bounding box */
-if(myin && myin.value){
-mybbox=parseBbox(myin.value);
+if(myin){
+    if(myin.length){
+	for (var i = 0;i < myin.length;i++){
+	    if(matchToken(myin[i].className,myclasses)){
+		if(myin[i].value){
+		    mybbox=parseBbox(myin[i].value);
+		}
+		break;
+	    }
+	}
+    }
+    else {
+	if(myin.value){
+	    mybbox=parseBbox(myin.value);
+	}
+    }
 }
 }
 if(!mybbox){
@@ -2829,7 +2843,7 @@ var plotborderbottom = myinfo["iridl:plotborderbottom"];
 var plotaxislength = plotaxislengthfn(myinfo,myclass);
 var Xaxislength = myinfo["iridl:Xaxislength"];
 var Yaxislength = myinfo["iridl:Yaxislength"];
-myA = getbbox(myinfo);
+    myA = getbbox(myinfo,myclass);
 var X0,X1,Y0,Y1,DX,DY;
 X0 = myA[0];
 Y0 = myA[1];
