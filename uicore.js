@@ -2835,7 +2835,6 @@ X0 = myA[0];
 Y0 = myA[1];
 X1 = myA[2];
 Y1 = myA[3];
-    alert('Got '+ myA + ' ' + Xaxislength + ' ' + Yaxislength + ' ' + plotaxislength);
 if(X1>X0) {
     DX = X1-X0;
 } else {
