@@ -1706,9 +1706,10 @@ updatePageForm();
 }
 }
 }
-function setbbox (newbbox,crs,myclasses) {
+function setbbox (newbbox,myinfo,myclasses) {
 var update=false;
 var within=false;
+    var crs = myinfo["wms:CRS"];
 var myform=document.getElementById('pageform');
 if(myform){
 var ifCRS = "";
@@ -1734,6 +1735,16 @@ if(myin){
 update=true;
 }
 }
+/* sets clickpt */
+var clickpt = myform.elements['clickpt'];
+    var historyid;
+if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
+    // click -- return depends on resolution res
+    within=true;
+    clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
+    historyid = clickpt.value;
+}
+/* sets region */
 var myin = myform.elements['region'];
 var res = myform.elements['resolution'];
 var resf = myform.elements['resolutionFilter'];
@@ -1758,13 +1769,8 @@ if(resf && resf.length) {
 else {
     resfs=[resf];
 }
-var clickpt = myform.elements['clickpt'];
-    var historyid;
 if(newbbox[0] == newbbox[2] && newbbox[1] == newbbox[3]){
 // click -- return depends on resolution res
-within=true;
-    clickpt.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
-    historyid = clickpt.value;
     for (iin=0 ; iin < myins.length ; iin++){
 	myin = myins[iin];
 	res = ress[iin];
@@ -1855,6 +1861,60 @@ else {
 }
 update=true;
 }
+/* Sets corresponding form variables for Abscissa and Ordinate */
+    var abscissa = myinfo["iridl:hasAbscissa"];
+    var ordinate = myinfo["iridl:hasOrdinate"];
+    var myvars = [];
+    if(abscissa && myform[abscissa["iridl:name"]]){
+	myvars[0]=abscissa;
+    }
+    if(ordinate && myform[ordinate["iridl:name"]]){
+	myvars[1]=ordinate;
+    }
+    if(within && myvars.length){
+	for(var idim=0;idim<myvars.length;idim++){
+	    var mygrid=myvars[idim];
+	    if(mygrid){
+		var myname=mygrid["iridl:name"];
+		var myout=myform.elements[myname];
+		var gridvalues =mygrid["iridl:gridvalues"];
+		var g0,g1,ginc;
+		var cval;
+		var cval0 = newbbox[idim];
+		gare = gridvalues["@type"];
+		if(gare == 'iridl:EvenGridEdges'){
+		    g0 = parseFloat(gridvalues["iridl:first"]);
+		    g1 = parseFloat(gridvalues["iridl:last"]);
+		    ginc = parseFloat(gridvalues["iridl:step"]);
+		    var g0c = g0 + ginc/2;
+		    var nval = Math.round((Math.abs(g1-g0)/ginc))-1;
+		    var ival = Math.round(nval*(cval0-g0c)/(g1-g0-ginc));
+		    cval = g0 + ginc/2 + ival*ginc;
+		}
+		if(gare == 'iridl:CenterValues'){
+		    g0 = parseFloat(mygrid["iridl:plotfirst"]);
+		    g1 = parseFloat(mygrid["iridl:plotlast"]);
+		    var glist=gridvalues['iridl:valuelist'];
+		    var nval = glist.length-1;
+		    var ival = Math.round(nval*(cval0-g0)/(g1-g0));
+		    cval = glist[ival];
+		}
+/* uses units to convert */
+		var units = mygrid['cfatt:units'];
+		if(units.substr(0,10) =='days since'){
+		    var refdate = new Date(units.substr(11));
+		    var cdate = new Date(Math.round(cval*1000*3600*24) + refdate.getTime());
+		    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		    myform[myname].value = cdate.getDate() + ' ' + months[cdate.getMonth()] + ' ' + cdate.getFullYear();
+		}
+		else {
+		myform[myname].value=cval;
+		}
+		update=true;
+	    }
+	}
+    }
+    
 if(update){
 	updatePageForm(undefined,undefined,undefined,historyid);
 }
@@ -2678,7 +2738,7 @@ dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
 }
 myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
 }
-    setbbox(myvals,myinfo["wms:CRS"],myclasses);
+    setbbox(myvals,myinfo,myclasses);
 }
 if(myobj != null && myobj.style.visibility == 'visible'){
 evt.cancelBubble = true;
