@@ -1986,7 +1986,7 @@ X1 = myinfo["iridl:hasAbscissa"]["iridl:plotlast"];
 Y0 = myinfo["iridl:hasOrdinate"]["iridl:plotfirst"];
 Y1 = myinfo["iridl:hasOrdinate"]["iridl:plotlast"];
     }
-mybbox=[X0,Y0,X1,Y1];
+    mybbox=[X0,Y0,X1,Y1,true];
 }
 return mybbox;
 }
@@ -2909,6 +2909,7 @@ X0 = myA[0];
 Y0 = myA[1];
 X1 = myA[2];
 Y1 = myA[3];
+    ifdefault = myA[4];
 if(X1>X0) {
     DX = X1-X0;
 } else {
@@ -2919,6 +2920,8 @@ if(Y1>Y0) {
 } else {
     DY = Y0 - Y1;
 }
+/* needs to use bbox limits to modify if not full range */
+    if(ifdefault){
 if(Xaxislength >= Yaxislength) {
 Yaxislength = Math.round((plotaxislength * Yaxislength)/Xaxislength);
 Xaxislength = plotaxislength;
@@ -2927,6 +2930,17 @@ else {
     Xaxislength = Math.round((plotaxislength * Xaxislength)/Yaxislength);
 Yaxislength = plotaxislength;
 }
+    }
+    else {
+if(DX >= DY) {
+Yaxislength = Math.round((plotaxislength * DY)/DX);
+Xaxislength = plotaxislength;
+}
+else {
+    Xaxislength = Math.round((plotaxislength * DX)/DY);
+Yaxislength = plotaxislength;
+}
+    }
 frac = imagewidth/(parseFloat(plotborderleft) + parseFloat(Xaxislength) + parseFloat(plotborderright));
 nxl =  X0 + (X1-X0)*(left-frac*plotborderleft)/(frac*Xaxislength);
 nxr =  X0 + (X1-X0)*(left+width-frac*plotborderleft)/(frac*Xaxislength);
