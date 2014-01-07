@@ -1641,7 +1641,7 @@ xmlhttp.send();
 DLimageResizeImage(xmlhttp.mylink);
 }
 }
-function dozoomout () {
+function dozoomout (evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
