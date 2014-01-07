@@ -1474,7 +1474,7 @@ function runPureOnContext(myContext){
 	var mydirs = myContext.byDirective;
 	for (var iscript = 0 ; iscript<mydirs.length ; iscript++){
 	    var myscript = mydirs[iscript];
-	    var mytclass = myscript.pureTemplateClass + 'isAPureTemplateFor' + myContext.contextcount;
+	    var mytclass =  myscript.pureTemplateClass + 'isAPureTemplateFor' + myContext.contextcount;
 	    var mytems0 = myContext.getElementsByClassName(myscript.pureTemplateClass);
 	    for (var i=0 ; i< mytems0.length;i++){
 		if(mytems0[i].tagName != 'SCRIPT'){
@@ -1902,7 +1902,7 @@ update=true;
 /* uses units to convert */
 		var units = mygrid['cfatt:units'];
 		if(units.substr(0,10) =='days since'){
-		    var refdate = new Date(units.substr(11));
+		    var refdate = new Date(units.substr(11).replace('-1-1','-01-01'));
 		    var cdate = new Date(Math.round(cval*1000*3600*24) + refdate.getTime());
 		    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 		    myform[myname].value = cdate.getDate() + ' ' + months[cdate.getMonth()] + ' ' + cdate.getFullYear();
@@ -3702,7 +3702,7 @@ if(myclickpt && myclickpt.value){
     within = true;
 }
 else {
-if (mybb && mybb.value.length>8 && myregion && myregion.value.length > 8){
+if (mybb && mybb.value && mybb.value.length>8 && myregion && myregion.value.length > 8){
 var bba = parseBbox(mybb.value);
     var regiona = myregion.value.split(':',8);
     if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
