@@ -1716,7 +1716,6 @@ var ifCRS = "";
 if(crs && crs != "EPSG:4326"){
     ifCRS = ":" + crs;
 }
-    alert(ifCRS);
 if(newbbox[0] != newbbox[2]){
 var myin = myform.elements['bbox'];
 if(myin){
