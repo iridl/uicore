@@ -1716,11 +1716,12 @@ var ifCRS = "";
 if(crs && crs != "EPSG:4326"){
     ifCRS = ":" + crs;
 }
+    alert(ifCRS);
 if(newbbox[0] != newbbox[2]){
 var myin = myform.elements['bbox'];
 if(myin){
     /*    myin.value=JSON.stringify(newbbox);  */
-    var newbb = 'bb:' + newbbox.join(':') + ifCRS + ':bb'; 
+    var newbb = 'bb:' + newbbox.slice(0,4).join(':') + ifCRS + ':bb'; 
     if(myin.length){
 	for (var i = 0;i < myin.length;i++){
 	    if(matchToken(myin[i].className,myclasses)){
@@ -1847,7 +1848,7 @@ roundbox[0]=x;
 roundbox[1]=y;
 roundbox[2]=x+delta;
 roundbox[3]=y+delta;
-myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
+    myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
 }
 else {
     myin.value="pt:" + newbbox.slice(0,2).join(':') + ifCRS + ":pt";
@@ -1857,7 +1858,7 @@ else {
 else {
     clickpt.value='';
 
-    myin.value="bb:" + newbbox.join(':') + ifCRS + ":bb";
+    myin.value="bb:" + newbbox.slice(0,4).join(':') + ifCRS + ":bb";
 }
 update=true;
 }
