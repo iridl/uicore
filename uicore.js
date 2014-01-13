@@ -343,12 +343,25 @@ function imageinputvaluechange(evt){
  var myimage =  it.parentNode.mylink.figureimage;
  // change class of parent whether single (value in list) or multi (value not in list)
  var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
+    var cmax = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
  if(cin > -1){
      changeClass(it.parentNode,'multiValue','singleValue');
  }
  else {
      changeClass(it.parentNode,'singleValue','multiValue');
  }
+ if(cin > 0){
+     changeOrAppendClass(it.parentNode,'atLower','aboveLower');
+ }
+    else if(cin == 0){
+     changeOrAppendClass(it.parentNode,'aboveLower','atLower');
+    }
+ if(cin >= 0 && cin < cmax){
+     changeOrAppendClass(it.parentNode,'atUpper','belowUpper');
+ }
+    else if(cin == cmax){
+     changeOrAppendClass(it.parentNode,'belowUpper','atUpper');
+    }
 // copy value(s) to page form and get url
 var pform=document.getElementById('pageform');
 var guess='';
@@ -2434,6 +2447,7 @@ iptset.appendChild(ipt);
  in list of values and presumably a range) */
 
 var cin = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].indexOf(ipt.value);
+var cmax = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].length-1;
 var controlClass;
 if(cin > -1){
     controlClass="singleValue";
@@ -2441,6 +2455,20 @@ if(cin > -1){
 else {
     controlClass="multiValue";
 }
+appendMissingClass(iptset,controlClass);
+ if(cin > 0){
+     controlClass= 'aboveLower';
+ }
+    else if(cin == 0){
+     controlClass='atLower';
+    }
+appendMissingClass(iptset,controlClass);
+ if(cin >= 0 && cin < cmax){
+     controlClass='belowUpper';
+ }
+    else if(cin == cmax){
+	controlClass='atUpper';
+    }
 appendMissingClass(iptset,controlClass);
 if(document.getElementById('pageform')){
 var pform=document.getElementById('pageform');
@@ -4007,6 +4035,10 @@ var newlist = new Array;
     ind.className = newlist.join(' ');
 }
 }
+}
+function changeOrAppendClass(pelement,fromclass,toclass){
+    changeClass(pelement,fromclass,toclass);
+    appendMissingClass(pelement,toclass);
 }
 function changeClass(pelement,fromclass,toclass){
 var targetlist=pelement.parentNode.getElementsByClassName(fromclass);
