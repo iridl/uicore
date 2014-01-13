@@ -121,9 +121,6 @@ border-bottom-left-radius: 10pt;
 .oneStep + .upperLimit {
 margin-left: 5pt;
 }
-.multiValue .oneStep { 
-visibility: hidden;
-                       }
 
 .controlLabel {
 display: inline-block;
@@ -202,7 +199,7 @@ top: 42px;
 	     border-color: LightGrey;
              border-width: 4px;
              margin: 1px;
-	     margin-bottom: 3px;
+	     margin-bottom: 1px;
 	font-size: 12pt;
 	background-color: WhiteSmoke;
 	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
@@ -606,7 +603,7 @@ input:disabled + span { color: grey }
 .leftarrow, .rightarrow {
 opacity: 0.2;
 }
-.controlSet:hover .leftarrow, .controlSet:hover .rightarrow{
+.controlSet:hover.singleValue.aboveLower .leftarrow, .controlSet:hover.singleValue.belowUpper .rightarrow{
 opacity: 0.6;
 }
 .leftarrow:before {
@@ -1094,6 +1091,7 @@ display: inline;
         padding-left: 5px;
         padding-right: 5px;
         padding-bottom: 0px;
+	margin: 2pt;
         margin-bottom: 0pt;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
