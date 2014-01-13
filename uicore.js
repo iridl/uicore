@@ -341,27 +341,6 @@ function imageinputvaluechange(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
  var myinput = it.parentNode.getElementsByTagName('input')[0];
  var myimage =  it.parentNode.mylink.figureimage;
- // change class of parent whether single (value in list) or multi (value not in list)
- var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
-    var cmax = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
- if(cin > -1){
-     changeClass(it.parentNode,'multiValue','singleValue');
- }
- else {
-     changeClass(it.parentNode,'singleValue','multiValue');
- }
- if(cin > 0){
-     changeOrAppendClass(it.parentNode,'atLower','aboveLower');
- }
-    else if(cin == 0){
-     changeOrAppendClass(it.parentNode,'aboveLower','atLower');
-    }
- if(cin >= 0 && cin < cmax){
-     changeOrAppendClass(it.parentNode,'atUpper','belowUpper');
- }
-    else if(cin == cmax){
-     changeOrAppendClass(it.parentNode,'belowUpper','atUpper');
-    }
 // copy value(s) to page form and get url
 var pform=document.getElementById('pageform');
 var guess='';
@@ -2449,6 +2428,7 @@ iptset.appendChild(ipt);
 var cin = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].indexOf(ipt.value);
 var cmax = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].length-1;
 var controlClass;
+appendMissingClass(ipt,'hasValueList');
 if(cin > -1){
     controlClass="singleValue";
 }
@@ -3782,6 +3762,35 @@ if(myform.className.indexOf('bodyAttribute')>=0){
     }
 }
 }
+/* does hasValueList */
+    var mylist = document.getElementsByClassName('hasValueList');
+    for (var i=0 ; i < mylist.length ; i++)
+    {
+	var it=mylist[i];
+ // change class of parent whether single (value in list) or multi (value not in list)
+ var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(it.value);
+    var cmax = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
+ if(cin > -1){
+     changeClass(it.parentNode,'multiValue','singleValue');
+ }
+ else {
+     changeClass(it.parentNode,'singleValue','multiValue');
+ }
+ if(cin > 0){
+     changeOrAppendClass(it.parentNode,'atLower','aboveLower');
+ }
+    else if(cin == 0){
+     changeOrAppendClass(it.parentNode,'aboveLower','atLower');
+    }
+ if(cin >= 0 && cin < cmax){
+     changeOrAppendClass(it.parentNode,'atUpper','belowUpper');
+ }
+    else if(cin == cmax){
+     changeOrAppendClass(it.parentNode,'belowUpper','atUpper');
+    }
+
+    }
+
 }
 }
 /* updates class pageformcopy selects to match pageform
