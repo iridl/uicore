@@ -603,6 +603,9 @@ input:disabled + span { color: grey }
 .leftarrow, .rightarrow {
 opacity: 0.2;
 }
+.controlSet.singleValue.aboveLower .leftarrow, .controlSet.singleValue.belowUpper .rightarrow{
+opacity: 0.4;
+}
 .controlSet:hover.singleValue.aboveLower .leftarrow, .controlSet:hover.singleValue.belowUpper .rightarrow{
 opacity: 0.6;
 }
