@@ -1874,14 +1874,29 @@ update=true;
 		var cval;
 		var cval0 = newbbox[idim];
 		gare = gridvalues["@type"];
+		if(gare == 'iridl:EvenGrid'){
+		    g0 = parseFloat(gridvalues["iridl:first"]);
+		    g1 = parseFloat(gridvalues["iridl:last"]);
+		    ginc = parseFloat(gridvalues["iridl:step"]);
+		    var nval = Math.round((Math.abs(g1-g0)/ginc));
+		    var ival = Math.round(nval*(cval0-g0)/(g1-g0));
+		    cval = g0 + ival*ginc;
+		}
 		if(gare == 'iridl:EvenGridEdges'){
 		    g0 = parseFloat(gridvalues["iridl:first"]);
 		    g1 = parseFloat(gridvalues["iridl:last"]);
 		    ginc = parseFloat(gridvalues["iridl:step"]);
-		    var g0c = g0 + ginc/2;
+		    var pw;
+		    if(typeof(gridvalues["iridl:pointwidth"]) != 'undefined'){
+			pw = gridvalues["iridl:pointwidth"];
+		    }
+		    else {
+			pw = ginc;
+		    }
+		    var g0c = g0 + pw/2;
 		    var nval = Math.round((Math.abs(g1-g0)/ginc))-1;
 		    var ival = Math.round(nval*(cval0-g0c)/(g1-g0-ginc));
-		    cval = g0 + ginc/2 + ival*ginc;
+		    cval = g0c + ival*ginc;
 		}
 		if(gare == 'iridl:CenterValues'){
 		    g0 = parseFloat(mygrid["iridl:plotfirst"]);
