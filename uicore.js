@@ -1706,6 +1706,28 @@ var myform=document.getElementById('pageform');
 if(myform){
 var ifCRS = "";
 if(crs && crs != "EPSG:4326"){
+    if(crs == "CRS:1"){
+	var abname, abunits,orname,orunits;
+	if(myinfo["iridl:hasAbscissa"]){
+	    abname=myinfo["iridl:hasAbscissa"]["cfatt:standard_name"];
+	    abunits=myinfo["iridl:hasAbscissa"]["cfatt:units"].replace(/ /g,"_");
+	    var abcal = myinfo["iridl:hasAbscissa"]["cfatt:calendar"];
+	    if(abcal && abcal != "standard"){
+		abunits = abunits + "/" + abcal;
+	    }
+	}
+	if(myinfo["iridl:hasOrdinate"]){
+	    orname=myinfo["iridl:hasOrdinate"]["cfatt:standard_name"];
+	    orunits=myinfo["iridl:hasOrdinate"]["cfatt:units"].replace(/ /g,"_");
+	    var orcal = myinfo["iridl:hasOrdinate"]["cfatt:calendar"];
+	    if(orcal && orcal != "standard"){
+		orunits = orunits + "/" + orcal;
+	    }
+	}
+	if(abname && abunits && orname && orunits){
+	    crs = "cfsn:" + abname + ":" + abunits + ":" + orname + ":" + orunits ;
+	}
+    }
     ifCRS = ":" + crs;
 }
 if(newbbox[0] != newbbox[2]){
