@@ -414,8 +414,11 @@ cursor: crosshair;
 }
 .zoomArea {
 cursor: se-resize !important;
+}
+.clipper {
 border-color: red;
 border-width: 2px;
+border-style: solid;
 }
 .imageOverlayDiv+img{
 cursor: crosshair;
