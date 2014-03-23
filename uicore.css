@@ -417,7 +417,7 @@ cursor: se-resize !important;
 }
 .clipper {
 border-color: red;
-border-width: 2px;
+border-width: 1px;
 border-style: solid;
 }
 .imageOverlayDiv+img{
