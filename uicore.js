@@ -1710,7 +1710,7 @@ if(crs && crs != "EPSG:4326"){
 	var abname, abunits,orname,orunits;
 	if(myinfo["iridl:hasAbscissa"]){
 	    abname=myinfo["iridl:hasAbscissa"]["cfatt:standard_name"];
-	    abunits=myinfo["iridl:hasAbscissa"]["cfatt:units"].replace(/ /g,"_");
+	    abunits=myinfo["iridl:hasAbscissa"]["cfatt:units"];
 	    var abcal = myinfo["iridl:hasAbscissa"]["cfatt:calendar"];
 	    if(abcal && abcal != "standard"){
 		abunits = abunits + "/" + abcal;
@@ -1718,7 +1718,7 @@ if(crs && crs != "EPSG:4326"){
 	}
 	if(myinfo["iridl:hasOrdinate"]){
 	    orname=myinfo["iridl:hasOrdinate"]["cfatt:standard_name"];
-	    orunits=myinfo["iridl:hasOrdinate"]["cfatt:units"].replace(/ /g,"_");
+	    orunits=myinfo["iridl:hasOrdinate"]["cfatt:units"];
 	    var orcal = myinfo["iridl:hasOrdinate"]["cfatt:calendar"];
 	    if(orcal && orcal != "standard"){
 		orunits = orunits + "/" + orcal;
