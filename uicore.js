@@ -104,16 +104,17 @@ var scriptroot;
 if(scriptsrc){
 scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 }
-var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 /* loads pure javascript */
 var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
 jsDependsOn(puredir + 'pure.js');
+var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
+var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
 function localHrefOf(ghref){
 var lhref;
 var ifmap  = ghref.lastIndexOf('/maproom/');
 var ifscript  = ghref.lastIndexOf('/uicore/');
-if(ifmap > -1){
+if(ifmaproomroot > -1 && ifmap > -1){
 var maproomurl = ghref.substr(0,ifmap+9);
 lhref = maproomroot + ghref.substr(maproomurl.length);
 }
