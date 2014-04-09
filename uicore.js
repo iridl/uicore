@@ -2802,19 +2802,19 @@ return true;
 }
 function absLeft(obj){
 if(obj.offsetParent){
-myval=obj.offsetLeft + absLeft(obj.offsetParent);
+myval=obj.offsetLeft + obj.clientLeft - obj.scrollLeft + absLeft(obj.offsetParent);
 }
 else {
-myval=obj.offsetLeft;
+myval=obj.offsetLeft + obj.clientLeft - obj.scrollLeft ;
 }
 return myval;
 }
 function absTop(obj){
 if(obj.offsetParent){
-myval=obj.offsetTop + absTop(obj.offsetParent);
+myval=obj.offsetTop + obj.clientTop - obj.scrollTop + absTop(obj.offsetParent);
 }
 else {
-myval=obj.offsetTop;
+myval=obj.offsetTop + obj.clientTop - obj.scrollTop;
 }
 return myval;}
 function startdrag(evt){
@@ -2877,15 +2877,18 @@ var plotborderright = myinfo["iridl:plotborderright"];
 var plotborderbottom = myinfo["iridl:plotborderbottom"];
 var Xaxislength = myinfo["iridl:Xaxislength"];
 var Yaxislength = myinfo["iridl:Yaxislength"];
+    var px,py;
 if(myobj != null){
 if(typeof evt.pageX != 'undefined'){
-dx=evt.pageX-absLeft(myimgdiv);
-dy=evt.pageY-absTop(myimgdiv);
+    px=evt.pageX;
+    py=evt.pageY;
 }
 else {
-    dx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
-dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
+    px=evt.clientX + myimgdiv.scrollLeft;
+    py=evt.clientY + myimgdiv.scrollTop;
 }
+    dx = px - absLeft(myimgdiv);
+    dy = py - absTop(myimgdiv);
 cw=parseInt(myobj.style.width);
 ch=parseInt(myobj.style.height);
 newx=Math.min(dx,myx);
