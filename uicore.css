@@ -1224,6 +1224,30 @@ visibility: hidden;
 .ui-tabs {
         border: none;
 }
+.ui-tabs-panel .ui-tabs {
+width: 20%;
+display: inline-block;
+vertical-align: top;
+margin-bottom: 10pt;
+}
+.ui-tabs-panel .ui-tabs .ui-tabs-nav{
+border-top-left-radius: 0pt;
+border-top-right-radius: 0pt;
+border-bottom-left-radius: 10px;
+}
+.ui-tabs-panel .ui-tabs li {
+display: block;
+margin-right: 4px;
+margin-bottom: 8px;
+margin-top: 0px;
+border-bottom: 2px outset;
+}
+.ui-tabs-panel .ui-tabs-panel {
+display: inline-block;
+width: 75%;
+vertical-align: top;
+}
+
 @media only all and (max-width: 750px) {
 /* spread dlimagecontrols on small screens to increase usability for touch */
 .dlimage:hover > legend > div,
@@ -1278,6 +1302,7 @@ display: block;
         display: block;
                                  }
 }
+
 @media only all and (max-width: 479px) {
 .ui-tabs-nav li{
         padding-bottom: 4px;
