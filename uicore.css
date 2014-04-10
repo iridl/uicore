@@ -1224,6 +1224,9 @@ visibility: hidden;
 .ui-tabs {
         border: none;
 }
+
+/* nested tabs to go on side instead of top */
+
 .ui-tabs-panel .ui-tabs {
 width: 20%;
 display: inline-block;
@@ -1234,13 +1237,32 @@ margin-bottom: 10pt;
 border-top-left-radius: 0pt;
 border-top-right-radius: 0pt;
 border-bottom-left-radius: 10px;
+padding-right: 0pt;
 }
-.ui-tabs-panel .ui-tabs li {
+.ui-tabs-panel .ui-tabs li
+ {
 display: block;
-margin-right: 4px;
+border-bottom: 2px outset !important;
+border-top-left-radius: 5pt;
+border-bottom-left-radius: 5pt;
+border-top-right-radius: 5pt;
+border-bottom-right-radius: 5pt;
+}
+.ui-tabs-panel .ui-tabs li.ui-state-active{
+margin-right: 0px;
+margin-bottom: 6px;
+margin-top: 0px;
+}
+.ui-tabs-panel .ui-tabs li.ui-state-default:active{
+border-bottom: 2px inset !important;
+}
+.ui-tabs-panel .ui-tabs li.ui-state-active:active{
+border-bottom: 2px inset !important;
+}
+.ui-tabs-panel .ui-tabs li.ui-state-default{
+margin-right: 0px;
 margin-bottom: 8px;
 margin-top: 0px;
-border-bottom: 2px outset;
 }
 .ui-tabs-panel .ui-tabs-panel {
 display: inline-block;
