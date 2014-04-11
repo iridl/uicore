@@ -1228,12 +1228,12 @@ visibility: hidden;
 /* nested tabs to go on side instead of top */
 
 .ui-tabs-panel .ui-tabs {
+}
+.ui-tabs-panel .ui-tabs .ui-tabs-nav{
 width: 20%;
 display: inline-block;
 vertical-align: top;
 margin-bottom: 10pt;
-}
-.ui-tabs-panel .ui-tabs .ui-tabs-nav{
 border-top-left-radius: 0pt;
 border-top-right-radius: 0pt;
 border-bottom-left-radius: 10px;
@@ -1264,7 +1264,7 @@ margin-right: 0px;
 margin-bottom: 8px;
 margin-top: 0px;
 }
-.ui-tabs-panel .ui-tabs-panel {
+.ui-tabs-panel .ui-tabs .ui-tabs-panel {
 display: inline-block;
 width: 75%;
 vertical-align: top;
