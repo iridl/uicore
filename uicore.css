@@ -1744,6 +1744,24 @@ border-radius: 7px;
 opacity: 1.0;
 background-color: white;
 }
+#helpmailbutton a {
+display:inline-block; 
+    cursor: pointer;
+    height: 20px;
+    padding: 2px 2px 2px 2px;
+text-indent:-9999px; overflow:hidden; 
+width:22px;
+background: url('icons/helpmail2_32.png') center no-repeat transparent;
+background-color: WhiteSmoke;
+background-size: 80%;
+opacity: 0.8;
+-moz-border-radius: 7px;
+border-radius: 7px;
+}
+#helpmailbutton a:hover {
+opacity: 1.0;
+background-color: white;
+}
 .datasetdocumentation dd {margin: 0;}
 .datasetdocumentation dt {float: left; clear: left; font-weight: bold; padding-right: .8em;}
 .datasetdocumentation dt::after {content: ":"}

@@ -5,8 +5,11 @@ var uicoreConfig = uicoreConfig || {};
 if(!uicoreConfig.resolutionQueryServers){
     uicoreConfig.resolutionQueryServers = {};
 }
-/* to change the GoogleAnalyticsId, redefine this after udunits.js */
+/* to change the GoogleAnalyticsId, redefine this after uicore.js */
 uicoreConfig.GoogleAnalyticsId='UA-432152-4';
+/* to set the help e-mail, redefine this after uicore.js
+uicoreConfig.helpemail='help@iri.columbia.edu'; */
+uicoreConfig.helpemail='';
 /* to add a server for a new resolution, run something like the following */
 uicoreConfig.resolutionQueryServers["irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds"] = "http://www.ethiometmaprooms.gov.et:8082/";
 
@@ -448,7 +451,18 @@ s.insertBefore(ls,s.firstChild);
 }
 sl = document.getElementById('googleplus');
 if(!sl){
-    /* google+ */
+    var tumblr_button;
+    if(uicoreConfig.helpemail){
+/* code to add Mail-help buttons */
+    gb= document.createElement('div');
+    gb.className='sharebutton';
+    gb.id='helpmailbutton';
+    tumblr_button = document.createElement("a");
+    tumblr_button.onclick=doHelpMail;
+    tumblr_button.setAttribute("title", "Help");
+    gb.appendChild(tumblr_button);
+    s.appendChild(gb);
+    }
 /* twitter */
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -476,7 +490,7 @@ gb.onclick=doPinterestClip;
 gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='tumblr';
-    var tumblr_button = document.createElement("a");
+    tumblr_button = document.createElement("a");
 	tumblr_button.onclick=doTumblrClip;
     tumblr_button.setAttribute("title", "Share on Tumblr with link back");
     gb.appendChild(tumblr_button);
@@ -603,6 +617,18 @@ function doMail(){
 var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
 /* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
     ga('send','social', 'mail','mail', url);
+window.open(m);
+}
+function doHelpMail(){
+ var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var tpar = getElementsByAttribute(document,'*','property','term:title');
+	if(tpar.length>0){
+	title=tpar[0].innerHTML;
+	}
+	if(!title)title=document.title;
+var m='mailto:' + uicoreConfig.helpemail +'?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
+/* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
+    ga('send','social', 'mail','help', url);
 window.open(m);
 }
 function doTumblrClip(){
