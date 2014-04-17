@@ -4283,6 +4283,25 @@ if(uicoreConfig.GoogleAnalyticsId){
   ga('create', uicoreConfig.GoogleAnalyticsId, 'columbia.edu');
   ga('send', 'pageview');
 }
+    if(uicoreConfig.GoogleSearchCX){
+var mynav=document.getElementById('GoogleSearch');
+	if(mynav){
+	    var sb = document.createElement('div');
+	    var sbb = document.createElement('gcse:searchbox-only');
+	    sb.appendChild(sbb);
+	    mynav.appendChild(sbb);
+  (function() {
+    var cx = uicoreConfig.GoogleSearchCX;
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+    }
+    }
 }
 }
 );

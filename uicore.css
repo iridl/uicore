@@ -264,6 +264,21 @@ opacity:  .75;
 border-radius: 10px;
        min-height: 36px;
 }
+/* Google Search Element */
+#GoogleSearch, .search {
+margin-top: 5pt;
+float: right;
+width: 35%;
+}
+#GoogleSearch div, .search div {
+margin-top: 2px;
+}
+@media only all and (max-width: 600px) {
+#GoogleSearch, .search {
+float: none;
+width: 95%;
+}
+}
 .selectvalue {
 padding: 0px;
 padding-left: 2px;
