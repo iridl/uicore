@@ -407,8 +407,14 @@ function tabsSetup(){
     var mylist=document.getElementsByClassName("ui-tabs");
     for (var i= 0; i<mylist.length; i++){
 	var tabset=mylist[i];
-	var tablist=tabset.getElementsByTagName("ul")[0].getElementsByTagName("li");
-	var activetab=0
+	var tablist;
+	if(tabset.getElementsByTagName("ul")[0]){
+	tablist=tabset.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	}
+	else {
+	    tablist=[];
+	}
+	var activetab=0;
 	for (var j=0; j<tablist.length; j++){
 	    if(tablist[j].className=='ui-state-active')activetab=j
 	}
