@@ -368,6 +368,7 @@ function tabclickevent(evt){
         if(history && history.pushState){
 	    var url = it.children[0].hash;
 	    history.pushState(null,null,url);
+    ga('send','social', 'Tabs', window.location.href);
 	}
     }
     return false;
