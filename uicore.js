@@ -364,7 +364,11 @@ var guess='';
 function tabclickevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-    var mylist=it.parentNode.getElementsByClassName("ui-state-active");
+    makeTabActive(it);
+    return false;
+}
+function makeTabActive(tab){
+    var mylist=tab.parentNode.getElementsByClassName("ui-state-active");
     for (var i= 0; i<mylist.length; i++){
 	var sid;
 	if(mylist[i].children[0].hash){
@@ -375,21 +379,20 @@ function tabclickevent(evt){
 	}
 	mylist[i].className="ui-state-default";
     }
-    it.className="ui-state-active";
+    tab.className="ui-state-active";
     var sid;
-    if(it.children[0].hash){
-	sid = it.children[0].hash.substr(1);
+    if(tab.children[0].hash){
+	sid = tab.children[0].hash.substr(1);
     }
 	if(sid){
         document.getElementById(sid).className="ui-tabs-panel";
 	}
 	else {
-	location.href= it.children[0].href;
+	location.href= tab.children[0].href;
 	}
         if(document.width < 750){
-	location.href= it.children[0].href;
+	location.href= tab.children[0].href;
 	}
-    return false;
 }
 function tabtarget(evt){
 	var ret = (document.width < 750);
@@ -442,6 +445,23 @@ function tabsSetup(){
 		    }
 		}
 		atab.children[0].onclick=tabtarget;
+	    }
+	}
+    }
+    tabFromUrl();
+}
+function tabFromUrl (){
+    var myhash = window.location.hash;
+    if(myhash){
+	var myid = myhash.substr(1);
+	mytabsets = document.getElementsByClassName('ui-tabs-nav');
+	for(var i=mytabsets.length;i--;){
+	    var mytabset=mytabsets[i];
+	    var mytabs=mytabset.getElementsByTagName('li');
+	    for(var j=mytabs.length;j--;){
+		if(mytabs[j].children[0].hash == myhash){
+		    makeTabActive(mytabs[j]);
+		}
 	    }
 	}
     }
