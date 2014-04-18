@@ -364,10 +364,16 @@ var guess='';
 function tabclickevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-    makeTabActive(it);
+    if(makeTabActive(it)){
+        if(history && history.pushState){
+	    var url = it.children[0].hash;
+	    history.pushState(null,null,url);
+	}
+    }
     return false;
 }
-function makeTabActive(tab){
+function makeSubTabActive(tab){
+    var ifchange=(tab.className != "ui-state-active");
     var mylist=tab.parentNode.getElementsByClassName("ui-state-active");
     for (var i= 0; i<mylist.length; i++){
 	var sid;
@@ -393,6 +399,26 @@ function makeTabActive(tab){
         if(document.width < 750){
 	location.href= tab.children[0].href;
 	}
+    return ifchange;
+}
+function makeTabActive(tab){
+    var ifchange=makeSubTabActive(tab);
+    makeTabParentActive(tab.parentNode);
+    return ifchange;
+};
+function makeTabParentActive(tabnode){
+    if(tabnode.className=="ui-tabs-panel-hidden"){
+	var myid = tabnode.id;
+	if(myid){
+	    var myhash = '#' + myid;
+	    makeTabActiveFromHash(myhash,true);
+	}
+    }
+    else {
+	if(tabnode.parentNode){
+	    makeTabParentActive(tabnode.parentNode);
+	}
+    }
 }
 function tabtarget(evt){
 	var ret = (document.width < 750);
@@ -448,23 +474,42 @@ function tabsSetup(){
 	    }
 	}
     }
-    tabFromUrl();
+    if(window.location.hash){
+	makeTabActiveFromHash(window.location.hash);
+    }
 }
-function tabFromUrl (){
-    var myhash = window.location.hash;
-    if(myhash){
-	var myid = myhash.substr(1);
-	mytabsets = document.getElementsByClassName('ui-tabs-nav');
-	for(var i=mytabsets.length;i--;){
-	    var mytabset=mytabsets[i];
-	    var mytabs=mytabset.getElementsByTagName('li');
+function makeTabActiveFromHash (myhash,dontClearChildren){
+    mytabsets = document.getElementsByClassName('ui-tabs-nav');
+    for(var i=mytabsets.length;i--;){
+	var mytabset=mytabsets[i];
+	var mytabs=mytabset.getElementsByTagName('li');
+	if(myhash){
 	    for(var j=mytabs.length;j--;){
 		if(mytabs[j].children[0].hash == myhash){
+		    if(!dontClearChildren){
+		    var myid = myhash.substr(1);
+		    var mypanel = document.getElementById(myid);
+		    if(mypanel){
+			clearTabActive(mypanel.getElementsByClassName('ui-tabs-nav'));
+		    }
+		    }
 		    makeTabActive(mytabs[j]);
 		}
 	    }
 	}
     }
+}
+function clearTabActive (mytabsets){
+    if(!mytabsets){
+	mytabsets = document.getElementsByClassName('ui-tabs-nav');
+    }
+	for(var i=mytabsets.length;i--;){
+	    var mytabset=mytabsets[i];
+	    var mytabs=mytabset.getElementsByTagName('li');
+	    if(mytabs.length){
+		makeSubTabActive(mytabs[0]);
+	    }
+	}
 }
 function insertshare(){
 var s = document.getElementById('share');
@@ -3498,6 +3543,13 @@ var varcnts = {};
         }
     if(achange){updatePageFormNoHistory()};
 }
+    if(window.location.hash){
+	makeTabActiveFromHash(window.location.hash);
+    }
+    else {
+	clearTabActive();
+    }
+
 }
 function disableNullInputs(){
 var myform=document.getElementById('pageform');
