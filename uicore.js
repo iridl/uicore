@@ -2900,19 +2900,19 @@ return true;
 }
 function absLeft(obj){
 if(obj.offsetParent){
-myval=obj.offsetLeft + obj.clientLeft - obj.scrollLeft + absLeft(obj.offsetParent);
+myval=obj.offsetLeft + absLeft(obj.offsetParent);
 }
 else {
-myval=obj.offsetLeft + obj.clientLeft - obj.scrollLeft ;
+myval=obj.offsetLeft;
 }
 return myval;
 }
 function absTop(obj){
 if(obj.offsetParent){
-myval=obj.offsetTop + obj.clientTop - obj.scrollTop + absTop(obj.offsetParent);
+myval=obj.offsetTop + absTop(obj.offsetParent);
 }
 else {
-myval=obj.offsetTop + obj.clientTop - obj.scrollTop;
+myval=obj.offsetTop;
 }
 return myval;}
 function startdrag(evt){
