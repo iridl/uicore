@@ -367,8 +367,21 @@ function tabclickevent(evt){
     if(makeTabActive(it)){
         if(history && history.pushState){
 	    var url = it.children[0].hash;
-	    history.pushState(null,null,url);
-	    ga('send','social', 'Tabs', url.substr(1), window.location.href);
+	    if(url){
+	    var mylabel = it.children[0].innerText;
+	    var mytitle = document.title;
+	    if(mylabel){
+		mytitle=addTabToTitle(mylabel);
+	    }
+	    else {
+		mylabel = url.substr(1);
+	    }
+	    history.pushState(null,mytitle,url);
+	    document.title=mytitle;
+	    /* not so sure we want this
+	       ga('send','social', 'Tabs', mylabel, window.location.href);
+	       */
+	    }
 	}
     }
     return false;
@@ -407,6 +420,10 @@ function makeTabActive(tab){
     makeTabParentActive(tab.parentNode);
     return ifchange;
 };
+function addTabToTitle(myadd){
+    var newtitle = document.title.replace(/:.*$/,"") + ": " + myadd;
+    return(newtitle);
+}
 function makeTabParentActive(tabnode){
     if(tabnode.className=="ui-tabs-panel-hidden"){
 	var myid = tabnode.id;
@@ -480,6 +497,7 @@ function tabsSetup(){
     }
 }
 function makeTabActiveFromHash (myhash,dontClearChildren){
+    var mytab="";
     mytabsets = document.getElementsByClassName('ui-tabs-nav');
     for(var i=mytabsets.length;i--;){
 	var mytabset=mytabsets[i];
@@ -495,10 +513,12 @@ function makeTabActiveFromHash (myhash,dontClearChildren){
 		    }
 		    }
 		    makeTabActive(mytabs[j]);
+		    mytab = mytabs[j];
 		}
 	    }
 	}
     }
+    return(mytab);
 }
 function clearTabActive (mytabsets){
     if(!mytabsets){
@@ -3545,7 +3565,11 @@ var varcnts = {};
     if(achange){updatePageFormNoHistory()};
 }
     if(window.location.hash){
-	makeTabActiveFromHash(window.location.hash);
+	var mytab = makeTabActiveFromHash(window.location.hash);
+	var mylabel = mytab.children[0].innerText;
+	    if(mylabel){
+		document.title=addTabToTitle(mylabel);
+	    }
     }
     else {
 	clearTabActive();
