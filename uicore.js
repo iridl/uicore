@@ -378,9 +378,7 @@ function tabclickevent(evt){
 	    }
 	    history.pushState(null,mytitle,url);
 	    document.title=mytitle;
-	    /* not so sure we want this
 	       ga('send','social', 'Tabs', mylabel, window.location.href);
-	       */
 	    }
 	}
     }
