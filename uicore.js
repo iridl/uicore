@@ -1477,6 +1477,81 @@ updatePageForm(changed);
 }
 }
 }
+function loadHasSparqlEndpoint(){
+var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasSparqlEndpoint');
+for (var i=0 ; i<sfigs.length ; i++){
+    if(!sfigs[i].parentNode.parsedJSON){updateHasSparqlEndpoint(sfigs[i])};
+}
+}
+/* 
+The parent of the link object we call the Context.
+when file is returned, if the url retrieved is still the url that the
+link object points to, stores parsedJSON in the Context,
+and calls runPureOnContext.
+
+Here we call all the queries associated with a particular SparqlEndpoint
+ */
+function updateHasSparqlEndpoint(myLink){
+var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
+for (var i=0 ; i<queries.length ; i++){
+    updateHasSerqlQuery(myLink,queries[i]);
+}
+}
+/* builds url from link and Serql query */
+function sparqlEndpointUrl(endpoint,query,varclasses){
+    alert('got ' + endpoint + ' ' + query + ' ' + varclasses);
+    var localurl = endpoint + '?query=' + encodeURIComponent(query) + '&queryLn=serql';
+    localurl = appendPageForm(localurl,varclasses);
+    alert(localurl);
+    return localurl;
+}
+/* builds url from link and query and retrieves if necessary */
+function updateHasSerqlQuery(myLink,myQuery){
+var xmlhttp= getXMLhttp();
+    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
+if(myQuery.localurl != localurl){
+var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
+    if(dumpelement.length > 0 ){dumpelement[0].innerHTML=localurl}
+myQuery.localurl = localurl;
+xmlhttp.infourl = localurl;
+xmlhttp.myContext = myLink.parentNode;
+xmlhttp.myLink=myLink;
+xmlhttp.myQuery=myQuery;
+changeClassWithin(xmlhttp.myContext,'valid','invalid');
+xmlhttp.onreadystatechange = function(evt) {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+if(it.readyState == 4){
+    if(it.status == 200){
+	var jsontxt = it.responseText;
+	if(it.myQuery.localurl == it.infourl){
+	    if(it.myQuery.id){
+		if(!it.myContext.parsedJSON){
+		    it.myContext.parsedJSON = {};
+		}
+		it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+	    }
+	    else {
+		it.myContext.parsedJSON=JSON.parse(jsontxt);
+	    }
+var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
+    if(dumpelement.length > 0 ){dumpelement[0].innerHTML='<pre>' + jsontxt + '</pre>'}
+	    runPureOnContext(it.myContext);
+	    updatePageFormCopies(it.myContext);
+	    validateAndCorrectPageForm(it.myContext);
+	}
+    }
+    else {
+	alert('got ' + it.status + ' ' + it.reponseText);
+    }
+}
+};
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+xmlhttp.open("GET",xmlhttp.infourl,true);
+xmlhttp.setRequestHeader("Accept","application/ld+json");
+xmlhttp.send();
+ }
+}
 function loadHasJSON(){
 var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
 for (var i=0 ; i<sfigs.length ; i++){
@@ -1502,21 +1577,26 @@ xmlhttp.onreadystatechange = function(evt) {
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 if(it.readyState == 4){
-var jsontxt = it.responseText;
-if(it.myLink.localurl == it.infourl){
-    if(it.myLink.id){
-	if(!it.myContext.parsedJSON){
-	    it.myContext.parsedJSON = {};
+    if(it.status == 200){
+	var jsontxt = it.responseText;
+	if(it.myLink.localurl == it.infourl){
+	    if(it.myLink.id){
+		if(!it.myContext.parsedJSON){
+		    it.myContext.parsedJSON = {};
+		}
+		it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+	    }
+	    else {
+		it.myContext.parsedJSON=JSON.parse(jsontxt);
+	    }
+	    runPureOnContext(it.myContext);
+	    updatePageFormCopies(it.myContext);
+	    validateAndCorrectPageForm(it.myContext);
 	}
-	it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
     }
     else {
-	it.myContext.parsedJSON=JSON.parse(jsontxt);
+	alert('Got ' + it.status + ' ' + it.responseText);
     }
-    runPureOnContext(it.myContext);
-    updatePageFormCopies(it.myContext);
-    validateAndCorrectPageForm(it.myContext);
-}
 }
 };
 xmlhttp.myevtfn=xmlhttp.onreadystatechange;
@@ -4375,6 +4455,7 @@ insertshare();
 insertInstructions();
 setupPageFormLinks();
 loadHasJSON();
+loadHasSparqlEndpoint();
 if(uicoreConfig.GoogleAnalyticsId){
 /*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
