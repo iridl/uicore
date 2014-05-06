@@ -1499,58 +1499,75 @@ for (var i=0 ; i<queries.length ; i++){
 }
 /* builds url from link and Serql query */
 function sparqlEndpointUrl(endpoint,query,varclasses){
-    alert('got ' + endpoint + ' ' + query + ' ' + varclasses);
     var localurl = endpoint + '?query=' + encodeURIComponent(query) + '&queryLn=serql';
-    localurl = appendPageForm(localurl,varclasses);
-    alert(localurl);
+    var appendurl = appendPageForm("",varclasses,true);
+    if(appendurl){
+	var vars = appendurl.substring(1).split("&");
+	var pair;
+	for (var i = 0 ; i < vars.length ; i++){
+            pair = vars[i].split("=");
+	    var newvalue =  "<" + unescape(pair[1]).replace("gaz:","http://iridl.ldeo.columbia.edu/ontologies/irigaz.owl#") + '>';
+
+	    localurl = localurl + "&" + encodeURIComponent("$" + pair[0] ) + "=" + encodeURIComponent(newvalue);
+	}
+    }
     return localurl;
 }
 /* builds url from link and query and retrieves if necessary */
 function updateHasSerqlQuery(myLink,myQuery){
-var xmlhttp= getXMLhttp();
+    var xmlhttp= getXMLhttp();
     var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
-if(myQuery.localurl != localurl){
-var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
-    if(dumpelement.length > 0 ){dumpelement[0].innerHTML=localurl}
-myQuery.localurl = localurl;
-xmlhttp.infourl = localurl;
-xmlhttp.myContext = myLink.parentNode;
-xmlhttp.myLink=myLink;
-xmlhttp.myQuery=myQuery;
-changeClassWithin(xmlhttp.myContext,'valid','invalid');
-xmlhttp.onreadystatechange = function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if(it.readyState == 4){
-    if(it.status == 200){
-	var jsontxt = it.responseText;
-	if(it.myQuery.localurl == it.infourl){
-	    if(it.myQuery.id){
-		if(!it.myContext.parsedJSON){
-		    it.myContext.parsedJSON = {};
-		}
-		it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+    if(myQuery.localurl != localurl){
+	var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:QueryAsText');
+	if(dumpelement.length > 0 ){
+	    dumpelement[0].innerHTML='<pre>' + myQuery.text+'</pre>';
+	    var appendurl = appendPageForm("",myQuery.className,true);
+	    if(appendurl){
+		dumpelement[0].innerHTML=dumpelement[0].innerHTML + ' with ' +unescape(appendurl.substring(1).replace(/&/g,' '));
 	    }
-	    else {
-		it.myContext.parsedJSON=JSON.parse(jsontxt);
-	    }
-var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
-    if(dumpelement.length > 0 ){dumpelement[0].innerHTML='<pre>' + jsontxt + '</pre>'}
-	    runPureOnContext(it.myContext);
-	    updatePageFormCopies(it.myContext);
-	    validateAndCorrectPageForm(it.myContext);
 	}
+	dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
+	if(dumpelement.length > 0 ){dumpelement[0].innerHTML=''}
+	myQuery.localurl = localurl;
+	xmlhttp.infourl = localurl;
+	xmlhttp.myContext = myLink.parentNode;
+	xmlhttp.myLink=myLink;
+	xmlhttp.myQuery=myQuery;
+	changeClassWithin(xmlhttp.myContext,'valid','invalid');
+	xmlhttp.onreadystatechange = function(evt) {
+	    var evt = (evt) ? evt : ((event) ? event : null );
+	    var it = (evt.currentTarget) ? evt.currentTarget : this;
+	    if(it.readyState == 4){
+		if(it.status == 200){
+		    var jsontxt = it.responseText;
+		    if(it.myQuery.localurl == it.infourl){
+			if(it.myQuery.id){
+			    if(!it.myContext.parsedJSON){
+				it.myContext.parsedJSON = {};
+			    }
+			    it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+			}
+			else {
+			    it.myContext.parsedJSON=JSON.parse(jsontxt);
+			}
+			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
+			if(dumpelement.length > 0 ){
+			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n<pre>" + jsontxt + '</pre>'}
+			runPureOnContext(it.myContext);
+			updatePageFormCopies(it.myContext);
+			validateAndCorrectPageForm(it.myContext);
+		    }
+		}
+		else {
+		    alert('got ' + it.status + ' ' + it.responseText);
+		}
+	    }
+	};
+	xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+	xmlhttp.open("GET",xmlhttp.infourl,true);
+	xmlhttp.setRequestHeader("Accept","application/ld+json");
+	xmlhttp.send();
     }
-    else {
-	alert('got ' + it.status + ' ' + it.reponseText);
-    }
-}
-};
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",xmlhttp.infourl,true);
-xmlhttp.setRequestHeader("Accept","application/ld+json");
-xmlhttp.send();
- }
 }
 function loadHasJSON(){
 var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
@@ -1680,18 +1697,20 @@ function runPureOnContext(myContext){
 	var myscript = mydirs[iscript];
 	var mytems = myscript.pureTemplates;
 	var mytclass = myscript.pureTClass;
+	if(mytems.length>0){
 	    var i=0;
 	    var holdonchange = mytems[i].onchange;
-	     if(myscript.pureDirective){
-	    $p(mytclass).render(myContext.parsedJSON,myscript.pureDirective);
-	     }
-	     else {
-	    $p(mytclass).autoRender(myContext.parsedJSON);
-	     }
+	    if(myscript.pureDirective){
+		$p(mytclass).render(myContext.parsedJSON,myscript.pureDirective);
+	    }
+	    else {
+		$p(mytclass).autoRender(myContext.parsedJSON);
+	    }
             if(typeof(holdonchange)=='function' ){
 	        mytems[i].onchange=holdonchange;
-	       mytems[i].myonchange=holdonchange;
+		mytems[i].myonchange=holdonchange;
             }
+	}
     }
     changeClassWithin(myContext,'invalid','valid');
 }
@@ -4315,7 +4334,7 @@ return false;
 }
 /* alldisabledPageForm -- disables FormElements that are default or not in classes,
 returns true if all default values or not in classes */
-function alldisabledPageForm(classes){
+function alldisabledPageForm(classes,includeDefaultValues){
     var myform=document.getElementById('pageform');
     var alldisabled;
     if(myform){
@@ -4331,7 +4350,7 @@ function alldisabledPageForm(classes){
 	    for ( var j = 0; j < members.length; j++ )
 		if(members[j].disabled) {
 		    if(members[j].type != 'checkbox' && members[j].value){
-			if(members[j].initialValue != members[j].value){
+			if(includeDefaultValues || members[j].initialValue != members[j].value){
 			    alldisabled=false;
 			    var myname=members[j].name;
 			    members[j].disabled=false;
@@ -4397,11 +4416,11 @@ else {
 /*
 appendPageForm -- appends to href, appending pageform inputs corresponding to class.
 */
-function appendPageForm(href,classes){
+function appendPageForm(href,classes,includeDefaultValues){
 var localhref=localHrefOf(href);
 var myform=document.getElementById('pageform');
 if(myform){
-var alldisabled=alldisabledPageForm(classes);
+    var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
 if(alldisabled){
 return localhref;
 }
