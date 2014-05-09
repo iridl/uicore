@@ -110,6 +110,8 @@ scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 /* loads pure javascript */
 var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
 jsDependsOn(puredir + 'pure.js');
+/* loads jsonld javascript */
+jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
