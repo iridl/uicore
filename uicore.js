@@ -1518,6 +1518,7 @@ function updateHasSerqlQuery(myLink,myQuery){
     var xmlhttp= getXMLhttp();
     var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
     if(myQuery.localurl != localurl){
+	myQuery.localurl = localurl;
 	var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:QueryAsText');
 	if(dumpelement.length > 0 ){
 	    dumpelement[0].innerHTML='<pre>' + myQuery.text+'</pre>';
@@ -1528,7 +1529,6 @@ function updateHasSerqlQuery(myLink,myQuery){
 	}
 	dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
 	if(dumpelement.length > 0 ){dumpelement[0].innerHTML=''}
-	myQuery.localurl = localurl;
 	xmlhttp.infourl = localurl;
 	xmlhttp.myContext = myLink.parentNode;
 	xmlhttp.myLink=myLink;
@@ -1540,22 +1540,54 @@ function updateHasSerqlQuery(myLink,myQuery){
 	    if(it.readyState == 4){
 		if(it.status == 200){
 		    var jsontxt = it.responseText;
+		    var parsedJSON = JSON.parse(jsontxt);
 		    if(it.myQuery.localurl == it.infourl){
 			if(it.myQuery.id){
 			    if(!it.myContext.parsedJSON){
 				it.myContext.parsedJSON = {};
 			    }
-			    it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+			    it.myContext.parsedJSON[it.myQuery.id]=parsedJSON;
 			}
 			else {
-			    it.myContext.parsedJSON=JSON.parse(jsontxt);
+			    it.myContext.parsedJSON=parsedJSON;
 			}
 			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
+		    if(it.myQuery.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldFrame'){
+			var frame = JSON.parse(it.myQuery.nextElementSibling.text);
+			var framedforPure;
+			jsonld.frame(parsedJSON,frame,function(err,framed){
+			    if(err){
+				alert('frame returned ' + JSON.stringify(err));
+			    }
+			    else {
+				framedforPure=framed;
+			    }
+			var myquery=it.myQuery;
+			if(myquery.id){
+			    if(!myquery.parentNode.parsedJSON){
+				myquery.parentNode.parsedJSON = {};
+			    }
+			    myquery.parentNode.parsedJSON[myquery.id]=framedforPure;
+			}
+			else {
+			    myquery.parentNode.parsedJSON=framedforPure;
+			}
+			var dumpelement=getElementsByAttribute(myquery.parentNode,'*','property','iridl:JsonAsText');
 			if(dumpelement.length > 0 ){
-			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n<pre>" + jsontxt + '</pre>'}
+			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(myquery.parentNode.parsedJSON);}
+
+			runPureOnContext(myquery.parentNode);
+			updatePageFormCopies(myquery.parentNode);
+			validateAndCorrectPageForm(myquery.parentNode);
+			});
+		    }
+			else {			
+			    if(dumpelement.length > 0 ){
+			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(parsedJSON)}
 			runPureOnContext(it.myContext);
 			updatePageFormCopies(it.myContext);
 			validateAndCorrectPageForm(it.myContext);
+			}
 		    }
 		}
 		else {
@@ -1699,6 +1731,7 @@ function runPureOnContext(myContext){
 	var mytclass = myscript.pureTClass;
 	if(mytems.length>0){
 	    var i=0;
+
 	    var holdonchange = mytems[i].onchange;
 	    if(myscript.pureDirective){
 		$p(mytclass).render(myContext.parsedJSON,myscript.pureDirective);
@@ -1712,6 +1745,7 @@ function runPureOnContext(myContext){
             }
 	}
     }
+    setUIHandlers(myContext);
     changeClassWithin(myContext,'invalid','valid');
 }
 function initializeDLimage(){
@@ -3745,8 +3779,13 @@ appendMissingClass(members[j],'valid');
 }
 }
 }
+    setUIHandlers(document);
+updatePageFormNoHistory();
+}
+}
+function setUIHandlers(context){
 /* pageformcopy form elements copy their values to the pageform */
-var stag = document.getElementsByClassName('pageformcopy');
+var stag = context.getElementsByClassName('pageformcopy');
 for (var i=0; i< stag.length ; i++){
 var sel=stag[i];
 if(typeof(sel.onchange) != 'function'){
@@ -3755,7 +3794,7 @@ sel.onchangefn=pageformcopyonchange;
 }
 }
 /* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
-var stag = document.getElementsByClassName('RegionMenu');
+var stag = context.getElementsByClassName('RegionMenu');
 for (var i=0; i< stag.length ; i++){
     var sel=stag[i];
     appendMissingClass(sel,'pageformcopy');
@@ -3765,7 +3804,7 @@ sel.onchangefn=regiononchange;
 }
 }
 /* popup regionwithinbbox:  sets region to match bbox and clears clickpt */
-var stag = document.getElementsByClassName('popup regionwithinbbox');
+var stag = context.getElementsByClassName('popup regionwithinbbox');
 for (var i=0; i< stag.length ; i++){
     var sel=stag[i];
 if(typeof(sel.onchange) != 'function'){
@@ -3773,10 +3812,7 @@ sel.onclick=clearregionwithin;
 sel.onclickfn=clearregionwithin;
 }
 }
-updatePageFormNoHistory();
 }
-}
-
 function invalidatePageInput(iname){
     ChangeClassPageInput(iname,'valid','invalid');
 }
@@ -3888,6 +3924,12 @@ if(newsrc != cmem.href){
 	updateHasFigure(cmem);
     }
 }
+}
+if(cmem.tagName == 'SCRIPT'){
+    if(cmem.getAttribute('property') == 'iridl:hasSerqlQuery'){
+	var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
+	if(links.length>0)updateHasSerqlQuery(links[0],cmem);
+    }
 }
 if(cmem.tagName == 'DIV'){
     if(cmem.getAttribute('data-href') && cmem.indexOf('share')>=0 ) {
