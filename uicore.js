@@ -1506,9 +1506,24 @@ function sparqlEndpointUrl(endpoint,query,varclasses){
     if(appendurl){
 	var vars = appendurl.substring(1).split("&");
 	var pair;
+	var myform=document.getElementById('pageform');
 	for (var i = 0 ; i < vars.length ; i++){
             pair = vars[i].split("=");
-	    var newvalue =  "<" + unescape(pair[1]).replace("gaz:","http://iridl.ldeo.columbia.edu/ontologies/irigaz.owl#") + '>';
+	    var newvalue;
+	    var ifid=false;
+	    var mys = false;
+	    if(myform.jsonldContext && myform.jsonldContext['@context']){
+		mys = myform.jsonldContext['@context'][pair[0]];
+		if(mys){
+		    ifid=(mys['@type'] == '@id');
+		}
+	    }
+	    if(ifid){
+		newvalue =  "<" + expandNS(unescape(pair[1]),myform.nsContext['@context']) + '>';
+	    }
+	    else {
+		newvalue = '"' + pair[1] + '"';
+	    }
 
 	    localurl = localurl + "&" + encodeURIComponent("$" + pair[0] ) + "=" + encodeURIComponent(newvalue);
 	}
@@ -1526,7 +1541,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 	    dumpelement[0].innerHTML='<pre>' + myQuery.text+'</pre>';
 	    var appendurl = appendPageForm("",myQuery.className,true);
 	    if(appendurl){
-		dumpelement[0].innerHTML=dumpelement[0].innerHTML + ' with ' +unescape(appendurl.substring(1).replace(/&/g,' '));
+		dumpelement[0].innerHTML=dumpelement[0].innerHTML + ' with variable bindings ' +unescape(appendurl.substring(1).replace(/&/g,' '));
 	    }
 	}
 	dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
@@ -1559,7 +1574,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 			var framedforPure;
 			jsonld.frame(parsedJSON,frame,function(err,framed){
 			    if(err){
-				alert('frame returned ' + JSON.stringify(err));
+				alert('frame returned ' + JSON.stringify(err,null,3));
 			    }
 			    else {
 				framedforPure=framed;
@@ -1576,7 +1591,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 			}
 			var dumpelement=getElementsByAttribute(myquery.parentNode,'*','property','iridl:JsonAsText');
 			if(dumpelement.length > 0 ){
-			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(myquery.parentNode.parsedJSON);}
+			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(myquery.parentNode.parsedJSON,null,3);}
 
 			runPureOnContext(myquery.parentNode);
 			updatePageFormCopies(myquery.parentNode);
@@ -1585,7 +1600,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 		    }
 			else {			
 			    if(dumpelement.length > 0 ){
-			    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(parsedJSON)}
+				dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(parsedJSON,null,3)}
 			runPureOnContext(it.myContext);
 			updatePageFormCopies(it.myContext);
 			validateAndCorrectPageForm(it.myContext);
@@ -1593,7 +1608,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 		    }
 		}
 		else {
-		    alert('got ' + it.status + ' ' + it.responseText);
+		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
 		}
 	    }
 	};
@@ -1646,7 +1661,7 @@ if(it.readyState == 4){
 	}
     }
     else {
-	alert('Got ' + it.status + ' ' + it.responseText);
+		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
     }
 }
 };
@@ -3596,6 +3611,18 @@ if(myform){
 	    }
 	}
     }
+/* sets form jsonldContext 
+jsonldContext == context as written
+nsContext == just the namespace declarations
+structContext == just the structure declarations -- expanded to not depend on nsContext, 
+                 but not changed in meaning: nsContext + structContext is still jsonldContext
+*/
+    if(myform.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldContext'){
+	myform.jsonldContext = JSON.parse(myform.nextElementSibling.text);
+	var mysplitContext=splitContext(myform.jsonldContext);
+	myform.nsContext=mysplitContext[0];
+	myform.structContext=mysplitContext[1];
+    }
     /* updates values from page url */
 var achange=false;
 var inputs=myform.elements;
@@ -3630,6 +3657,46 @@ var varcnts = {};
 	history.replaceState(url,'initial',url);
     }
 
+}
+function splitContext(icontext){
+    var ns={},struct={};
+    ns['@context']={};
+    struct['@context']={};
+    var mycontext=icontext['@context'];
+/* extracts namespace declarations */
+    for (var key in mycontext){
+	if(typeof(mycontext[key]) == "string"){
+	    ns['@context'][key] = expandNS(mycontext[key],mycontext);
+	}
+    }
+/* extracts structures, expanding ns */
+    var myns=ns['@context']
+    for (var key in mycontext){
+	if(typeof(mycontext[key]) != "string"){
+	    myhash = mycontext[key];
+	    var newhash={};
+	    for (var pkey in myhash){
+		var curr = expandNS(myhash[pkey],myns);
+		newhash[expandNS(pkey,myns)]=curr;
+	}
+	    struct['@context'][key] = newhash;
+	}
+    }
+    return [ns,struct];
+}
+function expandNS(curi,ns){
+    var rstr = curi;
+    if(typeof(curi) == "string"){
+    var cat = curi.indexOf(':');
+    if (cat > 0){
+	var abbr = curi.substring(0,cat);
+	var nsexp = ns[abbr];
+	if(nsexp){
+	    rstr = nsexp + curi.substring(cat+1);
+	}
+    }
+    }
+    return rstr;
 }
 /* onpopstate handler */
 function updatePageFormFromUrl(){
