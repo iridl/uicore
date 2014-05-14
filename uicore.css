@@ -61,6 +61,8 @@ opacity: 0.3;
  -webkit-transition: opacity 1s linear 1s;
  -moz-transition: opacity 1s linear 1s;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+}
+.invalid.loading {
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
 .bold {

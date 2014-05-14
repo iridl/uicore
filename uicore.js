@@ -3883,6 +3883,8 @@ members[j].onclick=onClickPageForm;
 }
 if(members[j].src){
 members[j].onload=imageloadedevent;
+members[j].onabort=imageabortedevent;
+members[j].onerror=imageabortedevent;
 appendMissingClass(members[j],'valid');
 }
 }
@@ -4017,6 +4019,7 @@ var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
+    appendMissingClass(cmem,'loading');
 }
     cmem.src = newsrc;
 }
@@ -4064,6 +4067,7 @@ var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
+    appendMissingClass(cmem,'loading');
 }
 /* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
 if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
@@ -4317,9 +4321,15 @@ if(!valid){
 }
 }
 }
+function imageabortedevent(evt){
+    evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    removeClass(it,'loading');
+}
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
 var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    removeClass(it,'loading');
 changeClass(it,'invalid','valid');
 changeClass(it,'invalid-zooming','valid');
 if(it.className.indexOf('dlimg') >=0){
