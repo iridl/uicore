@@ -65,6 +65,12 @@ opacity: 0.3;
 .invalid.loading {
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
+.invalid.failed {
+opacity: 1.0;
+border: 2px;
+border-color: red;
+border-style: solid;
+background-color: #FFBBBB}
 .bold {
 font-weight: bold;
 }

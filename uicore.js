@@ -4020,6 +4020,7 @@ if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
     appendMissingClass(cmem,'loading');
+    removeClass(cmem,'failed');
 }
     cmem.src = newsrc;
 }
@@ -4068,6 +4069,7 @@ if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
     appendMissingClass(cmem,'loading');
+    removeClass(cmem,'failed');
 }
 /* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
 if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
@@ -4325,6 +4327,8 @@ function imageabortedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
     removeClass(it,'loading');
+    appendMissingClass(it,'failed');
+
 }
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
