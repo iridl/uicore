@@ -1791,8 +1791,8 @@ function invalidate(context,vid){
 function clearFailed(cmem){
     removeClass(cmem,'failed');
     var mybody = document.getElementsByTagName('body')[0];
-    var cnt = mybody.getAttribute('failed');
-    cnt = cnt - 1;
+    var cnt = parseInt(mybody.getAttribute('failed'));
+    cnt += -1;
     if (cnt > 0){
 	mybody.setAttribute('failed',cnt);
     }
@@ -1803,9 +1803,9 @@ function clearFailed(cmem){
 function setFailed(cmem){
     if(appendMissingClass(cmem,'failed')){
 	var mybody = document.getElementsByTagName('body')[0];
-	var cnt = mybody.getAttribute('failed');
+	var cnt = parseInt(mybody.getAttribute('failed'));
 	if(cnt){
-	    cnt = cnt + 1;
+	    cnt += 1;
 	}
 	else {
 	    cnt = 1;

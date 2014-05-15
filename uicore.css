@@ -16,6 +16,22 @@ display: none
 { display: inline;
 color: black;
  }
+body[failed]::before {
+content: attr(failed) " download failures";
+display: block;
+border: 2pt;
+border-style: solid;
+border-color: red;
+padding: 10pt;
+position: fixed;
+top: 45%;
+left: 45%;
+z-index: 100;
+background-color: #FFCCCC;
+}
+body[failed="1"]::before {
+content: attr(failed) " download failure";
+}
 .sharebutton{
 display: inline;
 margin: 3px;
