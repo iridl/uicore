@@ -19,15 +19,16 @@ color: black;
 body[failed]::before {
 content: attr(failed) " download failures";
 display: block;
-border: 2pt;
-border-style: solid;
+border: 4pt;
+border-style: outset;
 border-color: red;
-padding: 10pt;
+padding: 20pt;
 position: fixed;
 top: 45%;
 left: 45%;
 z-index: 100;
 background-color: #FFCCCC;
+border-radius: 10px;
 }
 body[failed="1"]::before {
 content: attr(failed) " download failure";
