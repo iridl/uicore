@@ -21,13 +21,16 @@ content: attr(failed) " download failures";
 display: block;
 border: 4pt;
 border-style: outset;
-border-color: red;
+border-color; DarkGrey;
+text-align: center;
+color: red;
 padding: 20pt;
 position: fixed;
-top: 45%;
-left: 45%;
+top: 15%;
+left: 25%;
+right: 25%;
 z-index: 100;
-background-color: #FFCCCC;
+background-color: WhiteSmoke;
 border-radius: 10px;
 }
 body[failed="1"]::before {

@@ -3914,7 +3914,7 @@ members[j].onclick=onClickPageForm;
 if(members[j].src){
 members[j].onload=imageloadedevent;
 members[j].onabort=imageabortedevent;
-members[j].onerror=imageabortedevent;
+members[j].onerror=imageerrorevent;
 appendMissingClass(members[j],'valid');
 }
 }
@@ -4354,6 +4354,11 @@ if(!valid){
 }
 }
 function imageabortedevent(evt){
+    evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    removeClass(it,'loading');
+}
+function imageerrorevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
     removeClass(it,'loading');
