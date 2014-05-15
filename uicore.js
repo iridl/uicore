@@ -1536,6 +1536,7 @@ function updateHasSerqlQuery(myLink,myQuery){
     var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
     if(myQuery.localurl != localurl){
 	relStartLoading(myQuery);
+	clearFailed(myQuery);
 	myQuery.localurl = localurl;
 	var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:QueryAsText');
 	if(dumpelement.length > 0 ){
@@ -1614,6 +1615,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 		else {
 		    /*failed -- stop loading */
 		    relStopLoading(it.myQuery);
+		    setFailed(it.myQuery);
 		    if(it.status > 0){
 		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
 		    }
@@ -1643,6 +1645,7 @@ var xmlhttp= getXMLhttp();
 var localurl = localHrefOf(myLink.href);
 if(myLink.localurl != localurl){
     relStartLoading(myLink);
+    clearFailed(myLink);
 myLink.localurl = localurl;
 xmlhttp.infourl = localurl;
 xmlhttp.myContext = myLink.parentNode;
@@ -1673,6 +1676,7 @@ if(it.readyState == 4){
     else {
 /* failed */
 	relStopLoading(it.myLink);
+	setFailed(it.myLink);
 	if(it.status > 0){
 		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
 	}
@@ -1782,6 +1786,32 @@ function runPureOnContext(myContext){
 function validate(context,vid){
 }
 function invalidate(context,vid){
+}
+/* set/clear failed class on object, maintain failed attribute on body */
+function clearFailed(cmem){
+    removeClass(cmem,'failed');
+    var mybody = document.getElementsByTagName('body')[0];
+    var cnt = mybody.getAttribute('failed');
+    cnt = cnt - 1;
+    if (cnt > 0){
+	mybody.setAttribute('failed',cnt);
+    }
+    else {
+	mybody.removeAttribute('failed');
+    }
+}
+function setFailed(cmem){
+    if(appendMissingClass(cmem,'failed')){
+	var mybody = document.getElementsByTagName('body')[0];
+	var cnt = mybody.getAttribute('failed');
+	if(cnt){
+	    cnt = cnt + 1;
+	}
+	else {
+	    cnt = 1;
+	}
+	mybody.setAttribute('failed',cnt);
+    }
 }
 /* uses currenturl loadingCount, and Loading class to track loading state for links and their context */
 function relStartLoading(link){
@@ -4020,7 +4050,7 @@ if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
     appendMissingClass(cmem,'loading');
-    removeClass(cmem,'failed');
+    clearFailed(cmem);
 }
     cmem.src = newsrc;
 }
@@ -4069,7 +4099,7 @@ if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
     appendMissingClass(cmem,'loading');
-    removeClass(cmem,'failed');
+    clearFailed(cmem);
 }
 /* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
 if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
@@ -4327,8 +4357,7 @@ function imageabortedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
     removeClass(it,'loading');
-    appendMissingClass(it,'failed');
-
+    setFailed(it);
 }
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
