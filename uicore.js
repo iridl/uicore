@@ -4616,32 +4616,40 @@ else {
 appendPageForm -- appends to href, appending pageform inputs corresponding to class.
 */
 function appendPageForm(href,classes,includeDefaultValues){
-var localhref=localHrefOf(href);
-var myform=document.getElementById('pageform');
-if(myform){
-    var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
-if(alldisabled){
-return localhref;
-}
-else {
-var action = localhref;
-var inputs=myform.elements;
-delim= '?';
-        for (var i = 0; i < inputs.length; i++) {
-	    var myinput=inputs[i];
-	    if(!myinput.disabled){
-		if(myinput.type != 'checkbox' || myinput.checked){
-	action = action + delim + myinput.name + '=' + encodeURIComponent(myinput.value);
-	delim='&'
+    var localhref=localHrefOf(href);
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
+	if(alldisabled){
+	    return localhref;
+	}
+	else {
+	    var action = localhref;
+	    var thehash;
+	    if(action.indexOf("#") >= 0){
+		thehash = action.substring(action.indexOf('#'));
+		action=action.substring(0,action.indexOf('#'));
 	    }
+	    var inputs=myform.elements;
+	    delim= '?';
+	    for (var i = 0; i < inputs.length; i++) {
+		var myinput=inputs[i];
+		if(!myinput.disabled){
+		    if(myinput.type != 'checkbox' || myinput.checked){
+			action = action + delim + myinput.name + '=' + encodeURIComponent(myinput.value);
+			delim='&'
+		    }
+		}
+	    }
+	    if(thehash){
+		action = action + thehash;
+	    }
+	    return action;
 	}
-	}
-return action;
-}
-}
-else {
-return localhref;
-}
+    }
+    else {
+	return localhref;
+    }
 }
 // loadmaproom is run once (at DOMContentLoaded if possible, or onload).
 var loadmaproomneeded=true;
