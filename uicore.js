@@ -1594,7 +1594,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 				/* finish inside frame */
 				var dumpelement=getElementsByAttribute(myquery.parentNode,'*','property','iridl:JsonAsText');
 				if(dumpelement.length > 0 ){
-				    dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(myquery.parentNode.parsedJSON,null,3);}
+				    dumpelement[0].innerHTML=JSON.stringify(myquery.parentNode.parsedJSON,null,3);}
 				relStopLoading(myquery);
 				runPureOnContext(myquery.parentNode);
 				updatePageFormCopies(myquery.parentNode);
@@ -1615,10 +1615,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 		else {
 		    /*failed -- stop loading */
 		    relStopLoading(it.myQuery);
-		    setFailed(it.myQuery);
-		    if(it.status > 0){
-		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
-		    }
+		    setFailed(it.myQuery, it.status, it.statusText + it.responseText);
 		}
 	    }
 	};
@@ -1674,12 +1671,9 @@ if(it.readyState == 4){
 	}
     }
     else {
-/* failed */
+	/* failed */
 	relStopLoading(it.myLink);
-	setFailed(it.myLink);
-	if(it.status > 0){
-		    alert('got ' + it.status + ' ' + it.statusText + ' from ' + it.infourl + ' ' + it.responseText);
-	}
+	setFailed(it.myLink, it.status, it.statusText + it.responseText);
     }
 }
 };
@@ -1790,6 +1784,8 @@ function invalidate(context,vid){
 /* set/clear failed class on object, maintain failed attribute on body */
 function clearFailed(cmem){
     removeClass(cmem,'failed');
+    cmem.removeAttribute('failcode');
+    cmem.removeAttribute('failmsg');
     var mybody = document.getElementsByTagName('body')[0];
     var cnt = parseInt(mybody.getAttribute('failed'));
     cnt += -1;
@@ -1800,7 +1796,11 @@ function clearFailed(cmem){
 	mybody.removeAttribute('failed');
     }
 }
-function setFailed(cmem){
+    function setFailed(cmem,scode,msg){
+	if(scode){
+	    cmem.setAttribute('failcode',scode);
+	    cmem.setAttribute('failmsg',msg);
+	}
     if(appendMissingClass(cmem,'failed')){
 	var mybody = document.getElementsByTagName('body')[0];
 	var cnt = parseInt(mybody.getAttribute('failed'));
