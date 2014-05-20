@@ -4337,11 +4337,13 @@ var sel=stag[i];
 if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
     valid=false;
     sel.selectedIndex=0;
+    if(sel.selectedIndex == 0){
 myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
 if(sel.previousSibling.className == 'selectvalue'){
 sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
     sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
 }
+    }
  }   
 }
 if(!valid){
