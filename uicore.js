@@ -1494,10 +1494,10 @@ and calls runPureOnContext.
 Here we call all the queries associated with a particular SparqlEndpoint
  */
 function updateHasSparqlEndpoint(myLink){
-var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
-for (var i=0 ; i<queries.length ; i++){
-    updateHasSerqlQuery(myLink,queries[i]);
-}
+    var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
+    for (var i=0 ; i<queries.length ; i++){
+	updateHasSerqlQuery(myLink,queries[i]);
+    }
 }
 /* builds url from link and Serql query */
 function sparqlEndpointUrl(endpoint,query,varclasses){
@@ -1540,7 +1540,13 @@ function updateHasSerqlQuery(myLink,myQuery){
 	myQuery.localurl = localurl;
 	var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:QueryAsText');
 	if(dumpelement.length > 0 ){
-	    dumpelement[0].innerHTML='<pre>' + myQuery.text+'</pre>';
+	    if(myLink.parentNode.loading == 1){
+		dumpelement[0].innerHTML='';
+	    }
+	    if(myQuery.id){
+		dumpelement[0].innerHTML+='<p>' + myQuery.id + '</p>';
+	    }
+	    dumpelement[0].innerHTML+= '<pre>' + myQuery.text+'</pre>';
 	    var appendurl = appendPageForm("",myQuery.className,true);
 	    if(appendurl){
 		dumpelement[0].innerHTML=dumpelement[0].innerHTML + ' with variable bindings ' +unescape(appendurl.substring(1).replace(/&/g,' '));
@@ -1604,7 +1610,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 			else {
 			    /* finish without frame */
 			    if(dumpelement.length > 0 ){
-				dumpelement[0].innerHTML=dumpelement[0].innerHTML + "\n" + JSON.stringify(parsedJSON,null,3)}
+				dumpelement[0].innerHTML=JSON.stringify(it.myContext.parsedJSON,null,3)}
 			    relStopLoading(it.myQuery);
 			    runPureOnContext(it.myContext);
 			    updatePageFormCopies(it.myContext);
