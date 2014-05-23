@@ -1823,6 +1823,7 @@ function clearFailed(cmem){
 function relStartLoading(link){
     myContext = link.parentNode;
     if(appendMissingClass(link,'loading')){
+/* set loading in context */
 	if(myContext.loading && myContext.loading > 0){
 	    myContext.loading = myContext.loading + 1;
 	}
@@ -1830,11 +1831,30 @@ function relStartLoading(link){
 	    myContext.loading = 1;
 	    appendMissingClass(myContext,'loading');
 	}
+/* set loading on body */
+	var mybody = document.getElementsByTagName('body')[0];
+	var cnt = parseInt(mybody.getAttribute('loading'));
+	if(cnt){
+	    cnt += 1;
+	}
+	else {
+	    cnt = 1;
+	}
+	mybody.setAttribute('loading',cnt);
     }
 }
 function relStopLoading(link){
     myContext = link.parentNode;
     removeClass(link,'loading');
+    var mybody = document.getElementsByTagName('body')[0];
+    var cnt = parseInt(mybody.getAttribute('loading'));
+    cnt += -1;
+    if (cnt > 0){
+	mybody.setAttribute('loading',cnt);
+    }
+    else {
+	mybody.removeAttribute('loading');
+    }
     myContext.loading = myContext.loading - 1;
     if(myContext.loading == 0){
 	removeClass(myContext,'loading');
