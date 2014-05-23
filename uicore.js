@@ -1577,7 +1577,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 			    it.myContext.parsedJSON=parsedJSON;
 			}
 			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
-			if(it.myQuery.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldFrame'){
+			if(it.myQuery.nextElementSibling && it.myQuery.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldFrame'){
 			    var frame = JSON.parse(it.myQuery.nextElementSibling.text);
 			    var framedforPure;
 			    jsonld.frame(parsedJSON,frame,function(err,framed){
@@ -3712,7 +3712,7 @@ nsContext == just the namespace declarations
 structContext == just the structure declarations -- expanded to not depend on nsContext, 
                  but not changed in meaning: nsContext + structContext is still jsonldContext
 */
-    if(myform.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldContext'){
+    if(myform.nextElementSibling && myform.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldContext'){
 	myform.jsonldContext = JSON.parse(myform.nextElementSibling.text);
 	var mysplitContext=splitContext(myform.jsonldContext);
 	myform.nsContext=mysplitContext[0];
