@@ -77,16 +77,16 @@ opacity: 0.3;
 }
 .invalid {
 opacity: 0.3;
- transition: opacity 1s linear 1s;
- -webkit-transition: opacity 1s linear 1s;
- -moz-transition: opacity 1s linear 1s;
+ transition: opacity 3s linear 1s;
+ -webkit-transition: opacity 3s linear 1s;
+ -moz-transition: opacity 3s linear 1s;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 .invalid.loading {
 opacity: 0.3;
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
-img.invalid.loading {
+.slowly img.invalid.loading {
 visibility: hidden;
 }
 .invalid.failed {

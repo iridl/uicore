@@ -1841,6 +1841,12 @@ function relStartLoading(link){
 	    cnt = 1;
 	}
 	mybody.setAttribute('loading',cnt);
+	removeClass(mybody,'slowly');
+	if(mybody.loadTimer){
+	    clearTimeout(mybody.loadTimer);
+	}
+	mybody.loadTimer = setTimeout(function () {
+	    if(mybody.getAttribute('loading')){appendMissingClass(mybody,'slowly')};},3000);
     }
 }
 function relStopLoading(link){
@@ -1854,6 +1860,7 @@ function relStopLoading(link){
     }
     else {
 	mybody.removeAttribute('loading');
+	removeClass(mybody,'slowly');
     }
     myContext.loading = myContext.loading - 1;
     if(myContext.loading == 0){
@@ -3074,7 +3081,7 @@ else {
 mypar.innerHTML="click-drag-release to zoom in";
 }
 mypar.style.visibility="visible";
-mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},3000);
+mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},10000);
 }
 }
 return true;
@@ -4075,7 +4082,7 @@ var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
-    appendMissingClass(cmem,'loading');
+    relStartLoading(cmem);
     clearFailed(cmem);
 }
     cmem.src = newsrc;
@@ -4384,18 +4391,18 @@ if(!valid){
 function imageabortedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-    removeClass(it,'loading');
+    relStopLoading(it,'loading');
 }
 function imageerrorevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-    removeClass(it,'loading');
+    relStopLoading(it,'loading');
     setFailed(it);
 }
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
 var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-    removeClass(it,'loading');
+    relStopLoading(it,'loading');
 changeClass(it,'invalid','valid');
 changeClass(it,'invalid-zooming','valid');
 if(it.className.indexOf('dlimg') >=0){
