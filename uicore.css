@@ -77,17 +77,21 @@ opacity: 0.3;
 }
 .invalid {
 opacity: 0.3;
- transition: opacity 3s linear 1s;
- -webkit-transition: opacity 3s linear 1s;
- -moz-transition: opacity 3s linear 1s;
+ transition: opacity 2s linear 0.1s;
+ -webkit-transition: opacity 2s linear 0.1s;
+ -moz-transition: opacity 2s linear 0.1s;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 .invalid.loading {
 opacity: 0.3;
+ transition: opacity 2s linear 0.1s;
+ -webkit-transition: opacity 2s linear 0.1s;
+ -moz-transition: opacity 2s linear 0.1s;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
 .slowly img.invalid.loading {
-visibility: hidden;
+opacity: 0.1;
 }
 .invalid.failed {
 opacity: 1.0;
