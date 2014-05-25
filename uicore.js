@@ -4402,9 +4402,9 @@ function imageerrorevent(evt){
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
 var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-    relStopLoading(it,'loading');
 changeClass(it,'invalid','valid');
 changeClass(it,'invalid-zooming','valid');
+    relStopLoading(it,'loading');
 if(it.className.indexOf('dlimg') >=0){
 if(it.mylink){
 var mynode = it.mylink.parentNode;
