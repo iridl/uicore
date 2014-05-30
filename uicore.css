@@ -64,34 +64,32 @@ opacity: 1.0;
 }
 .valid {
 opacity: 1.0;
- transition: opacity 1s linear 0s;
- -webkit-transition: opacity 1s linear 0s;
- -moz-transition: opacity 1s linear 0s;
+ transition: opacity 1s ease-out 0s;
+ -webkit-transition: opacity 1s ease-out 0s;
+ -moz-transition: opacity 1s ease-out 0s;
 }
 .invalid-zooming {
 opacity: 0.3;
- transition: opacity 0.1s linear 0s;
- -webkit-transition: opacity 0.1s linear 0s;
- -moz-transition: opacity 0.1s linear 0s;
+ transition: opacity 0.1s ease-out 0s;
+ -webkit-transition: opacity 0.1s ease-out 0s;
+ -moz-transition: opacity 0.1s ease-out 0s;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 .invalid {
-opacity: 0.3;
- transition: opacity 2s linear 0.1s;
- -webkit-transition: opacity 2s linear 0.1s;
- -moz-transition: opacity 2s linear 0.1s;
+opacity: 0.2;
+ transition: opacity 6s ease-out 0.1s;
+ -webkit-transition: opacity 6s ease-out 0.1s;
+ -moz-transition: opacity 6s ease-out 0.1s;
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 .invalid.loading {
-opacity: 0.3;
- transition: opacity 2s linear 0.1s;
- -webkit-transition: opacity 2s linear 0.1s;
- -moz-transition: opacity 2s linear 0.1s;
--ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+opacity: 0.2;
 background: url('icons/wait30.gif') center no-repeat transparent;
 }
 .slowly img.invalid.loading {
-opacity: 0.1;
+opacity: 0.2;
+visibility: hidden;
+background: url('icons/wait30.gif') center no-repeat transparent;
 }
 .invalid.failed {
 opacity: 1.0;
