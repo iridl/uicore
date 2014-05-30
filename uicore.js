@@ -1453,9 +1453,10 @@ if(it.options){
 	changed.value=it.options[it.selectedIndex].value;
     }
 }
+/* no options, not a select */
 else if(elbyname.length) {
 	/* multivalued copy -- hopefully checkbox */
-	if(typeof(elbyname[0].checked) != 'undefined'){
+	if(elbyname[0].type == 'checkbox'){
 	    /* multivalued copy -- checkbox */
 	    for(var j = elbyname.length; j-- ;){
 		if(elbyname[j].value == it.value){
@@ -1465,10 +1466,38 @@ else if(elbyname.length) {
 	    }
 	}
 	else {
-	    /* multivalued but not checkbox -- copy first
-	     alternatively could look for matching classes */
+	    /* multivalued but not pageform not a checkbox 
+	     if it is a checkbox, looks for match or unset*/
+	    if(it.type == 'checkbox'){
+/* sets first unset element */
+		if(it.checked){
+		    for(var j = 0 ; j< elbyname.length; j++){
+			if(elbyname[j].value == ''){
+			    elbyname[j].value = it.value;
+			    changed = elbyname[j];
+			    break;
+			}
+		    }
+		}
+		else {
+/* unchecked checkbox -- unsets matching element */
+		    for(var j = 0 ; j< elbyname.length; j++){
+			if(elbyname[j].value == it.value){
+			    for(var k=j ; k< elbyname.length-1 ; k++){
+				elbyname[k].value=elbyname[k+1].value;
+			    }
+			    elbyname[elbyname.length-1].value = '';
+			    changed = elbyname[j];
+			    break;
+			}
+		    }
+		}
+	    }
+	    else {
+		/* punts by setting first one */
 	    changed = pform.elements[it.name][0];
 	    changed.value=it.value;
+	    }
 	}
 } 
 else {
@@ -1501,17 +1530,50 @@ function updateHasSparqlEndpoint(myLink){
 }
 /* builds url from link and Serql query */
 function sparqlEndpointUrl(endpoint,query,varclasses){
-    var localurl = endpoint + '?query=' + encodeURIComponent(query) + '&queryLn=serql';
     var appendurl = appendPageForm("",varclasses,true);
+    var myquery = query;
+    var myform=document.getElementById('pageform');
+/* finds multivalued variables, if any */
+    var inlist = myform.getElementsByClassName(varclasses.replace(/loading/,''));
+    var multi = {};
+    for (var i = 0 ; i < inlist.length ; i++){
+	var myin = inlist[i];
+	if(myin.tagName == 'INPUT' && myform[myin.name].length){
+	    if(!multi[myin.name]){multi[myin.name]=[];}
+	    if(myin.value){multi[myin.name].push(myin.value)}
+	}
+    }
+    for (var key in multi){
+	var mylist = multi[key];
+	var replacewith = mylist.join(',');
+	var myregexp;
+	var newquery
+	if(replacewith){
+	    myregexp = new RegExp('([\{\,]) *' + key + ' *([\}\,])','g');
+	    newquery = myquery.replace(myregexp,"$1" + replacewith + "$2");
+	}
+	else {
+	    myregexp = new RegExp('((\{)|(\,)) *' + key + ' *((\})|(\,))','g');
+	    newquery = myquery.replace(myregexp,"$2" + replacewith + "$5");
+	}
+	myquery=newquery;
+    }
+    
+    var localurl = endpoint + '?query=' + encodeURIComponent(myquery) + '&queryLn=serql';
+
     if(appendurl){
 	var vars = appendurl.substring(1).split("&");
 	var pair;
-	var myform=document.getElementById('pageform');
 	for (var i = 0 ; i < vars.length ; i++){
             pair = vars[i].split("=");
 	    var newvalue;
 	    var ifid=false;
 	    var mys = false;
+	    if(myform[pair[0]].length) {
+/* skips multi as currently no way to bind */
+	    }
+	    else {
+/* single valued -- use variable binding */
 	    if(myform.jsonldContext && myform.jsonldContext['@context']){
 		mys = myform.jsonldContext['@context'][pair[0]];
 		if(mys){
@@ -1526,6 +1588,7 @@ function sparqlEndpointUrl(endpoint,query,varclasses){
 	    }
 
 	    localurl = localurl + "&" + encodeURIComponent("$" + pair[0] ) + "=" + encodeURIComponent(newvalue);
+	    }
 	}
     }
     return localurl;
@@ -1716,7 +1779,12 @@ function runPureOnContext(myContext){
 		   var mystuff = {};
 		mystuff.pureDirective="";
 		if(holdtxt){
-		    var directive  = JSON.parse(holdtxt);
+		    var directive;
+		    try {
+			directive = JSON.parse(holdtxt);
+		    } catch(e){
+			alert('JSON parse error in ' + holdtxt);
+		    }
 		    if(!directive){
 			alert('probable parse error in ' + holdtxt);
 		    }
@@ -1846,7 +1914,7 @@ function relStartLoading(link){
 	    clearTimeout(mybody.loadTimer);
 	}
 	mybody.loadTimer = setTimeout(function () {
-	    if(mybody.getAttribute('loading')){appendMissingClass(mybody,'slowly')};},3000);
+	    if(mybody.getAttribute('loading')){appendMissingClass(mybody,'slowly')};},5000);
     }
 }
 function relStopLoading(link){
@@ -4305,13 +4373,28 @@ if(typeof(elbyname) != 'undefined'){
 	    }
 	}
 	else {
-	    /* multivalued but not checkbox -- copy first
-	     alternatively could match classes */
-	cval = myform.elements[sel.name][0].value;
-	if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
-	    sel.value=cval;
-}
-    
+	    /* multivalued but not checkbox 
+	      looks for matching values to set checkboxes
+	    */
+	    if(sel.type == 'checkbox') {
+	    /* multivalued copy to checkbox */
+		var ifchecked = false;
+	    for(var j = elbyname.length; j-- ;){
+		if(elbyname[j].value == sel.value){
+		    ifchecked=true;
+		    break;
+		}
+	    }
+		sel.checked=ifchecked;
+		if(ifchecked){sel.disabled=false;}
+	    }
+	    else {
+		/* not a checkbox -- just copies first */
+		cval = myform.elements[sel.name][0].value;
+		if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
+		    sel.value=cval;
+		}
+	    }
 	}
     }
     else {
