@@ -110,6 +110,7 @@ scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 /* loads pure javascript */
 var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
 jsDependsOn(puredir + 'pure.js');
+jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
@@ -1597,7 +1598,22 @@ function sparqlEndpointUrl(endpoint,query,varclasses){
 function updateHasSerqlQuery(myLink,myQuery){
     var xmlhttp= getXMLhttp();
     var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
-    if(myQuery.localurl != localurl){
+    var restrictif = myQuery.getAttribute('data-if');
+    var restrictnotif = myQuery.getAttribute('data-notif');
+    var ifneeded = (myQuery.localurl != localurl);
+    if(restrictif){
+	if($(restrictif).length == 0){
+	ifneeded=false;
+	    myQuery.localurl='';
+    }
+    }
+    if(restrictnotif){
+	if($(restrictnotif).length > 0){
+	ifneeded=false;
+	    myQuery.localurl='';
+    }
+    }
+    if(ifneeded){
 	relStartLoading(myQuery);
 	clearFailed(myQuery);
 	myQuery.localurl = localurl;
@@ -1606,8 +1622,9 @@ function updateHasSerqlQuery(myLink,myQuery){
 	    if(myLink.parentNode.loading == 1){
 		dumpelement[0].innerHTML='';
 	    }
-	    if(myQuery.id){
-		dumpelement[0].innerHTML+='<p>' + myQuery.id + '</p>';
+	    var qid = (myQuery.id) ? myQuery.id : myQuery.getAttribute('data-id');
+	    if(qid){
+		dumpelement[0].innerHTML+='<p>' + qid + '</p>';
 	    }
 	    dumpelement[0].innerHTML+= '<pre>' + myQuery.text+'</pre>';
 	    var appendurl = appendPageForm("",myQuery.className,true);
@@ -1630,11 +1647,12 @@ function updateHasSerqlQuery(myLink,myQuery){
 		    var jsontxt = it.responseText;
 		    var parsedJSON = JSON.parse(jsontxt);
 		    if(it.myQuery.localurl == it.infourl){
-			if(it.myQuery.id){
+			var qid = (myQuery.id) ? myQuery.id : myQuery.getAttribute('data-id');
+			if(qid){
 			    if(!it.myContext.parsedJSON){
 				it.myContext.parsedJSON = {};
 			    }
-			    it.myContext.parsedJSON[it.myQuery.id]=parsedJSON;
+			    it.myContext.parsedJSON[qid]=parsedJSON;
 			}
 			else {
 			    it.myContext.parsedJSON=parsedJSON;
@@ -1651,11 +1669,12 @@ function updateHasSerqlQuery(myLink,myQuery){
 				    framedforPure=framed;
 				}
 				var myquery=it.myQuery;
-				if(myquery.id){
+				var qid = (it.myQuery.id) ? it.myQuery.id : it.myQuery.getAttribute('data-id');
+				if(qid){
 				    if(!myquery.parentNode.parsedJSON){
 					myquery.parentNode.parsedJSON = {};
 				    }
-				    myquery.parentNode.parsedJSON[myquery.id]=framedforPure;
+				    myquery.parentNode.parsedJSON[qid]=framedforPure;
 				}
 				else {
 				    myquery.parentNode.parsedJSON=framedforPure;
@@ -4288,7 +4307,6 @@ else {
     setregionwithinbbox(false,doflags);
 }
 /* does bodyClasses */
-if(!doflags){
 if(myform.className.indexOf('bodyClass')>=0){
     var mylist = myform.elements;
     var thebody = document.getElementsByTagName('body')[0];
@@ -4309,12 +4327,34 @@ if(myform.className.indexOf('bodyClass')>=0){
 if(myform.className.indexOf('bodyAttribute')>=0){
     var mylist = myform.elements;
     var thebody = document.getElementsByTagName('body')[0];
-    for (var i=0 ; i < mylist.length ; i++){
+    var bodyvars = {};
+   for (var i=0 ; i < mylist.length ; i++){
 	if(mylist[i].className.indexOf('bodyAttribute')>=0){
-	    thebody.setAttribute(mylist[i].name,mylist[i].value);
+	    if(!bodyvars[mylist[i].name]){
+		bodyvars[mylist[i].name] = myform.elements[mylist[i].name];
+	    }
 	}
     }
-}
+    for (var key in bodyvars){
+	var myinputs = bodyvars[key];
+	if(myinputs.length){
+	    var use = [];
+	    for (var i=0 ; i < myinputs.length; i++){
+		if(myinputs[i].value){
+		    use.push(myinputs[i].value);
+		}
+	    }
+	    if(use.length){
+		thebody.setAttribute(key,use.join(','));
+	    }
+	    else {
+		thebody.removeAttribute(key);
+	    }
+	}
+	else {
+	    thebody.setAttribute(key,myinputs.value);
+	}
+    }
 }
 /* does hasValueList */
     var mylist = document.getElementsByClassName('hasValueList');
