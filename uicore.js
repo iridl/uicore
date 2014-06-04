@@ -959,6 +959,32 @@ function getFigureImage(clipthis){
    }
    return(figimg);
 }
+function getPDFImage(clipthis){
+  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPDFImage');
+   var figimg;
+   if(sfigimgs.length){
+       figimg=sfigimgs[0];
+       for(var i=sfigimgs.length;i--;){
+	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	       figimg=sfigimgs[i];
+	   }
+       }
+   }
+   return(figimg);
+}
+function getPNGImage(clipthis){
+  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPNGImage');
+   var figimg;
+   if(sfigimgs.length){
+       figimg=sfigimgs[0];
+       for(var i=sfigimgs.length;i--;){
+	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	       figimg=sfigimgs[i];
+	   }
+       }
+   }
+   return(figimg);
+}
 function getTable(clipthis){
   var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasTable');
    var figimg;
@@ -1008,13 +1034,37 @@ function doPDFClick(evt){
    if(figimg && figimg.src){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/.gif/,'.pdf');
+       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
        var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
 /*       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);*/
        ga('send','social', 'ImageDownload','asPDF',location.href);
+   }
+}
+function doPDFImageClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getPDFImage(it.clipthis);
+   if(figimg && figimg.href){
+       var pdfurl=figimg.href;
+       var pdfclass=figimg.className;
+       var pform=document.getElementById('pageform');
+       submitPageForm(pdfurl,pdfclass,'GET'); 
+       ga('send','social', 'ImageDownload','asPDF',location.href);
+   }
+}
+function doPNGImageClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getPNGImage(it.clipthis);
+   if(figimg && figimg.href){
+       var pdfurl=figimg.href;
+       var pdfclass=figimg.className;
+       var pform=document.getElementById('pageform');
+       submitPageForm(pdfurl,pdfclass,'GET'); 
+       ga('send','social', 'ImageDownload','asPNG',location.href);
    }
 }
 function doPinterestClipElement(evt){
@@ -1709,7 +1759,7 @@ function updateHasSerqlQuery(myLink,myQuery){
 	};
 	xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 	xmlhttp.open("GET",xmlhttp.infourl,true);
-	xmlhttp.setRequestHeader("Accept","application/ld+json");
+	xmlhttp.setRequestHeader("Accept","application/ld+json,application/sparql-results+json");
 	xmlhttp.send();
     }
 }
@@ -2828,6 +2878,28 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
 	    appendMissingClass(mydlimage,'hasDownload');
+	}
+	if(getPNGImage(mydlimage)){
+/* PDF */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asPNG';
+	    gb.setAttribute("title","PNG image");
+	    gb.onclick=doPNGImageClick;
+	    gb.myonclick=doPNGImageClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	appendMissingClass(mydlimage,'hasDownload');
+	}
+	if(getPDFImage(mydlimage)){
+/* PDF */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asPDF';
+	    gb.setAttribute("title","PDF image");
+	    gb.onclick=doPDFImageClick;
+	    gb.myonclick=doPDFImageClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getFigureImage(mydlimage)){
 /* PDF */

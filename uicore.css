@@ -1675,7 +1675,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGIF,.asJPG, .asTSV, .asHTML{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1708,6 +1708,9 @@ content: "table";
 .asPDF:before {
 content: "PDF";
 }
+.asPNG:before {
+content: "PNG";
+}
 .asGIF:before {
 content: "GIF";
 }
@@ -1735,13 +1738,16 @@ content: "TSV table";
 .asPDF::before {
 content: "PDF";
 }
+.asPNG::before {
+content: "PNG";
+}
 .asGIF::before {
 content: "GIF";
 }
 .asJPG::before {
 content: "JPG";
 }
-.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asGIF:hover,.asJPG:hover {
+.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover {
 opacity: 1.0;
 }
 
