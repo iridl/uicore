@@ -4424,7 +4424,12 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 	    }
 	}
 	else {
-	    thebody.setAttribute(key,myinputs.value);
+	    if(myinputs.value){
+		thebody.setAttribute(key,myinputs.value);
+	    }
+	    else {
+		thebody.removeAttribute(key);
+	    }
 	}
     }
 }
