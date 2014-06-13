@@ -4012,12 +4012,20 @@ var varcnts = {};
 		    }
 		    }
 		    else {
-		    inputs[iname][ipos].value=decodeURIComponent(hold);
+			inputs[iname][ipos].value=decodeURIComponent(hold);
+/* fixes initialValue if necessary */
+			if(inputs[iname][ipos].value == inputs[iname][ipos].initialValue){
+			    inputs[iname][ipos].initialValue='';
+			}
 			achange=true;
 		    }
 		}
 		else {
 		    inputs[iname].value=decodeURIComponent(hold);
+/* fixes initialValue if necessary */
+		    if(inputs[iname].value == inputs[iname].initialValue){
+			inputs[iname].initialValue='';
+		    }
 		    achange=true;
 		}
 		varcnts[iname] = varcnts[iname] + 1;
