@@ -3904,9 +3904,17 @@ var varcnts = {};
 		var ipos=varcnts[iname];
 		if(inputs[iname].length){
 		    inputs[iname][ipos].value=decodeURIComponent(hold);
+/* fixes initialValue if necessary */
+			if(inputs[iname][ipos].value == inputs[iname][ipos].initialValue){
+			    inputs[iname][ipos].initialValue='';
+			}
 		}
 		else {
 		    inputs[iname].value=decodeURIComponent(hold);
+/* fixes initialValue if necessary */
+		    if(inputs[iname].value == inputs[iname].initialValue){
+			inputs[iname].initialValue='';
+		    }
 		}
 		varcnts[iname] = varcnts[iname] + 1;
             }
