@@ -4059,7 +4059,7 @@ var inputs=myform.elements;
 		}
 		else {
 		for(var j=myl.length;j--;){
-		    if(myl[j].value != myl[j].defaultValue) {allq=false}
+		    if(myl[j].value != myl[j].initialValue) {allq=false}
 		};
 		if(!allq){
 		var myl=inputs[i];
