@@ -3852,13 +3852,13 @@ if(myform){
     }
     for (var i = 0; i < inputs.length ; i++){
 	var inp = inputs[i];
-	/* adds defaultValue to all input elements, e.g. hidden elements  */
-	if(typeof(inp.value) != undefined && typeof(inp.defaultValue) == 'undefined'){
-	    inp.defaultValue = inp.value;
-		}
-	if(typeof(inp.value) != undefined && typeof(inp.initialValue) == 'undefined'){
-	    inp.initialValue = inp.value;
-	    if(inp.type == 'checkbox'){
+
+	if(typeof(inp.initialValue) == 'undefined'){
+	    inp.initialValue = inp.getAttribute('data-default');
+	    if(inp.initialValue && !inp.value){
+		inp.value=inp.initialValue;
+	    }
+	    if(inp.initialValue && inp.type == 'checkbox'){
 		inp.initialChecked = inp.checked;
 	    }
 
@@ -3904,17 +3904,9 @@ var varcnts = {};
 		var ipos=varcnts[iname];
 		if(inputs[iname].length){
 		    inputs[iname][ipos].value=decodeURIComponent(hold);
-/* fixes initialValue if necessary */
-			if(inputs[iname][ipos].value == inputs[iname][ipos].initialValue){
-			    inputs[iname][ipos].initialValue='';
-			}
 		}
 		else {
 		    inputs[iname].value=decodeURIComponent(hold);
-/* fixes initialValue if necessary */
-		    if(inputs[iname].value == inputs[iname].initialValue){
-			inputs[iname].initialValue='';
-		    }
 		}
 		varcnts[iname] = varcnts[iname] + 1;
             }
@@ -4021,19 +4013,11 @@ var varcnts = {};
 		    }
 		    else {
 			inputs[iname][ipos].value=decodeURIComponent(hold);
-/* fixes initialValue if necessary */
-			if(inputs[iname][ipos].value == inputs[iname][ipos].initialValue){
-			    inputs[iname][ipos].initialValue='';
-			}
 			achange=true;
 		    }
 		}
 		else {
 		    inputs[iname].value=decodeURIComponent(hold);
-/* fixes initialValue if necessary */
-		    if(inputs[iname].value == inputs[iname].initialValue){
-			inputs[iname].initialValue='';
-		    }
 		    achange=true;
 		}
 		varcnts[iname] = varcnts[iname] + 1;
@@ -4729,7 +4713,6 @@ else {
 // traverses list in reverse order because the list updates as it executes
 function sameasthis(ele){return ele=this};
 function changeClassWithin(pelement,fromclass,toclass){
-var targetlist=pelement.getElementsByClassName(fromclass);
 var classlist = pelement.className.split(' ');
 if(classlist.some(sameasthis,fromclass)){
     var newlist = new Array;
@@ -4744,6 +4727,7 @@ if(classlist.some(sameasthis,fromclass)){
 	
     pelement.className = newlist.join(' ');
 }
+var targetlist=pelement.getElementsByClassName(fromclass);
 if(targetlist.length > 0){
 for (var i = targetlist.length-1 ; i >= 0; i--){
 var ind=targetlist[i];
