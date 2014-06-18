@@ -3710,7 +3710,12 @@ else if(homelinks.length > 1) {
     sel.selectedIndex=-1;
     gb.appendChild(sel);
 }
-cont.insertBefore(gb,cont.firstChild);
+/* skips over text nodes, links, and scripts to get homelink next to other displayed elements */
+    var cfirst = cont.firstChild;
+    while (cfirst && (!cfirst.tagName || cfirst.tagName=='A'  || cfirst.tagName=='SCRIPT')){
+	cfirst = cfirst.nextSibling;
+    }
+cont.insertBefore(gb,cfirst);
 var slist = cont.getElementsByTagName('select');
 for (var i=0; i<slist.length ; i++){
     var mysel = slist[i];
