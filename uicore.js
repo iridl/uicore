@@ -1576,11 +1576,16 @@ Here we call all the queries associated with a particular SparqlEndpoint
 function updateHasSparqlEndpoint(myLink){
     var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
     for (var i=0 ; i<queries.length ; i++){
-	updateHasSerqlQuery(myLink,queries[i]);
+	updateHasRqlQuery(myLink,queries[i],'serql');
+    }
+    var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSparqlQuery');
+    for (var i=0 ; i<queries.length ; i++){
+	updateHasRqlQuery(myLink,queries[i],'sparql');
     }
 }
-/* builds url from link and Serql query */
-function sparqlEndpointUrl(endpoint,query,varclasses){
+/* builds url from link and Serql query 
+querylang is serql or sparql for sesame */
+function sparqlEndpointUrl(endpoint,query,querylang,varclasses){
     var appendurl = appendPageForm("",varclasses,true);
     var myquery = query;
     var myform=document.getElementById('pageform');
@@ -1610,7 +1615,7 @@ function sparqlEndpointUrl(endpoint,query,varclasses){
 	myquery=newquery;
     }
     
-    var localurl = endpoint + '?query=' + encodeURIComponent(myquery) + '&queryLn=serql';
+    var localurl = endpoint + '?query=' + encodeURIComponent(myquery) + '&queryLn=' + querylang;
 
     if(appendurl){
 	var vars = appendurl.substring(1).split("&");
@@ -1645,9 +1650,9 @@ function sparqlEndpointUrl(endpoint,query,varclasses){
     return localurl;
 }
 /* builds url from link and query and retrieves if necessary */
-function updateHasSerqlQuery(myLink,myQuery){
+function updateHasRqlQuery(myLink,myQuery,querylang){
     var xmlhttp= getXMLhttp();
-    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), myQuery.className);
+    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), querylang , myQuery.className);
     var restrictif = myQuery.getAttribute('data-if');
     var restrictnotif = myQuery.getAttribute('data-notif');
     var ifneeded = (myQuery.localurl != localurl);
@@ -4267,7 +4272,11 @@ if(newsrc != cmem.href){
 if(cmem.tagName == 'SCRIPT'){
     if(cmem.getAttribute('property') == 'iridl:hasSerqlQuery'){
 	var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
-	if(links.length>0)updateHasSerqlQuery(links[0],cmem);
+	if(links.length>0)updateHasRqlQuery(links[0],cmem,'serql');
+    }
+    if(cmem.getAttribute('property') == 'iridl:hasSparqlQuery'){
+	var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
+	if(links.length>0)updateHasRqlQuery(links[0],cmem,'sparql');
     }
 }
 if(cmem.tagName == 'DIV'){
