@@ -4431,7 +4431,7 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 		}
 	    }
 	    if(use.length){
-		thebody.setAttribute(key,use.join(','));
+		thebody.setAttribute(key,use.join(' '));
 	    }
 	    else {
 		thebody.removeAttribute(key);
