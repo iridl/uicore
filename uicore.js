@@ -1924,6 +1924,7 @@ function runPureOnContext(myContext){
     }
     setUIHandlers(myContext);
     changeClassWithin(myContext,'invalid','valid');
+	    updateLangGroups(myContext);
 }
 function validate(context,vid){
 }
@@ -4196,7 +4197,23 @@ function ChangeClassPageInput(iname,fromclass,toclass){
 	}
     }
 }
-
+/* support for langgroup -- attribute is maintained as list of all lang contained within, so selection can be done with css */
+function updateLangGroups(context){
+    var langgroups = context.getElementsByClassName('langgroup');
+    for (var i = 0; i < langgroups.length ; i++){
+	var mygrp = langgroups[i];
+	var langs = {};
+	var langlist = getElementsByAttribute(mygrp,'*','lang','*');
+	for (var j=0; j < langlist.length ; j++){
+	    langs[langlist[j].getAttribute('lang')]="1";
+	}
+	var keys = new Array();
+	for (var key in langs){
+	    keys.push(key);
+	}
+	mygrp.setAttribute('langgroup',keys.join(' '));
+    }
+}
 /*
 function to indicate an update to the pageform
 updates all image urls that have classes that match the pageform
@@ -4929,6 +4946,7 @@ insertRegion();
 insertshare();
 insertInstructions();
 setupPageFormLinks();
+    updateLangGroups(document);
 loadHasJSON();
 loadHasSparqlEndpoint();
 if(uicoreConfig.GoogleAnalyticsId){
