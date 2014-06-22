@@ -4199,6 +4199,16 @@ function ChangeClassPageInput(iname,fromclass,toclass){
 }
 /* support for langgroup -- attribute is maintained as list of all lang contained within, so selection can be done with css */
 function updateLangGroups(context){
+    var langgroupstyle = document.getElementById('langgroupstyle');
+    if(!langgroupstyle){
+	langgroupstyle = document.createElement('style');
+	langgroupstyle.id='langgroupstyle';
+	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline}\n\
+.langgroup [lang] + [lang] {display:none}\n";
+	var ref = document.getElementsByTagName('script')[0];
+	ref.parentNode.insertBefore(langgroupstyle,ref);
+	langgroupstyle.langs={};
+    }
     var langgroups = context.getElementsByClassName('langgroup');
     for (var i = 0; i < langgroups.length ; i++){
 	var mygrp = langgroups[i];
@@ -4210,6 +4220,13 @@ function updateLangGroups(context){
 	var keys = new Array();
 	for (var key in langs){
 	    keys.push(key);
+	    if(!langgroupstyle.langs[key]){
+		langgroupstyle.langs[key]='1';
+		var ctarget = 'body[uselang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
+		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
+		ctarget = 'body[uselang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
+		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
+	    }
 	}
 	mygrp.setAttribute('langgroup',keys.join(' '));
     }
