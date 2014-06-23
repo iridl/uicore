@@ -1585,7 +1585,7 @@ function updateHasSparqlEndpoint(myLink){
 }
 /* builds url from link and Serql query 
 querylang is serql or sparql for sesame */
-function sparqlEndpointUrl(endpoint,query,querylang,varclasses){
+function sparqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
     var appendurl = appendPageForm("",varclasses,true);
     var myquery = query;
     var myform=document.getElementById('pageform');
@@ -1642,8 +1642,11 @@ function sparqlEndpointUrl(endpoint,query,querylang,varclasses){
 	    else {
 		newvalue = '"' + pair[1] + '"';
 	    }
-
-	    localurl = localurl + "&" + encodeURIComponent("$" + pair[0] ) + "=" + encodeURIComponent(newvalue);
+		var varname = pair[0];
+		if(varmap && varmap[varname]){
+		    varname=varmap[varname];
+		}
+	    localurl = localurl + "&" + encodeURIComponent("$" + varname ) + "=" + encodeURIComponent(newvalue);
 	    }
 	}
     }
@@ -1652,7 +1655,11 @@ function sparqlEndpointUrl(endpoint,query,querylang,varclasses){
 /* builds url from link and query and retrieves if necessary */
 function updateHasRqlQuery(myLink,myQuery,querylang){
     var xmlhttp= getXMLhttp();
-    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), querylang , myQuery.className);
+    var varmap = myQuery.getAttribute('data-varmap');
+    if(varmap){
+	varmap = JSON.parse(varmap);
+    }
+    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), querylang , myQuery.className,varmap);
     var restrictif = myQuery.getAttribute('data-if');
     var restrictnotif = myQuery.getAttribute('data-notif');
     var ifneeded = (myQuery.localurl != localurl);
@@ -4213,7 +4220,14 @@ function updateLangGroups(context){
     for (var i = 0; i < langgroups.length ; i++){
 	var mygrp = langgroups[i];
 	var langs = {};
-	var langlist = getElementsByAttribute(mygrp,'*','lang','*');
+/* copies xml:lang attributes to lang if they exist */
+	var langlist = getElementsByAttribute(mygrp,'*','xml:lang','*');
+	for (var j=0; j < langlist.length ; j++){
+	    if(!langlist[j].getAttribute('lang')){
+		langlist[j].setAttribute('lang',langlist[j].getAttribute('xml:lang'));
+	    }
+	}
+	langlist = getElementsByAttribute(mygrp,'*','lang','*');
 	for (var j=0; j < langlist.length ; j++){
 	    langs[langlist[j].getAttribute('lang')]="1";
 	}
@@ -4222,9 +4236,9 @@ function updateLangGroups(context){
 	    keys.push(key);
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
-		var ctarget = 'body[uselang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
+		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
 		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
-		ctarget = 'body[uselang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
+		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
 		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
 	    }
 	}
@@ -4474,6 +4488,9 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 	else {
 	    if(myinputs.value){
 		thebody.setAttribute(key,myinputs.value);
+		if(key == 'lang' && thebody.getAttribute('xml:lang')){
+		    thebody.setAttribute('xml:lang',myinputs.value);
+		}
 	    }
 	    else {
 		thebody.removeAttribute(key);
