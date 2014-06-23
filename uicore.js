@@ -3776,19 +3776,31 @@ LanguageTitle["ru"]="Язык";
 LanguageTitle["sw"]="Lugha";
 LanguageTitle["mg"]="Teny";
 function languageChange(){
-var s=document.getElementById('chooseLanguage');
-var sel=s.getElementsByTagName('select')[0];
-var newvalue=sel.options[sel.selectedIndex].value;
-if(newvalue){
-    if(newvalue.substr(0,5)=='file:'){
-	var locq = newvalue.indexOf('?');
-	if(locq>0){
-	var lang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
-	newvalue = newvalue.substr(0,locq) + '.' + lang + newvalue.substr(locq);
+    var s=document.getElementById('chooseLanguage');
+    var sel=s.getElementsByTagName('select')[0];
+    var newvalue=sel.options[sel.selectedIndex].value;
+    var newlang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
+    if(newvalue){
+	if(newvalue.substr(0,5)=='file:'){
+	    var locq = newvalue.indexOf('?');
+	    if(locq>0){
+		newvalue = newvalue.substr(0,locq) + '.' + newlang + newvalue.substr(locq);
+	    }
+	    location.href=newvalue;
+	}
+	else {
+	    var myform=document.getElementById('pageform');
+	    if(myform){
+		var lang=myform.elements['Set-Language'];
+		if(lang.className && lang.className.indexOf('carryLanguage')<0){
+		    appendMissingClass(lang,'carryLanguage');
+		    appendMissingClass(myform,'carryLanguage');
+		}
+		lang.value=newlang;
+		location.href=appendPageForm(location.href.replace(/[?].*/,''),myform.className);
+	    }
 	}
     }
-location.href=newvalue;
-}
 }
 function insertlang(){
 var s=document.getElementById('chooseLanguage');
