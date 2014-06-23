@@ -3778,13 +3778,13 @@ LanguageTitle["mg"]="Teny";
 function languageChange(){
     var s=document.getElementById('chooseLanguage');
     var sel=s.getElementsByTagName('select')[0];
-    var newvalue=sel.options[sel.selectedIndex].value;
-    var newlang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
-    if(newvalue){
-	if(newvalue.substr(0,5)=='file:'){
-	    var locq = newvalue.indexOf('?');
+    var newvalue;
+    var newlang=sel.options[sel.selectedIndex].value;
+    if(newlang){
+	if(location.href.substr(0,5)=='file:'){
+	    var locq = location.href.lastIndexOf('.');
 	    if(locq>0){
-		newvalue = newvalue.substr(0,locq) + '.' + newlang + newvalue.substr(locq);
+		newvalue = location.href.substr(0,locq) + '.' + newlang;
 	    }
 	    location.href=newvalue;
 	}
@@ -3828,8 +3828,10 @@ leg.innerHTML=LanguageTitle[opt.value];
 opt.value="";
 sel.appendChild(opt);
 for( var i=0 ; i < langList.length ; i++){
-opt=document.createElement('option');
-opt.value=langList[i].href;
+    opt=document.createElement('option');
+    var newvalue = langList[i].href;
+    var newlang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
+    opt.value=newlang;
 opt.innerHTML=Languages[langList[i].hreflang];
 if(!opt.innerHTML)opt.innerHTML=langList[i].lang;
 sel.appendChild(opt);
