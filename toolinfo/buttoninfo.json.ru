@@ -3,9 +3,10 @@
 "uicore":"http://iridl.ldeo.columbia.edu/uicore/",
 "term": "http://iridl.ldeo.columbia.edu/ontologies/iriterms.owl#",
 "uicore:buttonList": {"@container": "@list"},
-"term:label": {"@language": "en"},
-"term:description": {"@language": "en"}
+"term:label": {"@language": "ru"},
+"term:description": {"@language": "ru"}
 },
+"uicore:lang": "ru",
 "uicore:buttonList": [
 {
 "uicore:icon": "zoomout",

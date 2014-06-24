@@ -6,6 +6,7 @@
 "term:label": {"@language": "en"},
 "term:description": {"@language": "en"}
 },
+"uicore:lang": "en",
 "uicore:buttonList": [
 {
 "uicore:icon": "zoomout",
