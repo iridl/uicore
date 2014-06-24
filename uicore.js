@@ -3829,12 +3829,10 @@ opt.value="";
 sel.appendChild(opt);
 for( var i=0 ; i < langList.length ; i++){
     opt=document.createElement('option');
-    var newvalue = langList[i].href;
-    var newlang = newvalue.substr(newvalue.indexOf('Set-Language=')+13);
-    opt.value=newlang;
-opt.innerHTML=Languages[langList[i].hreflang];
-if(!opt.innerHTML)opt.innerHTML=langList[i].lang;
-sel.appendChild(opt);
+    opt.value=langList[i].hreflang;
+    opt.innerHTML=Languages[langList[i].hreflang];
+    if(!opt.innerHTML)opt.innerHTML=langList[i].hreflang;
+    sel.appendChild(opt);
 }
 fs.appendChild(sel);
 var mylist=document.getElementsByClassName("controlBar");
