@@ -1929,7 +1929,7 @@ function runPureOnContext(myContext){
             }
 	}
     }
-    setUIHandlers(myContext);
+    setupPageFormLinks(myContext);
     changeClassWithin(myContext,'invalid','valid');
 	    updateLangGroups(myContext);
 }
@@ -3778,10 +3778,15 @@ LanguageTitle["mg"]="Teny";
 function languageChange(){
     var s=document.getElementById('chooseLanguage');
     var sel=s.getElementsByTagName('select')[0];
+    var myform=document.getElementById('pageform');
+    var lang;
+    if(myform){
+	lang=myform.elements['lang'];
+    }
     var newvalue;
     var newlang=sel.options[sel.selectedIndex].value;
     if(newlang){
-	if(location.href.substr(0,5)=='file:'){
+	if(!lang && location.href.substr(0,5)=='file:'){
 	    var locq = location.href.lastIndexOf('.');
 	    if(locq>0){
 		newvalue = location.href.substr(0,locq) + '.' + newlang;
@@ -3789,15 +3794,26 @@ function languageChange(){
 	    location.href=newvalue;
 	}
 	else {
-	    var myform=document.getElementById('pageform');
 	    if(myform){
-		var lang=myform.elements['Set-Language'];
-		if(lang.className && lang.className.indexOf('carryLanguage')<0){
-		    appendMissingClass(lang,'carryLanguage');
+		var slang=myform.elements['Set-Language'];
+		if(slang && slang.className && slang.className.indexOf('carryLanguage')<0){
+		    appendMissingClass(slang,'carryLanguage');
 		    appendMissingClass(myform,'carryLanguage');
 		}
-		lang.value=newlang;
-		location.href=appendPageForm(location.href.replace(/[?].*/,''),myform.className);
+		if(lang && lang.className && lang.className.indexOf('bodyAttribute')<0){
+		    appendMissingClass(slang,'bodyAttribute');
+		    appendMissingClass(myform,'bodyAttribute');
+		}
+		if(slang){
+		    slang.value=newlang;
+		}
+		if(lang){
+		    lang.value=newlang;
+		}
+		else {
+		    location.href=appendPageForm(location.href.replace(/[?].*/,''),myform.className);
+		}
+		updatePageForm();
 	    }
 	}
     }
@@ -3816,17 +3832,24 @@ var sel=document.createElement('select');
 sel.name="Set-Language";
 sel.onchange=languageChange;
 sel.onchangefn=languageChange;
-var opt=document.createElement('option');
+    var dopt=false;
+    var opt;
 if(document.getElementsByTagName('html')[0].hasAttribute("xml:lang")){
+    dopt=true;
+opt =document.createElement('option');
 opt.value=document.getElementsByTagName('html')[0].getAttribute("xml:lang");
 }
-else {
+    else if(document.getElementsByTagName('body')[0].getAttribute("xml:lang")){
+	dopt=true;
+opt=document.createElement('option');
 opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
 }
+    if(opt){
 opt.innerHTML=Languages[opt.value];
 leg.innerHTML=LanguageTitle[opt.value];
-opt.value="";
+//opt.value="";
 sel.appendChild(opt);
+    }
 for( var i=0 ; i < langList.length ; i++){
     opt=document.createElement('option');
     opt.value=langList[i].hreflang;
@@ -3834,6 +3857,28 @@ for( var i=0 ; i < langList.length ; i++){
     if(!opt.innerHTML)opt.innerHTML=langList[i].hreflang;
     sel.appendChild(opt);
 }
+    if(!dopt){
+        var blang=navigator.language || window.navigator.userLanguage;
+	var myform=document.getElementById('pageform');
+	sel.value= blang.replace(/-.*/,'');
+	if(sel.selectedIndex<0)sel.selectedIndex=0;
+	var langval;
+	if(myform){
+	    var lang=myform.elements['lang'];
+	    var slang=myform.elements['Set-Language'];
+	    if(slang && slang.value && lang && !lang.value){
+		lang.value = slang.value;
+	    }
+	    if(lang && lang.value){
+		langval = lang.value;
+		sel.value=langval;
+		if(sel.selectedIndex<0)sel.selectedIndex=1;
+	    }
+	    if(lang && !lang.value){
+		lang.value=sel.options[sel.selectedIndex].value
+	    }
+	}
+    }
 fs.appendChild(sel);
 var mylist=document.getElementsByClassName("controlBar");
 if(mylist.length>0){
@@ -4047,7 +4092,9 @@ var varcnts = {};
 		    }
 		}
 		else {
-		    inputs[iname].value=decodeURIComponent(hold);
+		    var newvalue=decodeURIComponent(hold);
+		    inputs[iname].value=newvalue;
+		    if(iname=='Set-Language' && inputs['lang'])inputs['lang'].value=newvalue;
 		    achange=true;
 		}
 		varcnts[iname] = varcnts[iname] + 1;
@@ -4121,14 +4168,14 @@ return newurl;
 }
 return url;
 }
-function setupPageFormLinks(){
+function setupPageFormLinks(context){
 var myform=document.getElementById('pageform');
 if(myform){
 var clist = myform.className.split(' ');
 for ( var i = 0; i < clist.length; i++ )
          {
 var cclass=clist[i];
-var members = document.getElementsByClassName(cclass);
+var members = context.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ ) {
 if(members[j].href){
 members[j].onclick=onClickPageForm;
@@ -4141,7 +4188,7 @@ appendMissingClass(members[j],'valid');
 }
 }
 }
-    setUIHandlers(document);
+    setUIHandlers(context);
 updatePageFormNoHistory();
 }
 }
@@ -4991,7 +5038,7 @@ insertchooseSection();
 insertRegion();
 insertshare();
 insertInstructions();
-setupPageFormLinks();
+setupPageFormLinks(document);
     updateLangGroups(document);
 loadHasJSON();
 loadHasSparqlEndpoint();
