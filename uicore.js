@@ -1856,13 +1856,13 @@ function runPureOnContext(myContext){
 	    for (var iscript = 0 ; iscript<myscripts.length ; iscript++){
 		var myscript = myscripts[iscript];
 	        if(myscript.parentNode == myContext){
-                   var holdtxt = myscript.text.replace(/&lt;/g,'<');
+                    var holdtxt = myscript.text;
 		   var mystuff = {};
 		mystuff.pureDirective="";
 		if(holdtxt){
 		    var directive;
 		    try {
-			directive = JSON.parse(holdtxt);
+			directive = enhancedPureDirective(holdtxt);
 		    } catch(e){
 			alert('JSON parse error in ' + holdtxt);
 		    }
@@ -1933,6 +1933,78 @@ function runPureOnContext(myContext){
     changeClassWithin(myContext,'invalid','valid');
 	    updateLangGroups(myContext);
 }
+function enhancedPureDirective(directivestring){
+	var findlg=new RegExp('"([^"]*).iridl:asLangGroup"');
+    var cleanstring = directivestring.replace(/&lt;/g,'<');
+    var directive = JSON.parse(cleanstring);
+     var newstring=cleanstring.replace(findlg,'function(arg){var loc="$1"; var ret="oops"; return ret}')
+    if (newstring != cleanstring){
+	var newdirective = transformObject(directive,mapObject);
+	directive=newdirective;
+    }
+    return directive;
+}
+function transformObject(object,func){
+    var newobj = {};
+    for (var key in object ){
+	var newval = func(object[key],key);
+	    newobj[key]=newval;
+    }
+    return newobj;
+}
+    function mapObject (obj,key){
+	var newobj = obj;
+	var findlg=new RegExp('([^"]*).iridl:asLangGroup');
+	if(typeof(obj) == 'object'){
+	    newobj = transformObject(obj,mapObject);
+	}
+	if(typeof(obj) == 'string'){
+	    var res = findlg.exec(obj);
+	    if(res){
+		var localref=res[1];
+		newobj = function(arg){
+		    var local=localref; 
+		    var ret; 
+
+		    var mycontid = local.substr(1+local.indexOf('.'));
+		    var mycont = arg.item[mycontid];
+		    mycont.sort(function(a,b){
+			if(typeof(a) == 'string' || !a['@language']){
+			    return 1;
+			}
+			else if(typeof(b) == 'string'||  !b['@language']){
+			    return -1;
+			}
+			else {
+			    if(a['@language'] > b['@language']){
+				return 1;
+			    }
+			    else {
+				return -1;
+			    }
+			}
+});
+		    ret='';
+		    if(mycont.length > 1){
+			ret = '<span class="langgroup">';
+		    }
+		    for (var i = 0 ; i < mycont.length ; i++){
+			var entry = mycont[i];
+			if(typeof(entry)=='object'){
+			ret += '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
+			}
+			else {
+			    ret+= '<span lang="">' + entry + '</span>' ;
+			}
+		    }
+		    if(mycont.length > 1){
+			ret += '</span>';
+		    }
+		    return ret}; 
+	    }
+	}
+	return newobj;
+	}
 function validate(context,vid){
 }
 function invalidate(context,vid){
