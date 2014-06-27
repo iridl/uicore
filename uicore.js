@@ -1958,7 +1958,15 @@ function transformObject(object,func){
 	if(typeof(obj) == 'object'){
 	    newobj = transformObject(obj,mapObject);
 	}
-	if(typeof(obj) == 'string'){
+        if(key=='sort'){
+	    var sortvar = obj;
+	    newobj = function(a,b){
+		var mysortvar = sortvar;
+		var ret;
+		return a[sortvar].toLowerCase() > b[sortvar].toLowerCase() ? 1 : -1;
+	    };
+	}
+	else if(typeof(obj) == 'string'){
 	    var res = findlg.exec(obj);
 	    if(res){
 		var localref=res[1];
@@ -1968,6 +1976,7 @@ function transformObject(object,func){
 
 		    var mycontid = local.substr(1+local.indexOf('.'));
 		    var mycont = arg.item[mycontid];
+		    if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
 			if(typeof(a) == 'string' || !a['@language']){
 			    return 1;
@@ -1984,6 +1993,14 @@ function transformObject(object,func){
 			    }
 			}
 });
+		    };	
+		    if(!mycont){
+			ret='';
+		    }
+		    else if(!mycont.length){
+			ret=mycont;
+		    }
+		    else {
 		    ret='';
 		    if(mycont.length > 1){
 			ret = '<span class="langgroup">';
@@ -1999,6 +2016,7 @@ function transformObject(object,func){
 		    }
 		    if(mycont.length > 1){
 			ret += '</span>';
+		    }
 		    }
 		    return ret}; 
 	    }
