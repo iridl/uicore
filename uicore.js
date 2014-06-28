@@ -1934,14 +1934,10 @@ function runPureOnContext(myContext){
 	    updateLangGroups(myContext);
 }
 function enhancedPureDirective(directivestring){
-	var findlg=new RegExp('"([^"]*).iridl:asLangGroup"');
     var cleanstring = directivestring.replace(/&lt;/g,'<');
     var directive = JSON.parse(cleanstring);
-     var newstring=cleanstring.replace(findlg,'function(arg){var loc="$1"; var ret="oops"; return ret}')
-    if (newstring != cleanstring){
 	var newdirective = transformObject(directive,mapObject);
 	directive=newdirective;
-    }
     return directive;
 }
 function transformObject(object,func){
