@@ -1640,7 +1640,7 @@ function sparqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
 		newvalue =  "<" + expandNS(unescape(pair[1]),myform.nsContext['@context']) + '>';
 	    }
 	    else {
-		newvalue = '"' + pair[1] + '"';
+		newvalue = '"' + unescape(pair[1]) + '"';
 	    }
 		var varname = pair[0];
 		if(varmap && varmap[varname]){
