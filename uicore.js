@@ -1959,7 +1959,16 @@ function transformObject(object,func){
 	    newobj = function(a,b){
 		var mysortvar = sortvar;
 		var ret;
-		return a[sortvar].toLowerCase() > b[sortvar].toLowerCase() ? 1 : -1;
+		var sa,sb;
+		if(sortvar == '.'){
+		    sa = a;
+		    sb = b;
+		}
+		else {
+		    sa = a[sortvar];
+		    sb = b[sortvar];
+		}
+		return sa.toLowerCase() > sb.toLowerCase() ? 1 : -1;
 	    };
 	}
 	else if(typeof(obj) == 'string'){
