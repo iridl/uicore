@@ -2003,7 +2003,12 @@ function transformObject(object,func){
 			ret='';
 		    }
 		    else if(!mycont.length){
-			ret=mycont;
+			if(typeof(entry)=='object'){
+			ret = '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
+			}
+			else {
+			    ret= '<span lang="">' + entry + '</span>' ;
+			}
 		    }
 		    else {
 		    ret='';
@@ -4009,6 +4014,16 @@ function getQueryVariable(variable) {
 	return undefined;
     }
 
+function setPageFormVariable(name,newvalue){
+var myform=document.getElementById('pageform');
+    if(myform){
+	if(myform.elements[name]){
+	    myform.elements[name].value=newvalue;
+	    updatePageForm(myform.elements[name]);
+	}
+    }
+    return true;
+}
 function setPageForm(){
 var myform=document.getElementById('pageform');
 if(myform){
