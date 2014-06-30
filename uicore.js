@@ -1951,6 +1951,7 @@ function transformObject(object,func){
     function mapObject (obj,key){
 	var newobj = obj;
 	var findlg=new RegExp('([^"]*).iridl:asLangGroup');
+	var findfl=new RegExp('([^"]*).iridl:firstLetter');
 	if(typeof(obj) == 'object'){
 	    newobj = transformObject(obj,mapObject);
 	}
@@ -1966,7 +1967,19 @@ function transformObject(object,func){
 		}
 		else {
 		    sa = a[sortvar];
+		    if(typeof(sa) == 'object' && sa.length){
+			sa = sa[0];
+		    }
+		    if (typeof(sa) == 'object' && sa['@value']){
+		    sa = sa['@value'];
+		}
 		    sb = b[sortvar];
+		    if(typeof(sb) == 'object' && sb.length){
+			sb = sb[0];
+		    }
+		    if (typeof(sb) == 'object' && sb['@value']){
+		    sb = sb['@value'];
+		}
 		}
 		return sa.toLowerCase() > sb.toLowerCase() ? 1 : -1;
 	    };
@@ -2003,6 +2016,7 @@ function transformObject(object,func){
 			ret='';
 		    }
 		    else if(!mycont.length){
+			var entry=mycont;
 			if(typeof(entry)=='object'){
 			ret = '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
 			}
@@ -2030,9 +2044,57 @@ function transformObject(object,func){
 		    }
 		    return ret}; 
 	    }
+	    if(res = findfl.exec(obj)){
+		var localref=res[1];
+		newobj = function(arg){
+		    var local=localref; 
+		    var ret; 
+
+		    var mycontid = local.substr(1+local.indexOf('.'));
+		    var mycont = arg.item[mycontid];
+		    if(mycont && mycont.sort){
+		    mycont.sort(function(a,b){
+			if(typeof(a) == 'string' || !a['@language']){
+			    return 1;
+			}
+			else if(typeof(b) == 'string'||  !b['@language']){
+			    return -1;
+			}
+			else {
+			    if(a['@language'] > b['@language']){
+				return 1;
+			    }
+			    else {
+				return -1;
+			    }
+			}
+});
+		    };	
+		    if(!mycont){
+			ret='';
+		    }
+		    else{
+			var entry;
+			if(!mycont.length){
+			    entry=mycont;
+			}
+			else {
+			    entry=mycont[0];
+			}
+			if(typeof(entry)=='object'){
+			    ret = entry['@value'].substr(0,1).toLowerCase(); 
+			}
+			else {
+			    ret= entry.substr(0,1).toLowerCase();
+			}
+		    }
+		    return ret;
+		}; 
+	    }
+
 	}
 	return newobj;
-	}
+    }
 function validate(context,vid){
 }
 function invalidate(context,vid){
