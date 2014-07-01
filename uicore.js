@@ -4020,7 +4020,7 @@ for( var i=0 ; i < langList.length ; i++){
     sel.appendChild(opt);
 }
     if(!dopt){
-        var blang=navigator.language || window.navigator.userLanguage;
+        var blang=navigator.language || window.navigator.userLanguage || 'en';
 	var myform=document.getElementById('pageform');
 	sel.value= blang.replace(/-.*/,'');
 	if(sel.selectedIndex<0)sel.selectedIndex=0;
