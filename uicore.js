@@ -2015,7 +2015,7 @@ function transformObject(object,func){
 		    if(!mycont){
 			ret='';
 		    }
-		    else if(!mycont.length){
+		    else if(typeof(mycont)!='array'){
 			var entry=mycont;
 			if(typeof(entry)=='object'){
 			ret = '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
