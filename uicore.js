@@ -1981,7 +1981,14 @@ function transformObject(object,func){
 		    sb = sb['@value'];
 		}
 		}
-		return sa.toLowerCase() > sb.toLowerCase() ? 1 : -1;
+		if(!sa){
+		    return -1
+		}
+		else if (!sb){
+		    return 1}
+		else {
+		    return sa.toLowerCase() > sb.toLowerCase() ? 1 : -1;
+		}
 	    };
 	}
 	else if(typeof(obj) == 'string'){
