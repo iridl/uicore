@@ -250,7 +250,9 @@ var optclass = "carryup";
 if(optvalue){
 /*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
     ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
-    document.location.href=localHrefOf(optvalue);
+ var url = appendPageForm(optvalue,'carryLanguage');
+
+    document.location.href=url;
 }
     }
 function dosectionsel(){
