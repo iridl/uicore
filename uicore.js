@@ -1661,7 +1661,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
     if(varmap){
 	varmap = JSON.parse(varmap);
     }
-    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<'), querylang , myQuery.className,varmap);
+    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<').replace(/&amp;/g,'&'), querylang , myQuery.className,varmap);
     var restrictif = myQuery.getAttribute('data-if');
     var restrictnotif = myQuery.getAttribute('data-notif');
     var ifneeded = (myQuery.localurl != localurl);
