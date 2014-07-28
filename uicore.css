@@ -272,7 +272,7 @@ border-radius: 12px;
 padding-bottom: 2px;
 overflow: hidden;
             }
-#share {
+#share, #contactus {
 overflow: hidden;
 opacity:  .75;
 }
@@ -1013,14 +1013,14 @@ display: inline;
 font-size: 6pt;
 }
 
-.navitem > legend {
-       font-size: 3pt;
+.controlBar .navitem > legend {
+       font-size: 4pt;
 }
-.navitem + .navitem > legend {
-       font-size: 3pt;
+.controlBar .navitem + .navitem > legend {
+       font-size: 4pt;
 }
-.navitem + .navitem + .navitem > legend {
-       font-size: 3pt;
+.controlBar .navitem + .navitem + .navitem > legend {
+       font-size: 4pt;
 }
 /* suppress lang control on very small screens */
 .lang {
@@ -1054,7 +1054,7 @@ margin-top: 2pt;
        font-size: 10pt;
 }
 .lang {
-       font-size: 3pt;
+       font-size: 4pt;
 }
 .controlBar:hover .navlink {
        font-size: 10pt;
@@ -1393,7 +1393,7 @@ display: block;
 .navlink {font-size: 14pt;}
 .navitem select { font-size: 10pt;}
 .ui-tabs-nav li {font-size: 8pt;}
-#share {display: none;}
+#share,#contactus {display: none;}
 #chooseLanguage {display: none;}
 .selectvalue {
 display: inline;
@@ -1809,7 +1809,7 @@ display:inline-block;
     padding: 2px 2px 2px 2px;
 text-indent:-9999px; overflow:hidden; 
 width:22px;
-background: url('icons/helpmail2_32.png') center no-repeat transparent;
+background: url('icons/mail_32.png') center no-repeat transparent;
 background-color: WhiteSmoke;
 background-size: 80%;
 opacity: 0.8;

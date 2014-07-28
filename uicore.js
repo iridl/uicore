@@ -535,13 +535,19 @@ function clearTabActive (mytabsets){
 	    }
 	}
 }
-function insertshare(){
-var s = document.getElementById('share');
+function insertcontactus(){
+var s = document.getElementById('contactus');
 if(s){
 var sl = s.getElementsByTagName('legend');
 if(!sl.length){
+    appendMissingClass(s,'langgroup');
 var ls=document.createElement('legend');
-ls.appendChild(document.createTextNode('Share'));
+    ls.setAttribute('lang','es');
+ls.appendChild(document.createTextNode('Contáctenos'));
+s.insertBefore(ls,s.firstChild);
+ls=document.createElement('legend');
+    ls.setAttribute('lang','en');
+ls.appendChild(document.createTextNode('Contact Us'));
 s.insertBefore(ls,s.firstChild);
 }
 sl = document.getElementById('googleplus');
@@ -554,10 +560,26 @@ if(!sl){
     gb.id='helpmailbutton';
     tumblr_button = document.createElement("a");
     tumblr_button.onclick=doHelpMail;
-    tumblr_button.setAttribute("title", "Help");
+    tumblr_button.setAttribute("title", uicoreConfig.helpemail);
     gb.appendChild(tumblr_button);
     s.appendChild(gb);
     }
+}
+}
+}
+function insertshare(){
+    insertcontactus();
+var s = document.getElementById('share');
+if(s){
+var sl = s.getElementsByTagName('legend');
+if(!sl.length){
+var ls=document.createElement('legend');
+ls.appendChild(document.createTextNode('Share'));
+s.insertBefore(ls,s.firstChild);
+}
+sl = document.getElementById('googleplus');
+if(!sl){
+    var tumblr_button;
 /* twitter */
 gb= document.createElement('div');
 gb.className='sharebutton';
