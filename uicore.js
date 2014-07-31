@@ -1628,13 +1628,20 @@ function sparqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
 	var replacewith = mylist.join(',');
 	var myregexp;
 	var newquery
-	if(replacewith){
-	    myregexp = new RegExp('([\{\,]) *' + key + ' *([\}\,])','g');
-	    newquery = myquery.replace(myregexp,"$1" + replacewith + "$2");
+	if(querylang == 'serql'){
+	    if(replacewith){
+		myregexp = new RegExp('([\{\,]) *' + key + ' *([\}\,])','g');
+		newquery = myquery.replace(myregexp,"$1" + replacewith + "$2");
+	    }
+	    else {
+		myregexp = new RegExp('((\{)|(\,)) *' + key + ' *((\})|(\,))','g');
+		newquery = myquery.replace(myregexp,"$2" + replacewith + "$5");
+	    }
 	}
 	else {
-	    myregexp = new RegExp('((\{)|(\,)) *' + key + ' *((\})|(\,))','g');
-	    newquery = myquery.replace(myregexp,"$2" + replacewith + "$5");
+/* sparql -- simple comma-seperated list of values to replace ?key */
+	    myregexp = new RegExp('\?' + key,'g');
+	    newquery = myquery.replace(myregexp,replacewith);
 	}
 	myquery=newquery;
     }
