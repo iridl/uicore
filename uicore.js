@@ -1889,26 +1889,26 @@ function runPureOnContext(myContext){
 	        if(myscript.parentNode == myContext){
                     var holdtxt = myscript.text;
 		   var mystuff = {};
-		mystuff.pureDirective="";
-		if(holdtxt){
-		    var directive;
-		    try {
-			directive = enhancedPureDirective(holdtxt);
-		    } catch(e){
-			alert('JSON parse error in ' + holdtxt);
+		    mystuff.pureDirective="";
+		    if(holdtxt){
+			var directive;
+			try {
+			    directive = enhancedPureDirective(holdtxt,mystuff);
+			} catch(e){
+			    alert('JSON parse error in ' + holdtxt);
+			}
+			if(!directive){
+			    alert('probable parse error in ' + holdtxt);
+			}
+			mystuff.pureDirective=directive;
 		    }
-		    if(!directive){
-			alert('probable parse error in ' + holdtxt);
+		    if(myscript.className){
+			mystuff.pureTemplateClass=myscript.className;
 		    }
-		    mystuff.pureDirective=directive;
-		}
-		if(myscript.className){
-		    mystuff.pureTemplateClass=myscript.className;
-		}
-		else {
-		    mystuff.pureTemplateClass='template';
-		}
-		myContext.byDirective.push(mystuff);
+		    else {
+			mystuff.pureTemplateClass='template';
+		    }
+		    myContext.byDirective.push(mystuff);
 		}
 	    }
 	}
@@ -1949,7 +1949,10 @@ function runPureOnContext(myContext){
 
 	    var holdonchange = mytems[i].onchange;
 	    if(myscript.pureDirective){
-		$p(mytclass).render(myContext.parsedJSON,myscript.pureDirective);
+		if(!myscript.pureFunction){
+		    myscript.pureFunction = $p(mytclass).compile(myscript.pureDirective);
+		}
+		$p(mytclass).render(myContext.parsedJSON,myscript.pureFunction);
 	    }
 	    else {
 		$p(mytclass).autoRender(myContext.parsedJSON);
@@ -1964,27 +1967,28 @@ function runPureOnContext(myContext){
     changeClassWithin(myContext,'invalid','valid');
 	    updateLangGroups(myContext);
 }
-function enhancedPureDirective(directivestring){
+function enhancedPureDirective(directivestring,myDirective){
     var cleanstring = directivestring.replace(/&lt;/g,'<');
     var directive = JSON.parse(cleanstring);
-	var newdirective = transformObject(directive,mapObject);
+    var newdirective = transformObject(directive,mapObject,myDirective);
 	directive=newdirective;
     return directive;
 }
-function transformObject(object,func){
+function transformObject(object,func,myDirective){
     var newobj = {};
     for (var key in object ){
-	var newval = func(object[key],key);
+	var newval = func(object[key],key,myDirective);
 	    newobj[key]=newval;
     }
     return newobj;
 }
-    function mapObject (obj,key){
+function mapObject (obj,key,myDirective){
 	var newobj = obj;
 	var findlg=new RegExp('([^"]*).iridl:asLangGroup');
+	var findrc=new RegExp('([^".]*)[.]([^".]*).iridl:recurse');
 	var findfl=new RegExp('([^"]*).iridl:firstLetter');
 	if(typeof(obj) == 'object'){
-	    newobj = transformObject(obj,mapObject);
+	    newobj = transformObject(obj,mapObject,myDirective);
 	}
         if(key=='sort'){
 	    var sortvar = obj;
@@ -2128,6 +2132,24 @@ function transformObject(object,func){
 		    }
 		    return ret;
 		}; 
+	    }
+	    if (res = findrc.exec(obj)){
+		var localref=res[1];
+		var localloopon=res[2];
+		var myd = myDirective;
+		newobj = function(arg){
+		    var local=localref;
+		    var loopon=localloopon;
+		    var context=myd;
+		    var ret='';
+		    if(context.pureFunction){
+			var myfunc = context.pureFunction;
+			if(arg[local] && arg[local].item[loopon]){
+			    ret = myfunc(arg[local].item); 
+			}
+		    }
+		    return ret;
+		};
 	    }
 
 	}
