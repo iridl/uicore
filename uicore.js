@@ -5182,18 +5182,20 @@ if(myform){
     var alldisabled=alldisabledPageForm(classes);
     if(alldisabled && theMethod == 'GET'){
 	if(localhref.substring(0,5) =='file:'){
+/*
 	    if(localhref.charAt(localhref.length-1) == '/'){
 		localhref=localhref+'index.html';
 	    }
+*/
 	}
 	document.location.href=localhref;
     }
     else {
 /* our rewrite rules do not handle Set-Language for a directory, so we avoid doing it
- */
 	if(localhref.charAt(localhref.length-1) == '/'){
 	    localhref=localhref+'index.html';
 	}
+ */
 	myform.action=localhref;
 	myform.method=theMethod;
 	myform.submit();
