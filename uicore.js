@@ -1582,6 +1582,10 @@ changed.value=it.value;
 updatePageForm(changed);
 }
 }
+    if (it.className && it.className.indexOf('scrollToTop')){
+	scrollTo(0,0);
+    }
+
 }
 function loadHasSparqlEndpoint(){
 var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasSparqlEndpoint');
