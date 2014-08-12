@@ -1801,7 +1801,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 		    /*failed -- stop loading */
 		    relStopLoading(it.myQuery);
 		    setFailed(it.myQuery, it.status, it.statusText + it.responseText);
-		    var dumpelement=getElementsByAttribute(it.myquery.parentNode,'*','property','iridl:JsonAsText');
+		    var dumpelement=getElementsByAttribute(it.myQuery.parentNode,'*','property','iridl:JsonAsText');
 		    if(dumpelement.length > 0 ){
 			dumpelement[0].innerHTML=it.statusText + it.responseText}
 		}
