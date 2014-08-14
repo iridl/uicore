@@ -201,7 +201,7 @@ width: 52px;
 margin: 1px;
 border: 0px;
 z-index: 0;
-    background: url('icons/iri.png') center no-repeat;
+    background: url('icons/iriwh.png') center no-repeat;
         background-color: WhiteSmoke;
 	background-size: 52px;
 }
@@ -262,7 +262,7 @@ height: 0px;
              min-height: 54px;
 	     max-width: 100%;
 	font-size: 12pt;
-    background: url('icons/iri.png') right no-repeat;
+    background: url('icons/iriwh.png') right no-repeat;
 	background-size: 50pt;
 	background-color: WhiteSmoke;
 	padding-right: 52pt;
@@ -806,7 +806,7 @@ display: none;
 #homelink {
 height: 37px;
 width: 37px;
-    background: url('icons/iri36.png') center no-repeat;
+    background: url('icons/iriwh36.png') center no-repeat;
 background-size: 36px;
 margin: 2px;
 }
@@ -976,7 +976,7 @@ img.dlimg, img.dlauximg, img.dlimgts {
  #homelink {
 height: 30px;
 width: 30px;
-    background: url('icons/iri30.png') center no-repeat;
+    background: url('icons/iriwh30.png') center no-repeat;
 background-size: 30px;
 }
 #homelink select {
@@ -995,7 +995,7 @@ top: 30px;
 .controlBar:hover #homelink {
 height: 37px;
 width: 37px;
-    background: url('icons/iri36.png') center no-repeat;
+    background: url('icons/iriwh36.png') center no-repeat;
 background-size: 36px;
 }
 .controlBar:hover #homelink:hover{
