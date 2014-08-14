@@ -1124,6 +1124,35 @@ ga('send','social', 'Pinterest','clipelement',location.href);
            window.open(pinterest_url); 
    }
 }
+function doIRIFClipElement(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+     
+   if(figimg && figimg.src){
+       var pinurl=figimg.src;
+       var pinclass=figimg.className;
+       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var tpar = getElementsByAttribute(document,'h2','property','term:title');
+    var dpar = getElementsByAttribute(document,'p','property','term:description')
+
+    var title="";
+	if(tpar.length>0){
+	title=tpar[0].innerHTML;
+	}
+	if(!title)title=document.title;
+    var description="";
+	if(dpar.length>0){
+	description=dpar[0].innerHTML;
+	}
+    var pinterest_link_description = title + ":  " +description;
+
+/*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
+ga('send','social', 'IRIForum','clipelement',location.href);
+       pinterest_url = "http://forums.iri.columbia.edu/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl) + "&image=" + encodeURIComponent(pinurl) + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
+           window.open(pinterest_url); 
+   }
+}
 function doFigureImageClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -3031,6 +3060,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.setAttribute("title","Save to Tumblr with link back");
 	gb.onclick=doTumblrClipElement;
 	gb.myonclick=doTumblrClipElement;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+/* IFIF */
+	var gb= document.createElement('div');
+	gb.className='sharebutton iriforum';
+	gb.setAttribute("title","Save to IRI Forum with link back");
+	gb.onclick=doIRIFClipElement;
+	gb.myonclick=doIRIFClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 /* pinterest */

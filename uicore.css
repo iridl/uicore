@@ -1611,6 +1611,24 @@ opacity: 0.8;
 .evernote:hover {
 opacity: 1.0;
 }
+/* IRI forum share element */
+  .iriforum{
+    cursor: pointer;
+    height: 20px;
+   width: 20px;
+    display: inline-block;
+    padding: 2px;
+    background: url('icons/iriwh36.png') center no-repeat;
+	background-size: 25px;
+    border: 1px solid #ccc;
+text-indent:-9999px; overflow:hidden; 
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+  }
+.iriforum:hover {
+opacity: 1.0;
+}
 /* tumblr share element */
   .tumblr{
     cursor: pointer;
