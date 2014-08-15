@@ -3065,7 +3065,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* IFIF */
 	var gb= document.createElement('div');
 	gb.className='sharebutton iriforum';
-	gb.setAttribute("title","Save to IRI Forum with link back");
+	gb.setAttribute("title","Save to CSP Forum with link back");
 	gb.onclick=doIRIFClipElement;
 	gb.myonclick=doIRIFClipElement;
 	gb.clipthis = currentObj.parentNode;
