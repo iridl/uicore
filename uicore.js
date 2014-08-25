@@ -1149,7 +1149,7 @@ function doIRIFClipElement(evt){
 
 /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
 ga('send','social', 'IRIForum','clipelement',location.href);
-       pinterest_url = "http://forums.iri.columbia.edu/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl) + "&image=" + encodeURIComponent(pinurl) + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
+       pinterest_url = "http://forums.climate-services.org/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl) + "&image=" + encodeURIComponent(pinurl) + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
            window.open(pinterest_url); 
    }
 }
