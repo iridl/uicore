@@ -612,6 +612,15 @@ gb.id='tumblr';
     tumblr_button.setAttribute("title", "Share on Tumblr with link back");
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
+/* CSP Forum */
+gb= document.createElement('div');
+gb.className='sharebutton';
+gb.id='csp';
+    tumblr_button = document.createElement("a");
+	tumblr_button.onclick=doIRIFClipElement;
+    tumblr_button.setAttribute("title", "Share on CSP with link back");
+    gb.appendChild(tumblr_button);
+s.appendChild(gb);
 /* code to add Mail buttons */
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -777,6 +786,9 @@ function doTumblrClip(){
 	tumblr_photo_source = content.getElementsByTagName('link')[0].figureimage.src;
 	}
 	}
+    else {
+	tumblr_photo_source = getFigureImage(document);
+    }
 	var tumblr_photo_click_thru = url;
 	if(tumblr_photo_source){
 	    ttype='photo';
@@ -967,20 +979,39 @@ if(sfigs.length){
 }
 }
 function getFigureImage(clipthis){
-  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
-   var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
-   var figimg;
-   if(sfigimgs.length){
-       figimg=sfigimgs[0];
-       for(var i=sfigimgs.length;i--;){
+    var figimg;
+    if(!clipthis){
+	clipthis=document;
+    }
+    var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
+    var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
+    if(sfigimgs.length){
+	figimg=sfigimgs[0];
+	for(var i=sfigimgs.length;i--;){
 	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
 	       figimg=sfigimgs[i];
 	   }
        }
-   }
-   else if(sfigs.length){
-       figimg=sfigs[0].figureimage;
-   }
+    }
+    else if(sfigs.length){
+	figimg=sfigs[0].figureimage;
+    }
+    else {
+	var sfigimgs = document.getElementsByTagName('img');
+	var maxsize = 0;
+	var imax = -1;
+	for(var i=sfigimgs.length;i--;){
+	    var isize = sfigimgs[i].width * sfigimgs[i].height;
+	   if( isize >= imax){
+	       imax = isize;
+	       imax = i;
+	   }
+       }
+	if(imax >= 0){
+	    figimg = sfigimgs(imax);
+	}
+    }
+
    return(figimg);
 }
 function getPDFImage(clipthis){
@@ -1132,6 +1163,7 @@ function doIRIFClipElement(evt){
    if(figimg && figimg.src){
        var pinurl=figimg.src;
        var pinclass=figimg.className;
+   }
        var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description')
@@ -1150,8 +1182,8 @@ function doIRIFClipElement(evt){
 /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
 ga('send','social', 'IRIForum','clipelement',location.href);
        pinterest_url = "http://forums.climate-services.org/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl) + "&image=" + encodeURIComponent(pinurl) + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
-           window.open(pinterest_url); 
-   }
+           window.open(pinterest_url);
+   
 }
 function doFigureImageClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
@@ -3062,7 +3094,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doTumblrClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
-/* IFIF */
+/* CSPF */
 	var gb= document.createElement('div');
 	gb.className='sharebutton iriforum';
 	gb.setAttribute("title","Save to CSP Forum with link back");
