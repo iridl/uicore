@@ -1008,7 +1008,7 @@ function getFigureImage(clipthis){
 	   }
        }
 	if(imax >= 0){
-	    figimg = sfigimgs(imax);
+	    figimg = sfigimgs[imax];
 	}
     }
 
