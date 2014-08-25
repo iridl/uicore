@@ -618,7 +618,7 @@ gb.className='sharebutton';
 gb.id='csp';
     tumblr_button = document.createElement("a");
 	tumblr_button.onclick=doIRIFClipElement;
-    tumblr_button.setAttribute("title", "Share on CSP with link back");
+    tumblr_button.setAttribute("title", "Share with Climate Services Partnership Forums");
     gb.appendChild(tumblr_button);
 s.appendChild(gb);
 /* code to add Mail buttons */
@@ -3097,7 +3097,7 @@ function DLimageBuildControls(mydlimage,mylink){
 /* CSPF */
 	var gb= document.createElement('div');
 	gb.className='sharebutton iriforum';
-	gb.setAttribute("title","Save to CSP Forum with link back");
+	gb.setAttribute("title","Share image and link using the Climate Services Partnership Forums");
 	gb.onclick=doIRIFClipElement;
 	gb.myonclick=doIRIFClipElement;
 	gb.clipthis = currentObj.parentNode;
