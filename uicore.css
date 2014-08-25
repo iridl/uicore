@@ -1789,6 +1789,23 @@ opacity: 0.8;
 background-color: white;
 opacity: 1.0;
 }
+#csp a {
+display:inline-block; 
+    cursor: pointer;
+    height: 20px;
+    padding: 2px 2px 2px 2px;
+text-indent:-9999px; overflow:hidden; 
+width:20px;
+background:url('icons/csp36.png') center no-repeat transparent;
+background-size: 95%;
+-moz-border-radius: 7px;
+border-radius: 7px;
+opacity: 0.8;
+}
+#csp a:hover {
+background-color: white;
+opacity: 1.0;
+}
 #googleplusbutton div {
 // width: 75px !important;
 }
