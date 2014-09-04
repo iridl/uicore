@@ -4553,7 +4553,7 @@ for (var i=0; i< stag.length ; i++){
     }
 }
 }
-function toggleShowAll(){
+function toggleShowAll(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
     toggleClass(it,'ShowAll');
