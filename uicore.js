@@ -981,6 +981,9 @@ if(sfigs.length){
 function getFigureImage(clipthis){
     var figimg;
     if(!clipthis){
+	clipthis = document.getElementById("content");
+    }
+    if(!clipthis){
 	clipthis=document;
     }
     var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
@@ -997,7 +1000,7 @@ function getFigureImage(clipthis){
 	figimg=sfigs[0].figureimage;
     }
     else {
-	var sfigimgs = document.getElementsByTagName('img');
+	var sfigimgs = clipthis.getElementsByTagName('img');
 	var maxsize = 0;
 	var imax = -1;
 	for(var i=sfigimgs.length;i--;){
@@ -1160,9 +1163,11 @@ function doIRIFClipElement(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
    var figimg = getFigureImage(it.clipthis);
      
+       var pinurl;
+       var pinclass;
    if(figimg && figimg.src){
-       var pinurl=figimg.src;
-       var pinclass=figimg.className;
+       pinurl=figimg.src;
+       pinclass=figimg.className;
    }
        var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
@@ -1181,7 +1186,11 @@ function doIRIFClipElement(evt){
 
 /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
 ga('send','social', 'IRIForum','clipelement',location.href);
-       pinterest_url = "http://forums.climate-services.org/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl) + "&image=" + encodeURIComponent(pinurl) + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
+    pinterest_url = "http://forums.climate-services.org/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl);
+    if(pinurl){
+	pinterest_url = pinterest_url + "&image=" + encodeURIComponent(pinurl);
+    }
+	pinterest_url = pinterest_url + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
            window.open(pinterest_url);
    
 }
