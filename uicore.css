@@ -118,6 +118,7 @@ display: block;
 display: block;
 }
 .hasMoreButton::after {
+cursor: pointer;
 margin-top: 5pt;
 content: 'show all ' attr(moreitemcount);
 display: block;
