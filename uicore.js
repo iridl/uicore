@@ -4529,6 +4529,34 @@ sel.onclick=clearregionwithin;
 sel.onclickfn=clearregionwithin;
 }
 }
+/* morecount/moreitem:  provides more button if more moreitem's than count */
+    var stag = getElementsByAttribute(context,'*','data-morecount','*');
+for (var i=0; i< stag.length ; i++){
+    var sel=stag[i];
+    var morecount = sel.getAttribute('data-morecount');
+    var morechildren = [];
+    for (var j=0 ; j< sel.children.length ; j++){
+	if (sel.children[j].className && sel.children[j].className.indexOf('moreitem')>-1){
+	    morechildren.push(sel.children[j]);
+	}
+    }
+    if (morecount < morechildren.length-1){
+    /* morecount is restrictive */
+	appendMissingClass(sel,'hasMoreButton');
+	sel.setAttribute('morehide',morechildren.length-morecount);
+	sel.setAttribute('moreitemcount',morechildren.length);
+	sel.onclick=toggleShowAll;
+	sel.onclickfn=toggleShowAll;
+	for (var j = 0 ; j < morecount ; j++){
+	    appendMissingClass(morechildren[j],'belowMoreCount')
+	}
+    }
+}
+}
+function toggleShowAll(){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    toggleClass(it,'ShowAll');
 }
 function invalidatePageInput(iname){
     ChangeClassPageInput(iname,'valid','invalid');

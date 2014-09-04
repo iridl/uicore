@@ -107,6 +107,33 @@ font-weight: bold;
 display: none !important;
 }
 
+/* more button support */
+.hasMoreButton .moreitem {
+display: none;
+}
+.hasMoreButton.ShowAll .moreitem {
+display: block;
+}
+.hasMoreButton .moreitem.belowMoreCount {
+display: block;
+}
+.hasMoreButton::after {
+margin-top: 5pt;
+content: 'show all ' attr(moreitemcount);
+display: block;
+background-color: LightGrey;
+text-align: center;
+border-bottom-right-radius: 5pt;
+border-bottom-left-radius: 5pt;
+border-top-right-radius: 5pt;
+border-top-left-radius: 5pt;
+margin-bottom: 0pt;
+padding-bottom: 0pt;
+width: 100%;
+}
+.hasMoreButton.ShowAll::after {
+content: 'hide ' attr(morehide);
+}
 .lowerLimit, .lowerLimit-disabled {
 display: inline-block;
 padding-left: 5px;
