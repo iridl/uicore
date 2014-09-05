@@ -4549,11 +4549,11 @@ for (var i=0; i< stag.length ; i++){
 	    morechildren.push(sel.children[j]);
 	}
     }
+    sel.setAttribute('moreitemcount',morechildren.length);
     if (morecount < morechildren.length-1){
     /* morecount is restrictive */
 	appendMissingClass(sel,'hasMoreButton');
 	sel.setAttribute('morehide',morechildren.length-morecount);
-	sel.setAttribute('moreitemcount',morechildren.length);
 	sel.onclick=toggleShowAll;
 	sel.onclickfn=toggleShowAll;
 	for (var j = 0 ; j < morecount ; j++){
