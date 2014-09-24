@@ -4116,11 +4116,12 @@ function languageChange(){
 		}
 		if(lang){
 		    lang.value=newlang;
+		    updatePageForm();
 		}
 		else {
-		    location.href=appendPageForm(location.href.replace(/[?].*/,''),myform.className);
+		    var newloc = appendPageForm('',myform.className);
+		    location.search=newloc;
 		}
-		updatePageForm();
 	    }
 	}
     }
