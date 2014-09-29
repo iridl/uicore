@@ -1492,6 +1492,8 @@ border-radius: 7px;
 }
 .itemGroup {display: block; text-align: center; font-weight: bold;
           padding-top: 8pt; padding-bottom: 8pt;}
+.itemGroupDescription {display: block; text-align: inherit; font-weight: normal;
+          padding-top: 8pt; padding-bottom: 8pt;}
 .itemTitle { background-color:  #ECECEC; font-weight: bold; border: 1px outset; padding-bottom: 2px; 
 padding-left: 4px;
 padding-right: 4px;
@@ -1514,7 +1516,7 @@ clear: both;
 .itemImage { max-width: 100%;
 }
 .itemDescription { font-size: 12pt; color: #000000; display: inline; vertical-align: top; padding-top: 0px; padding-bottom: 0px; line-height: 1.3;}
-.searchDescription { max-width: 450px; min-width: 100px; display: inline-block; margin-right: 2px}
+.searchDescription, .leftcolumnset { max-width: 450px; min-width: 100px; display: inline-block; margin-right: 2px}
 .a_column{font-size: 10pt; margin: 0px 0px 5px 0px; padding-left: 5px; padding-right: 5px; width: 137px; float: left; background-color: inherit}
 .column { margin: 0; padding-left: 3%; padding-right: 3%; border-right-width: 1px; border-left-width: 1px; width: 44%; float: left; }
 .leftcol { margin: 0; padding-left: 0%; padding-right: 2%; width: 300px; float: left; font-family: arial; }
@@ -1523,7 +1525,7 @@ A.titleLink:link, A.titleLink:visited, A.titleLink:active {text-decoration: none
 color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
 @media only all and (max-width: 970px){
-.searchDescription {
+.searchDescription, .leftcolumnset {
 width: 48%;
 }
 .rightcol {
@@ -1531,7 +1533,7 @@ width: 48%;
 }
 }
 @media only all and (max-width: 700px) {
-.searchDescription {
+.searchDescription, .leftcolumnset {
 width: 100%;
 max-width: 750px;
 }
@@ -1545,6 +1547,9 @@ max-width: 750px;
 padding-top: 16px;
 }
 .searchDescription {
+max-width: 340px;
+}
+.leftcolumnset {
 max-width: 340px;
 }
 .rightcol {
