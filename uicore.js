@@ -3758,6 +3758,11 @@ return false;
 function skipme(evt){
 return false;
 }
+function stopevent(evt){
+evt = (evt) ? evt : event;
+evt.cancelBubble = true;
+return false;
+}
 function classMatch (clists, clists2){
 var clist = clists.split(' ');
 var clist2 = clists2.split(' ');
@@ -4559,6 +4564,12 @@ for (var i=0; i< stag.length ; i++){
 	sel.onclickfn=toggleShowAll;
 	for (var j = 0 ; j < morecount ; j++){
 	    appendMissingClass(morechildren[j],'belowMoreCount')
+	}
+	for (var j = 0 ; j < morechildren.length ; j++){
+	    if(typeof morechildren[j].onclick != 'function'){
+		morechildren[j].onclick=stopevent;
+		morechildren[j].onclickfn=stopevent;
+	    }
 	}
     }
 }
