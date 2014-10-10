@@ -20,24 +20,23 @@ color: black;
 .langgroup [lang] {display:inline}
 .langgroup [lang] + [lang] {display:none}
 body[failed]::before {
-content: attr(failed) " download failures";
+content: attr(failed) " downloads unavailable";
 display: block;
 border: 4pt;
 border-style: outset;
-border-color; DarkGrey;
+border-color: DarkGrey;
 text-align: center;
-color: red;
-padding: 20pt;
+color: brown;
+padding: 5pt;
 position: fixed;
-top: 15%;
-left: 25%;
-right: 25%;
+bottom: 5pt;
+right: 5pt;
 z-index: 100;
 background-color: WhiteSmoke;
 border-radius: 10px;
 }
 body[failed="1"]::before {
-content: attr(failed) " download failure";
+content: attr(failed) " download unavailable";
 }
 .sharebutton{
 display: inline;
