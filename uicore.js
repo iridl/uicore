@@ -4566,13 +4566,13 @@ for (var i=0; i< stag.length ; i++){
 	for (var j = 0 ; j < morecount ; j++){
 	    appendMissingClass(morechildren[j],'belowMoreCount')
 	}
-	for (var j = 0 ; j < morechildren.length ; j++){
-	    if(typeof morechildren[j].onclick != 'function'){
-		morechildren[j].onclick=stopevent;
-		morechildren[j].onclickfn=stopevent;
-		morechildren[j].onmouseover=fixglossloc;
-		morechildren[j].onmouseoverfn=fixglossloc;
-	    }
+    }
+    for (var j = 0 ; j < morechildren.length ; j++){
+	if(typeof morechildren[j].onclick != 'function'){
+	    morechildren[j].onclick=stopevent;
+	    morechildren[j].onclickfn=stopevent;
+	    morechildren[j].onmouseover=fixglossloc;
+	    morechildren[j].onmouseoverfn=fixglossloc;
 	}
     }
 }
