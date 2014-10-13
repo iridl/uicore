@@ -1531,6 +1531,7 @@ border-radius: 7px;
         -moz-border-radius-bottomright: 3px;
 margin-bottom: 2pt;
 clear: both;
+font-size: 120%;
 }
 .itemTitle:after {content: ""; display: block;}
 .itemFooter {clear: both; }
