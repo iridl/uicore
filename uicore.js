@@ -2043,6 +2043,7 @@ function runPureOnContext(myContext){
     setupPageFormLinks(myContext);
     changeClassWithin(myContext,'invalid','valid');
 	    updateLangGroups(myContext);
+    var forcereflow=myContext.offsetHeight;
 }
 function enhancedPureDirective(directivestring,myDirective){
     var cleanstring = directivestring.replace(/&lt;/g,'<');
@@ -4569,15 +4570,34 @@ for (var i=0; i< stag.length ; i++){
 	    if(typeof morechildren[j].onclick != 'function'){
 		morechildren[j].onclick=stopevent;
 		morechildren[j].onclickfn=stopevent;
+		morechildren[j].onmouseover=fixglossloc;
+		morechildren[j].onmouseoverfn=fixglossloc;
 	    }
 	}
     }
 }
 }
+/* this is a work around for a webkit position: absolute bug in multicolumn layout.  Hopefully will be unnecessary someday, though was reported a year ago for Chromium.  
+Note that it assumes gloss is defined with position absolute relative to the page, an intervening position: relative will mess things up.
+ 2014-10-13 */
+function fixglossloc(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var isWebkit = 'WebkitAppearance' in document.documentElement.style;
+    if(isWebkit){
+    var mylbl = it.getElementsByClassName("lbl");
+    var mygloss = it.getElementsByClassName("gloss");
+    if(mylbl.length > 0 && mygloss.length > 0){
+	mygloss[0].style.top=(absTop(mylbl[0])+mylbl[0].offsetHeight+5)+'px';
+	mygloss[0].style.left=absLeft(mylbl[0])+'px';
+    }
+    }
+}
 function toggleShowAll(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
     toggleClass(it,'ShowAll');
+    var forcereflow=it.offsetHeight;
 }
 function invalidatePageInput(iname){
     ChangeClassPageInput(iname,'valid','invalid');
