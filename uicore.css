@@ -1512,7 +1512,8 @@ border-spacing: 2px; padding-left: 6px; padding-right: 6px; padding-top: 2px; pa
 border-radius: 7px;
 }
 .itemGroup {display: block; text-align: center; font-weight: bold;
-          padding-top: 8pt; padding-bottom: 8pt;}
+          padding-top: 8pt; padding-bottom: 8pt; font-size: 130%;
+}
 .itemGroupDescription {display: block; text-align: inherit; font-weight: normal;
           padding-top: 0pt; padding-bottom: 8pt;  padding-left: 20pt; padding-right:20pt}
 .itemTitle { background-color:  #ECECEC; font-weight: bold; border: 1px outset; padding-bottom: 2px; 
