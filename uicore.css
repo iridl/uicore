@@ -1301,8 +1301,6 @@ display: inline-block;
         padding-left: 8pt;
         padding-right: 8pt;
         background: white;
-	font-size: 14pt;
-	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
         padding-top: 0px;
         margin-top: 0px;
         border: 1px solid LightGrey;
@@ -1516,7 +1514,7 @@ border-radius: 7px;
 .itemGroup {display: block; text-align: center; font-weight: bold;
           padding-top: 8pt; padding-bottom: 8pt;}
 .itemGroupDescription {display: block; text-align: inherit; font-weight: normal;
-          padding-top: 8pt; padding-bottom: 8pt;}
+          padding-top: 0pt; padding-bottom: 8pt;  padding-left: 20pt; padding-right:20pt}
 .itemTitle { background-color:  #ECECEC; font-weight: bold; border: 1px outset; padding-bottom: 2px; 
 padding-left: 4px;
 padding-right: 4px;
@@ -1542,8 +1540,8 @@ clear: both;
 .searchDescription, .leftcolumnset { max-width: 450px; min-width: 100px; display: inline-block; margin-right: 2px}
 .a_column{font-size: 10pt; margin: 0px 0px 5px 0px; padding-left: 5px; padding-right: 5px; width: 137px; float: left; background-color: inherit}
 .column { margin: 0; padding-left: 3%; padding-right: 3%; border-right-width: 1px; border-left-width: 1px; width: 44%; float: left; }
-.leftcol { margin: 0; padding-left: 0%; padding-right: 2%; width: 300px; float: left; font-family: arial; }
-.rightcol { font-family: arial; max-width: 490px;  display: table-cell; display: inline-block; vertical-align: top; margin-right: 2px}
+.leftcol { margin: 0; padding-left: 0%; padding-right: 2%; width: 300px; float: left; }
+.rightcol { max-width: 490px;  display: table-cell; display: inline-block; vertical-align: top; margin-right: 2px}
 A.titleLink:link, A.titleLink:visited, A.titleLink:active {text-decoration: none;
 color: navy;}
 A.titleLink:active, A.titleLink:hover {color: blue;}
@@ -1587,7 +1585,8 @@ width: 880px;
 column-count: 2;
 -moz-column-count: 2;
 }
-.rightcol .ui-tabs-panel .itemGroup {
+.rightcol .ui-tabs-panel .itemGroup,
+.rightcol .ui-tabs-panel  .itemGroupDescription{
 column-span: all;
 -moz-column-span: all;
 -webkit-column-span: all;
