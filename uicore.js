@@ -3622,14 +3622,8 @@ changeClass(myimgdiv.inputimage,'valid','invalid-zooming');
 }
 else {
 var dx,dy;
-if(typeof evt.pageX != 'undefined'){
-dx=evt.pageX-absLeft(myimgdiv);
-dy=evt.pageY-absTop(myimgdiv);
-}
-else {
-    dx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
-dy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
-}
+    dx=evt.clientX - absLeft(myimgdiv);
+dy=evt.clientY - absTop(myimgdiv);
 myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
 }
     setbbox(myvals,myinfo,myclasses);
@@ -3650,19 +3644,19 @@ return true;
 }
 function absLeft(obj){
 if(obj.offsetParent){
-myval=obj.offsetLeft + absLeft(obj.offsetParent);
+myval=obj.offsetLeft -obj.scrollLeft - obj.clientLeft + absLeft(obj.offsetParent);
 }
 else {
-myval=obj.offsetLeft;
+myval=obj.offsetLeft-obj.scrollLeft - obj.clientLeft;
 }
 return myval;
 }
 function absTop(obj){
 if(obj.offsetParent){
-myval=obj.offsetTop + absTop(obj.offsetParent);
+myval=obj.offsetTop -obj.scrollTop + obj.clientTop + absTop(obj.offsetParent);
 }
 else {
-myval=obj.offsetTop;
+myval=obj.offsetTop - obj.scrollTop + obj.clientTop;
 }
 return myval;}
 function startdrag(evt){
@@ -3685,15 +3679,9 @@ var plotborderleft = myinfo["iridl:plotborderleft"];
 var plotbordertop = myinfo["iridl:plotbordertop"];
 var plotborderright = myinfo["iridl:plotborderright"];
 var plotborderbottom = myinfo["iridl:plotborderbottom"];
-// alert(evt.layerX + ' ' + evt.x + ' ' + evt.pageX + ' ' + absLeft(myimgdiv));
-if(typeof evt.pageX != 'undefined'){
-myx=evt.pageX-absLeft(myimgdiv);
-myy=evt.pageY-absTop(myimgdiv);
-}
-else {
-    myx=evt.clientX + myimgdiv.scrollLeft-absLeft(myimgdiv);
-myy=evt.clientY + myimgdiv.scrollTop-absTop(myimgdiv);
-}
+// alert(evt.layerX + ' ' + evt.x + ' ' + evt.clientX + ' ' + absLeft(myimgdiv));
+myx=evt.clientX -absLeft(myimgdiv);
+myy=evt.clientY -absTop(myimgdiv);
 if(myobj == null){
 myobj = myimgdiv.outline;
 sizeto(myobj,0,0);
@@ -3727,14 +3715,8 @@ var Xaxislength = myinfo["iridl:Xaxislength"];
 var Yaxislength = myinfo["iridl:Yaxislength"];
     var px,py;
 if(myobj != null){
-if(typeof evt.pageX != 'undefined'){
-    px=evt.pageX;
-    py=evt.pageY;
-}
-else {
-    px=evt.clientX + myimgdiv.scrollLeft;
-    py=evt.clientY + myimgdiv.scrollTop;
-}
+    px=evt.clientX;
+    py=evt.clientY;
     dx = px - absLeft(myimgdiv);
     dy = py - absTop(myimgdiv);
 cw=parseInt(myobj.style.width);
