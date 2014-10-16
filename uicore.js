@@ -3622,8 +3622,9 @@ changeClass(myimgdiv.inputimage,'valid','invalid-zooming');
 }
 else {
 var dx,dy;
-    dx=evt.clientX - absLeft(myimgdiv);
-dy=evt.clientY - absTop(myimgdiv);
+/* using inputimage as coordinate reference because firefox performs better with it -- I think because it is a visible object unlike myimgdiv, so it is positioned more reliably.  Also helps keep the overlay and the image aligned.  */
+dx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
+dy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
 myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
 }
     setbbox(myvals,myinfo,myclasses);
@@ -3643,22 +3644,29 @@ return true;
 }
 }
 function absLeft(obj){
-if(obj.offsetParent){
-myval=obj.offsetLeft -obj.scrollLeft - obj.clientLeft + absLeft(obj.offsetParent);
-}
-else {
-myval=obj.offsetLeft-obj.scrollLeft - obj.clientLeft;
-}
-return myval;
+    var	myval=0;
+    if(obj){
+	if(obj.offsetParent){
+	    myval=obj.offsetLeft + absLeft(obj.offsetParent);
+	}
+	else {
+	    myval=obj.offsetLeft;
+	}
+    }
+    return myval;
 }
 function absTop(obj){
-if(obj.offsetParent){
-myval=obj.offsetTop -obj.scrollTop + obj.clientTop + absTop(obj.offsetParent);
+    var myval=0;
+    if(obj){
+	if(obj.offsetParent){
+	    myval=obj.offsetTop + absTop(obj.offsetParent);
+	}
+	else {
+	    myval=obj.offsetTop;
+	}
+    }
+return myval;
 }
-else {
-myval=obj.offsetTop - obj.scrollTop + obj.clientTop;
-}
-return myval;}
 function startdrag(evt){
 evt = (evt) ? evt : event;
     var myimgdiv;
@@ -3679,9 +3687,9 @@ var plotborderleft = myinfo["iridl:plotborderleft"];
 var plotbordertop = myinfo["iridl:plotbordertop"];
 var plotborderright = myinfo["iridl:plotborderright"];
 var plotborderbottom = myinfo["iridl:plotborderbottom"];
-// alert(evt.layerX + ' ' + evt.x + ' ' + evt.clientX + ' ' + absLeft(myimgdiv));
-myx=evt.clientX -absLeft(myimgdiv);
-myy=evt.clientY -absTop(myimgdiv);
+// alert(evt.layerX + ' ' + evt.x + ' ' + evt.pageX + ' ' + absLeft(myimgdiv));
+    myx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
+myy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
 if(myobj == null){
 myobj = myimgdiv.outline;
 sizeto(myobj,0,0);
@@ -3715,10 +3723,10 @@ var Xaxislength = myinfo["iridl:Xaxislength"];
 var Yaxislength = myinfo["iridl:Yaxislength"];
     var px,py;
 if(myobj != null){
-    px=evt.clientX;
-    py=evt.clientY;
-    dx = px - absLeft(myimgdiv);
-    dy = py - absTop(myimgdiv);
+    px=evt.clientX + window.pageXOffset;
+    py=evt.clientY + window.pageYOffset;
+    dx = px - absLeft(myimgdiv.inputimage);
+    dy = py - absTop(myimgdiv.inputimage);
 cw=parseInt(myobj.style.width);
 ch=parseInt(myobj.style.height);
 newx=Math.min(dx,myx);
