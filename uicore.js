@@ -3752,7 +3752,7 @@ return false;
 function stopevent(evt){
 evt = (evt) ? evt : event;
 evt.cancelBubble = true;
-return false;
+return true;
 }
 function classMatch (clists, clists2){
 var clist = clists.split(' ');
