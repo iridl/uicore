@@ -441,6 +441,17 @@ function makeTabParentActive(tabnode){
 	}
     }
 }
+/* getTabParent -- gets first object or parent that is a tab -- starts with the object */
+function getTabParent(tabnode){
+    if(tabnode.className=="ui-tabs-panel-hidden" || tabnode.className=="ui-tabs-panel"){
+	return(tabnode);
+    }
+    else {
+	if(tabnode.parentNode){
+	    return(getTabParent(tabnode.parentNode));
+	}
+    }
+}
 function tabtarget(evt){
 	var ret = (document.width < 750);
 	evt = (evt) ? evt : ((event) ? event : null );
@@ -501,20 +512,22 @@ function tabsSetup(){
 }
 function makeTabActiveFromHash (myhash,dontClearChildren){
     var mytab="";
-    mytabsets = document.getElementsByClassName('ui-tabs-nav');
-    for(var i=mytabsets.length;i--;){
-	var mytabset=mytabsets[i];
-	var mytabs=mytabset.getElementsByTagName('li');
-	if(myhash){
+    if(myhash){
+	var myid = myhash.substr(1);
+	var myobject = document.getElementById(myid);
+	if(!dontClearChildren){
+	    if(myobject){
+		clearTabActive(myobject.getElementsByClassName('ui-tabs-nav'));
+	    }
+	}
+	var mypanel=getTabParent(myobject);
+	var myphash = '#' + mypanel.id;
+	mytabsets = document.getElementsByClassName('ui-tabs-nav');
+	for(var i=mytabsets.length;i--;){
+	    var mytabset=mytabsets[i];
+	    var mytabs=mytabset.getElementsByTagName('li');
 	    for(var j=mytabs.length;j--;){
-		if(mytabs[j].children[0].hash == myhash){
-		    if(!dontClearChildren){
-		    var myid = myhash.substr(1);
-		    var mypanel = document.getElementById(myid);
-		    if(mypanel){
-			clearTabActive(mypanel.getElementsByClassName('ui-tabs-nav'));
-		    }
-		    }
+		if(mytabs[j].children[0].hash == myphash){
 		    makeTabActive(mytabs[j]);
 		    mytab = mytabs[j];
 		}
