@@ -2113,7 +2113,11 @@ function mapObject (obj,key,myDirective){
 		    var ret; 
 
 		    var mycontid = local.substr(1+local.indexOf('.'));
-		    var mycont = arg.item[mycontid];
+		    var contidlist = mycontid.split(".");
+		    var mycont = arg.item;
+		    for (var i=0 ; i < contidlist.length ; i++) {
+			mycont = mycont[contidlist[i]];
+		    }
 		    if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
 			if(typeof(a) == 'string' || !a['@language']){
@@ -2171,7 +2175,11 @@ function mapObject (obj,key,myDirective){
 		    var ret; 
 
 		    var mycontid = local.substr(1+local.indexOf('.'));
-		    var mycont = arg.item[mycontid];
+		    var contidlist = mycontid.split(".");
+		    var mycont = arg.item;
+		    for (var i=0 ; i < contidlist.length ; i++) {
+			mycont = mycont[contidlist[i]];
+		    }
 		    if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
 			if(typeof(a) == 'string' || !a['@language']){
