@@ -4587,6 +4587,29 @@ for (var i=0; i< stag.length ; i++){
 	}
     }
 }
+/* property=wn20schema:lexicalForm and rel=wn20schema:containsWordSense */
+    var stag = getElementsByAttribute(context,'*','rel','wn20schema:containsWordSense');
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	if(typeof sel.onclick != 'function'){
+	    sel.onclick=handleworddef;
+	    sel.onclickfn=handleworddef;
+	}
+    }
+}
+function handleworddef(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+
+    var myglossary = getElementsByAttribute(document,'link','rel','iridl:hasGlossary');
+    if(myglossary){
+	var qurl = myglossary[0].getAttribute('href');
+	var word=it.getAttribute('resource');
+	if(word.substr(0,1)=='['){
+	    word = word.substr(1,word.length-2);
+	}
+	document.location.href= qurl + '?word=' + encodeURIComponent(word);
+    }
 }
 /* this is a work around for a webkit position: absolute bug in multicolumn layout.  Hopefully will be unnecessary someday, though was reported a year ago for Chromium.  
 Note that it assumes gloss is defined with position absolute relative to the page, an intervening position: relative will mess things up.
