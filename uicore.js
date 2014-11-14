@@ -2129,7 +2129,9 @@ function mapObject (obj,key,myDirective){
 		    var contidlist = mycontid.split(".");
 		    var mycont = arg.item;
 		    for (var i=0 ; i < contidlist.length ; i++) {
+                        if (mycont) {
 			mycont = mycont[contidlist[i]];
+			}
 		    }
 		    if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
@@ -2191,7 +2193,9 @@ function mapObject (obj,key,myDirective){
 		    var contidlist = mycontid.split(".");
 		    var mycont = arg.item;
 		    for (var i=0 ; i < contidlist.length ; i++) {
+                        if (mycont) {
 			mycont = mycont[contidlist[i]];
+			}
 		    }
 		    if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
