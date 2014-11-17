@@ -4600,6 +4600,15 @@ for (var i=0; i< stag.length ; i++){
 	    sel.onclickfn=handleworddef;
 	}
     }
+/* property=wn30:lexicalForm and rel=wn30:hasSense */
+    var stag = getElementsByAttribute(context,'*','rel','wn30:hasSense');
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	if(typeof sel.onclick != 'function'){
+	    sel.onclick=handleworddef;
+	    sel.onclickfn=handleworddef;
+	}
+    }
 }
 function handleworddef(evt){
    var evt = (evt) ? evt : ((event) ? event : null );

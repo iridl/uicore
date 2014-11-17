@@ -62,7 +62,7 @@ overflow: visible;
 cursor: help;
 }
 
-[property="wn20schema:lexicalForm"],[rel="wn20schema:containsWordSense"]{
+[property="wn20schema:lexicalForm"],[rel="wn20schema:containsWordSense"],[property="wn30:lexicalForm"],[rel="wn30:hasSense"]{
 font-style: italic;
 color: #222222;
 text-decoration: underline;
