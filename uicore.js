@@ -4571,6 +4571,7 @@ for (var i=0; i< stag.length ; i++){
 	    morechildren.push(sel.children[j]);
 	}
     }
+
     sel.setAttribute('moreitemcount',morechildren.length);
     if (morecount < morechildren.length-1){
     /* morecount is restrictive */
@@ -4582,6 +4583,7 @@ for (var i=0; i< stag.length ; i++){
 	    appendMissingClass(morechildren[j],'belowMoreCount')
 	}
     }
+    morechildren=sel.getElementsByClassName('moreitem');
     for (var j = 0 ; j < morechildren.length ; j++){
 	if(typeof morechildren[j].onclick != 'function'){
 	    morechildren[j].onclick=stopevent;
