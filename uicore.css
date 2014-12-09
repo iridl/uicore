@@ -517,6 +517,7 @@ border-style: outset;
 }
 .imageOverlayDiv {
 cursor: crosshair;
+z-index: 20;
 }
 .imageOverlayDiv.pickRegion {
 cursor: crosshair;
@@ -611,7 +612,7 @@ padding: 4px;
 width: 160px;
 left: 0px;
 top: 3px;
-zindex: 10;
+z-index: 10;
 }
 
 .dlimage > .dlcontrol input {
@@ -680,6 +681,11 @@ display: inline-block;
 }
 .dlimage .dlcontrol {
 display: none;
+}
+.dlimage .messagearea.show {
+display: block;
+white-space: normal;
+z-index: 100;
 }
 .dlimage.ShowControlLayers .dlcontrol.layers {
 display: block;

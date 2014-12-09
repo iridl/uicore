@@ -1256,7 +1256,14 @@ if(sfigs.length){
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
+	if(msga.length>0){
+	    msga[0].innerHTML="<p>To open directly in ArcGIS using WMS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea><p>Alternatively, choose a GeoTiff option under the download button <span class="dlimagecontrol download" title="Download"></span> to download an image ArcGIS can read';
+	    appendMissingClass(msga[0],'show');
+	}
+	else {
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
+	}
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
 	ga('send','social', 'arcgis', 'asWMS',location.href);
@@ -3293,6 +3300,11 @@ function DLimageBuildControls(mydlimage,mylink){
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 	currentObj=ctl;
+/* adds message area for download controls e.g. ArcGIS */
+	var msga = document.createElement('div');
+	msga.className='messagearea';
+	currentObj.parentNode.insertBefore(msga,currentObj.nextSibling);
+	currentObj=msga;
 /* builds fig dimension controls */
 	if(mylink) {
 var dimlist=mylink.info["iridl:hasDimensions"];
