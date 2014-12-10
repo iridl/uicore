@@ -149,9 +149,11 @@ display: block;
 .hasMoreButton::after {
 cursor: pointer;
 margin-top: 5pt;
-content: 'show all ' attr(moreitemcount);
+content: '... ('attr(morehide) ' more)';
 display: block;
-background-color: LightGrey;
+color: SlateGrey;
+font-style: italic;
+font-size: 80%;
 text-align: center;
 border-bottom-right-radius: 5pt;
 border-bottom-left-radius: 5pt;
@@ -159,7 +161,8 @@ border-top-right-radius: 5pt;
 border-top-left-radius: 5pt;
 margin-bottom: 0pt;
 padding-bottom: 0pt;
-width: 100%;
+margin-right: 20pt;
+margin-left: 20pt;
 }
 .hasMoreButton.ShowAll::after {
 content: 'hide ' attr(morehide);

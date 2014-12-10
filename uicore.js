@@ -4585,7 +4585,7 @@ for (var i=0; i< stag.length ; i++){
     }
 
     sel.setAttribute('moreitemcount',morechildren.length);
-    if (morecount < morechildren.length-1){
+    if (morecount < morechildren.length-3){
     /* morecount is restrictive */
 	appendMissingClass(sel,'hasMoreButton');
 	sel.setAttribute('morehide',morechildren.length-morecount);
