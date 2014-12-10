@@ -682,6 +682,9 @@ display: inline-block;
 .dlimage .dlcontrol {
 display: none;
 }
+.dlimage .messagearea {
+display: none
+}
 .dlimage .messagearea.show {
 display: block;
 white-space: normal;

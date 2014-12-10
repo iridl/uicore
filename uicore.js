@@ -1259,7 +1259,7 @@ if(sfigs.length){
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
 	if(msga.length>0){
 	    msga[0].innerHTML="<p>To open directly in ArcGIS using WMS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea><p>Alternatively, choose a GeoTiff option under the download button <span class="dlimagecontrol download" title="Download"></span> to download an image ArcGIS can read';
-	    appendMissingClass(msga[0],'show');
+	    toggleClass(msga[0],'show');
 	}
 	else {
 	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
