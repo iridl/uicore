@@ -137,13 +137,13 @@ display: none !important;
 }
 
 /* more button support */
-.hasMoreButton .moreitem {
+.hasMoreButton >  .moreitem {
 display: none;
 }
-.hasMoreButton.ShowAll .moreitem {
+.hasMoreButton.ShowAll >  .moreitem {
 display: block;
 }
-.hasMoreButton .moreitem.belowMoreCount {
+.hasMoreButton > .moreitem.belowMoreCount {
 display: block;
 }
 .hasMoreButton::after {
