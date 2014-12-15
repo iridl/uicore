@@ -149,7 +149,9 @@ display: block;
 .hasMoreButton::after {
 cursor: pointer;
 margin-top: 5pt;
-content: '... ('attr(morehide) ' more)';
+content: attr(morehide) ' more';
+border: solid 1px DarkGrey;
+background-color: white;
 display: block;
 color: SlateGrey;
 font-style: italic;
@@ -166,6 +168,8 @@ margin-left: 20pt;
 }
 .hasMoreButton.ShowAll::after {
 content: 'hide ' attr(morehide);
+border: solid 1px DarkGrey;
+background-color: white;
 }
 .lowerLimit, .lowerLimit-disabled {
 display: inline-block;
