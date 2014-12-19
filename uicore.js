@@ -559,6 +559,10 @@ var ls=document.createElement('legend');
 ls.appendChild(document.createTextNode('Contáctenos'));
 s.insertBefore(ls,s.firstChild);
 ls=document.createElement('legend');
+    ls.setAttribute('lang','fr');
+ls.appendChild(document.createTextNode('Contactez Nous'));
+s.insertBefore(ls,s.firstChild);
+ls=document.createElement('legend');
     ls.setAttribute('lang','en');
 ls.appendChild(document.createTextNode('Contact Us'));
 s.insertBefore(ls,s.firstChild);
@@ -4143,6 +4147,9 @@ function languageChange(){
 		if(lang && lang.className && lang.className.indexOf('bodyAttribute')<0){
 		    appendMissingClass(slang,'bodyAttribute');
 		    appendMissingClass(myform,'bodyAttribute');
+		}
+		if(sel.parentNode.firstChild.tagName == 'LEGEND'){
+		sel.parentNode.firstChild.innerHTML=LanguageTitle[newlang];
 		}
 		if(slang){
 		    slang.value=newlang;
