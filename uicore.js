@@ -4337,7 +4337,7 @@ var varcnts = {};
 		var ipos=varcnts[iname];
 		var refvalue = decodeURIComponent(hold);
 		if(inputs[iname].length){
-		    if(typeof(inputs[iname][ipos].checked) == 'boolean'){
+		    if(inputs[iname][ipos].type == 'checkbox'){
 			for (var ick = 0 ; ick < inputs[iname].length; ick++){
 			    if(inputs[iname][ick].value == refvalue){
 				inputs[iname][ick].checked = true;
@@ -4991,7 +4991,7 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 	if(myinputs.length){
 	    var use = [];
 	    for (var i=0 ; i < myinputs.length; i++){
-		if(myinputs[i].value && !(typeof(myinputs[i].checked) == 'boolean' && !myinputs[i].checked)){
+		if(myinputs[i].value && !(myinputs[i].type == 'checkbox' && !myinputs[i].checked)){
 		    use.push(myinputs[i].value);
 		}
 	    }
