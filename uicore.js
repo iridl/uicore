@@ -4971,7 +4971,7 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 	if(myinputs.length){
 	    var use = [];
 	    for (var i=0 ; i < myinputs.length; i++){
-		if(myinputs[i].value){
+		if(myinputs[i].value && !(myinputs[i].type == 'checkbox' && !myinputs[i].checked)){
 		    use.push(myinputs[i].value);
 		}
 	    }
