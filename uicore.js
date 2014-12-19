@@ -4328,11 +4328,24 @@ var varcnts = {};
 		    varcnts[iname]=0;
 		}
 		var ipos=varcnts[iname];
+		var refvalue = decodeURIComponent(hold);
 		if(inputs[iname].length){
-		    inputs[iname][ipos].value=decodeURIComponent(hold);
+		    if(typeof(inputs[iname][ipos].checked) == 'boolean'){
+			for (var ick = 0 ; ick < inputs[iname].length; ick++){
+			    if(inputs[iname][ick].value == refvalue){
+				inputs[iname][ick].checked = true;
+			    }
+			    else if(ipos == 0){
+				inputs[iname][ick].checked = false;
+			    }
+			}
+		    }
+		    else {
+			inputs[iname][ipos].value=refvalue;
+		    }
 		}
 		else {
-		    inputs[iname].value=decodeURIComponent(hold);
+		    inputs[iname].value=refvalue;
 		}
 		varcnts[iname] = varcnts[iname] + 1;
             }
@@ -4433,7 +4446,7 @@ var varcnts = {};
 				inputs[iname][j].checked = false;
 			    }
 			if(inputs[iname][j].value == newvalue){
-			    inputs[iname][j].checked = 'true';
+			    inputs[iname][j].checked = true;
 			}
 		    }
 		    }
@@ -4971,7 +4984,7 @@ if(myform.className.indexOf('bodyAttribute')>=0){
 	if(myinputs.length){
 	    var use = [];
 	    for (var i=0 ; i < myinputs.length; i++){
-		if(myinputs[i].value && !(myinputs[i].type == 'checkbox' && !myinputs[i].checked)){
+		if(myinputs[i].value && !(typeof(myinputs[i].checked) == 'boolean' && !myinputs[i].checked)){
 		    use.push(myinputs[i].value);
 		}
 	    }
