@@ -4194,7 +4194,6 @@ opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
 }
     if(opt){
 opt.innerHTML=Languages[opt.value];
-leg.innerHTML=LanguageTitle[opt.value];
 //opt.value="";
 sel.appendChild(opt);
     }
@@ -4227,6 +4226,7 @@ for( var i=0 ; i < langList.length ; i++){
 	    }
 	}
     }
+leg.innerHTML=LanguageTitle[sel.options[sel.selectedIndex].value];
 fs.appendChild(sel);
 var mylist=document.getElementsByClassName("controlBar");
 if(mylist.length>0){
