@@ -2443,7 +2443,8 @@ DLimageBuildControls(s);
 }
 }
 function updateHasFigure(myfig){
-    var newinfourl = myfig.href+'info.json';
+    var newinfourl = myfig.href;
+    if(newinfourl.slice(-1)=='/') newinfourl = newinfourl +'info.json';
     if(myfig.href.indexOf('?')>0){
 	newinfourl=myfig.href.substr(0,myfig.href.indexOf('?')) + 'info.json' + myfig.href.substr(myfig.href.indexOf('?'));
     }
@@ -2927,6 +2928,8 @@ function doinfobutton (evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
    var newloc = mylink[0].href;
+    var lastslashindex = newloc.lastIndexOf('/');
+    newloc = newloc.substr(0,lastslashindex+1);
    var locq = mylink[0].href.indexOf('?');
 	if(locq>0){
 	    newloc=newloc.substr(0,locq);
