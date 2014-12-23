@@ -2444,7 +2444,9 @@ DLimageBuildControls(s);
 }
 function updateHasFigure(myfig){
     var newinfourl = myfig.href;
-    if(newinfourl.slice(-1)=='/') newinfourl = newinfourl +'info.json';
+    var lastslashindex = newinfourl.lastIndexOf('/');
+    newinfourl = newinfourl.substr(0,lastslashindex+1);
+    newinfourl = newinfourl +'info.json';
     if(myfig.href.indexOf('?')>0){
 	newinfourl=myfig.href.substr(0,myfig.href.indexOf('?')) + 'info.json' + myfig.href.substr(myfig.href.indexOf('?'));
     }
