@@ -1404,6 +1404,29 @@ if(stitle.length > 0){
 }
 }
 }
+function updateHasSectionList(selectlink){
+var s=document.getElementById('chooseSection');
+var sl=document.getElementById('toSectionList');
+var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
+if (s && sl  && titleobj){
+var sels=s.getElementsByTagName('select');
+if(sels.length > 0){
+    var sel=sels[0];
+var slhref=selectlink.href;
+if(slhref){
+var lin = slhref.lastIndexOf('/');
+if(lin){
+sel.hrefroot=slhref.substr(0,lin+1);
+}else {
+sel.hrefroot=slhref;
+}
+if(slhref.substring(0,4) == "http"){
+readwithxmlhttp(slhref,sel);
+}
+}
+}
+}
+}
 function previousElement(mynode){
 if(mynode.previousSibling && mynode.previousSibling.nodeType == 3){
 return previousElement(mynode.previousSibling);
@@ -1420,6 +1443,10 @@ var xmlDoc = iframe.contentDocument;
 dofinishchooseSection(sel,xmlDoc);
 }
 function dofinishchooseSection(sel,xmlDoc){
+    var opts = sel.options;
+    for (i=opts.length; i>0  ; i--){
+	sel.remove(opts[i]);
+    }
 if(xmlDoc){
     var itemlist;
     if(xmlDoc.getElementsByClassName){
@@ -4849,6 +4876,9 @@ if(newsrc != cmem.href){
     }
     if(cmem.rel == 'iridl:hasFigure'){
 	updateHasFigure(cmem);
+    }
+    if(cmem.rev == 'section'){
+	updateHasSectionList(cmem);
     }
 }
 }
