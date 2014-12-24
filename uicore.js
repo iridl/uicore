@@ -4281,6 +4281,19 @@ function setPageForm(){
 var myform=document.getElementById('pageform');
 if(myform){
     window.onpopstate=updatePageFormFromUrl;
+/* makes sure lang element is class bodyAttribute */
+    var langgroups = document.getElementsByClassName('langgroup');
+    if(langgroups.length > 0) {
+	var mylang = myform.elements['lang'];
+	if(!mylang){
+	    mylang = document.createElement('input');
+	    mylang.className='bodyAttribute';
+	    mylang.name='lang';
+	    mylang.type='hidden';
+	    myform.appendChild(mylang);
+	}
+	appendMissingClass(mylang,'bodyAttribute');
+    }
     /* initializes pageform classes */
     var inputs = myform.children;
     var pfclasses = [];
