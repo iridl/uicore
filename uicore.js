@@ -5498,7 +5498,12 @@ function appendPageForm(href,classes,includeDefaultValues){
 		action=action.substring(0,action.indexOf('#'));
 	    }
 	    var inputs=myform.elements;
-	    delim= '?';
+	    if(action.indexOf("?") >= 0){
+		delim='&';
+	    }
+	    else {
+		delim= '?';
+	    }
 	    for (var i = 0; i < inputs.length; i++) {
 		var myinput=inputs[i];
 		if(!myinput.disabled){
