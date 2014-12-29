@@ -355,13 +355,13 @@ var pform=document.getElementById('pageform');
 var guess='';
   if(myinput.guessvalue){
   pform.elements[myinput.name].value = myinput.guessvalue;
-//  guess = appendPageForm(myimage.src.replace(/[?].*/,''),myimage.className);
+//  guess = appendPageForm(myimage.src,myimage.className);
     guess = myinput.guessvalue;
 	myinput.guessvalue='';
 }
   updatePageForm(pform.elements[myinput.name],myinput.value,guess);
 //  pform.elements[myinput.name].value = myinput.value;
-//  myimage.src = appendPageForm(myimage.src.replace(/[?].*/,''),myimage.className);
+//  myimage.src = appendPageForm(myimage.src,myimage.className);
 //	if(guess){
 //        preload(guess);
 //	}
@@ -651,7 +651,7 @@ s.appendChild(gb);
 gb=document.createElement('div');
 // FB with url following share variables 
 // gb.className="fb-like share";
-//    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+//    var url = appendPageForm(location.href,'share');
 // FB with parameters stripped from url 
 gb.className="fb-like";
 var url = location.href.replace(/[?].*/,'');
@@ -727,7 +727,7 @@ function finishFB(){
 FBloaded=true;
 }
 function doTwitter(){
- var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+ var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
     var dpar = getElementsByAttribute(document,'*','property','term:description');
     var title="";
@@ -741,7 +741,7 @@ var twitter_url = "https://twitter.com/share?via=iridl&hashtags=dataviz&url=" + 
 window.open(twitter_url);
 }
 function doGMail(){
- var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+ var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
@@ -751,7 +751,7 @@ var m='http://mail.google.com/mail/?ui=1&view=cm&fs=1&tf=1&to=&su='+encodeURICom
 window.open(m);
 }
 function doMail(){
- var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+ var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
@@ -763,7 +763,7 @@ var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(u
 window.open(m);
 }
 function doHelpMail(){
- var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+ var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
@@ -778,7 +778,7 @@ function doTumblrClip(){
     var content = document.getElementById("content");
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description');
-    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
 	if(tpar.length>0){
@@ -830,7 +830,7 @@ function doTumblrClipElement(){
     var content = document.getElementById("content");
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description');
-    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
 	if(tpar.length>0){
@@ -886,7 +886,7 @@ document.location.href=myurl;
 function doEvernoteClip(){
 var clipargs = {};
 clipargs.contentId = 'content';
-clipargs.url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+clipargs.url = appendPageForm(location,'share');
 clipargs.filter= function (arg){
 if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 || arg.style.visibility=='hidden')){
 return arg;
@@ -899,7 +899,7 @@ Evernote.doClip(clipargs);
 function doPinterestClip(){
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description');
-    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
 	if(tpar.length>0){
@@ -922,7 +922,7 @@ function doEvernoteClipElement(evt){
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var clipargs = {};
 clipargs.content = it.clipthis;
-clipargs.url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+clipargs.url = appendPageForm(location.href,'share');
 clipargs.filter= function (arg){
     if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0|| arg.style.visibility=='hidden')){
 return arg;
@@ -940,7 +940,7 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasKML'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+	var linkurl = appendPageForm(location.href,'share');
 	var pform=document.getElementById('pageform');
 	pform.elements['linkurl'].value=linkurl;
 	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
@@ -957,7 +957,7 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasWMS'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	var myurl = appendPageForm(kmlurl,kmlclass);
 	alert(myurl);
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
@@ -973,7 +973,7 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasGeoTiff'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	var myurl = appendPageForm(kmlurl,kmlclass);
 	location.href=myurl;
 /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);*/
 	ga('send','social', 'DataDownload','asGeoTiff',location.href);
@@ -988,7 +988,7 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasGeoTiffPaletteColor'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	var myurl = appendPageForm(kmlurl,kmlclass);
 	location.href=myurl;
 /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);*/
 	ga('send','social', 'DataDownload','asGeoTiffPC',location.href);
@@ -1110,7 +1110,7 @@ function doPDFClick(evt){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       var linkurl = appendPageForm(location.href,'share');
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
@@ -1150,7 +1150,7 @@ function doPinterestClipElement(evt){
    if(figimg && figimg.src){
        var pinurl=figimg.src;
        var pinclass=figimg.className;
-       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       var linkurl = appendPageForm(location.href,'share');
        pinrul = pinurl.replace(/[/]expert[/]/,'/');
        pinurl = pinurl.substr(0,8) + pinurl.substring(8).replace(/[/][/]([^/+]+)/g,function(match){
 		   return '(' + match.substring(2,match.length) + ')cvn';
@@ -1186,7 +1186,7 @@ function doIRIFClipElement(evt){
        pinurl=figimg.src;
        pinclass=figimg.className;
    }
-       var linkurl = appendPageForm(location.href.replace(/[?].*/,''),'share');
+       var linkurl = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description')
 
@@ -1259,7 +1259,7 @@ if(sfigs.length){
     var kmlurl=sfigs[0].info['iridl:hasWMS'];
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
-	var myurl = appendPageForm(kmlurl.replace(/[?].*/,''),kmlclass);
+	var myurl = appendPageForm(kmlurl,kmlclass);
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
 	if(msga.length>0){
 	    msga[0].innerHTML="<p>To open directly in ArcGIS using WMS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea><p>Alternatively, choose a GeoTiff option under the download button <span class="dlimagecontrol download" title="Download"></span> to download an image ArcGIS can read';
@@ -4857,7 +4857,7 @@ for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
 /* first changes images that are on-screen */
 if(cmem.offsetTop != 0 && cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
+var newsrc = appendPageForm(cmem.src,cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
@@ -4868,7 +4868,7 @@ changeClass(cmem,'valid','invalid');
 }
 }
 if(cmem.tagName == 'LINK' || cmem.tagName == 'A'){
-var newsrc = appendPageForm(cmem.href.replace(/[?].*/,''),cmem.className);
+var newsrc = appendPageForm(cmem.href,cmem.className);
 if(newsrc != cmem.href){
     cmem.href = newsrc;
     if(cmem.rel == 'iridl:hasJSON'){
@@ -4894,7 +4894,7 @@ if(cmem.tagName == 'SCRIPT'){
 }
 if(cmem.tagName == 'DIV'){
     if(cmem.getAttribute('data-href') && cmem.indexOf('share')>=0 ) {
-    var url = appendPageForm(location.href.replace(/[?].*/,''),'share');
+    var url = appendPageForm(location.href,'share');
     url = url.replace(/[?]/,"/QS/");
     cmem.setAttribute("data-href",url);
     if(typeof(FB) != 'undefined'){
@@ -4913,7 +4913,7 @@ var members = document.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
 if(cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
+var newsrc = appendPageForm(cmem.src,cmem.className);
 if(newsrc != cmem.src){
 if(!quietflag) {
 changeClass(cmem,'valid','invalid');
@@ -4938,7 +4938,7 @@ var members = document.getElementsByClassName(cclass);
 for ( var j = 0; j < members.length; j++ ) {
 var cmem=members[j];
 if(cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src.replace(/[?].*/,''),cmem.className);
+var newsrc = appendPageForm(cmem.src,cmem.className);
 if(newsrc != cmem.src){
 	preload(newsrc);
 }
@@ -4950,7 +4950,7 @@ changedInput.value=newvalue;
 updatePageFormCopies(document);
 updatePageFormConditionalClassesAndFlags(false);
     if(addhistory && history && history.pushState){
-	var url = appendPageForm(location.href.replace(/[?][^#]*/,''),'share carryLanguage');
+	var url = appendPageForm(location.href,'share carryLanguage');
 	var currentstate = history.state;
 	if(location.href != url){
 	    var newstate = historyid;
@@ -5443,13 +5443,10 @@ function alldisabledPageForm(classes,includeDefaultValues){
 submitPageForm -- submits pageform to href, appending inputs corresponding to class.
 */
 function submitPageForm(href,classes,inMethod){
-var localhref=localHrefOf(href);
+    var localhref=localHrefOf(removePageForm(href));
 var theMethod='GET';
 if(inMethod){
     theMethod=inMethod;
-}
-if(localhref.indexOf('?')>0){
-    localhref=localhref.substr(0,localhref.indexOf('?'));
 }
 var myform=document.getElementById('pageform');
 if(myform){
@@ -5470,20 +5467,61 @@ if(myform){
 	    localhref=localhref+'index.html';
 	}
  */
+	if(localhref.indexOf('?')>0){
+	    localhref = appendPageForm(href,classes,false);
+	    document.location.href=localhref;
+	}
+	else {
 	myform.action=localhref;
 	myform.method=theMethod;
 	myform.submit();
+	}
     }
 }
 else {
     document.location.href=localhref;
 }
 }
+/* removePageForm -- removes all values in url that exist in page form
+*/
+function removePageForm(href){
+    var newhref = href;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var action = href;
+	var thehash;
+	if(action.indexOf("#") >= 0){
+	    thehash = action.substring(action.indexOf('#'));
+	    action=action.substring(0,action.indexOf('#'));
+	}
+	var inputs=myform.elements;
+	var hrefparts = action.split('?');
+	var newhref=hrefparts[0];
+        var query = hrefparts[1];
+	if(query){
+	    var delim='?';
+	    var vars = query.split("&");
+		var pair;
+		for (var i = 0; i < vars.length; i++) {
+		    pair = vars[i].split("=");
+		    var iname=pair[0];
+		    if (!inputs[iname]) {
+			newhref=newhref + delim + vars[i];
+			delim='&';
+		    }
+		}
+	    if(thehash){
+		newhref=newhref+'#'+thehash;
+	    }
+	}
+    }
+    return newhref;
+}
 /*
 appendPageForm -- appends to href, appending pageform inputs corresponding to class.
 */
 function appendPageForm(href,classes,includeDefaultValues){
-    var localhref=localHrefOf(href);
+    var localhref=localHrefOf(removePageForm(href));
     var myform=document.getElementById('pageform');
     if(myform){
 	var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
