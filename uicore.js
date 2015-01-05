@@ -759,7 +759,6 @@ function doMail(){
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
 	}
-    alert('Got '+ document.title);
 	if(!title)title=document.title;
 var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
 /* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
