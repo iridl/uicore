@@ -566,6 +566,7 @@ ls=document.createElement('legend');
     ls.setAttribute('lang','en');
 ls.appendChild(document.createTextNode('Contact Us'));
 s.insertBefore(ls,s.firstChild);
+    updateLangGroups(s);
 }
 sl = document.getElementById('googleplus');
 if(!sl){
@@ -4216,11 +4217,15 @@ sel.onchangefn=languageChange;
     var opt;
 if(document.getElementsByTagName('html')[0].hasAttribute("xml:lang")){
     dopt=true;
+	document.getElementsByTagName('body')[0].setAttribute("lang",
+							      document.getElementsByTagName('html')[0].getAttribute("xml:lang"));
 opt =document.createElement('option');
 opt.value=document.getElementsByTagName('html')[0].getAttribute("xml:lang");
 }
     else if(document.getElementsByTagName('body')[0].getAttribute("xml:lang")){
 	dopt=true;
+	document.getElementsByTagName('body')[0].setAttribute("lang",
+							      document.getElementsByTagName('body')[0].getAttribute("xml:lang"));
 opt=document.createElement('option');
 opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
 }
