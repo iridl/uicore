@@ -744,6 +744,7 @@ window.open(twitter_url);
 function doGMail(){
  var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
+    var title="";
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
 	}
@@ -754,9 +755,11 @@ window.open(m);
 function doMail(){
  var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
+    var title="";
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
 	}
+    alert('Got '+ document.title);
 	if(!title)title=document.title;
 var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
 /* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
@@ -766,6 +769,7 @@ window.open(m);
 function doHelpMail(){
  var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
+    var title="";
 	if(tpar.length>0){
 	title=tpar[0].innerHTML;
 	}
