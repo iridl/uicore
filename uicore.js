@@ -1968,11 +1968,12 @@ if(it.readyState == 4){
     if(it.status == 200){
 	var jsontxt = it.responseText;
 	if(it.myLink.localurl == it.infourl){
-	    if(it.myLink.id){
+	    var qid = (it.myLink.id) ? it.myLink.id : it.myLink.getAttribute('data-id');
+	    if(qid){
 		if(!it.myContext.parsedJSON){
 		    it.myContext.parsedJSON = {};
 		}
-		it.myContext.parsedJSON[it.myLink.id]=JSON.parse(jsontxt);
+		it.myContext.parsedJSON[qid]=JSON.parse(jsontxt);
 	    }
 	    else {
 		it.myContext.parsedJSON=JSON.parse(jsontxt);
