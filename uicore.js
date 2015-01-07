@@ -826,7 +826,7 @@ tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr
     ga('send','social', 'tumblr',ttype, url);
 window.open(tumblr_url);
 }
-function doTumblrClipElement(){
+function doTumblrClipElement(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
    var figimg = getFigureImage(it.clipthis);
