@@ -5496,7 +5496,7 @@ else {
 function removePageForm(href){
     var newhref = href;
     var myform=document.getElementById('pageform');
-    if(myform){
+    if(href && myform){
 	var action = href;
 	var thehash;
 	if(action.indexOf("#") >= 0){
