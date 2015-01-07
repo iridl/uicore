@@ -808,7 +808,8 @@ function doTumblrClip(){
 	}
 	}
     else {
-	tumblr_photo_source = getFigureImage(document).src;
+	var figimg = getFigureImage(document);
+	if(figimg)tumblr_photo_source = figimg.src;
     }
 	var tumblr_photo_click_thru = url;
 	if(tumblr_photo_source){
