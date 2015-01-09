@@ -47,6 +47,7 @@ display: none;
 display: block;
 position: absolute;
 z-index: 30;
+white-space: normal;
 color: #111;
 border: 1px solid #DCA;
 background: #FFFAF0;
