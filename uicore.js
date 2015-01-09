@@ -1039,6 +1039,29 @@ function getFigureImage(clipthis){
 
    return(figimg);
 }
+function getOnlyFigureImage(clipthis){
+    var figimg;
+    if(!clipthis){
+	clipthis = document.getElementById("content");
+    }
+    if(!clipthis){
+	clipthis=document;
+    }
+    var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigureImage');
+    var sfigs=getElementsByAttribute(clipthis,'*','rel','iridl:hasFigure');
+    if(sfigimgs.length){
+	figimg=sfigimgs[0];
+	for(var i=sfigimgs.length;i--;){
+	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+	       figimg=sfigimgs[i];
+	   }
+       }
+    }
+    else if(sfigs.length){
+	figimg=sfigs[0].figureimage;
+    }
+   return(figimg);
+}
 function getPDFImage(clipthis){
   var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPDFImage');
    var figimg;
@@ -3296,7 +3319,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    ctl.appendChild(gb);
 	appendMissingClass(mydlimage,'hasDownload');
 	}
-	if(getFigureImage(mydlimage)){
+	if(getOnlyFigureImage(mydlimage)){
 /* PDF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPDF';
