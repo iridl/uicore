@@ -1325,6 +1325,7 @@ else
   }
 return xmlhttp;
 }
+
 function preload(href){
 var xmlhttp=getXMLhttp();
 xmlhttp.onreadystatechange=function(evt) {
@@ -1337,6 +1338,40 @@ xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",href,true);
 xmlhttp.send();
 }
+function getLanguageFrom(href){
+var xmlhttp=getXMLhttp();
+xmlhttp.onreadystatechange=function(evt) {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    if(it.readyState == 4){
+	if(it.status == 200){
+	    var jsontxt = it.responseText;
+	    var info=JSON.parse(jsontxt);
+ 	    var plang = info['uicore:lang'];
+	if(plang){
+	    var myform=document.getElementById('pageform');
+	    if(myform){
+		var lang=myform.elements['lang'];
+		var slang=myform.elements['Set-Language'];
+		if(lang.value != plang && ( !slang || (slang && !slang.value))){
+		    var s=document.getElementById('chooseLanguage');
+		    var sel=s.getElementsByTagName('select')[0];
+		    sel.value = plang;
+		    if(sel.selectedIndex<0){
+			sel.value=lang.value;
+		    }
+		    lang.value=sel.options[sel.selectedIndex].value;
+		}
+	    }
+	}
+    }
+    }
+};
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+xmlhttp.open("GET",href,true);
+xmlhttp.send();
+}
+
 function readwithxmlhttp(slhref,sel){
 var xmlhttp=getXMLhttp();
 xmlhttp.mysel=sel;
@@ -4334,11 +4369,7 @@ for( var i=0 ; i < langList.length ; i++){
     sel.appendChild(opt);
 }
     if(!dopt){
-        var blang=navigator.language || window.navigator.userLanguage || 'en';
 	var myform=document.getElementById('pageform');
-	sel.value= blang.replace(/-.*/,'');
-	if(sel.selectedIndex<0)sel.selectedIndex=0;
-	var langval;
 	if(myform){
 	    var lang=myform.elements['lang'];
 	    var slang=myform.elements['Set-Language'];
@@ -4346,12 +4377,13 @@ for( var i=0 ; i < langList.length ; i++){
 		lang.value = slang.value;
 	    }
 	    if(lang && lang.value){
-		langval = lang.value;
-		sel.value=langval;
+		sel.value=lang.value;
 		if(sel.selectedIndex<0)sel.selectedIndex=1;
 	    }
 	    if(lang && !lang.value){
 		lang.value=sel.options[sel.selectedIndex].value
+/* reads user language preference by getting tool documentation */
+		getLanguageFrom("/uicore/toolinfo/buttoninfo.json");
 	    }
 	}
     }
