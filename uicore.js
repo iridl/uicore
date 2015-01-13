@@ -4040,6 +4040,14 @@ shiftby(myit,newx-cleft,newy-ctop);
 function insertInstructions(){
     var mylist=document.getElementsByClassName("buttonInstructions");
     if(mylist.length>0){
+/* make sure Set-Language has carryLanguage */
+	var myform=document.getElementById('pageform');
+	if(myform){
+	    var slang=myform.elements['Set-Language'];
+	    if(slang){
+		appendMissingClass(slang,'carryLanguage');
+	    }
+	}
 	var cont=mylist[0];
 	if(typeof(cont.filledOut)=='undefined'){
 	    cont.filledOut=true;
