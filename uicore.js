@@ -2051,6 +2051,9 @@ function runPureOnContext(myContext){
 			var directive;
 			try {
 			    directive = enhancedPureDirective(holdtxt,mystuff);
+			    if(holdtxt.indexOf('.sort') || holdtxt.indexOf('iridl:firstLetter')){
+				appendMissingClass(myContext,'PureDependsOnLang');
+			    }
 			} catch(e){
 			    alert('JSON parse error in ' + holdtxt);
 			}
@@ -2162,19 +2165,24 @@ function mapObject (obj,key,myDirective){
 		    sa = a[sortvar];
 		    if(typeof(sa) == 'object' && sa.length){
 /* sa is an array -- could be strings or objects */
-			sa = sa[0];
 			if(typeof(sa[sa.length-1]) == 'object' && sa.length > 1){
+			    var sanew = sa[0];
 /* array of objects -- look for current language if possible*/
 			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
 			    if(clang){
 				for(var ilang=0; ilang < sa.length; ilang++){
 				    if(sa[ilang]['@language'] == clang){
-					sa = sa[ilang];
+					sanew = sa[ilang];
 					break;
 				    }
 				}
 			    }
+			    sa = sanew;
 			}
+			else {
+			    sa = sa[0];
+			}
+
 		    }
 /* if sa is an object, look for a @value attribute */
 		    if (typeof(sa) == 'object' && sa['@value']){
@@ -2183,18 +2191,22 @@ function mapObject (obj,key,myDirective){
 /* same processing for sb */
 		    sb = b[sortvar];
 		    if(typeof(sb) == 'object' && sb.length){
-			sb = sb[0];
 			if(typeof(sb[sb.length-1]) == 'object' && sb.length > 1){
+			    var sbnew = sb[0];
 /* array of objects -- look for current language if possible*/
 			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
 			    if(clang){
-				for(var ilang=0; ilang < sa.length; ilang++){
+				for(var ilang=0; ilang < sb.length; ilang++){
 				    if(sb[ilang]['@language'] == clang){
-					sb = sb[ilang];
+					sbnew = sb[ilang];
 					break;
 				    }
 				}
 			    }
+			    sb = sbnew;
+			}
+			else {
+			    sb = sb[0];
 			}
 		    }
 		    if (typeof(sb) == 'object' && sb['@value']){
@@ -2323,7 +2335,7 @@ function mapObject (obj,key,myDirective){
 /* array of objects -- look for current language if possible*/
 			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
 			    if(clang){
-				for(var ilang=0; ilang < sa.length; ilang++){
+				for(var ilang=0; ilang < mycont.length; ilang++){
 				    if(mycont[ilang]['@language'] == clang){
 					entry = mycont[ilang];
 					break;
@@ -4258,6 +4270,10 @@ function languageChange(){
 		if(lang){
 		    lang.value=newlang;
 		    updatePageForm();
+		    var rerun = document.getElementsByClassName('PureDependsOnLang');
+		    for (ip = 0 ; ip < rerun.length ; ip++){
+			runPureOnContext(rerun[ip]);
+		    }
 		}
 		else {
 		    var newloc = appendPageForm('',myform.className);
