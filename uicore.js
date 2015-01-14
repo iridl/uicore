@@ -2086,7 +2086,7 @@ function runPureOnContext(myContext){
 			var directive;
 			try {
 			    directive = enhancedPureDirective(holdtxt,mystuff);
-			    if(holdtxt.indexOf('.sort') || holdtxt.indexOf('iridl:firstLetter')){
+			    if(holdtxt.indexOf('.sort')>0 || holdtxt.indexOf('iridl:firstLetter')>0){
 				appendMissingClass(myContext,'PureDependsOnLang');
 			    }
 			} catch(e){
