@@ -12,7 +12,8 @@ uicoreConfig.helpemail='help@iri.columbia.edu'; */
 uicoreConfig.helpemail='';
 /* to add a server for a new resolution, run something like the following */
 uicoreConfig.resolutionQueryServers["irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds"] = "http://www.ethiometmaprooms.gov.et:8082/";
-
+/* to change json used for setting preferred language on multi-language pages, reset this */
+uicoreConfig.languageSettingDocument="/uicore/toolinfo/buttoninfo.json";
 /* additional default uicoreConfig settings */
 uicoreConfig.resolutionQueryServers["default"]= "http://iridl.ldeo.columbia.edu/";
 uicoreConfig.resolutionQueryServers["irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds"]= "http://maproom.meteo.go.tz/";
@@ -1368,7 +1369,7 @@ xmlhttp.onreadystatechange=function(evt) {
     }
 };
 xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",href,true);
+    xmlhttp.open("GET",localHrefOf(href),true);
 xmlhttp.send();
 }
 
@@ -4383,7 +4384,7 @@ for( var i=0 ; i < langList.length ; i++){
 	    if(lang && !lang.value){
 		lang.value=sel.options[sel.selectedIndex].value
 /* reads user language preference by getting tool documentation */
-		getLanguageFrom("/uicore/toolinfo/buttoninfo.json");
+		getLanguageFrom(uicoreConfig.languageSettingDocument);
 	    }
 	}
     }
