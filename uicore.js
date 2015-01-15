@@ -4082,6 +4082,7 @@ function insertInstructions(){
 	    var slang=myform.elements['Set-Language'];
 	    if(slang){
 		appendMissingClass(slang,'carryLanguage');
+		appendMissingClass(myform,'carryLanguage');
 	    }
 	}
 	var cont=mylist[0];
