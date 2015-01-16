@@ -825,7 +825,7 @@ opacity: 1.0;
 	width: 46%;
 }
 .dlimage.wide {
-	width: 55%;
+	width: 65%;
 }
 .selectvalue {
 display: none;
@@ -1176,7 +1176,7 @@ display: inline;
 	width: 45%;
 }
 .dlimage.wide {
-	width: 55%;
+	width: 65%;
 }
 .dlimage.narrow {
 	width: 20%;
@@ -1195,6 +1195,9 @@ display: inline;
 }
 .dlimage.narrow {
 	width: 27%;
+}
+.dlimage.wide {
+	width: 55%;
 }
 }
 @media only all and (min-width: 750px) and (orientation: landscape){
