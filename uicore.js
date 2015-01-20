@@ -247,11 +247,17 @@ function dohomesel(evt){
 var opt=it.options[it.selectedIndex];
 var fullpathname = document.location.href;
 var optvalue = opt.value;
-var optclass = "carryup";
+    var optpath = optvalue.replace(/\?.*/,'');
+    if(optpath == location.pathname){
+	var optclass = "share carryLanguage";
+    }
+    else {
+	var optclass = "carryup carryLanguage";
+    }
 if(optvalue){
 /*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
     ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
- var url = appendPageForm(optvalue,'carryLanguage');
+    var url = appendPageForm(optvalue,optclass,false,true);
 
     document.location.href=url;
 }
@@ -5001,6 +5007,9 @@ changeClass(cmem,'valid','invalid');
 if(cmem.tagName == 'LINK' || cmem.tagName == 'A'){
 var newsrc = appendPageForm(cmem.href,cmem.className);
 if(newsrc != cmem.href){
+    if(!cmem.sourcehref){
+	cmem.sourcehref = cmem.href;
+    }
     cmem.href = newsrc;
     if(cmem.rel == 'iridl:hasJSON'){
 	updateHasJSON(cmem);
@@ -5615,7 +5624,7 @@ else {
 }
 /* removePageForm -- removes all values in url that exist in page form
 */
-function removePageForm(href){
+function removePageForm(href,overridePageForm){
     var newhref = href;
     var myform=document.getElementById('pageform');
     if(href && myform){
@@ -5640,6 +5649,9 @@ function removePageForm(href){
 			newhref=newhref + delim + vars[i];
 			delim='&';
 		    }
+		    else if(overridePageForm) {
+			inputs[iname].value = unescape(pair[1]);
+		    }
 		}
 	    if(thehash){
 		newhref=newhref+'#'+thehash;
@@ -5651,8 +5663,9 @@ function removePageForm(href){
 /*
 appendPageForm -- appends to href, appending pageform inputs corresponding to class.
 */
-function appendPageForm(href,classes,includeDefaultValues){
-    var localhref=localHrefOf(removePageForm(href));
+function appendPageForm(href,classes,includeDefaultValues,overridePageForm){
+    var filtered =removePageForm(href,overridePageForm);
+    var localhref=localHrefOf(filtered);
     var myform=document.getElementById('pageform');
     if(myform){
 	var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
