@@ -6,7 +6,7 @@ if(!uicoreConfig.resolutionQueryServers){
     uicoreConfig.resolutionQueryServers = {};
 }
 /* to change the GoogleAnalyticsId, redefine this after uicore.js */
-uicoreConfig.GoogleAnalyticsId='UA-432152-4';
+/* uicoreConfig.GoogleAnalyticsId='UA-xxxxx-xx'; */
 /* to set the help e-mail, redefine this after uicore.js
 uicoreConfig.helpemail='help@iri.columbia.edu'; */
 uicoreConfig.helpemail='';
