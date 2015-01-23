@@ -3536,13 +3536,13 @@ if(document.getElementById('pageform')){
 var pform=document.getElementById('pageform');
 if(!pform.elements[ipt.name]){
 var iptcpy= document.createElement('input');
-iptcpy.className = ipt.className;
-appendMissingClass(pform,ipt.className);
-appendMissingClass(pform,'share');
-iptcpy.name = ipt.name;
-iptcpy.value=ipt.value;
-iptcpy.type='hidden';
-pform.appendChild(iptcpy);
+    iptcpy.className = ipt.className;
+    appendMissingClass(pform,ipt.className);
+    appendMissingClass(iptcpy,'share');
+    iptcpy.name = ipt.name;
+    iptcpy.value=ipt.value;
+    iptcpy.type='hidden';
+    pform.appendChild(iptcpy);
 }
 else {
 if(pform.elements[ipt.name].value != ''){
