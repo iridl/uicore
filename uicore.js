@@ -3543,11 +3543,10 @@ var iptcpy= document.createElement('input');
     iptcpy.value=ipt.value;
     iptcpy.type='hidden';
     pform.appendChild(iptcpy);
+    updatePageFormFromUrl(iptcpy);
 }
-else {
 if(pform.elements[ipt.name].value != ''){
 ipt.value=pform.elements[ipt.name].value;
-}
 }
 }
 ipt = document.createElement('span');
@@ -4589,12 +4588,20 @@ function expandNS(curi,ns){
     return rstr;
 }
 /* onpopstate handler */
-function updatePageFormFromUrl(){
+function updatePageFormFromUrl(elementtocheck){
     /* updates values from page url */
 var myform=document.getElementById('pageform');
 if(myform){
 var achange=false;
-var inputs=myform.elements;
+    var inputs;
+    if(elementtocheck){
+	inputs=[];
+	inputs[elementtocheck.name]=elementtocheck;
+	inputs[0]=elementtocheck;
+    }
+    else {
+	inputs=myform.elements;
+    }
 var varcnts = {};
     for(var i=0; i < inputs.length; i++){
 	var inp=inputs[i];
