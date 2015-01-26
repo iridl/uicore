@@ -4126,6 +4126,50 @@ function insertInstructions(){
 	}
     }
 }
+/* mirrors term:title term:description term:icon as OpenGraph meta tags */
+function updateOG(){
+    var ogt = getElementsByAttribute(document,'meta','property','og:title');
+    var tpar = getElementsByAttribute(document,'*','property','term:title');
+    var dpar = getElementsByAttribute(document,'*','property','term:description');
+    var icon = getElementsByAttribute(document,'*','rel','term:icon');
+    if(ogt.length<1){
+	var head = document.getElementsByTagName('head')[0];
+	var lastog = head.firstChild;
+	if(tpar.length>0){
+	    var title=tpar[0].innerHTML;
+	    if(!title) {
+		title = tpar[0].getAttribute('content');
+	    }
+	    if(title){
+		var og = document.createElement('meta');
+		og.setAttribute('property','og:title');
+		og.setAttribute('content',title);
+		head.insertBefore(og,lastog);
+	    }
+	}
+	if(dpar.length>0){
+	    var des=dpar[0].innerHTML;
+	    if(!des) {
+		des =dpar[0].getAttribute('content');
+	    }
+	    if(des){
+		var og = document.createElement('meta');
+		og.setAttribute('property','og:description');
+		og.setAttribute('content',des);
+		head.insertBefore(og,lastog);
+	    }
+	}
+	if(icon.length>0){
+		var dicon =icon[0].getAttribute('href');
+	    if(des){
+		var og = document.createElement('meta');
+		og.setAttribute('property','og:image');
+		og.setAttribute('content',dicon);
+		head.insertBefore(og,lastog);
+	    }
+	}
+    }
+}
 function insertcontrolBar(){
 var s=document.getElementById('homelink');
 if(!s){
@@ -5849,6 +5893,7 @@ setupPageFormLinks(document);
     updateLangGroups(document);
 loadHasJSON();
 loadHasSparqlEndpoint();
+    updateOG();
 if(uicoreConfig.GoogleAnalyticsId){
 /*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
