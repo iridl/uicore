@@ -1562,7 +1562,7 @@ font-size: 120%;
 .itemTitle:after {content: ""; display: block;}
 .itemFooter {clear: both; }
 .itemIcon{ float:right; background-color: WhiteSmoke; font-size: 12pt; color: #000080; display:table-cell; display: inline-block; text-align: center; padding-right: 5px; padding-top: 2px; border-left-width: 1px; max-width: 50%;}
-.itemImage { max-width: 100%;
+.itemImage { max-height: 180px; max-width: 100%;
 }
 .itemDescription { font-size: 12pt; color: #000000; display: inline; vertical-align: top; padding-top: 0px; padding-bottom: 0px; line-height: 1.3;}
 .searchDescription, .leftcolumnset { max-width: 450px; min-width: 100px; display: inline-block; margin-right: 2px}
