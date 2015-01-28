@@ -4444,7 +4444,7 @@ var myform=document.getElementById('pageform');
 function setPageForm(){
 var myform=document.getElementById('pageform');
 if(myform){
-    window.onpopstate=updatePageFormFromUrl;
+    window.onpopstate=updatePageFormFromUrlEvt;
 /* makes sure lang element is class bodyAttribute */
     var langgroups = document.getElementsByClassName('langgroup');
     if(langgroups.length > 0) {
@@ -4588,6 +4588,9 @@ function expandNS(curi,ns){
     return rstr;
 }
 /* onpopstate handler */
+function updatePageFormFromUrlEvt(evt){
+    updatePageFormFromUrl();
+}
 function updatePageFormFromUrl(elementtocheck){
     /* updates values from page url */
 var myform=document.getElementById('pageform');
