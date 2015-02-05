@@ -1878,6 +1878,18 @@ function sparqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
     }
     return localurl;
 }
+var escaped_one_to_xml_special_map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>'
+};
+
+function decodeXML(string) {
+    return string.replace(/(&lt;|&gt;|&amp;)/g,
+        function(str, item) {
+            return escaped_one_to_xml_special_map[item];
+    });
+}
 /* builds url from link and query and retrieves if necessary */
 function updateHasRqlQuery(myLink,myQuery,querylang){
     var xmlhttp= getXMLhttp();
@@ -1885,7 +1897,10 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
     if(varmap){
 	varmap = JSON.parse(varmap);
     }
-    var localurl = sparqlEndpointUrl(myLink.href,myQuery.text.replace(/&lt;/g,'<').replace(/&amp;/g,'&'), querylang , myQuery.className,varmap);
+    if(!myQuery.cleantxt){
+	myQuery.cleantxt = decodeXML(myQuery.text);
+    }
+    var localurl = sparqlEndpointUrl(myLink.href,myQuery.cleantxt, querylang , myQuery.className,varmap);
     var restrictif = myQuery.getAttribute('data-if');
     var restrictnotif = myQuery.getAttribute('data-notif');
     var ifneeded = (myQuery.localurl != localurl);
@@ -2171,7 +2186,8 @@ function runPureOnContext(myContext){
     var forcereflow=myContext.offsetHeight;
 }
 function enhancedPureDirective(directivestring,myDirective){
-    var cleanstring = directivestring.replace(/&lt;/g,'<');
+    var cleanstring = decodeXML(directivestring);
+    alert(cleanstring);
     var directive = JSON.parse(cleanstring);
     var newdirective = transformObject(directive,mapObject,myDirective);
 	directive=newdirective;
