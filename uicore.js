@@ -2187,7 +2187,6 @@ function runPureOnContext(myContext){
 }
 function enhancedPureDirective(directivestring,myDirective){
     var cleanstring = decodeXML(directivestring);
-    alert(cleanstring);
     var directive = JSON.parse(cleanstring);
     var newdirective = transformObject(directive,mapObject,myDirective);
 	directive=newdirective;
