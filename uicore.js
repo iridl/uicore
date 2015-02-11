@@ -4303,9 +4303,12 @@ function languageChange(){
     var sel=s.getElementsByTagName('select')[0];
     var myform=document.getElementById('pageform');
     var lang;
+    var reloadOnLanguageChange=false;
+    if(document.getElementsByTagName('body')[0].className.indexOf('reloadOnLanguageChange') >= 0){reloadOnLanguageChange=true;}
     if(myform){
 	lang=myform.elements['lang'];
     }
+    if(!lang){reloadOnLanguageChange=true;}
     var newvalue;
     var newlang=sel.options[sel.selectedIndex].value;
     if(newlang){
@@ -4333,7 +4336,7 @@ function languageChange(){
 		if(slang){
 		    slang.value=newlang;
 		}
-		if(lang){
+		if(!reloadOnLanguageChange){
 		    lang.value=newlang;
 		    updatePageForm();
 		    var rerun = document.getElementsByClassName('PureDependsOnLang');
@@ -5841,20 +5844,10 @@ $.ready(
 function loadmaproom(){
 if(loadmaproomneeded){
 loadmaproomneeded=false;
-if(window.name == "portaldl"){
     var mybody = document.getElementsByTagName('body')[0];
-    if(mybody){
-	appendMissingClass(mybody,'embedded');
-	appendMissingClass(mybody,'atIRI');
+    if(window.name){
+	mybody.setAttribute('within',window.name);
     }
-}
-if(window.name == "ceos-cd-content"){
-    var mybody = document.getElementsByTagName('body')[0];
-    if(mybody){
-	appendMissingClass(mybody,'embedded');
-	appendMissingClass(mybody,'atGCMD');
-    }
-}
 setPageForm();
 tabsSetup();
 insertcontrolBar();
