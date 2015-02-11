@@ -3147,7 +3147,7 @@ function DLimageRemoveControls(mylink){
     var myimage = mylink.figureimage;
     var maybecontrol=mylink.nextSibling;
     while(maybecontrol && maybecontrol != myimage){
-	var nextcontrol=maybecontrol.nextSibling;
+	var nextcontrol=maybecondtrol.nextSibling;
         if(maybecontrol.className && maybecontrol.className.indexOf('dlcontrol') >= 0){
 	mylink.parentNode.removeChild(maybecontrol);
 	}
@@ -3671,6 +3671,17 @@ newimg.src=myimgdiv.inputimage.src;
 myimgdiv.outlineimage.appendChild(newimg);
 myfigure.parentNode.insertBefore(myimgdiv,myfigure);
 // myimgdiv.appendChild(myfigure);
+var pform=document.getElementById('pageform');
+    if(pform){
+	var bbox = pform.elements['bbox'];
+	if(!bbox){
+	    bbox = document.createElement('input');
+	    bbox.name='bbox';
+	    bbox.type='hidden';
+	    bbox.className = myfigure.className.split(' ')[0] + ' share';
+	    pform.appendChild(bbox);
+	}
+}
 }
 }
 function hideImageOverlay(myfigure){
@@ -4461,6 +4472,14 @@ var myform=document.getElementById('pageform');
 }
 function setPageForm(){
 var myform=document.getElementById('pageform');
+    if(!myform){
+	var body = document.getElementsByTagName('body')[0];
+	myform = document.createElement('form');
+	myform.id = 'pageform';
+	myform.className='share';
+	body.insertBefore(myform,body.firstChild);
+
+    }
 if(myform){
     window.onpopstate=updatePageFormFromUrlEvt;
 /* makes sure lang element is class bodyAttribute */
