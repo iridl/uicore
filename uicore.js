@@ -1339,8 +1339,7 @@ if(sfigs.length){
 	}
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
-	ga('send','social', 'arcgis', 'asWMS',location.href);
-
+	ga('send','social', 'widget', 'full',location.href);
 }
 }
 function readwithiframe(slhref,s,readfn){
