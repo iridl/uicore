@@ -1315,11 +1315,15 @@ function docutandpasteClick(evt){
 var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
 if(sfigs.length){
 	var myurl = sfigs[0].href;
-    var myfigurl = sfigs[0].figureimage.src;
+        var iconurl=sfigs[0].info['iridl:icon'];
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
     
 	if(msga.length>0){
-	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot + "insertui.js\"></script>\n<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + myurl + '\">visit site</a>\n';
+	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot + 'insertui.js\"></script>\n';
+	    if(iconurl){
+		mymsg = mymsg + '<link ref="term:icon" href="' + iconurl + '" />\n';
+	    }
+	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + myurl + '\">visit site</a>\n';
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
@@ -1329,8 +1333,9 @@ if(sfigs.length){
 		}
 	    }
 	    mymsg = mymsg + '</fieldset></textarea>';
+	    mymsg = mymsg + '<p>The script line insures that the needed css and javascript files are included and should be omitted if they are already there.  The term:icon link is purely informative and is used in building a collection of map room pages.  the fieldset element is the actual widget';
 	    msga[0].innerHTML=mymsg;
-	    toggleClass(msga[0],'show');
+	    toggleClass(msga[0],'show'); 
 	}
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
