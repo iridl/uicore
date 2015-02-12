@@ -1333,7 +1333,7 @@ if(sfigs.length){
 		}
 	    }
 	    mymsg = mymsg + '</fieldset></textarea>';
-	    mymsg = mymsg + '<p>The script line insures that the needed css and javascript files are included and should be omitted if they are already there.  The term:icon link is purely informative and is used in building a collection of map room pages.  the fieldset element is the actual widget';
+	    mymsg = mymsg + '<p>The script line insures that the needed css and javascript files are included and should be omitted if they are already there.  The term:icon link is purely informative and is used as metadata in building a collection of map room pages.  The fieldset element is the actual widget';
 	    msga[0].innerHTML=mymsg;
 	    toggleClass(msga[0],'show'); 
 	}
