@@ -3176,7 +3176,7 @@ function DLimageRemoveControls(mylink){
     var myimage = mylink.figureimage;
     var maybecontrol=mylink.nextSibling;
     while(maybecontrol && maybecontrol != myimage){
-	var nextcontrol=maybecondtrol.nextSibling;
+	var nextcontrol=maybecontrol.nextSibling;
         if(maybecontrol.className && maybecontrol.className.indexOf('dlcontrol') >= 0){
 	mylink.parentNode.removeChild(maybecontrol);
 	}
