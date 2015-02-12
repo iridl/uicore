@@ -1327,7 +1327,7 @@ if(sfigs.length){
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
-		    var myfigurl = figs[i].src;
+		    var myfigurl = appendPageForm(figs[i].src,figs[i].className)
 		    var figclass = figs[i].className.split(' ')[0];
 		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl + '\" />\n';
 		}
@@ -3164,6 +3164,8 @@ if(!ipt){
 ipt= document.createElement('input');
 ipt.className = mylink.figureimage.className.split(' ')[0];
 appendMissingClass(pform,ipt.className);
+    appendMissingClass(ipt,'dlauximg');
+appendMissingClass(pform,'dlauximg');
 ipt.name = 'plotaxislength';
 ipt.type='hidden';
 pform.appendChild(ipt);
