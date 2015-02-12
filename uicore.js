@@ -1309,6 +1309,35 @@ if(sfigs.length){
     }
 }
 }
+function docutandpasteClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+if(sfigs.length){
+	var myurl = sfigs[0].href;
+    var myfigurl = sfigs[0].figureimage.src;
+	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
+    
+	if(msga.length>0){
+	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot + "insertui.js\"></script>\n<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + myurl + '\">visit site</a>\n';
+	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
+	    for (var i=0 ; i < figs.length ; i++){
+		if(figs[i].parentNode == sfigs[0].parentNode){
+		    var myfigurl = figs[i].src;
+		    var figclass = figs[i].className.split(' ')[0];
+		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl + '\" />\n';
+		}
+	    }
+	    mymsg = mymsg + '</fieldset></textarea>';
+	    msga[0].innerHTML=mymsg;
+	    toggleClass(msga[0],'show');
+	}
+	/*	location.href=myurl; */
+/*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
+	ga('send','social', 'arcgis', 'asWMS',location.href);
+
+}
+}
 function readwithiframe(slhref,s,readfn){
 var iframe=document.getElementById('sectioniframe');
 if(!iframe) {
@@ -3460,6 +3489,15 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.myonclick=doJpgClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
+/* cut and paste */
+	gb= document.createElement('div');
+	gb.className='sharebutton asCutAndPaste';
+	gb.setAttribute("title","copy to html");
+	gb.onclick=docutandpasteClick;
+	gb.myonclick=docutandpasteClick;
+	gb.clipthis = currentObj.parentNode;
+	ctl.appendChild(gb);
+
 	    appendMissingClass(mydlimage,'hasDownload');
 	    var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
 	    if(sfigs.length){

@@ -1773,7 +1773,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1785,6 +1785,8 @@ opacity: 1.0;
 border-radius: 7px;
 opacity: 0.8;
   }
+.asCutAndPaste {display:none}
+.ShowWidgetDownload .asCutAndPaste { display: inline-block}
 .asGeoTiffPaletteColor:before {
 content: "GeoTiff";
 }
@@ -1842,10 +1844,13 @@ content: "PNG";
 .asGIF::before {
 content: "GIF";
 }
+.asCutAndPaste::before {
+content: "Widget";
+}
 .asJPG::before {
 content: "JPG";
 }
-.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover {
+.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover,.asCutAndPaste::hover {
 opacity: 1.0;
 }
 
