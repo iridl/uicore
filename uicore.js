@@ -1327,8 +1327,8 @@ if(sfigs.length){
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
-		    var myfigurl = appendPageForm(figs[i].src,figs[i].className)
 		    var figclass = figs[i].className.split(' ')[0];
+		    var myfigurl = appendPageForm(figs[i].src,figclass + '&share')
 		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl + '\" />\n';
 		}
 	    }
@@ -5642,7 +5642,8 @@ function alldisabledPageForm(classes,includeDefaultValues){
 	alldisabled=true;
 	var clist = classes.split(' ');
 	for ( var ic = 0; ic < clist.length; ic++ ){
-	    var cclass=clist[ic];
+	    var cclass=clist[ic].replace('&',' ');
+	    alert(cclass);
 	    var members = document.getElementsByClassName(cclass);
 	    for ( var j = 0; j < members.length; j++ )
 		if(members[j].disabled) {
