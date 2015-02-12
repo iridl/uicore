@@ -5643,7 +5643,6 @@ function alldisabledPageForm(classes,includeDefaultValues){
 	var clist = classes.split(' ');
 	for ( var ic = 0; ic < clist.length; ic++ ){
 	    var cclass=clist[ic].replace('&',' ');
-	    alert(cclass);
 	    var members = document.getElementsByClassName(cclass);
 	    for ( var j = 0; j < members.length; j++ )
 		if(members[j].disabled) {
