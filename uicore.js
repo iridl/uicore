@@ -1321,7 +1321,7 @@ if(sfigs.length){
 	if(msga.length>0){
 	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot + 'insertui.js\"></script>\n';
 	    if(iconurl){
-		mymsg = mymsg + '<link ref="term:icon" href="' + iconurl + '" />\n';
+		mymsg = mymsg + '<link rel="term:icon" href="' + iconurl + '" />\n';
 	    }
 	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + myurl + '\">visit site</a>\n';
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
