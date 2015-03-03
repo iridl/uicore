@@ -529,15 +529,17 @@ function makeTabActiveFromHash (myhash,dontClearChildren){
 	}
 	if(myobject){
 	    var mypanel=getTabParent(myobject);
-	    var myphash = '#' + mypanel.id;
-	    mytabsets = document.getElementsByClassName('ui-tabs-nav');
-	    for(var i=mytabsets.length;i--;){
-		var mytabset=mytabsets[i];
-		var mytabs=mytabset.getElementsByTagName('li');
-		for(var j=mytabs.length;j--;){
-		    if(mytabs[j].children[0].hash == myphash){
-			makeTabActive(mytabs[j]);
-			mytab = mytabs[j];
+	    if(mypanel){
+		var myphash = '#' + mypanel.id;
+		mytabsets = document.getElementsByClassName('ui-tabs-nav');
+		for(var i=mytabsets.length;i--;){
+		    var mytabset=mytabsets[i];
+		    var mytabs=mytabset.getElementsByTagName('li');
+		    for(var j=mytabs.length;j--;){
+			if(mytabs[j].children[0].hash == myphash){
+			    makeTabActive(mytabs[j]);
+			    mytab = mytabs[j];
+			}
 		    }
 		}
 	    }
