@@ -5193,7 +5193,7 @@ updatePageFormConditionalClassesAndFlags(false);
 	    if(!historyid){
 		newstate=url;
 	    }
-	    if(historyid && currentstate == historyid){
+	    if(currentstate == historyid){
 	    history.replaceState(newstate,'update',url);
 	    }
 	    else {
