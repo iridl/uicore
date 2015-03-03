@@ -527,16 +527,18 @@ function makeTabActiveFromHash (myhash,dontClearChildren){
 		clearTabActive(myobject.getElementsByClassName('ui-tabs-nav'));
 	    }
 	}
-	var mypanel=getTabParent(myobject);
-	var myphash = '#' + mypanel.id;
-	mytabsets = document.getElementsByClassName('ui-tabs-nav');
-	for(var i=mytabsets.length;i--;){
-	    var mytabset=mytabsets[i];
-	    var mytabs=mytabset.getElementsByTagName('li');
-	    for(var j=mytabs.length;j--;){
-		if(mytabs[j].children[0].hash == myphash){
-		    makeTabActive(mytabs[j]);
-		    mytab = mytabs[j];
+	if(myobject){
+	    var mypanel=getTabParent(myobject);
+	    var myphash = '#' + mypanel.id;
+	    mytabsets = document.getElementsByClassName('ui-tabs-nav');
+	    for(var i=mytabsets.length;i--;){
+		var mytabset=mytabsets[i];
+		var mytabs=mytabset.getElementsByTagName('li');
+		for(var j=mytabs.length;j--;){
+		    if(mytabs[j].children[0].hash == myphash){
+			makeTabActive(mytabs[j]);
+			mytab = mytabs[j];
+		    }
 		}
 	    }
 	}
@@ -4749,10 +4751,12 @@ var varcnts = {};
 }
     if(window.location.hash){
 	var mytab = makeTabActiveFromHash(window.location.hash);
-	var mylabel = mytab.children[0].innerText;
+	if(mytab){
+	    var mylabel = mytab.children[0].innerText;
 	    if(mylabel){
 		document.title=addTabToTitle(mylabel);
 	    }
+	}
     }
     else {
 	clearTabActive();
@@ -5745,9 +5749,9 @@ function removePageForm(href,overridePageForm){
 			inputs[iname].value = unescape(pair[1]);
 		    }
 		}
-	    if(thehash){
-		newhref=newhref+'#'+thehash;
-	    }
+	}
+	if(thehash){
+	    newhref=newhref+thehash;
 	}
     }
     return newhref;
