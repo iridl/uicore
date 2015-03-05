@@ -388,7 +388,7 @@ function tabclickevent(evt){
 	    else {
 		mylabel = url.substr(1);
 	    }
-	    history.pushState(null,mytitle,url);
+	    history.pushState(url,mytitle,url);
 	    document.title=mytitle;
 	       ga('send','social', 'Tabs', mylabel, window.location.href);
 	    }
