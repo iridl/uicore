@@ -3603,7 +3603,7 @@ var iptcpy= document.createElement('input');
     appendMissingClass(pform,ipt.className);
     appendMissingClass(iptcpy,'share');
     iptcpy.name = ipt.name;
-    iptcpy.value=ipt.value;
+    iptcpy.value='';
     iptcpy.type='hidden';
     pform.appendChild(iptcpy);
     updatePageFormFromUrl(iptcpy);
