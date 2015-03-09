@@ -1614,9 +1614,6 @@ column-span: all;
 padding: 0pt;
 margin: 0pt;
   }
-  #custom-tweet-button:hover{
-opacity: 1.0;
-  }
   #custom-tweet-button a {
     height: 18px;
     width: 18px;
@@ -1632,6 +1629,9 @@ background-size: 16px;
 border-radius: 7px;
        border: 1px solid #ccc;
 opacity: 0.8;
+  }
+  #custom-tweet-button a:hover{
+opacity: 1.0;
   }
   .fb-like {
       display: inline-block;
