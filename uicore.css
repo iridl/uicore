@@ -262,10 +262,10 @@ border: 0px;
 z-index: 0;
     background: url('icons/iriwh.png') center no-repeat;
         background-color: WhiteSmoke;
-	background-size: 52px;
+	background-size: 95%;
 }
 #homelink:hover{
-background-size: 54px;
+background-size: 100%;
 }
 #homelink select {
 position: absolute;
@@ -874,8 +874,6 @@ display: none;
 #homelink {
 height: 37px;
 width: 37px;
-    background: url('icons/iriwh36.png') center no-repeat;
-background-size: 36px;
 margin: 2px;
 }
 #homelink:hover{
@@ -1044,8 +1042,6 @@ img.dlimg, img.dlauximg, img.dlimgts {
  #homelink {
 height: 30px;
 width: 30px;
-    background: url('icons/iriwh30.png') center no-repeat;
-background-size: 30px;
 }
 #homelink select {
 height: 30px;
@@ -1063,8 +1059,6 @@ top: 30px;
 .controlBar:hover #homelink {
 height: 37px;
 width: 37px;
-    background: url('icons/iriwh36.png') center no-repeat;
-background-size: 36px;
 }
 .controlBar:hover #homelink:hover{
 background-size: 37px;
