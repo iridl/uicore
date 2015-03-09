@@ -1610,21 +1610,28 @@ column-span: all;
 }
   #custom-tweet-button{
     display: inline-block;
-    background: WhiteSmoke;
--moz-border-radius: 7px;
-border-radius: 7px;
+    background: LightGrey;
+padding: 0pt;
+margin: 0pt;
   }
   #custom-tweet-button:hover{
-    background: white;
+opacity: 1.0;
   }
   #custom-tweet-button a {
+    height: 18px;
+    width: 18px;
     cursor: pointer;
-    height: 20px;
-    display: inline-block;
-    padding: 2px 5px 2px 15px;
-    background: url('icons/tweet.png') center no-repeat;
-    border: 1px solid #ccc;
 text-indent:-9999px; overflow:hidden; 
+    display: inline-block;
+    padding: 2px;
+    margin-top: 3px;
+    margin-bottom: 1px;
+ background: white url('icons/tweet.png') center no-repeat;
+background-size: 16px;
+-moz-border-radius: 7px;
+border-radius: 7px;
+       border: 1px solid #ccc;
+opacity: 0.8;
   }
   .fb-like {
       display: inline-block;
@@ -1634,6 +1641,7 @@ text-indent:-9999px; overflow:hidden;
         top: -2px;
 overflow: visible;
    }
+
   #fb-like a {
       display: inline-block;
         height: 24px;

@@ -5726,9 +5726,9 @@ function removePageForm(href,overridePageForm){
     var newhref = href;
     var myform=document.getElementById('pageform');
     if(href && myform){
-	var action = href;
+	var action = String(href);
 	var thehash;
-	if(action.indexOf("#") >= 0){
+	if(action.indexOf && action.indexOf("#") >= 0){
 	    thehash = action.substring(action.indexOf('#'));
 	    action=action.substring(0,action.indexOf('#'));
 	}
