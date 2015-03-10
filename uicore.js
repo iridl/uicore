@@ -4905,6 +4905,15 @@ for (var i=0; i< stag.length ; i++){
 	}
     }
 }
+/* ingrid command form */
+    var stag = context.getElementsByClassName('ingridcommand');
+    for (var i=0; i< stag.length ; i++){
+	var aform = stag[i];
+	if(typeof aform.onsubmit != 'function'){
+	    aform.onsubmit=dopageformcommand;
+	    aform.onsubmitfn=dopageformcommand;
+	    }
+	}
 /* property=wn20schema:lexicalForm and rel=wn20schema:containsWordSense */
     var stag = getElementsByAttribute(context,'*','rel','wn20schema:containsWordSense');
     for (var i=0; i< stag.length ; i++){
@@ -4923,6 +4932,45 @@ for (var i=0; i< stag.length ; i++){
 	    sel.onclickfn=handleworddef;
 	}
     }
+}
+function dopageformcommand (evt){
+  var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+
+    var cmd = it.elements["command"].value;
+    var url='';
+    var ipos = 0;
+    while (ipos < cmd.length){
+	var ipar= cmd.indexOf("(",ipos);
+	if(ipar >= ipos){
+	    var pcnt = 1;
+	    url = url + cmd.substring(ipos,ipar).replace(/\s+/gm,'/');
+	    var cpos = ipar + 1;
+	    while (pcnt > 0 && cpos < cmd.length){
+		var cch = cmd.substr(cpos,1);
+		if (cch == '('){
+		    pcnt = pcnt  + 1;
+		    }
+		else if (cch == ')'){
+		    pcnt = pcnt - 1;
+		    }
+		cpos = cpos + 1;
+		}
+	    url = url + cmd.substring(ipar,cpos);
+	    ipos = cpos;
+	    }
+	else {
+	    url = url + cmd.substr(ipos).replace(/\s+/gm,'/');
+	    ipos = cmd.length;
+	    }
+	}
+    if(location.hash){
+	url = url + location.hash;
+	}
+    url = appendPageForm(encodeURI(url),'share');
+    location.href=url;
+    evt.returnValue=false;
+    return false;
 }
 function handleworddef(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
