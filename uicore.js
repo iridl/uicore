@@ -476,8 +476,8 @@ function tabsSetup(){
     for (var i= 0; i<mylist.length; i++){
 	var tabset=mylist[i];
 	var tablist;
-	if(tabset.getElementsByTagName("ul")[0]){
-	tablist=tabset.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	if(tabset.getElementsByClassName("ui-tabs-nav")[0]){
+	tablist=tabset.getElementsByClassName("ui-tabs-nav")[0].getElementsByTagName("li");
 	}
 	else {
 	    tablist=[];
@@ -4964,10 +4964,13 @@ function dopageformcommand (evt){
 	    ipos = cmd.length;
 	    }
 	}
+    if(url.substr(url.length-1) != '/'){
+	url = url + '/';
+	}
     if(location.hash){
 	url = url + location.hash;
 	}
-    url = appendPageForm(encodeURI(url),'share');
+    url = appendPageForm(encodeURI(url),'share carryLanguage');
     location.href=url;
     evt.returnValue=false;
     return false;
