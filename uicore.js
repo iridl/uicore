@@ -1749,8 +1749,11 @@ if(it.options){
     changed = pform.elements[it.name];
     if(changed.length){
 	    /* multivalued but not checkbox -- copy first
-	     alternatively could match classes */
-	changed[0].value=it.options[it.selectedIndex].value;
+	     unless data-nameindex is set */
+	var ind = 0;
+	var myind = it.getAttribute('data-nameindex');
+	if(myind){ind = myind};
+	changed[ind].value=it.options[it.selectedIndex].value;
     }
     else {
 	changed.value=it.options[it.selectedIndex].value;
@@ -1797,8 +1800,11 @@ else if(elbyname.length) {
 		}
 	    }
 	    else {
-		/* punts by setting first one */
-	    changed = pform.elements[it.name][0];
+       /* punts by setting first one unless data-nameindex is set */
+		var ind=0;
+	var myind = it.getAttribute('data-nameindex');
+	if(myind){ind = myind};
+	    changed = pform.elements[it.name][ind];
 	    changed.value=it.value;
 	    }
 	}
@@ -5426,7 +5432,10 @@ if(typeof(elbyname) != 'undefined'){
 	    }
 	    else {
 		/* not a checkbox -- just copies first */
-		cval = myform.elements[sel.name][0].value;
+		var ind = 0;
+		var myind = sel.getAttribute('data-nameindex');
+		if(myind){ind = myind};
+		cval = myform.elements[sel.name][ind].value;
 		if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
 		    sel.value=cval;
 		}
