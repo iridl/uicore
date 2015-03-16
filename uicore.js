@@ -4973,10 +4973,11 @@ function dopageformcommand (evt){
     if(url.substr(url.length-1) != '/'){
 	url = url + '/';
 	}
-    url = appendPageForm(encodeURIcomponent(url).replace(/%2F/gm,'/'),'share carryLanguage');
+    url = encodeURIcomponent(url).replace(/%2F/gm,'/');
     if(location.hash){
 	url = url + location.hash;
 	}
+    url = appendPageForm(url,'share carryLanguage');
     location.href=url;
     evt.returnValue=false;
     return false;
