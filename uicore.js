@@ -4976,7 +4976,7 @@ function dopageformcommand (evt){
     if(location.hash){
 	url = url + location.hash;
 	}
-    url = appendPageForm(encodeURI(url),'share carryLanguage');
+    url = appendPageForm(encodeURIcomponent(url).replace(/%2F/gm,'/'),'share carryLanguage');
     location.href=url;
     evt.returnValue=false;
     return false;
