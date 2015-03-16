@@ -4942,7 +4942,6 @@ for (var i=0; i< stag.length ; i++){
 function dopageformcommand (evt){
   var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
-
     var cmd = it.elements["command"].value;
     var url='';
     var ipos = 0;
@@ -4973,11 +4972,11 @@ function dopageformcommand (evt){
     if(url.substr(url.length-1) != '/'){
 	url = url + '/';
 	}
-    url = encodeURIcomponent(url).replace(/%2F/gm,'/');
+    var cleanurl = encodeURIComponent(url).replace(/%2F/gm,'/');
     if(location.hash){
-	url = url + location.hash;
+	cleanurl = cleanurl + location.hash;
 	}
-    url = appendPageForm(url,'share carryLanguage');
+    url = appendPageForm(cleanurl,'share carryLanguage');
     location.href=url;
     evt.returnValue=false;
     return false;
