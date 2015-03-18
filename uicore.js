@@ -902,7 +902,7 @@ document.location.href=myurl;
 function doEvernoteClip(){
 var clipargs = {};
 clipargs.contentId = 'content';
-clipargs.url = appendPageForm(location,'share');
+    clipargs.url = appendPageForm(decodeURIComponent(location),'share');
 clipargs.filter= function (arg){
 if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 || arg.style.visibility=='hidden')){
 return arg;
