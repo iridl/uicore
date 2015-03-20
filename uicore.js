@@ -2068,6 +2068,28 @@ for (var i=0 ; i<sfigs.length ; i++){
     if(!sfigs[i].parentNode.parsedJSON){updateHasJSON(sfigs[i])};
 }
 }
+function readfileinto(url,inputelement){
+var xmlhttp= getXMLhttp();
+xmlhttp.infourl=url;
+xmlhttp.inputelement=inputelement;
+xmlhttp.onreadystatechange = function(evt) {
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+if(it.readyState == 4){
+    if(it.status == 200){
+	var jsontxt = it.responseText;
+	it.inputelement.value=jsontxt;
+    }
+    else {
+	/* failed */
+	setFailed(it.inputelement, it.status, it.statusText + it.responseText);
+    }
+}
+};
+xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+xmlhttp.open("GET",xmlhttp.infourl,true);
+xmlhttp.send();
+}
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
 when file is returned, if the url retrieved is still the url that the
@@ -2077,7 +2099,7 @@ and calls runPureOnContext.
 function updateHasJSON(myLink){
 var xmlhttp= getXMLhttp();
 var localurl = localHrefOf(myLink.href);
-if(myLink.localurl != localurl){
+if(myLink.href && myLink.localurl != localurl){
     relStartLoading(myLink);
     clearFailed(myLink);
 myLink.localurl = localurl;
@@ -2092,6 +2114,8 @@ if(it.readyState == 4){
     if(it.status == 200){
 	var jsontxt = it.responseText;
 	if(it.myLink.localurl == it.infourl){
+	    var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
+	    if(dumpelement.length > 0){dumpelement[0].innerHTML=jsontxt;}
 	    var qid = (it.myLink.id) ? it.myLink.id : it.myLink.getAttribute('data-id');
 	    if(qid){
 		if(!it.myContext.parsedJSON){
@@ -5967,6 +5991,79 @@ function removeDiacritics (str) {
 	return diacriticsMap[a] || a; 
     });
 }
+
+// GitHub setup
+function githubSetup(){
+var githubform=document.getElementsByClassName('githubconnect');
+if(githubform[0]){
+githubform[0].onsubmit=dogithub;
+githubform[0].onsubmitfn=dogithub;
+githubform[0].elements["github"].onchange=dogithubjson;
+githubform[0].elements["github"].onchangefn=dogithubjson;
+var gid = getCookie('githubid');
+if(gid){
+githubform[0].elements["github"].value=gid;
+setgithubjson(gid);
+}
+}
+}
+function getCookie(wantid){
+var cookies=document.cookie;
+var cookielist=cookies.split(';')
+for(var i=0; i<cookielist.length ; i++){
+	var apair=cookielist[i].split("=");
+	var cname=apair[0];
+	while(cname.charAt(0)==' ')cname = cname.substring(1);
+	if(cname.indexOf(wantid) == 0)return apair[1];
+}
+return "";
+}
+function dogithub(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+document.cookie="githubid=" + it.elements["github"].value;
+return false;
+}
+function dogithubjson(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+setgithubjson(it.value);
+}
+function getCookie(wantid){
+var cookies=document.cookie;
+var cookielist=cookies.split(';')
+for(var i=0; i<cookielist.length ; i++){
+	var apair=cookielist[i].split("=");
+	var cname=apair[0];
+	while(cname.charAt(0)==' ')cname = cname.substring(1);
+	if(cname.indexOf(wantid) == 0)return apair[1];
+}
+return "";
+}
+function dogithub(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+document.cookie="githubid=" + it.elements["github"].value;
+return false;
+}
+function dogithubjson(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+setgithubjson(it.value);
+}
+function setgithubjson(newname){
+var githubjson=document.getElementById('githubjson');
+if(githubjson){
+githubjson.href='https://api.github.com/users/' + newname;
+updateHasJSON(githubjson);
+}
+var githubgistjson=document.getElementById('githubgistjson');
+if(githubgistjson){
+githubgistjson.href='https://api.github.com/users/' + newname + '/gists';
+updateHasJSON(githubgistjson);
+}
+}
+
 // loadmaproom is run once (at DOMContentLoaded if possible, or onload).
 var loadmaproomneeded=true;
 $.ready(
@@ -5989,6 +6086,7 @@ setupPageFormLinks(document);
     updateLangGroups(document);
 loadHasJSON();
 loadHasSparqlEndpoint();
+githubSetup();
 if(uicoreConfig.GoogleAnalyticsId){
 /*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
