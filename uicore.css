@@ -425,7 +425,7 @@ display: none;
 	background-color: LightGrey;
        vertical-align: middle;
 }
-.lang {display: inline;
+.lang, .login {display: inline;
 	float: right;
 	margin-top: 0px;
 	margin-bottom: 0px;
