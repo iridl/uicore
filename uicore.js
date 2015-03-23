@@ -6040,17 +6040,6 @@ for(var i=0; i<cookielist.length ; i++){
 }
 return "";
 }
-function dogithub(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-document.cookie="githubid=" + it.elements["github"].value;
-return false;
-}
-function dogithubjson(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-setgithubjson(it.value);
-}
 function setgithubjson(newname){
 var githubjson=document.getElementById('githubjson');
 if(githubjson){
