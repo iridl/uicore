@@ -3631,6 +3631,7 @@ if(!pform.elements[ipt.name]){
 var iptcpy= document.createElement('input');
     iptcpy.className = ipt.className;
     appendMissingClass(pform,ipt.className);
+    appendMissingClass(iptcpy,'dlauximg');
     appendMissingClass(iptcpy,'share');
     iptcpy.name = ipt.name;
     iptcpy.value='';
