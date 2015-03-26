@@ -440,6 +440,7 @@ display: none;
 	background-color: LightGrey;
        vertical-align: middle;
 }
+.login {display: none}
 .navitem > legend {
        font-size: 10pt;
         border-style: outset;
