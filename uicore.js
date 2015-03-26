@@ -2067,6 +2067,10 @@ var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
 for (var i=0 ; i<sfigs.length ; i++){
     if(!sfigs[i].parentNode.parsedJSON){updateHasJSON(sfigs[i])};
 }
+sfigs=getElementsByAttribute(document,'*','property','iridl:hasJSON');
+for (var i=0 ; i<sfigs.length ; i++){
+    if(!sfigs[i].parentNode.parsedJSON){readHasJSON(sfigs[i])};
+}
 }
 function readfileinto(url,inputelement){
 var xmlhttp= getXMLhttp();
@@ -2089,6 +2093,23 @@ if(it.readyState == 4){
 xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 xmlhttp.open("GET",xmlhttp.infourl,true);
 xmlhttp.send();
+}
+function readHasJSON(myScript){
+    var myContext=myScript.parentNode;
+    var jsontxt = myScript.text;
+    var qid = (myScript.id) ? myScript.id : myScript.getAttribute('data-id');
+    if(qid){
+	if(!myContext.parsedJSON){
+	    myContext.parsedJSON = {};
+	}
+	myContext.parsedJSON[qid]=JSON.parse(jsontxt);
+    }
+    else {
+	myContext.parsedJSON=JSON.parse(jsontxt);
+    }
+    runPureOnContext(myContext);
+    updatePageFormCopies(myContext);
+    validateAndCorrectPageForm(myContext);
 }
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
