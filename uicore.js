@@ -2512,7 +2512,10 @@ function mapObject (obj,key,myDirective){
 		    if(context.pureFunction){
 			var myfunc = context.pureFunction;
 			if(arg[local] && arg[local].item[loopon]){
-			    ret = myfunc(arg[local].item); 
+			    ret = myfunc(arg[local].item);
+			    var el = document.createElement('div');
+			    el.innerHTML=ret;
+			    ret=el.firstChild.innerHTML;
 			}
 		    }
 		    return ret;
