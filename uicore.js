@@ -2115,6 +2115,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
     for (var i=0;i<graphs.length; i++){
 	var graph = graphs[i];
 	var canvas = graph.getElementsByTagName('canvas')[0];
+	if(canvas.getContext){
 	canvas.width=canvas.clientWidth;
         canvas.height=canvas.clientHeight;
 	var rLeft = absLeft(canvas);
@@ -2129,13 +2130,14 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		if(lfrom){
 		    var fobj = document.getElementById(lfrom);
 		    ctx.beginPath();
-		    ctx.moveTo(absLeft(fobj)-rLeft, absTop(fobj)-rTop);
-		    ctx.lineTo(absLeft(tobj)-rLeft, absTop(tobj)-rTop);
+		    ctx.moveTo(absLeft(fobj)-rLeft+fobj.clientWidth, absTop(fobj)-rTop+fobj.clientHeight/2);
+		    ctx.lineTo(absLeft(tobj)-rLeft, absTop(tobj)+tobj.clientHeight/2-rTop);
 		    ctx.stroke();
 		    }
 		}
 	    }
 	}
+    }
 }
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
