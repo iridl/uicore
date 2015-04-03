@@ -2110,6 +2110,32 @@ function readHasJSON(myScript){
     runPureOnContext(myContext);
     updatePageFormCopies(myContext);
     validateAndCorrectPageForm(myContext);
+/* experimental connected graph support */
+var graphs = document.getElementsByClassName('connectedgraph');
+    for (var i=0;i<graphs.length; i++){
+	var graph = graphs[i];
+	var canvas = graph.getElementsByTagName('canvas')[0];
+	canvas.width=canvas.clientWidth;
+        canvas.height=canvas.clientHeight;
+	var rLeft = absLeft(canvas);
+	var rTop = absTop(canvas);
+	var ctx = canvas.getContext("2d");
+	var objs = graph.getElementsByClassName('graphobject');
+	for (var iob=0; iob < objs.length ; iob++){
+	    var tobj = objs[iob];
+	    var llist = tobj.parentNode.children[1].children;
+	    for (var iline = 0 ; iline < llist.length ; iline++){
+		var lfrom = llist[iline].getAttribute('linefrom');
+		if(lfrom){
+		    var fobj = document.getElementById(lfrom);
+		    ctx.beginPath();
+		    ctx.moveTo(absLeft(fobj)-rLeft, absTop(fobj)-rTop);
+		    ctx.lineTo(absLeft(tobj)-rLeft, absTop(tobj)-rTop);
+		    ctx.stroke();
+		    }
+		}
+	    }
+	}
 }
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
