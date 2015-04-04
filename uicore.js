@@ -2140,7 +2140,7 @@ function gconnect(canvas,fobj,tobj){
     var fx  = absLeft(fobj)-rLeft+fobj.clientWidth;
     var fy  = absTop(fobj)-rTop+fobj.clientHeight/2;
     var tx  = absLeft(tobj)-rLeft;
-    var fy  = absTop(tobj)+tobj.clientHeight/2-rTop;
+    var ty  = absTop(tobj)+tobj.clientHeight/2-rTop;
 
     ctx.beginPath();
     ctx.moveTo(fx, fy);
