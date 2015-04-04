@@ -2118,9 +2118,6 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	if(canvas.getContext){
 	canvas.width=canvas.clientWidth;
         canvas.height=canvas.clientHeight;
-	var rLeft = absLeft(canvas);
-	var rTop = absTop(canvas);
-	var ctx = canvas.getContext("2d");
 	var objs = graph.getElementsByClassName('graphobject');
 	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
@@ -2129,15 +2126,35 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		var lfrom = llist[iline].getAttribute('linefrom');
 		if(lfrom){
 		    var fobj = document.getElementById(lfrom);
-		    ctx.beginPath();
-		    ctx.moveTo(absLeft(fobj)-rLeft+fobj.clientWidth, absTop(fobj)-rTop+fobj.clientHeight/2);
-		    ctx.lineTo(absLeft(tobj)-rLeft, absTop(tobj)+tobj.clientHeight/2-rTop);
-		    ctx.stroke();
+		    gconnect(canvas,fobj,tobj);
 		    }
 		}
 	    }
 	}
     }
+}
+function gconnect(canvas,fobj,tobj){
+    var rLeft = absLeft(canvas);
+    var rTop = absTop(canvas);
+    var ctx = canvas.getContext("2d");
+    var fx  = absLeft(fobj)-rLeft+fobj.clientWidth;
+    var fy  = absTop(fobj)-rTop+fobj.clientHeight/2;
+    var tx  = absLeft(tobj)-rLeft;
+    var fy  = absTop(tobj)+tobj.clientHeight/2-rTop;
+
+    ctx.beginPath();
+    ctx.moveTo(fx, fy);
+    if(tx < fx){
+	var mx = (tx+fx)/2;
+	var my = (ty + fy)/2;
+	var off = 15;
+	ctx.bezierCurveTo(fx+off,fy,fx+off,my,mx,my);
+	ctx.bezierCurveTo(tx-off,my,tx-off,ty,tx,ty);
+    }
+    else {
+	ctx.lineTo(tx, ty);
+    }
+    ctx.stroke();
 }
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
