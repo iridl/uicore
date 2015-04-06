@@ -2111,6 +2111,9 @@ function readHasJSON(myScript){
     updatePageFormCopies(myContext);
     validateAndCorrectPageForm(myContext);
 /* experimental connected graph support */
+    refreshConnectedGraphs();
+}
+function refreshConnectedGraphs(evt){
 var graphs = document.getElementsByClassName('connectedgraph');
     for (var i=0;i<graphs.length; i++){
 	var graph = graphs[i];
@@ -2118,9 +2121,15 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	if(canvas.getContext){
 	canvas.width=canvas.clientWidth;
         canvas.height=canvas.clientHeight;
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var objs = graph.getElementsByClassName('graphobject');
 	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
+	    if(typeof(tobj.onmouseover)!= 'function'){
+		tobj.onmouseover=refreshConnectedGraphs;
+		tobj.onmouseout=refreshConnectedGraphs;
+		}
 	    var llist = tobj.parentNode.children[1].children;
 	    for (var iline = 0 ; iline < llist.length ; iline++){
 		var lfrom = llist[iline].getAttribute('linefrom');
@@ -2146,10 +2155,17 @@ function gconnect(canvas,fobj,tobj){
     ctx.moveTo(fx, fy);
     if(tx < fx){
 	var mx = (tx+fx)/2;
-	var my = (ty + fy)/2;
-	var off = 15;
-	ctx.bezierCurveTo(fx+off,fy,fx+off,my,mx,my);
-	ctx.bezierCurveTo(tx-off,my,tx-off,ty,tx,ty);
+	var my;
+	if(ty<fy){
+	    my = (ty + fy)/2;
+	}
+	else {
+	    my = (2*ty + fy)/3;
+	}
+	var toff = 15;
+	var foff = 8;
+	ctx.bezierCurveTo(fx+foff,(fy+my)/2,fx+foff,my,mx,my);
+	ctx.bezierCurveTo(tx-toff,my,tx-toff,(2*my+ty)/3,tx,ty);
     }
     else {
 	ctx.lineTo(tx, ty);
