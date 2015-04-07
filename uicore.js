@@ -2126,10 +2126,6 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	var objs = graph.getElementsByClassName('graphobject');
 	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
-	    if(typeof(tobj.onmouseover)!= 'function'){
-		tobj.onmouseover=refreshConnectedGraphs;
-		tobj.onmouseout=refreshConnectedGraphs;
-		}
 	    var llist = tobj.parentNode.children[1].children;
 	    for (var iline = 0 ; iline < llist.length ; iline++){
 		var lfrom = llist[iline].getAttribute('linefrom');
