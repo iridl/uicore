@@ -6158,6 +6158,7 @@ setupPageFormLinks(document);
 loadHasJSON();
 loadHasSparqlEndpoint();
 githubSetup();
+$(window).resize(refreshConnectedGraphs);
 if(uicoreConfig.GoogleAnalyticsId){
 /*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
