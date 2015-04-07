@@ -2568,7 +2568,7 @@ function mapObject (obj,key,myDirective){
 		    var ret='';
 		    if(context.pureFunction){
 			var myfunc = context.pureFunction;
-			if(arg[local] && arg[local].item[loopon]){
+			if(arg[local] && arg[local].item && arg[local].item[loopon]){
 			    ret = myfunc(arg[local].item);
 			    var el = document.createElement('div');
 			    el.innerHTML=ret;
