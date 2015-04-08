@@ -393,6 +393,7 @@ function tabclickevent(evt){
 	       ga('send','social', 'Tabs', mylabel, window.location.href);
 	    }
 	}
+	refreshConnectedGraphs();
     }
     return false;
 }
@@ -554,7 +555,7 @@ function clearTabActive (mytabsets){
 	for(var i=mytabsets.length;i--;){
 	    var mytabset=mytabsets[i];
 	    var mytabs=mytabset.getElementsByTagName('li');
-	    if(mytabs.length){
+	    if(mytabs.length && mytabs[0].children[0].hash){
 		makeSubTabActive(mytabs[0]);
 	    }
 	}
@@ -2156,7 +2157,7 @@ function gconnect(canvas,fobj,tobj){
 	    my = (ty + fy)/2;
 	}
 	else {
-	    my = ty- .8 * tobj.clientHeight;
+	    my = ty- 1.1 * tobj.clientHeight;
 	}
 	var toff = 15;
 	var foff = 8;
@@ -2164,7 +2165,18 @@ function gconnect(canvas,fobj,tobj){
 	ctx.bezierCurveTo(tx-toff,my,tx-toff,(2*my+ty)/3,tx,ty);
     }
     else {
-	ctx.lineTo(tx, ty);
+	if(Math.abs(ty-fy)>15){
+	var mx = (tx+fx)/2;
+	var my;
+	    my = (ty + fy)/2;
+	var toff = 15;
+	var foff = 15;
+	ctx.bezierCurveTo(mx,fy,mx,my,mx,my);
+	ctx.bezierCurveTo(mx,my,mx,ty,tx,ty);
+	}
+	else {
+	    ctx.lineTo(tx,ty);
+	}
     }
     ctx.stroke();
 }
@@ -4787,6 +4799,7 @@ function expandNS(curi,ns){
 /* onpopstate handler */
 function updatePageFormFromUrlEvt(evt){
     updatePageFormFromUrl();
+    refreshConnectedGraphs();
 }
 function updatePageFormFromUrl(elementtocheck){
     /* updates values from page url */
