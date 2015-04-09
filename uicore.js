@@ -299,7 +299,9 @@ function tabclick(it){
     }
     it.className="ui-state-active";
 	var sid = it.children[0].hash.substr(1);
+	if(it.children[0].pathname==location.pathname){
         document.getElementById(sid).className="ui-tabs-panel";
+	}
     return false;
 }
 function limitclickevent(evt){
@@ -374,10 +376,10 @@ var guess='';
 //	}
  }
 function tabclickevent(evt){
-    evt = (evt) ? evt : ((event) ? event : null );
-    it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
     if(makeTabActive(it)){
-        if(history && history.pushState){
+        if(history && history.pushState && it.children[0].pathname == location.pathname){
 	    var url = it.children[0].hash;
 	    if(url){
 	    var mylabel = it.children[0].innerText;
@@ -405,14 +407,14 @@ function makeSubTabActive(tab){
 	if(mylist[i].children[0].hash){
 	    sid = mylist[i].children[0].hash.substr(1);
 	}
-	if(sid){
+	if(sid && document.getElementById(sid)){
         document.getElementById(sid).className="ui-tabs-panel-hidden";
 	}
 	mylist[i].className="ui-state-default";
     }
     tab.className="ui-state-active";
-    var sid;
-    if(tab.children[0].hash){
+    var sid="";
+    if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
 	sid = tab.children[0].hash.substr(1);
     }
 	if(sid){
