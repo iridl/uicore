@@ -4666,6 +4666,8 @@ if(myform){
 	    mylang.name='lang';
 	    mylang.type='hidden';
 	    myform.appendChild(mylang);
+	    mybody = document.getElementsByTagName('body')[0];
+	    appendMissingClass(mybody,'reloadOnLanguageChange');
 	}
 	appendMissingClass(mylang,'bodyAttribute');
     }
