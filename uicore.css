@@ -1254,6 +1254,11 @@ display: inline;
 .ui-tabs-nav li a { text-decoration: none;
 display: inline-block;
  }
+.ui-tabs-nav li a img{
+display: block;
+margin: auto;
+margin: auto;
+ }
 .ui-tabs-nav .ui-state-default a:visited,
 .ui-tabs-nav .ui-state-default a:link
 {color: #2E6E9E; }
