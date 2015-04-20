@@ -1457,7 +1457,7 @@ display: block;
 	margin-left: 2px;
 	margin-right: 2px;
 }
-.ui-tabs-panel-hidden > h2, .ui-tabs-panel > h2 
+.ui-tabs-panel-hidden h2, .ui-tabs-panel h2 
 { font-size: 1.25em }
 }
 @media print {
