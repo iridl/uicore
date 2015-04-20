@@ -1253,6 +1253,7 @@ display: inline;
 }
 .ui-tabs-nav li a { text-decoration: none;
 display: inline-block;
+text-align: center;
  }
 .ui-tabs-nav li a img{
 display: block;
@@ -1456,6 +1457,8 @@ display: block;
 	margin-left: 2px;
 	margin-right: 2px;
 }
+.ui-tabs-panel-hidden > h2, .ui-tabs-panel > h2 
+{ font-size: 1.25em }
 }
 @media print {
 .ui-tabs .ui-tabs-panel-hidden {display: block;}
