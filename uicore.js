@@ -417,7 +417,7 @@ function makeSubTabActive(tab){
     if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
 	sid = tab.children[0].hash.substr(1);
     }
-	if(sid){
+	if(sid && document.getElementById(sid)){
         document.getElementById(sid).className="ui-tabs-panel";
 	}
 	else {
