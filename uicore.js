@@ -1554,9 +1554,13 @@ dofinishchooseSection(sel,xmlDoc);
 }
 function dofinishchooseSection(sel,xmlDoc){
     var opts = sel.options;
-    for (i=opts.length; i>0  ; i--){
+    for (var i=opts.length; i>0  ; i--){
 	sel.remove(opts[i]);
     }
+//removes sections as well  if needed
+while (sel.firstChild) {
+    sel.removeChild(sel.firstChild);
+}
 if(xmlDoc){
     var itemlist;
     if(xmlDoc.getElementsByClassName){
@@ -5115,7 +5119,8 @@ function handleworddef(evt){
 	if(word.substr(0,1)=='['){
 	    word = word.substr(1,word.length-2);
 	}
-	document.location.href= qurl + '?word=' + encodeURIComponent(word);
+	qurl= qurl + '?word=' + encodeURIComponent(word);
+	document.location.href = appendPageForm(qurl,'carryLanguage');
     }
 }
 /* this is a work around for a webkit position: absolute bug in multicolumn layout.  Hopefully will be unnecessary someday, though was reported a year ago for Chromium.  
