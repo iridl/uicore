@@ -345,11 +345,15 @@ opacity:  .75;
          color: navy;
 	 line-height: 1.1;
          }
+.alttablink {
+         text-decoration: none;
+         color: black;
+         }
 .navtext {
          font-size: 16pt;
          text-decoration: none;
          }
-.navlink:hover {
+.navlink:hover,.alttablink:hover {
          font-weight: bold;
          color: blue;
          }
@@ -895,7 +899,7 @@ min-width: 37px;
 .navtext {
          font-size: 10pt;
          }
-.navlink:hover {
+.navlink:hover,.alttablink:hover {
          font-weight: bold;
          }
 .navitem {
@@ -1098,6 +1102,9 @@ border-width: 2pt !important;
 padding-top: 0pt !important;
 display: none !important;
 }
+.alttablink {
+         color: navy;
+         }
 .ui-tabs-panel {
         border-top-left-radius: 10px !important;
         border-top-right-radius: 10px !important;
@@ -1110,7 +1117,7 @@ display: none !important;
 .dlimage {
 margin-top: 2pt;
 }
-.navitem{
+.navitem, .alttablink{
        font-size: 10pt;
 }
 .navitem + .navitem{
@@ -1409,6 +1416,10 @@ vertical-align: top;
 .ui-tabs-nav {
 display: block;
 }
+.alttablink {
+         color: navy;
+         }
+
 .ui-tabs-nav .ui-state-active a:visited,
 .ui-tabs-nav .ui-state-active a:link
 {color: #2E6E9E; }
