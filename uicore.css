@@ -1472,12 +1472,26 @@ display: block;
 { font-size: 1.25em }
 }
 @media print {
+body {
+-webkit-print-color-adjust: exact;
+}
 .ui-tabs .ui-tabs-panel-hidden {display: block;}
 .navlink {font-size: 14pt;}
 .navitem select { font-size: 10pt;}
 .ui-tabs-nav li {font-size: 8pt;}
 #share,#contactus {display: none;}
 #chooseLanguage {display: none;}
+.imagecontrols {display: none;}
+.dlimage, .dlimage.wide, .dlimage.tall{
+	width: 50%;
+}
+.dlimage.tall{
+	width: 40%;
+}
+.dlimage.narrow{
+	width: 30%;
+}
+
 .selectvalue {
 display: inline;
 }
