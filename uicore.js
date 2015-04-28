@@ -5218,9 +5218,9 @@ function updateLangGroups(context){
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
 		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
-		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
+		langgroupstyle.cssText += ctarget + ' {display: none}\n' ;
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
-		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
+		langgroupstyle.cssText += ctarget + ' {display: inline}\n' ;
 	    }
 	}
 	mygrp.setAttribute('langgroup',keys.join(' '));
