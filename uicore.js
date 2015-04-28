@@ -5192,8 +5192,7 @@ function updateLangGroups(context){
     if(!langgroupstyle){
 	langgroupstyle = document.createElement('style');
 	langgroupstyle.id='langgroupstyle';
-	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline}\n\
-.langgroup [lang] + [lang] {display:none}\n";
+	langgroupstyle.cssText = ".langgroup [lang] {display:inline}\n.langgroup [lang] + [lang] {display:none}\n";
 	var ref = document.getElementsByTagName('script')[0];
 	ref.parentNode.insertBefore(langgroupstyle,ref);
 	langgroupstyle.langs={};
