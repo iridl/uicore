@@ -1105,7 +1105,7 @@ display: none !important;
 .alttablink {
          color: navy;
          }
-.ui-tabs-panel {
+.ui-tabs-panel, .ui-tabs-panel-float {
         border-top-left-radius: 10px !important;
         border-top-right-radius: 10px !important;
         -moz-border-radius-topleft: 10px !important;
@@ -1239,9 +1239,12 @@ display: inline;
 .ui-tabs-nav li{
         line-height: 1.8;
         background: #ECECEC;
-        display: inline;
+        display: inline-block;
         margin-top: 4px;
-	padding: 2px 8px 4px 8px;
+        padding-top: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-bottom: 2px;
         margin-bottom: 0px;
         border-bottom: 0px none !important;
         border-top-left-radius: 5px;
@@ -1253,10 +1256,13 @@ display: inline;
         -moz-border-radius-bottomleft: 0px;
         -moz-border-radius-bottomright: 0px;
 	border-width: 2px;
-	margin-left: 2px;
-	margin-right: 2px;
+	margin-left: 3px;
+	margin-right: 3px;
         border-style: outset;
 	border-color: #E2E2E2;
+}
+.ui-tabs-nav li.toggle {
+display: inline-block;
 }
 .ui-tabs-nav li a { text-decoration: none;
 display: inline-block;
@@ -1269,6 +1275,7 @@ margin-right: auto;
  }
 .ui-tabs-nav .ui-state-default a:visited,
 .ui-tabs-nav .ui-state-default a:link
+ 
 {color: #2E6E9E; }
 .ui-tabs-nav .ui-state-active a:visited,
 .ui-tabs-nav .ui-state-active a:link
@@ -1288,16 +1295,18 @@ margin-right: auto;
 	margin-left: 0px;
 	margin-right: 0px;
         position:relative;
-        left: 0px;
-        top: 0px;
-        padding-top: 3px;
-        padding-bottom: 6px;
+        left: 2px;
+        top: 2px;
+        padding-bottom: 4px;
+	margin-bottom: 0px;
 }
 .ui-tabs-nav .ui-state-active:active,
 .ui-tabs-nav .ui-state-default:active{
 	border-color: LightGrey;
 	border: 4px;
-        margin-top: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+        margin-top: 3px;
         margin-left: 0px;
         margin-right: 0px;
         margin-bottom: 0px;
@@ -1325,7 +1334,7 @@ margin-right: auto;
         -moz-border-radius-bottomright: 10px;
         display: none;
                                  }
-.ui-tabs .ui-tabs-panel-active, .ui-tabs .ui-tabs-panel  {
+.ui-tabs .ui-tabs-panel-active, .ui-tabs .ui-tabs-panel, .ui-tabs .ui-tabs-panel-float  {
         padding-left: 8pt;
         padding-right: 8pt;
         background: white;
@@ -1614,6 +1623,15 @@ max-width: 750px;
 }
 }
 @media only all and (min-width: 1250px) {
+.ui-tabs-nav li.toggle {
+display: inline-block;
+float: right;
+}
+.ui-tabs-panel-float {
+float: right;
+width: 40%;
+margin-left: 2px;
+}
  .itemIcon {
 padding-top: 16px;
 }

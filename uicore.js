@@ -290,20 +290,6 @@ submitPageForm(it.hrefroot + optvalue,optclass);
 submitPageForm(optvalue,optclass);
 }
 }
-function tabclick(it){
-    var mylist=it.parentNode.getElementsByClassName("ui-state-active");
-    for (var i= 0; i<mylist.length; i++){
-	var sid = mylist[i].children[0].hash.substr(1);
-        document.getElementById(sid).className="ui-tabs-panel-hidden";
-	mylist[i].className="ui-state-default";
-    }
-    it.className="ui-state-active";
-	var sid = it.children[0].hash.substr(1);
-	if(it.children[0].pathname==location.pathname){
-        document.getElementById(sid).className="ui-tabs-panel";
-	}
-    return false;
-}
 function limitclickevent(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -378,9 +364,15 @@ var guess='';
 function tabclickevent(evt){
     var evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-    if(makeTabActive(it)){
+    if(makeTabActive(it,true)){
         if(history && history.pushState && it.children[0].pathname == location.pathname){
 	    var url = it.children[0].hash;
+	    if(it.className.indexOf("ui-state-active") < 0){
+		var mylist=it.parentNode.getElementsByClassName("ui-state-active");
+		if(mylist.length > 0){
+		url = mylist[0].children[0].hash;
+		}
+	    }
 	    if(url){
 	    var mylabel = it.children[0].innerText;
 	    var mytitle = document.title;
@@ -399,20 +391,45 @@ function tabclickevent(evt){
     }
     return false;
 }
-function makeSubTabActive(tab){
-    var ifchange=(tab.className != "ui-state-active");
+function makeSubTabActive(tab,ifclick){
+    var iftoggle=ifclick && ($(tab).css('float') == 'right');
+    var ifchange=iftoggle || (tab.className.indexOf("ui-state-active") <0);
+    if(iftoggle){
+    var sid="";
+    if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
+	sid = tab.children[0].hash.substr(1);
+    }
+    if(tab.className.indexOf("ui-state-active") >=0){
+	changeClass(tab,"ui-state-active","ui-state-default");
+	if(sid && document.getElementById(sid)){
+        document.getElementById(sid).className="ui-tabs-panel-hidden";
+	}
+    }
+    else {
+	changeClass(tab,"ui-state-default","ui-state-active");
+	if(sid && document.getElementById(sid)){
+        document.getElementById(sid).className="ui-tabs-panel-float";
+	var mypanel = document.getElementById(sid);
+	var myset = mypanel.parentNode;
+	myset.insertBefore(mypanel,myset.firstElementChild.nextElementSibling);
+	}
+    }
+    }
+    else {
     var mylist=tab.parentNode.getElementsByClassName("ui-state-active");
     for (var i= 0; i<mylist.length; i++){
 	var sid;
+	if(!(ifclick && $(mylist[i]).css('float') == 'right')){
 	if(mylist[i].children[0].hash){
 	    sid = mylist[i].children[0].hash.substr(1);
 	}
 	if(sid && document.getElementById(sid)){
         document.getElementById(sid).className="ui-tabs-panel-hidden";
 	}
-	mylist[i].className="ui-state-default";
+	changeClass(mylist[i],"ui-state-active","ui-state-default");
+	}
     }
-    tab.className="ui-state-active";
+    changeClass(tab,"ui-state-default","ui-state-active");
     var sid="";
     if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
 	sid = tab.children[0].hash.substr(1);
@@ -426,10 +443,11 @@ function makeSubTabActive(tab){
         if(document.width < 750){
 	location.href= tab.children[0].href;
 	}
+    }
     return ifchange;
 }
-function makeTabActive(tab){
-    var ifchange=makeSubTabActive(tab);
+function makeTabActive(tab,ifclick){
+    var ifchange=makeSubTabActive(tab,ifclick);
     makeTabParentActive(tab.parentNode);
     return ifchange;
 };
@@ -487,16 +505,14 @@ function tabsSetup(){
 	}
 	var activetab=0;
 	for (var j=0; j<tablist.length; j++){
-	    if(tablist[j].className=='ui-state-active')activetab=j
+	    if(tablist[j].className.indexOf('ui-state-active')>=0)activetab=j
 	}
 	for (var j=0; j<tablist.length; j++){
 	    var atab=tablist[j];
 	    if(!atab.children[0].onclick) {
-		atab.onmousedown=tabclickevent;
-		atab.onfocus=tabclickevent;
 		atab.onclick=tabclickevent;
 		if(j != activetab){
-		    atab.className='ui-state-default';
+		    appendMissingClass(atab,'ui-state-default');
 		    var sid = atab.children[0].hash.substr(1);
 		    if(!!sid){
 			if(document.getElementById(sid)){
@@ -505,7 +521,7 @@ function tabsSetup(){
 		    }
 		}
 		else {
-		    atab.className='ui-state-active';
+		    appendMissingClass(atab,'ui-state-active');
 		    var sid = atab.children[0].hash.substr(1);
 		    if(!!sid){
 			if(document.getElementById(sid))
@@ -540,7 +556,7 @@ function makeTabActiveFromHash (myhash,dontClearChildren){
 		    var mytabs=mytabset.getElementsByTagName('li');
 		    for(var j=mytabs.length;j--;){
 			if(mytabs[j].children[0].hash == myphash){
-			    makeTabActive(mytabs[j]);
+			    makeTabActive(mytabs[j],true);
 			    mytab = mytabs[j];
 			}
 		    }
@@ -558,7 +574,7 @@ function clearTabActive (mytabsets){
 	    var mytabset=mytabsets[i];
 	    var mytabs=mytabset.getElementsByTagName('li');
 	    if(mytabs.length && mytabs[0].children[0].hash){
-		makeSubTabActive(mytabs[0]);
+		makeSubTabActive(mytabs[0],false);
 	    }
 	}
 }
