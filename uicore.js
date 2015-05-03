@@ -5208,12 +5208,7 @@ function updateLangGroups(context){
     if(!langgroupstyle){
 	langgroupstyle = document.createElement('style');
 	langgroupstyle.id='langgroupstyle';
-	if(typeof(langgroupstyle.innerHTML) != 'undefined'){
-	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline}\n.langgroup [lang] + [lang] {display:none}\n";
-	}
-	else {
-	langgroupstyle.cssText = ".langgroup [lang] {display:inline}\n.langgroup [lang] + [lang] {display:none}\n";
-	}
+	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
 	var ref = document.getElementsByTagName('script')[0];
 	ref.parentNode.insertBefore(langgroupstyle,ref);
 	langgroupstyle.langs={};
@@ -5239,15 +5234,9 @@ function updateLangGroups(context){
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
 		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
-		if(typeof(langgroupstyle.innerHTML) != 'undefined'){
-		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
+		langgroupstyle.innerHTML += ctarget + ' {display: none} ' ;
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
-		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
-	} else {
-		langgroupstyle.cssText += ctarget + ' {display: none}\n' ;
-		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
-		langgroupstyle.cssText += ctarget + ' {display: inline}\n' ;
-	}
+		langgroupstyle.innerHTML += ctarget + ' {display: inline} ' ;
 	    }
 	}
 	mygrp.setAttribute('langgroup',keys.join(' '));
