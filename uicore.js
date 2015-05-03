@@ -5208,7 +5208,7 @@ function updateLangGroups(context){
     if(!langgroupstyle){
 	langgroupstyle = document.createElement('style');
 	langgroupstyle.id='langgroupstyle';
-	if(typeof(langgroupstyle.cssText) == 'undefined'){
+	if(typeof(langgroupstyle.innerHTML) != 'undefined'){
 	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline}\n.langgroup [lang] + [lang] {display:none}\n";
 	}
 	else {
@@ -5239,7 +5239,7 @@ function updateLangGroups(context){
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
 		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
-		if(typeof(langgroupstyle.cssText) == 'undefined'){
+		if(typeof(langgroupstyle.innerHTML) != 'undefined'){
 		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
 		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
