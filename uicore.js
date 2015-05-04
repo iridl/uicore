@@ -366,6 +366,11 @@ var guess='';
 //        preload(guess);
 //	}
  }
+function tabdblclickevent(evt){
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+    toggleClass(it,'toggle');
+}
 function tabclickevent(evt){
     var evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
@@ -516,6 +521,9 @@ function tabsSetup(){
 	    var atab=tablist[j];
 	    if(!atab.children[0].onclick) {
 		atab.onclick=tabclickevent;
+		atab.ondblclick=tabdblclickevent;
+		atab.myonclick=tabclickevent;
+		atab.myondblclick=tabdblclickevent;
 		if(j != activetab){
 		    appendMissingClass(atab,'ui-state-default');
 		    var sid = atab.children[0].hash.substr(1);
