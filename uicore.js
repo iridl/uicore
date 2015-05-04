@@ -5208,9 +5208,9 @@ function updateLangGroups(context){
     if(!langgroupstyle){
 	langgroupstyle = document.createElement('style');
 	langgroupstyle.id='langgroupstyle';
-	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
 	var ref = document.getElementsByTagName('script')[0];
 	ref.parentNode.insertBefore(langgroupstyle,ref);
+	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
 	langgroupstyle.langs={};
     }
     var langgroups = context.getElementsByClassName('langgroup');
