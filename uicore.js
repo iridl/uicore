@@ -137,7 +137,7 @@ lhref = scriptroot + ghref.substr(scripturl.length);
 else {
 lhref= ghref;
 }
-if(lhref.substr(0,1) == '/'){
+if(lhref && lhref.substr(0,1) == '/'){
     lhref = location.protocol + '//' + location.host + lhref;
 }
 return lhref;
