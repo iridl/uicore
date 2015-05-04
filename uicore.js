@@ -5210,7 +5210,13 @@ function updateLangGroups(context){
 	langgroupstyle.id='langgroupstyle';
 	var ref = document.getElementsByTagName('script')[0];
 	ref.parentNode.insertBefore(langgroupstyle,ref);
-	langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
+	if(document.styleSheets['langgroupstyle'].addRule){
+	    document.styleSheets['langgroupstyle'].addRule(".langgroup [lang]","display:inline");
+	    document.styleSheets['langgroupstyle'].addRule(".langgroup [lang] + [lang]","display:none");
+	}
+	else {
+	    langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
+	}
 	langgroupstyle.langs={};
     }
     var langgroups = context.getElementsByClassName('langgroup');
@@ -5234,9 +5240,19 @@ function updateLangGroups(context){
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
 		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
+		if(document.styleSheets['langgroupstyle'].addRule){
+		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: none");
+		}
+		else {
 		langgroupstyle.innerHTML += ctarget + ' {display: none} ' ;
+		}
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
+		if(document.styleSheets['langgroupstyle'].addRule){
+		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: inline");
+		}
+		else {
 		langgroupstyle.innerHTML += ctarget + ' {display: inline} ' ;
+		}
 	    }
 	}
 	mygrp.setAttribute('langgroup',keys.join(' '));
