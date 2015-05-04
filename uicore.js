@@ -5915,7 +5915,7 @@ submitPageForm -- submits pageform to href, appending inputs corresponding to cl
 function submitPageForm(href,classes,inMethod){
     var localhref=localHrefOf(removePageForm(href));
 var theMethod='GET';
-    if(!localhef){localhref=document.location.href;}
+    if(!localhref){localhref=document.location.href;}
 if(inMethod){
     theMethod=inMethod;
 }
