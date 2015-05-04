@@ -95,6 +95,7 @@ by the maproom javascript code.
 maproomroot: holds the document root
 localHrefOf: converts a /maproom/ reference to be relative to the current document
 */
+var IE8=(navigator.appVersion.indexOf('MSIE 8')>=0);
 var slist=document.getElementsByTagName('script');
 var scriptsrc='';
 for (var i=0; i<slist.length; i++){
@@ -1631,7 +1632,7 @@ if (sel.hrefroot + anchref == fullpathname || sel.hrefroot + anchref == altpathn
 opt.selected=true;
 }
 /* IE8 has strange optgroup behavior */
-if(navigator.appVersion.indexOf('MSIE 8')<0){
+if(!IE8){
 og.appendChild(opt);
 }else
     sel.add(opt);
@@ -5214,12 +5215,12 @@ function updateLangGroups(context){
 	langgroupstyle.id='langgroupstyle';
 	var ref = document.getElementsByTagName('script')[0];
 	ref.parentNode.insertBefore(langgroupstyle,ref);
-	if(document.styleSheets['langgroupstyle'].addRule){
+	if(IE8){
 	    document.styleSheets['langgroupstyle'].addRule(".langgroup [lang]","display:inline");
 	    document.styleSheets['langgroupstyle'].addRule(".langgroup [lang] + [lang]","display:none");
 	}
 	else {
-	    langgroupstyle.innerHTML = ".langgroup [lang] {display:inline} .langgroup [lang] + [lang] {display:none} ";
+	    langgroupstyle.innerHTML = ".langgroup [lang] {display:inline}\n.langgroup [lang] + [lang] {display:none}\n";
 	}
 	langgroupstyle.langs={};
     }
@@ -5244,18 +5245,18 @@ function updateLangGroups(context){
 	    if(!langgroupstyle.langs[key]){
 		langgroupstyle.langs[key]='1';
 		var ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang]';
-		if(document.styleSheets['langgroupstyle'].addRule){
+		if(IE8){
 		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: none");
 		}
 		else {
-		langgroupstyle.innerHTML += ctarget + ' {display: none} ' ;
+		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
 		}
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
-		if(document.styleSheets['langgroupstyle'].addRule){
+		if(IE8){
 		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: inline");
 		}
 		else {
-		langgroupstyle.innerHTML += ctarget + ' {display: inline} ' ;
+		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
 		}
 	    }
 	}
