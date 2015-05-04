@@ -119,8 +119,12 @@ var maproomroot = document.location.href.substr(0,document.location.href.lastInd
 
 function localHrefOf(ghref){
 var lhref;
-var ifmap  = ghref.lastIndexOf('/maproom/');
-var ifscript  = ghref.lastIndexOf('/uicore/');
+    var ifmap=-1;
+    var ifscript=-1;
+    if(ghref){
+	ifmap  = ghref.lastIndexOf('/maproom/');
+	ifscript  = ghref.lastIndexOf('/uicore/');
+    }
 if(ifmaproomroot > -1 && ifmap > -1){
 var maproomurl = ghref.substr(0,ifmap+9);
 lhref = maproomroot + ghref.substr(maproomurl.length);
