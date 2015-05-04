@@ -5913,9 +5913,9 @@ function alldisabledPageForm(classes,includeDefaultValues){
 submitPageForm -- submits pageform to href, appending inputs corresponding to class.
 */
 function submitPageForm(href,classes,inMethod){
+    if(!href){return}
     var localhref=localHrefOf(removePageForm(href));
 var theMethod='GET';
-    if(!localhref){localhref=document.location.href;}
 if(inMethod){
     theMethod=inMethod;
 }
