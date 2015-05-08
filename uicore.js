@@ -2394,6 +2394,7 @@ function mapObject (obj,key,myDirective){
 	var findlg=new RegExp('([^"]*).iridl:asLangGroup');
 	var findrc=new RegExp('([^".]*)[.]([^".]*).iridl:recurse');
 	var findfl=new RegExp('([^"]*).iridl:firstLetter');
+	var findcnt=new RegExp('([^"]*).iridl:length');
 	if(typeof(obj) == 'object'){
 	    newobj = transformObject(obj,mapObject,myDirective);
 	}
@@ -2535,6 +2536,27 @@ function mapObject (obj,key,myDirective){
 		    }
 		    return ret}; 
 	    }
+	    if(res = findcnt.exec(obj)){
+		var localref=res[1];
+		newobj = function(arg){
+		    var local=localref; 
+		    var ret; 
+
+		    var mycontid = local.substr(1+local.indexOf('.'));
+		    var contidlist = mycontid.split(".");
+		    var mycont = arg.context;
+		    if(arg.item){mycont=arg.item};
+		    for (var i=0 ; i < contidlist.length ; i++) {
+                        if (mycont) {
+			mycont = mycont[contidlist[i]];
+			}
+		    }
+		    if(mycont){
+		    ret = mycont.length;
+		    }
+		    return ret;
+		    }
+		}
 	    if(res = findfl.exec(obj)){
 		var localref=res[1];
 		newobj = function(arg){
