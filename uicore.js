@@ -408,6 +408,9 @@ function makeSubTabActive(tab,ifclick){
     if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
 	sid = tab.children[0].hash.substr(1);
     }
+	else {
+	    location.href = tab.children[0].href;
+	}
     if(tab.className.indexOf("ui-state-active") >=0){
 	changeClass(tab,"ui-state-active","ui-state-default");
 	if(sid && document.getElementById(sid)){
