@@ -372,6 +372,26 @@ function tabclickevent(evt){
 
     if(evt.shiftKey){
 	toggleClass(it,'toggle');
+	if(it.children[0] && it.children[0].hash){
+	if(it.className.indexOf('toggle')<0){
+	    var tlists = decodeURIComponent(getCookie('toggletabs'));
+	    var tlist = tlists.split(' ');
+	    tlists='';
+	    var delim='';
+	    for(var i=0; i<tlist.length; i++){
+		if(tlist[i] != it.children[0].hash){
+		    tlists = tlists + delim + tlist[i];
+		    delim=' ';
+		}
+	    }
+	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlists);
+	}
+	else {
+	    var tlist = decodeURIComponent(getCookie('toggletabs'));
+	    tlist = tlist + ' ' + it.children[0].hash;
+	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlist);
+	}
+	}
     }
     if(makeTabActive(it,true)){
         if(history && history.pushState && it.children[0].pathname == location.pathname){
@@ -506,6 +526,11 @@ function tabtarget(evt){
 }
 function tabsSetup(){
     var mylist=document.getElementsByClassName("ui-tabs");
+    var togglelist=decodeURIComponent(getCookie('toggletabs')).split(' ');
+    var togglehash={};
+    for(var i=0;i<togglelist.length; i++){
+	togglehash[togglelist[i]]=true;
+    }
     for (var i= 0; i<mylist.length; i++){
 	var tabset=mylist[i];
 	var tablist;
@@ -521,6 +546,9 @@ function tabsSetup(){
 	}
 	for (var j=0; j<tablist.length; j++){
 	    var atab=tablist[j];
+	    if(atab.children[0] && atab.children[0].hash &&  togglehash[atab.children[0].hash]){
+		appendMissingClass(atab,'toggle');
+	    }
 	    if(!atab.children[0].onclick) {
 		atab.onclick=tabclickevent;
 		atab.myonclick=tabclickevent;
@@ -6177,17 +6205,6 @@ githubform[0].elements["github"].value=gid;
 setgithubjson(gid);
 }
 }
-}
-function getCookie(wantid){
-var cookies=document.cookie;
-var cookielist=cookies.split(';')
-for(var i=0; i<cookielist.length ; i++){
-	var apair=cookielist[i].split("=");
-	var cname=apair[0];
-	while(cname.charAt(0)==' ')cname = cname.substring(1);
-	if(cname.indexOf(wantid) == 0)return apair[1];
-}
-return "";
 }
 function dogithub(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
