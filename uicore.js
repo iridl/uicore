@@ -4018,7 +4018,7 @@ var res = myform.elements['resolution'];
 	    }
 	}
     }
-    if(resclass=='point'){
+    if(res && resclass=='point'){
 	if(res.value.substring && res.value.substring(0,6)=='irids:'){
 	    var parts = res.value.split(':');
 	    resclass = parts[parts.length-2];
