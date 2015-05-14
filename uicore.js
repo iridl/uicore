@@ -3417,6 +3417,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	currentObj=llist[0];
 	}
     }
+    var pform=document.getElementById('pageform');
     if(!currentObj.nextSibling.className || currentObj.nextSibling.className.indexOf('dlcontrol') < 0){
 	var pformchanged = false;
 	var kmlurl;
