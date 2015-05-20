@@ -384,12 +384,12 @@ function tabclickevent(evt){
 		    delim=' ';
 		}
 	    }
-	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlists) + ";path='/'";
+	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlists) + "; path=/";
 	}
 	else {
 	    var tlist = decodeURIComponent(getCookie('toggletabs'));
 	    tlist = tlist + ' ' + it.children[0].hash;
-	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlist) + ";path='/'";
+	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlist) + "; path=/";
 	}
 	}
     }
@@ -6210,7 +6210,7 @@ setgithubjson(gid);
 function dogithub(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
-document.cookie="githubid=" + it.elements["github"].value + ";path='/'";
+document.cookie="githubid=" + it.elements["github"].value + "; path=/";
 return false;
 }
 function dogithubjson(evt){
