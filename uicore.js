@@ -3505,7 +3505,7 @@ function DLimageBuildControls(mydlimage,mylink){
 		if(formlayers && formlayers.value==layername){
 		    ipt.checked=formlayers.checked;
 		}
-		else if(formlayers && formlayers.some(function (ele){return (ele.value==this)},layername)){
+		else if(formlayers && formlayers.length && formlayers.some(function (ele){return (ele.value==this)},layername)){
 		    var myfl = formlayers.filter(function (ele){return ele.value==this},layername)[0];
 		    ipt.checked=myfl.checked;
 		}
