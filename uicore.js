@@ -6305,6 +6305,19 @@ if(uicoreConfig.GoogleAnalyticsId){
   _gaq.push(['_trackPageLoadTime']); 
     setupGA();
 */
+if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+            if (mql.matches) {
+                refreshConnectedGraphs();
+            } else {
+                refreshConnectedGraphs();
+            }
+        });
+    }
+
+    window.onbeforeprint = refreshConnectedGraphs;
+    window.onafterprint = refreshConnectedGraphs;
   ga('create', uicoreConfig.GoogleAnalyticsId, 'columbia.edu');
   ga('send', 'pageview');
 }
