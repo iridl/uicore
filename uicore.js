@@ -2183,13 +2183,24 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	var graph = graphs[i];
 	var canvas = graph.getElementsByTagName('canvas')[0];
 	if(canvas.getContext){
-	canvas.width=canvas.clientWidth;
-        canvas.height=canvas.clientHeight;
-	var ctx = canvas.getContext("2d");
+	    canvas.width=canvas.clientWidth;
+            canvas.height=canvas.clientHeight;
+	    var ctx;
+	    if(canvas.ctx){
+		ctx=canvas.ctx;
+	    }
+	    else {
+		ctx = canvas.getContext("2d");
+		canvas.ctx=ctx;
+		}
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var objs = graph.getElementsByClassName('graphobject');
 	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
+	    if(typeof(tobj.onmouseover) != 'function'){
+		tobj.onmouseover=highlightConnectedGraphs;
+		tobj.onmouseout=refreshConnectedGraphs;
+		}
 	    var llist = $(tobj.parentNode).children(".lineset").children("[linefrom]");
 	    for (var iline = 0 ; iline < llist.length ; iline++){
 		var lfrom = llist[iline].getAttribute('linefrom');
@@ -2199,6 +2210,28 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		    }
 		}
 	    }
+	}
+    }
+}
+function highlightConnectedGraphs(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+var graphs = document.getElementsByClassName('connectedgraph');
+    for (var i=0;i<graphs.length; i++){
+	var graph = graphs[i];
+	var canvas = graph.getElementsByTagName('canvas')[0];
+	if(canvas.getContext){
+	    var ctx = canvas.ctx;
+	    var tobj = it;
+	    ctx.lineWidth=3;
+	    var llist = $(tobj.parentNode).children(".lineset").children("[linefrom]");
+	    for (var iline = 0 ; iline < llist.length ; iline++){
+		var lfrom = llist[iline].getAttribute('linefrom');
+		if(lfrom){
+		    var fobj = document.getElementById(lfrom);
+		    gconnect(canvas,fobj,tobj);
+		}
+	    }	    
 	}
     }
 }
