@@ -2391,6 +2391,9 @@ function runPureOnContext(myContext){
 	    if(myContext.pureTemplateClass){
 	    	    myContext.byDirective[0].pureTemplateClass=myContext.pureTemplateClass;
 		    }
+	    else if(myContext.getAttribute('data-hasTemplate')){
+	    	    myContext.byDirective[0].pureTemplateClass=myContext.getAttribute('data-hasTemplate');
+		}
 		    else {
 	    	    myContext.byDirective[0].pureTemplateClass='template';
 		    }
