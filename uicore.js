@@ -2350,10 +2350,12 @@ function runPureOnContext(myContext){
 	contextcount=contextcount+1;
 	/* loops over script iridl:hasPUREdirective elements for directives */
 	var myscripts = getElementsByAttribute(myContext,'script','property','iridl:hasPUREdirective');
+	var doDefaultScript=true;
 	if(myscripts.length > 0){
 	    for (var iscript = 0 ; iscript<myscripts.length ; iscript++){
 		var myscript = myscripts[iscript];
 	        if(myscript.parentNode == myContext){
+		    doDefaultScript=false;
                     var holdtxt = myscript.text;
 		   var mystuff = {};
 		    mystuff.pureDirective="";
@@ -2382,7 +2384,7 @@ function runPureOnContext(myContext){
 		}
 	    }
 	}
-	else {
+	if(doDefaultScript){
 	/* does default single directive or not*/
 	    myContext.byDirective[0]={};
 	    myContext.byDirective[0].pureDirective=myContext.pureDirective;
