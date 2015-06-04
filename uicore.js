@@ -2195,8 +2195,29 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		}
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var objs = graph.getElementsByClassName('graphobject');
-	for (var iob=0; iob < objs.length ; iob++){
+	    if(objs.length){
+		var tobj = objs[0];
+		if(!tobj.getAttribute('glevel')){
+		    tobj.setAttribute('glevel',0);
+		    graph.setAttribute('glevel',0);
+		    }
+		}	
+	    for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
+	    if(!tobj.getAttribute('glevel')){
+		var lsobj = tobj.parentNode.parentNode.parentNode;
+		var pgobj = $(lsobj.parentNode).children(".graphobject");
+		if(pgobj.length && pgobj[0].getAttribute('glevel')){
+		    var olevel = parseInt(pgobj[0].getAttribute('glevel'));
+		    var nlevel = ++olevel;
+		    tobj.setAttribute('glevel',nlevel);
+		    tobj.parentNode.setAttribute('glevel',nlevel);
+		    olevel = parseInt(graph.getAttribute('glevel'));
+		    if(nlevel > olevel){
+			graph.setAttribute('glevel',nlevel);
+			}
+		}
+	    }
 	    if(typeof(tobj.onmouseover) != 'function'){
 		tobj.onmouseover=highlightConnectedGraphs;
 		tobj.onmouseout=refreshConnectedGraphs;
