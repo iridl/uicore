@@ -2181,19 +2181,6 @@ function refreshConnectedGraphs(evt){
 var graphs = document.getElementsByClassName('connectedgraph');
     for (var i=0;i<graphs.length; i++){
 	var graph = graphs[i];
-	var canvas = graph.getElementsByTagName('canvas')[0];
-	if(canvas.getContext){
-	    canvas.width=canvas.clientWidth;
-            canvas.height=canvas.clientHeight;
-	    var ctx;
-	    if(canvas.ctx){
-		ctx=canvas.ctx;
-	    }
-	    else {
-		ctx = canvas.getContext("2d");
-		canvas.ctx=ctx;
-		}
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var objs = graph.getElementsByClassName('graphobject');
 	    if(objs.length){
 		var tobj = objs[0];
@@ -2202,6 +2189,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		    graph.setAttribute('glevel',0);
 		    }
 		}	
+//initialization loop
 	    for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
 	    if(!tobj.getAttribute('glevel')){
@@ -2222,6 +2210,26 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		tobj.onmouseover=highlightConnectedGraphs;
 		tobj.onmouseout=refreshConnectedGraphs;
 		}
+	    }
+    var forcereflow=graph.offsetHeight;
+// drawing setup
+	var canvas = graph.getElementsByTagName('canvas')[0];
+	if(canvas.getContext){
+	    canvas.width=canvas.clientWidth;
+            canvas.height=canvas.clientHeight;
+	    var ctx;
+	    if(canvas.ctx){
+		ctx=canvas.ctx;
+	    }
+	    else {
+		ctx = canvas.getContext("2d");
+		canvas.ctx=ctx;
+		}
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+// drawing loop
+	    for (var iob=0; iob < objs.length ; iob++){
+	    var tobj = objs[iob];
+
 	    var llist = $(tobj.parentNode).children(".lineset").children("[linefrom]");
 	    for (var iline = 0 ; iline < llist.length ; iline++){
 		var lfrom = llist[iline].getAttribute('linefrom');
