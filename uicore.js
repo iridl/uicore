@@ -5212,6 +5212,17 @@ for (var i=0; i< stag.length ; i++){
 	    sel.onclickfn=handleworddef;
 	}
     }
+    var tablistb = context.getElementsByClassName("ui-tabs-nav");
+    if(tablistb.length>0){
+	var tablist = tablistb[0].getElementsByTagName("li");
+	for (var j=0; j<tablist.length; j++){
+	    var atab=tablist[j];
+	    if(!atab.children[0].onclick) {
+		atab.onclick=tabclickevent;
+		atab.myonclick=tabclickevent;
+	    }
+	}
+    }
 }
 function dopageformcommand (evt){
   var evt = (evt) ? evt : ((event) ? event : null );
