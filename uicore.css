@@ -731,10 +731,15 @@ input:disabled + span { color: grey }
 .leftarrow, .rightarrow {
 opacity: 0.2;
 }
-.controlSet.singleValue.aboveLower .leftarrow, .controlSet.singleValue.belowUpper .rightarrow{
+.controlSet.singleValue.aboveLower .leftarrow, .controlSet.singleValue.belowUpper .rightarrow,
+.connectedgraph.aboveLower .leftarrow,.connectedgraph.belowUpper .rightarrow
+{
 opacity: 0.4;
 }
-.controlSet:hover.singleValue.aboveLower .leftarrow, .controlSet:hover.singleValue.belowUpper .rightarrow{
+.controlSet:hover.singleValue.aboveLower .leftarrow,
+ .controlSet:hover.singleValue.belowUpper .rightarrow,
+.connectedgraph.aboveLower .leftarrow:hover,.connectedgraph.belowUpper .rightarrow:hover
+{
 opacity: 0.6;
 }
 .leftarrow:before {
@@ -1629,8 +1634,10 @@ float: right;
 }
 .ui-tabs-panel-float {
 float: right;
-width: 40%;
+width: 36%;
 margin-left: 2px;
+resize: horizontal;
+overflow: hidden;
 }
  .itemIcon {
 padding-top: 16px;

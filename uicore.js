@@ -368,7 +368,8 @@ var guess='';
  }
 function tabclickevent(evt){
     var evt = (evt) ? evt : ((event) ? event : null );
-    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    if (!it) {it = evt.srcElement.parentNode;}
 
     if(evt.shiftKey){
 	toggleClass(it,'toggle');
@@ -2190,7 +2191,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		    }
 		}	
 //initialization loop
-	    for (var iob=0; iob < objs.length ; iob++){
+	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
 	    if(!tobj.getAttribute('glevel')){
 		var lsobj = tobj.parentNode.parentNode.parentNode;
@@ -2203,17 +2204,54 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		    olevel = parseInt(graph.getAttribute('glevel'));
 		    if(nlevel > olevel){
 			graph.setAttribute('glevel',nlevel);
-			}
+		    }
 		}
 	    }
 	    if(typeof(tobj.onmouseover) != 'function'){
 		tobj.onmouseover=highlightConnectedGraphs;
 		tobj.onmouseout=refreshConnectedGraphs;
-		}
 	    }
-    var forcereflow=graph.offsetHeight;
-// drawing setup
+	}
+// button setup
 	var canvas = graph.getElementsByTagName('canvas')[0];
+	var ifbut=graph.getElementsByClassName('moreglevelbutton').length;
+	var tlevel = graph.getAttribute('data-glevel');
+	var clevel = parseInt(graph.getAttribute('glevel'));
+	if(tlevel){
+	    if(clevel>=parseInt(tlevel)){
+		appendMissingClass(graph,'aboveLower');
+	    }
+	    if(clevel>0){
+		appendMissingClass(graph,'belowUpper');
+	    }
+	}
+	if(tlevel && !ifbut){
+	    var glevelstyle = document.getElementById('glevellimit');
+	    if(!glevelstyle){
+		glevelstyle = document.createElement('style');
+		glevelstyle.id = 'glevellimit';
+		var ref=document.getElementsByTagName('head')[0];
+		ref.appendChild(glevelstyle);
+		if(IE8){
+	    document.styleSheets['glevellimit'].addRule('.var[glevel="' + tlevel + '"]',"display:none");
+		    }
+		    else {
+	    glevelstyle.innerHTML = '.var[glevel="' + tlevel + '"]{display:none}'
+		    }
+		}
+ 	    var gbut = document.createElement('div');
+	    gbut.className='moreglevelbutton oneStep leftarrow';
+	    gbut.onclick  =moreglevelclick;
+	    gbut.onclickfn=moreglevelclick;
+	    graph.insertBefore(gbut,canvas);
+ 	    gbut = document.createElement('div');
+	    gbut.className='moreglevelbutton oneStep rightarrow';
+	    gbut.onclick  =moreglevelclick;
+	    gbut.onclickfn=moreglevelclick;
+	    graph.insertBefore(gbut,canvas);
+	}
+	var forcereflow=graph.offsetHeight;
+// drawing setup
 	if(canvas.getContext){
 	    canvas.width=canvas.clientWidth;
             canvas.height=canvas.clientHeight;
@@ -2305,6 +2343,40 @@ function gconnect(canvas,fobj,tobj){
     }
     ctx.stroke();
 }
+function moreglevelclick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+
+    var leftarrow = (it.className.indexOf('leftarrow') >= 0);
+    if(leftarrow){
+	var tlist = $('.toggle.ui-state-active').click();
+    }
+
+   var gmax = it.parentNode.getAttribute('glevel');
+   var glimit = parseInt(document.styleSheets['glevellimit'].cssRules[0].selectorText.replace(/.*glevel="(.*)".*/,"$1"));
+   var newlimit;
+   if(leftarrow){
+   newlimit = glimit + 1;
+   }
+   else {
+      newlimit = glimit - 1;
+}
+    if(newlimit <= gmax + 1 && newlimit > 0) {
+        document.styleSheets['glevellimit'].cssRules[0].selectorText='.var[glevel="' + newlimit + '"]';
+    }
+    if(newlimit > gmax) {
+        removeClass(it.parentNode,'aboveLower');
+    }else {
+    appendMissingClass(it.parentNode,'aboveLower');
+    }
+    if(newlimit <= 1) {
+        removeClass(it.parentNode,'belowUpper');
+    } else {
+    appendMissingClass(it.parentNode,'belowUpper');
+    }
+    refreshConnectedGraphs();
+}
+
 /* reads JSON file referred to by a link object
 The parent of the link object we call the Context.
 when file is returned, if the url retrieved is still the url that the
