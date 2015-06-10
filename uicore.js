@@ -2221,9 +2221,6 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	    if(clevel>=parseInt(tlevel)){
 		appendMissingClass(graph,'aboveLower');
 	    }
-	    else {
-		tlevel = clevel+1;
-	    }
 	    if(clevel>0){
 		appendMissingClass(graph,'belowUpper');
 	    }
