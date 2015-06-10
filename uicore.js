@@ -2239,7 +2239,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	    document.styleSheets['glevellimit'].addRule('.var[glevel="' + tlevel + '"]',"display:none");
 		    }
 		    else {
-	    glevelstyle.innerHTML = '.var[glevel="' + tlevel + '"]{display:none}'
+			glevelstyle.innerHTML = '.var[glevel="' + tlevel + '"]' + "{display:none}\n";
 		    }
 		}
  	    var gbut = document.createElement('div');
@@ -2357,11 +2357,13 @@ function moreglevelclick(evt){
 
    var gmax = it.parentNode.getAttribute('glevel');
     var grule;
-    if(document.styleSheets['glevellimit'].cssRules){
-	grule = document.styleSheets['glevellimit'].cssRules[0];
+    var glevelstyle = document.getElementById('glevellimit').sheet;
+    if(glevelstyle){
+    if(IE8){
+	grule = glevelstyle.rules[0];
     }
     else {
-	grule = document.styleSheets['glevellimit'].rules[0];
+	grule = glevelstyle.cssRules[0];
     }
    var glimit = parseInt(grule.selectorText.replace(/.*glevel="(.*)".*/i,"$1"));
    var newlimit;
@@ -2370,9 +2372,13 @@ function moreglevelclick(evt){
    }
    else {
       newlimit = glimit - 1;
-}
+   }
     if(newlimit <= gmax + 1 && newlimit > 0) {
-        grule.selectorText='.var[glevel="' + newlimit + '"]';
+	var old = grule.selectorText;
+	    grule.selectorText='.var[glevel="' + newlimit + '"]';
+	    if(old == grule.selectorText){
+		document.getElementById('glevellimit').innerHTML='.var[glevel="' + newlimit + '"]{display: none}' + "\n";
+	    }
     }
     if(newlimit > gmax) {
         removeClass(it.parentNode,'aboveLower');
@@ -2383,6 +2389,7 @@ function moreglevelclick(evt){
         removeClass(it.parentNode,'belowUpper');
     } else {
     appendMissingClass(it.parentNode,'belowUpper');
+    }
     }
     refreshConnectedGraphs();
 }
