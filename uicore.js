@@ -2356,7 +2356,14 @@ function moreglevelclick(evt){
     }
 
    var gmax = it.parentNode.getAttribute('glevel');
-   var glimit = parseInt(document.styleSheets['glevellimit'].cssRules[0].selectorText.replace(/.*glevel="(.*)".*/,"$1"));
+    var grule;
+    if(document.styleSheets['glevellimit'].cssRules){
+	grule = document.styleSheets['glevellimit'].cssRules[0];
+    }
+    else {
+	grule = document.styleSheets['glevellimit'].rules[0];
+    }
+   var glimit = parseInt(grule.selectorText.replace(/.*glevel="(.*)".*/i,"$1"));
    var newlimit;
    if(leftarrow){
    newlimit = glimit + 1;
@@ -2365,7 +2372,7 @@ function moreglevelclick(evt){
       newlimit = glimit - 1;
 }
     if(newlimit <= gmax + 1 && newlimit > 0) {
-        document.styleSheets['glevellimit'].cssRules[0].selectorText='.var[glevel="' + newlimit + '"]';
+        grule.selectorText='.var[glevel="' + newlimit + '"]';
     }
     if(newlimit > gmax) {
         removeClass(it.parentNode,'aboveLower');
