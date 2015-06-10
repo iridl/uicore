@@ -2323,7 +2323,7 @@ function gconnect(canvas,fobj,tobj){
 	    my = (ty + fy)/2;
 	}
 	else {
-	    my = ty- 1.1 * tobj.clientHeight;
+	    my = (ty + fy + 4)/2;
 	}
 	var toff = 15;
 	var foff = 8;
