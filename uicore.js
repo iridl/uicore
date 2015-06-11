@@ -2187,7 +2187,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		var tobj = objs[0];
 		if(!tobj.getAttribute('glevel')){
 		    tobj.setAttribute('glevel',0);
-		    graph.setAttribute('glevel',0);
+		    graph.setAttribute('glevelmax',0);
 		    }
 		}	
 //initialization loop
@@ -2201,9 +2201,9 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		    var nlevel = ++olevel;
 		    tobj.setAttribute('glevel',nlevel);
 		    tobj.parentNode.setAttribute('glevel',nlevel);
-		    olevel = parseInt(graph.getAttribute('glevel'));
+		    olevel = parseInt(graph.getAttribute('glevelmax'));
 		    if(nlevel > olevel){
-			graph.setAttribute('glevel',nlevel);
+			graph.setAttribute('glevelmax',nlevel);
 		    }
 		}
 	    }
@@ -2216,7 +2216,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	var canvas = graph.getElementsByTagName('canvas')[0];
 	var ifbut=graph.getElementsByClassName('moreglevelbutton').length;
 	var tlevel = graph.getAttribute('data-glevel');
-	var clevel = parseInt(graph.getAttribute('glevel'));
+	var clevel = parseInt(graph.getAttribute('glevelmax'));
 	if(tlevel){
 	    if(clevel>=parseInt(tlevel)){
 		appendMissingClass(graph,'aboveLower');
@@ -2355,7 +2355,7 @@ function moreglevelclick(evt){
 	var tlist = $('.toggle.ui-state-active').click();
     }
 
-   var gmax = it.parentNode.getAttribute('glevel');
+   var gmax = parseInt(it.parentNode.getAttribute('glevelmax'));
     var grule;
     var glevelstyle = document.getElementById('glevellimit').sheet;
     if(glevelstyle){
