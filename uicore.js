@@ -444,7 +444,16 @@ function makeSubTabActive(tab,ifclick){
         document.getElementById(sid).className="ui-tabs-panel-float";
 	var mypanel = document.getElementById(sid);
 	var myset = mypanel.parentNode;
-	myset.insertBefore(mypanel,myset.firstElementChild.nextElementSibling);
+	var togglelist = tab.parentNode.getElementsByClassName("toggle");
+	var insertAfter=myset.firstElementChild;
+	    for(var j=0; j<togglelist.length ; j++){
+		var tsid =  togglelist[j].firstElementChild.hash.substr(1);
+		var tpanel = document.getElementById(tsid);
+		if(tpanel){
+		    myset.insertBefore(tpanel,insertAfter.nextElementSibling);
+		    insertAfter=tpanel;
+		}
+		}
 	}
     }
     }
