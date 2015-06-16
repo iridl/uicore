@@ -4551,10 +4551,11 @@ function insertInstructions(){
 	    el = document.createElement('script');
 	    el.type = "application/json";
             el.setAttribute('property','iridl:hasPUREdirective');
+	    el.className="instructionsTemplate";
 	    el.text='{".button" : {"button<-uicore:buttonList":{".icon@class+": "button.uicore:icon",".label": "button.term:label",".description": "button.term:description"}}}';
 	    cont.appendChild(el);
 	    el=document.createElement('div');
-	    el.className="template";
+	    el.className="instructionsTemplate";
 	    cont.appendChild(el);
 	    var el2=document.createElement('div');
 	    el2.className="button";
