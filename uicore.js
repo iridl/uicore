@@ -639,9 +639,14 @@ var ls=document.createElement('legend');
     ls.setAttribute('lang','es');
 ls.appendChild(document.createTextNode('Contáctenos'));
 s.insertBefore(ls,s.firstChild);
+
 ls=document.createElement('legend');
     ls.setAttribute('lang','fr');
 ls.appendChild(document.createTextNode('Contactez Nous'));
+s.insertBefore(ls,s.firstChild);
+ls=document.createElement('legend');
+    ls.setAttribute('lang','ru');
+ls.appendChild(document.createTextNode('Контактная информация'));
 s.insertBefore(ls,s.firstChild);
 ls=document.createElement('legend');
     ls.setAttribute('lang','en');
