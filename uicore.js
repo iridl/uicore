@@ -1049,7 +1049,14 @@ if(sfigs.length){
     var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
     if(kmlurl){
 	var myurl = appendPageForm(kmlurl,kmlclass);
+	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
+	if(msga.length>0){
+	    msga[0].innerHTML="<p>To open using WMS, enter this URL for the WMSserver</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea>';
+	    toggleClass(msga[0],'show');
+	}
+	else {
 	alert(myurl);
+	}
 	/*	location.href=myurl; */
 /*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
 	ga('send','social', 'WMS','asWMS',location.href);
