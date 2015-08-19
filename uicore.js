@@ -2438,6 +2438,11 @@ xmlhttp.onreadystatechange = function(evt) {
 if(it.readyState == 4){
     if(it.status == 200){
 	var jsontxt = it.responseText;
+	var jsonparser=it.myLink.getAttribute('data-parser');
+	if(jsonparser){
+	    var expr = jsonparser + '(jsontxt);';
+	    jsontxt=eval(expr);
+	}
 	if(it.myLink.localurl == it.infourl){
 	    var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
 	    if(dumpelement.length > 0){dumpelement[0].innerHTML=jsontxt;}
