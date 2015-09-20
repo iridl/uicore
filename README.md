@@ -10,6 +10,16 @@ This README would normally document whatever steps are necessary to get your app
 
 This html pages are written in xhtml, so that elements can be parsed with rdfa, so not only are the elements configured so that the code operates properly, but the configuration can be read by rdfa and the relationships used by global rdf databases.
 
+## pageform ##
+The core feature of each of this pages is a html FORM called **pageform**.  For example
+
+
+    <form name="pageform" id="pageform">
+    <input class="carryLanguage" name="Set-Language" type="hidden" />
+    <input class="titleLink itemImage" name="bbox" type="hidden" />
+    </form>
+
+Here we have two variables *Set-Language" and *bbox*.   *Set-Language* is the current language for the build-in language support, which allows the language to be specified but defaults to determining the language chosen by the browser user in their browser configuration.  *bbox* is the current zoom for an image that is configured to read additional spatial information.  In this case, *Set-Language* automatically generated a language menu for a page that have multiple language choices; *bbox* can result in zoom controls if the proper elements are on the page.
 
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
