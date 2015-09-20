@@ -4,7 +4,12 @@ This README would normally document whatever steps are necessary to get your app
 
 ### javascript user interface library based on html objects ###
 
-* Quick summary
+* Concept
+
+*uicore* is a javascript library designed to build tools specified by single html pages that contain a single state space (called **pageform**) and a collection of elements that interact by modifying that state space.  Such elements include controls, images, and external json files, as well as some built-in support for selecting areas and clicking on pointw. **pageform** is subdivided using classes so that the author can control what parts of **pageform** each element monitors, limiting which elements need to be updating on a variable change.
+
+
+
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
