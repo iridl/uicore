@@ -19,7 +19,9 @@ The core feature of each of this pages is a html FORM called **pageform**.  For 
     <input class="titleLink itemImage" name="bbox" type="hidden" />
     </form>
 
-Here we have two variables *Set-Language* and *bbox*.   *Set-Language* is the current language for the build-in language support, which allows the language to be specified but defaults to determining the language chosen by the browser user in their browser configuration.  *bbox* is the current zoom for an image that is configured to read additional spatial information.  In this case, *Set-Language* automatically generated a language menu for a page that have multiple language choices; *bbox* can result in zoom controls if the proper elements are on the page.
+Here we have two variables *Set-Language* and *bbox*.   *Set-Language* is the current language for the build-in language support, which allows the language to be specified but defaults to determining the language chosen by the browser user in their browser configuration.  *bbox* is the current zoom for an image that is configured to read additional spatial information.  In this case, *Set-Language* automatically generated a language menu for a page that have multiple language choices; *bbox* can result in zoom controls if the proper elements are on the page.  
+
+In this case, any element that has class *carryLanguage* will get updated on any change to the variable *Set-Language*, while any element has has class *titleLink* or *itemImage* will get updated on any change to the element *bbox*.
 
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
