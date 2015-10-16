@@ -1953,7 +1953,7 @@ background-color: white;
 opacity: 1.0;
 }
 #googleplusbutton div {
-// width: 75px !important;
+width: 200px !important;
 }
 #gmailbutton a {
 display:inline-block; 
