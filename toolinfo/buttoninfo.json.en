@@ -1,6 +1,6 @@
 {
 "@context": {
-"uicore":"http://iridl.ldeo.columbia.edu/uicore/",
+"uicore": "http://iridl.ldeo.columbia.edu/uicore/",
 "term": "http://iridl.ldeo.columbia.edu/ontologies/iriterms.owl#",
 "uicore:buttonList": {"@container": "@list"},
 "term:label": {"@language": "en"},
