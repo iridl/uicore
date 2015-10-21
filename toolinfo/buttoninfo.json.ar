@@ -1,0 +1,54 @@
+{
+"@context": {
+"uicore": "http://iridl.ldeo.columbia.edu/uicore/",
+"term": "http://iridl.ldeo.columbia.edu/ontologies/iriterms.owl#",
+"uicore:buttonList": {"@container": "@list"},
+"term:label": {"@language": "ar"},
+"term:description": {"@language": "ar"}
+},
+"uicore:lang": "ar",
+"uicore:buttonList": [
+{
+"uicore:icon": "zoomout",
+"term:label": "تصغير",
+"term:description": "استعادة الحجم الأصلى للصفحه عن طريق الغاء اوامر التكبير السابقه.   يجب ملاحظة  أن زر العوده يلغى جميع اوامرالتكبير السابقه فى  الانترنت الحديثه."
+},
+{
+"uicore:icon": "info",
+"term:label": "معلومات أكثر",
+"term:description": "يقوم بفتح صفحه فى مكتبة قواعد البيانات و التى ستمكن المستخدم من الحصول على معلومات أكثر و اختيارات اخري بخصوص الصوره المعروضه."
+},
+{
+"uicore:icon": "settings",
+"term:label": "متغيرات مستقله",
+"term:description": "يتحكم فى أعدادات  المستقله كالزمن و الأرتفاع .  يظهر فقط عندما تكون هناك اختيارات متاحه للمستخدم."
+},
+{
+"uicore:icon": "layers",
+"term:label": "طبقات",
+"term:description": "يسمح باتاحة او الغاء الطبقات المتعدده للمعلومات الخاصه بصورة ما. يظهر فقط عندما تكون هناك اختيارات متاحه للمستخدم."
+},
+{
+"uicore:icon": "share",
+"term:label": "مشاركه",
+"term:description": "يسمح بمشاركه الصوره المعروضه عن طريق أدوات تداول الصور على الانترنت و مواقع التواصل الاجتماع. 	الادوات الخاصه بالخرائط لا تظهر الا اذا كانت الصوره خريطه."
+},
+{
+"uicore:icon": "download",
+"term:label": "تحميل",
+"term:description": "تسمح بتحميل الصوره المعروضه باختيار احدى الصيغ (الفورمات)و طرق التحميل.   مستوي المعلومات المتعلقه بالصوره يختلف طبقا للصيغه المطلوبه:  حاله اختيار اي من الصيغات KML  , WMS   PDF"
+},
+{
+"uicore:icon": "downloadselect",
+"term:label": "أجزاء متعدده من الصوره",
+"term:description": "يظهر الصوره المختاره فى اطار اسود عندما يتم تحميلهااو مشاركتها.  الضغط على أي صورة اخري سوف يلغى اختيار الصوره الحاليه."
+},
+{
+"uicore:icon": "dlimageswitch",
+"term:label": "قفل التحكم",
+"term:description": "ضوابط تصبح مرئية فقط عندما تكون الصورة النشطة. لكن اختيار قفل تحكم يتيح تبقى ضوابط واضحة."
+}
+
+
+]
+}
