@@ -1,7 +1,12 @@
 /*
-MBB 2012 -- maproom implementation in javascript
+uicore implementation in javascript
+primarily used for maprooms  */
+/* uicoreConfig ( -- ) possible parameters and settings.  Can be set
+   in different files, so a bit careful in coding.
 */
 var uicoreConfig = uicoreConfig || {};
+/* resolutionQueryServers ( -- ) server used to resolve resolution
+   queries for a particular uri -- normally starts empty */ 
 if(!uicoreConfig.resolutionQueryServers){
     uicoreConfig.resolutionQueryServers = {};
 }
@@ -12,12 +17,11 @@ uicoreConfig.helpemail='help@iri.columbia.edu'; */
 uicoreConfig.helpemail='';
 /* to add a server for a new resolution, run something like the following */
 uicoreConfig.resolutionQueryServers["irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds"] = "http://www.ethiometmaprooms.gov.et:8082/";
-/* to change json used for setting preferred language on multi-language pages, reset this */
-uicoreConfig.languageSettingDocument="/uicore/toolinfo/buttoninfo.json";
 /* additional default uicoreConfig settings */
 uicoreConfig.resolutionQueryServers["default"]= "http://iridl.ldeo.columbia.edu/";
 uicoreConfig.resolutionQueryServers["irids:SOURCES:TMA:Features:Forecast:vuli_2013:ds"]= "http://maproom.meteo.go.tz/";
-
+/* to change json used for setting preferred language on multi-language pages, reset this */
+uicoreConfig.languageSettingDocument="/uicore/toolinfo/buttoninfo.json";
 /*
 $.ready runs a function at DOMContentLoaded if possible, otherwise onload
 runs immediately if already loaded.  It is invoked at the end of this file.
@@ -4806,6 +4810,7 @@ function languageChange(){
 	}
     }
 }
+/* builds language menu -- note that default language is different than choosing a language */
 function insertlang(){
 var s=document.getElementById('chooseLanguage');
 var langList=document.getElementsByClassName('altLanguage');
