@@ -23,6 +23,12 @@ uicoreConfig.resolutionQueryServers["irids:SOURCES:TMA:Features:Forecast:vuli_20
 /* to change json used for setting preferred language on multi-language pages, reset this */
 uicoreConfig.languageSettingDocument="/uicore/toolinfo/buttoninfo.json";
 /*
+Multiple File Load (.js and .css)
+This is the basic check that all the needed js files are loaded
+asynchrously before executing. 
+jsAllLoading() is run at the end if all the files are loaded,
+otherwise it waits for the missing files.
+
 $.ready runs a function at DOMContentLoaded if possible, otherwise onload
 runs immediately if already loaded.  It is invoked at the end of this file.
 */
@@ -52,7 +58,10 @@ $.ready = function(fn) {
 var jsDependsOnList = new Array();
 var jsAllLoadedFn = null;
 jsDependsOnList.push(document);
-
+/*
+jsDependsOn ( srcfile -- ) adds to the list of files that must be
+loaded before execution.
+*/
     function jsDependsOn(srcfile){
 	var s=document.getElementsByTagName('script')[0];
 
@@ -66,6 +75,9 @@ jsDependsOnList.push(document);
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
     }
+/* jsAllLoaded ( -- boolean ) returns true if all files have been
+    loaded.
+*/
 function jsAllLoaded() {
 var ans = true;
 for (var i=0; i<jsDependsOnList.length; i++){
