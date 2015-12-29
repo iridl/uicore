@@ -607,6 +607,9 @@ var guess='';
 //        preload(guess);
 //	}
  }
+/* tab events */
+/* tabclickevent ( evt -- ) click on tab (select tab) and shift click
+   on tab (multiple active tabs if screen is large) . */
 function tabclickevent(evt){
     var evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -775,6 +778,7 @@ function tabtarget(evt){
 	}
     return(ret);
 }
+/* tabsSetup ( -- ) set up tabs. */
 function tabsSetup(){
     var mylist=document.getElementsByClassName("ui-tabs");
     var togglelist=decodeURIComponent(getCookie('toggletabs')).split(' ');
@@ -828,6 +832,8 @@ function tabsSetup(){
 	makeTabActiveFromHash(window.location.hash);
     }
 }
+/* makeTabActiveFromHash ( hash flag -- ) makes tab active using the
+	hash from the url */
 function makeTabActiveFromHash (myhash,dontClearChildren){
     var mytab="";
     if(myhash){
@@ -858,6 +864,7 @@ function makeTabActiveFromHash (myhash,dontClearChildren){
     }
     return(mytab);
 }
+/* clearTabActive ( tabsets -- ) clears active tabs. */
 function clearTabActive (mytabsets){
     if(!mytabsets){
 	mytabsets = document.getElementsByClassName('ui-tabs-nav');
