@@ -2342,7 +2342,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 	xmlhttp.myQuery=myQuery;
 	/* marks Context invalid */
 	changeClassWithin(xmlhttp.myContext,'valid','invalid');
-	/* sets callback function */
+	/* sets callback function for query return */
 	xmlhttp.onreadystatechange = function(evt) {
 	    var evt = (evt) ? evt : ((event) ? event : null );
 	    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -2362,9 +2362,13 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 			    it.myContext.parsedJSON=parsedJSON;
 			}
 			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
-			if(it.myQuery.nextElementSibling && it.myQuery.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldFrame'){
+			/* iridl:hasJsondlFrame -- uses jsonld.frame callback to frame raw JSON */
+			if(it.myQuery.nextElementSibling &&
+    it.myQuery.nextElementSibling.getAttribute('property') ==
+    'iridl:hasJsonldFrame'){
+			    /* using jsonld.frame to process raw RDF JSON */
 			    var frame = JSON.parse(it.myQuery.nextElementSibling.text);
-			    var framedforPure;
+                            var framedforPure;
 			    jsonld.frame(parsedJSON,frame,function(err,framed){
 				if(err){
 				    alert('frame returned ' + JSON.stringify(err,null,3));
@@ -2391,7 +2395,9 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 				runPureOnContext(myquery.parentNode);
 				updatePageFormCopies(myquery.parentNode);
 				validateAndCorrectPageForm(myquery.parentNode);
-			    });
+			    }
+		         /* finishes jsonld.frame callback */
+			);
 			}
 			else {
 			    /* finish without frame */
@@ -2414,7 +2420,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 		}
 	    }
 	};
-	/* sets up callback and sends async */
+	/* sets up query callback and sends async */
 	xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 	xmlhttp.open("GET",xmlhttp.infourl,true);
 	xmlhttp.setRequestHeader("Accept","application/ld+json,application/sparql-results+json");
