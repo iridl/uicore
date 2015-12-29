@@ -334,10 +334,6 @@ function limitclickevent(evt){
 	    evt.currentTarget=this;
 	}
 	imageinputvaluechange(evt);
- }
-
-}
-}
 }
 /*
 To simplify writing maproom documents, and accessing them locally,
