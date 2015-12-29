@@ -877,6 +877,7 @@ function clearTabActive (mytabsets){
 	    }
 	}
 }
+/* insertcontactus ( -- ) insert contactus element. */
 function insertcontactus(){
 var s = document.getElementById('contactus');
 if(s){
@@ -2155,10 +2156,10 @@ updatePageForm(changed);
     }
 
 }
-function loadHasSparqlEndpoint(){
+function loadHasRqlEndpoint(){
 var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasSparqlEndpoint');
 for (var i=0 ; i<sfigs.length ; i++){
-    if(!sfigs[i].parentNode.parsedJSON){updateHasSparqlEndpoint(sfigs[i])};
+    if(!sfigs[i].parentNode.parsedJSON){updateHasRqlEndpoint(sfigs[i])};
 }
 }
 /* 
@@ -2168,8 +2169,9 @@ link object points to, stores parsedJSON in the Context,
 and calls runPureOnContext.
 
 Here we call all the queries associated with a particular SparqlEndpoint
+We do both iridl:hasSerqlQuery and iridl:hasSparqlQuery
  */
-function updateHasSparqlEndpoint(myLink){
+function updateHasRqlEndpoint(myLink){
     var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
     for (var i=0 ; i<queries.length ; i++){
 	updateHasRqlQuery(myLink,queries[i],'serql');
@@ -2179,9 +2181,14 @@ function updateHasSparqlEndpoint(myLink){
 	updateHasRqlQuery(myLink,queries[i],'sparql');
     }
 }
-/* builds url from link and Serql query 
+/* RqlEndpointUrl ( endpoint query querylang varclasses varmap -- ) 
+builds url from endpoint and Rql query. varclasses controls the
+variables that can be using for single bindings -- multiple-valued 
+variables have to be inserted in the query. varmap allows variable
+renaming in the case where the pageform variable and the query
+variable cannot have precisely the same name.
 querylang is serql or sparql for sesame */
-function sparqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
+function rqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
     var appendurl = appendPageForm("",varclasses,true);
     var myquery = query;
     var myform=document.getElementById('pageform');
@@ -2267,7 +2274,8 @@ function decodeXML(string) {
             return escaped_one_to_xml_special_map[item];
     });
 }
-/* builds url from link and query and retrieves if necessary */
+/* updateHasRqlQuery ( endpoint query querylang -- ) builds url
+    from endpoint and query and retrieves from server if necessary */
 function updateHasRqlQuery(myLink,myQuery,querylang){
     var xmlhttp= getXMLhttp();
     var varmap = myQuery.getAttribute('data-varmap');
@@ -2277,10 +2285,15 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
     if(!myQuery.cleantxt){
 	myQuery.cleantxt = decodeXML(myQuery.text);
     }
-    var localurl = sparqlEndpointUrl(myLink.href,myQuery.cleantxt, querylang , myQuery.className,varmap);
+    var localurl = rqlEndpointUrl(myLink.href, myQuery.cleantxt,
+    querylang, myQuery.className,varmap);
+    /* possibly restricted use of query */
     var restrictif = myQuery.getAttribute('data-if');
+    /* possibly restricted use of query (not) */
     var restrictnotif = myQuery.getAttribute('data-notif');
+    /* possibly unchanged query */
     var ifneeded = (myQuery.localurl != localurl);
+    /* check tests for query use */
     if(restrictif){
 	if($(restrictif).length == 0){
 	ifneeded=false;
@@ -2293,10 +2306,12 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 	    myQuery.localurl='';
     }
     }
+    /* if query is needed */
     if(ifneeded){
 	relStartLoading(myQuery);
 	clearFailed(myQuery);
 	myQuery.localurl = localurl;
+	/* iridl:QueryAsText -- setup for dump of query needed */
 	var dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:QueryAsText');
 	if(dumpelement.length > 0 ){
 	    if(myLink.parentNode.loading == 1){
@@ -2314,11 +2329,20 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 	}
 	dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
 	if(dumpelement.length > 0 ){dumpelement[0].innerHTML=''}
+	/* setup callback for server request for query result 
+	 xmlhttp ( -- ) object containing callback 
+	infourl ( -- ) the infourl that matches the callback when it 
+          is returned
+       myContext ( -- context ) parentNode of the link i.e. the context
+       myLink ( -- endpoint ) the link iridl:hasSparqlEndpoint
+       myQuery ( -- query) the query */ 
 	xmlhttp.infourl = localurl;
 	xmlhttp.myContext = myLink.parentNode;
 	xmlhttp.myLink=myLink;
 	xmlhttp.myQuery=myQuery;
+	/* marks Context invalid */
 	changeClassWithin(xmlhttp.myContext,'valid','invalid');
+	/* sets callback function */
 	xmlhttp.onreadystatechange = function(evt) {
 	    var evt = (evt) ? evt : ((event) ? event : null );
 	    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -2390,6 +2414,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 		}
 	    }
 	};
+	/* sets up callback and sends async */
 	xmlhttp.myevtfn=xmlhttp.onreadystatechange;
 	xmlhttp.open("GET",xmlhttp.infourl,true);
 	xmlhttp.setRequestHeader("Accept","application/ld+json,application/sparql-results+json");
@@ -6708,7 +6733,7 @@ insertInstructions();
 setupPageFormLinks(document);
     updateLangGroups(document);
 loadHasJSON();
-loadHasSparqlEndpoint();
+loadHasRqlEndpoint();
 githubSetup();
 $(window).resize(refreshConnectedGraphs);
 if(uicoreConfig.GoogleAnalyticsId){
