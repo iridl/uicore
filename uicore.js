@@ -5087,74 +5087,74 @@ function languageChange(){
 }
 /* builds language menu -- note that default language is different than choosing a language */
 function insertlang(){
-var s=document.getElementById('chooseLanguage');
-var langList=document.getElementsByClassName('altLanguage');
-if(!s && langList.length>0){
-fs = document.createElement('fieldset');
-fs.className='lang';
-fs.id='chooseLanguage';
-var leg=document.createElement('legend');
-leg.innerHTML='Language';
-fs.appendChild(leg);
-var sel=document.createElement('select');
-sel.name="Set-Language";
-sel.onchange=languageChange;
-sel.onchangefn=languageChange;
-    var dopt=false;
-    var opt;
-if(document.getElementsByTagName('html')[0].hasAttribute("xml:lang")){
-    dopt=true;
-	document.getElementsByTagName('body')[0].setAttribute("lang",
-							      document.getElementsByTagName('html')[0].getAttribute("xml:lang"));
-opt =document.createElement('option');
-opt.value=document.getElementsByTagName('html')[0].getAttribute("xml:lang");
-}
-    else if(document.getElementsByTagName('body')[0].getAttribute("xml:lang")){
-	dopt=true;
-	document.getElementsByTagName('body')[0].setAttribute("lang",
-							      document.getElementsByTagName('body')[0].getAttribute("xml:lang"));
-opt=document.createElement('option');
-opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
-}
-    if(opt){
-opt.innerHTML=Languages[opt.value];
-//opt.value="";
-sel.appendChild(opt);
-    }
-for( var i=0 ; i < langList.length ; i++){
-    opt=document.createElement('option');
-    opt.value=langList[i].hreflang;
-    opt.innerHTML=Languages[langList[i].hreflang];
-    if(!opt.innerHTML)opt.innerHTML=langList[i].hreflang;
-    sel.appendChild(opt);
-}
-    if(!dopt){
-	var myform=document.getElementById('pageform');
-	if(myform){
-	    var lang=myform.elements['lang'];
-	    var slang=myform.elements['Set-Language'];
-	    if(slang && slang.value && lang && !lang.value){
-		lang.value = slang.value;
-	    }
-	    if(lang && lang.value){
-		sel.value=lang.value;
-		if(sel.selectedIndex<0)sel.selectedIndex=1;
-	    }
-	    if(lang && !lang.value){
-		lang.value=sel.options[sel.selectedIndex].value
-/* reads user language preference by getting tool documentation */
-		getLanguageFrom(uicoreConfig.languageSettingDocument);
+    var s=document.getElementById('chooseLanguage');
+    var langList=document.getElementsByClassName('altLanguage');
+    if(!s && langList.length>0){
+	fs = document.createElement('fieldset');
+	fs.className='lang';
+	fs.id='chooseLanguage';
+	var leg=document.createElement('legend');
+	leg.innerHTML='Language';
+	fs.appendChild(leg);
+	var sel=document.createElement('select');
+	sel.name="Set-Language";
+	sel.onchange=languageChange;
+	sel.onchangefn=languageChange;
+	var dopt=false;
+	var opt;
+	if(document.getElementsByTagName('html')[0].hasAttribute("xml:lang")){
+	    dopt=true;
+	    document.getElementsByTagName('body')[0].setAttribute("lang",
+								  document.getElementsByTagName('html')[0].getAttribute("xml:lang"));
+	    opt =document.createElement('option');
+	    opt.value=document.getElementsByTagName('html')[0].getAttribute("xml:lang");
+	}
+	else if(document.getElementsByTagName('body')[0].getAttribute("xml:lang")){
+	    dopt=true;
+	    document.getElementsByTagName('body')[0].setAttribute("lang",
+								  document.getElementsByTagName('body')[0].getAttribute("xml:lang"));
+	    opt=document.createElement('option');
+	    opt.value=document.getElementsByTagName('body')[0].getAttribute("xml:lang");
+	}
+	if(opt){
+	    opt.innerHTML=Languages[opt.value];
+	    //opt.value="";
+	    sel.appendChild(opt);
+	}
+	for( var i=0 ; i < langList.length ; i++){
+	    opt=document.createElement('option');
+	    opt.value=langList[i].hreflang;
+	    opt.innerHTML=Languages[langList[i].hreflang];
+	    if(!opt.innerHTML)opt.innerHTML=langList[i].hreflang;
+	    sel.appendChild(opt);
+	}
+	if(!dopt){
+	    var myform=document.getElementById('pageform');
+	    if(myform){
+		var lang=myform.elements['lang'];
+		var slang=myform.elements['Set-Language'];
+		if(slang && slang.value && lang && !lang.value){
+		    lang.value = slang.value;
+		}
+		if(lang && lang.value){
+		    sel.value=lang.value;
+		    if(sel.selectedIndex<0)sel.selectedIndex=1;
+		}
+		if(lang && !lang.value){
+		    lang.value=sel.options[sel.selectedIndex].value
+		    /* reads user language preference by getting tool documentation */
+		    getLanguageFrom(uicoreConfig.languageSettingDocument);
+		}
 	    }
 	}
+	leg.innerHTML=LanguageTitle[sel.options[sel.selectedIndex].value];
+	fs.appendChild(sel);
+	var mylist=document.getElementsByClassName("controlBar");
+	if(mylist.length>0){
+	    var cont=mylist[0];
+	    cont.insertBefore(fs,cont.firstChild);
+	}
     }
-leg.innerHTML=LanguageTitle[sel.options[sel.selectedIndex].value];
-fs.appendChild(sel);
-var mylist=document.getElementsByClassName("controlBar");
-if(mylist.length>0){
-var cont=mylist[0];
-cont.insertBefore(fs,cont.firstChild);
-}
-}
 }
 /* set up old style Google Analytics */
 /*var _gaq = _gaq || [];
