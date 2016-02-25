@@ -1025,7 +1025,7 @@ s.appendChild(gb);
     po.src = 'https://apis.google.com/js/plusone.js';
 s.appendChild(po);
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = "http://static.evernote.com/noteit.js";
+    ga.src = "//static.evernote.com/noteit.js";
 s.appendChild(ga);
 /* var pi = document.createElement('script'); pi.type = 'text/javascript'; pi.async = true;
     pi.src = "//assets.pinterest.com/js/pinit.js";
