@@ -1149,14 +1149,14 @@ function doTumblrClip(){
 	var tumblr_photo_click_thru = url;
 	if(tumblr_photo_source){
 	    ttype='photo';
-tumblr_url = "http://www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
+tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
 }
 else {
 	    ttype='link';
     var tumblr_link_url = url;
     var tumblr_link_name = title;
     var tumblr_link_description = description;
-tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
+tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
 }
 /* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
     ga('send','social', 'tumblr',ttype, url);
@@ -1196,14 +1196,14 @@ function doTumblrClipElement(evt){
 	var tumblr_photo_click_thru = url;
 	if(tumblr_photo_source){
 	    ttype='photo';
-tumblr_url = "http://www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
+tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
 }
 else {
 	    ttype='link';
     var tumblr_link_url = url;
     var tumblr_link_name = title;
     var tumblr_link_description = description;
-tumblr_url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
+tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
 }
 /* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
     ga('send','social', 'tumblr',ttype, url);
