@@ -1648,23 +1648,25 @@ function docutandpasteClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    var nohttp = new RegExp("^(https?:)?(.*)$");
+    var nohttpmach = new RegExp("^(https?://[^/]+)?(.*)$");
 if(sfigs.length){
 	var myurl = sfigs[0].href;
         var iconurl=sfigs[0].info['iridl:icon'];
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
     
 	if(msga.length>0){
-	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot + 'insertui.js\"></script>\n';
+	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot.match (nohttp)[2] + 'insertui.js\"></script>\n';
 	    if(iconurl){
 		mymsg = mymsg + '<link rel="term:icon" href="' + iconurl + '" />\n';
 	    }
-	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + myurl + '\">visit site</a>\n';
+	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" src=\"" + myurl.match (nohttpmach)[2] + '\">visit site</a>\n';
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
 		    var figclass = figs[i].className.split(' ')[0];
 		    var myfigurl = appendPageForm(figs[i].src,figclass + '&share')
-		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl + '\" />\n';
+		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl.match (nohttpmach)[2] + '\" />\n';
 		}
 	    }
 	    mymsg = mymsg + '</fieldset></textarea>';
