@@ -1644,13 +1644,24 @@ if(sfigs.length){
     }
 }
 }
+/* short url -- remove https? and server -- also remove /expert if not needed
+*/
+function shorturl(url){
+   var nohttpmach = new RegExp("^(https?://[^/]+)?(.*)$");
+    var noneedexpert = new RegExp("^(/expert/[^/])");
+    var myurl;
+    myurl=url.match (nohttpmach)[2];
+    if(myurl.match (noneedexpert)){
+	myurl=myurl.substr(7);
+    }
+    return myurl;
+}
 function docutandpasteClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
 var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
     var nohttp = new RegExp("^(https?:)?(.*)$");
-    var nohttpmach = new RegExp("^(https?://[^/]+)?(.*)$");
-if(sfigs.length){
+ if(sfigs.length){
 	var myurl = sfigs[0].href;
         var iconurl=sfigs[0].info['iridl:icon'];
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
@@ -1660,13 +1671,13 @@ if(sfigs.length){
 	    if(iconurl){
 		mymsg = mymsg + '<link rel="term:icon" href="' + iconurl + '" />\n';
 	    }
-	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" src=\"" + myurl.match (nohttpmach)[2] + '\">visit site</a>\n';
+	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" src=\"" + shorturl(myurl) + '\">visit site</a>\n';
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
 		    var figclass = figs[i].className.split(' ')[0];
 		    var myfigurl = appendPageForm(figs[i].src,figclass + '&share')
-		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + myfigurl.match (nohttpmach)[2] + '\" />\n';
+		    mymsg = mymsg + '<img class=\"' + figclass + '\" src=\"' + shorturl(myfigurl) + '\" />\n';
 		}
 	    }
 	    mymsg = mymsg + '</fieldset></textarea>';
