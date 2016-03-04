@@ -1671,7 +1671,7 @@ var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
 	    if(iconurl){
 		mymsg = mymsg + '<link rel="term:icon" href="' + iconurl + '" />\n';
 	    }
-	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" src=\"" + shorturl(myurl) + '\">visit site</a>\n';
+	    mymsg=mymsg + "<fieldset class=\"dlimage\">\n<a rel=\"iridl:hasFigure\" href=\"" + shorturl(myurl) + '\">visit site</a>\n';
 	    var figs = sfigs[0].parentNode.getElementsByTagName('img');
 	    for (var i=0 ; i < figs.length ; i++){
 		if(figs[i].parentNode == sfigs[0].parentNode){
