@@ -883,24 +883,26 @@ var s = document.getElementById('contactus');
 if(s){
 var sl = s.getElementsByTagName('legend');
 if(!sl.length){
-    appendMissingClass(s,'langgroup');
-var ls=document.createElement('legend');
+var lls=document.createElement('legend');
+    appendMissingClass(lls,'langgroup');
+s.insertBefore(lls,s.firstChild);
+ls=document.createElement('span');
     ls.setAttribute('lang','es');
 ls.appendChild(document.createTextNode('Contáctenos'));
-s.insertBefore(ls,s.firstChild);
+lls.insertBefore(ls,lls.firstChild);
 
-ls=document.createElement('legend');
+ls=document.createElement('span');
     ls.setAttribute('lang','fr');
 ls.appendChild(document.createTextNode('Contactez Nous'));
-s.insertBefore(ls,s.firstChild);
-ls=document.createElement('legend');
+lls.insertBefore(ls,lls.firstChild);
+ls=document.createElement('span');
     ls.setAttribute('lang','ru');
 ls.appendChild(document.createTextNode('Контактная информация'));
-s.insertBefore(ls,s.firstChild);
-ls=document.createElement('legend');
+lls.insertBefore(ls,lls.firstChild);
+ls=document.createElement('span');
     ls.setAttribute('lang','en');
 ls.appendChild(document.createTextNode('Contact Us'));
-s.insertBefore(ls,s.firstChild);
+lls.insertBefore(ls,lls.firstChild);
     updateLangGroups(s);
 }
 sl = document.getElementById('googleplus');
