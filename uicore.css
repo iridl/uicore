@@ -1837,7 +1837,7 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGDrive,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1872,6 +1872,9 @@ content: "table";
 .asPDF:before {
 content: "PDF";
 }
+.asGDrive:before {
+content: "GDrive";
+}
 .asPNG:before {
 content: "PNG";
 }
@@ -1899,8 +1902,11 @@ content: "table";
 .asTSV::before {
 content: "TSV table";
 }
-.asPDF::before {
+.asPDF:before {
 content: "PDF";
+}
+.asGDrive::before {
+content: "GDrive";
 }
 .asPNG::before {
 content: "PNG";
@@ -1914,7 +1920,7 @@ content: "Widget";
 .asJPG::before {
 content: "JPG";
 }
-.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover,.asCutAndPaste::hover {
+.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,asGDrive:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover,.asCutAndPaste::hover {
 opacity: 1.0;
 }
 

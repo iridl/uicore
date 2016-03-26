@@ -944,6 +944,15 @@ gba.setAttribute("title","Tweet");
 gba.onclick=doTwitter;
 gb.appendChild(gba);
 s.appendChild(gb);
+/* google drive */
+var gb= document.createElement('div');
+gb.className='g-savetodrive';
+gb.id='gsavedrive';
+gb.setAttribute("data-src","/maproom/Global/Precipitation/Anomaly.html");
+gb.setAttribute("data-src",appendPageForm(location.pathname,'share'));
+gb.setAttribute("data-filename","sample.html");
+gb.setAttribute("data-sitename","IRI");
+s.appendChild(gb);
 /* evernote */
 gb= document.createElement('div');
 gb.className='sharebutton';
@@ -1023,6 +1032,10 @@ gb.innerHTML='<div class="g-plusone" data-annotation="' + annote + '" ></div>';
 s.appendChild(gb);
 }
 // adds scripts to share to activate buttons
+    var pf = document.createElement('script'); pf.type = 'text/javascript'; pf.async = true;
+    pf.defer = true; 
+    pf.src = 'https://apis.google.com/js/platform.js';
+s.appendChild(pf);
     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
     po.src = 'https://apis.google.com/js/plusone.js';
 s.appendChild(po);
@@ -1486,8 +1499,27 @@ function doPDFClick(evt){
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
        submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-/*       _gaq.push(['_trackSocial', 'ImageDownload', 'asPDF']);*/
        ga('send','social', 'ImageDownload','asPDF',location.href);
+   }
+}
+function doPDFgDriveClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+   if(figimg && figimg.src){
+       var pdfurl=figimg.src;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+       var linkurl = appendPageForm(location.href,'share');
+       var pform=document.getElementById('pageform');
+       pform.elements['linkurl'].value=linkurl;
+gba.setAttribute("data-src",appendPageForm(pdfurl,pdfclass+' linkurl'));
+gba.setAttribute("data-filename","sample.pdf");
+gba.setAttribute("data-sitename","IRI");
+gba.className='g-savetodrive';
+/*       submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
+       ga('send','social', 'ImageDownload','asPDF',location.href);
+*/
    }
 }
 function doPDFImageClick(evt){
@@ -4078,8 +4110,24 @@ function DLimageBuildControls(mydlimage,mylink){
 	ipt.innerHTML='Download as' + '  ';
 	ctl.appendChild(ipt);
 	if(mylink){
-/* KML */
+/* google drive */
 	var gb= document.createElement('div');
+	gb.className='sharebutton asGDrive';
+	gb.setAttribute("title","GDrive with link back");
+	gb.onclick=doPDFgDriveClick;
+	gb.myonclick=doPDFgDriveClick;
+	gb.clipthis = currentObj.parentNode;
+var gba= document.createElement('span');
+gba.className='g-savetodrive-hold';
+/* gb.id='gsavedrive'; */
+	    var figimg = getFigureImage();
+gba.setAttribute("data-filename","sample.pdf");
+gba.setAttribute("data-sitename","IRI");
+gb.appendChild(gba);
+	ctl.appendChild(gb);
+
+/* KML */
+	gb= document.createElement('div');
 	gb.className='sharebutton asKML';
 	gb.setAttribute("title","KML with link back");
 	gb.onclick=doGoogleEarthClick;
@@ -4131,7 +4179,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getPNGImage(mydlimage)){
-/* PDF */
+/* PNG */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPNG';
 	    gb.setAttribute("title","PNG image");
