@@ -944,17 +944,8 @@ gba.setAttribute("title","Tweet");
 gba.onclick=doTwitter;
 gb.appendChild(gba);
 s.appendChild(gb);
-/* google drive */
-var gb= document.createElement('div');
-gb.className='g-savetodrive';
-gb.id='gsavedrive';
-gb.setAttribute("data-src","/maproom/Global/Precipitation/Anomaly.html");
-gb.setAttribute("data-src",appendPageForm(location.pathname,'share'));
-gb.setAttribute("data-filename","sample.html");
-gb.setAttribute("data-sitename","IRI");
-s.appendChild(gb);
 /* evernote */
-gb= document.createElement('div');
+var gb= document.createElement('div');
 gb.className='sharebutton';
 gb.id='evernote';
 gba = document.createElement('a');
@@ -1510,15 +1501,18 @@ function doPDFgDriveClick(evt){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
        pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.href,'share');
+       var linkurl = appendPageForm(location.pathname,'share');
        var pform=document.getElementById('pageform');
        pform.elements['linkurl'].value=linkurl;
-gba.setAttribute("data-src",appendPageForm(pdfurl,pdfclass+' linkurl'));
-gba.setAttribute("data-filename","sample.pdf");
-gba.setAttribute("data-sitename","IRI");
-gba.className='g-savetodrive';
+       /* gapi.savetodrive.render */
+       var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
+       gapi.savetodrive.render(it,{"src": urlxml,
+				   "filename":document.title,
+				   "sitename": "IRI"});
+
+
 /*       submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-       ga('send','social', 'ImageDownload','asPDF',location.href);
+       ga('send','social', 'ImageDownload','asGDrive',location.href);
 */
    }
 }
@@ -4117,17 +4111,9 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.onclick=doPDFgDriveClick;
 	gb.myonclick=doPDFgDriveClick;
 	gb.clipthis = currentObj.parentNode;
-var gba= document.createElement('span');
-gba.className='g-savetodrive-hold';
-/* gb.id='gsavedrive'; */
-	    var figimg = getFigureImage();
-gba.setAttribute("data-filename","sample.pdf");
-gba.setAttribute("data-sitename","IRI");
-gb.appendChild(gba);
 	ctl.appendChild(gb);
-
 /* KML */
-	gb= document.createElement('div');
+	var gb= document.createElement('div');
 	gb.className='sharebutton asKML';
 	gb.setAttribute("title","KML with link back");
 	gb.onclick=doGoogleEarthClick;
@@ -6390,204 +6376,6 @@ element.className=element.className.replace(" "+slist[i],"");
 }
 else {
     if(element.className){
-	element.className= element.className + " " + slist[i];
-    }
-    else {
-	element.className=slist[i];
-    }
-}
-}
-
-}
-// changes class of all sublements within an element
-// traverses list in reverse order because the list updates as it executes
-function sameasthis(ele){return ele=this};
-function changeClassWithin(pelement,fromclass,toclass){
-var classlist = pelement.className.split(' ');
-if(classlist.some(sameasthis,fromclass)){
-    var newlist = new Array;
-    for (var i = classlist.length-1 ; i >=0 ; i--){
-	if(classlist[i] == fromclass){
-	    newlist[i] = toclass;
-	}
-	else {
-	newlist[i] = classlist[i];
-	}
-    }
-	
-    pelement.className = newlist.join(' ');
-}
-var targetlist=pelement.getElementsByClassName(fromclass);
-if(targetlist.length > 0){
-for (var i = targetlist.length-1 ; i >= 0; i--){
-var ind=targetlist[i];
-var classlist = ind.className.split(' ');
-var newlist = new Array;
-    for (var i = classlist.length-1 ; i >=0 ; i--){
-	if(classlist[i] == fromclass){
-	    newlist[i] = toclass;
-	}
-	else {
-	newlist[i] = classlist[i];
-	}
-    }
-	
-    ind.className = newlist.join(' ');
-}
-}
-}
-function changeOrAppendClass(pelement,fromclass,toclass){
-    changeClass(pelement,fromclass,toclass);
-    appendMissingClass(pelement,toclass);
-}
-function changeClass(pelement,fromclass,toclass){
-var targetlist=pelement.parentNode.getElementsByClassName(fromclass);
-for (var i = targetlist.length-1 ; i >= 0; i--){
-var ind=targetlist[i];
-if(ind == pelement){
-ind.className=ind.className.replace(fromclass,toclass);
-}
-}
-}
-
-function onClickPageForm(evt){
-    evt = (evt) ? evt : ((event) ? event : null );
-var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-submitPageForm(it.href,it.className);
-return false;
-}
-/* alldisabledPageForm -- disables FormElements that are default or not in classes,
-returns true if all default values or not in classes */
-function alldisabledPageForm(classes,includeDefaultValues){
-    var myform=document.getElementById('pageform');
-    var alldisabled;
-    if(myform){
-	var inputs=myform.elements;
-        for (var i = 0; i < inputs.length; i++) {
-	    inputs[i].disabled=true;
-	}
-	alldisabled=true;
-	var clist = classes.split(' ');
-	for ( var ic = 0; ic < clist.length; ic++ ){
-	    var cclass=clist[ic].replace('&',' ');
-	    var members = document.getElementsByClassName(cclass);
-	    for ( var j = 0; j < members.length; j++ )
-		if(members[j].disabled) {
-		    if(members[j].type != 'checkbox' && members[j].value){
-			if(includeDefaultValues || members[j].initialValue != members[j].value){
-			    alldisabled=false;
-			    var myname=members[j].name;
-			    members[j].disabled=false;
-			    for (var k=j;k--;){
-				if(members[k].disabled && members[k].name == myname){
-				    members[k].disabled=false;
-				}
-			    }
-			}
-		    }
-		    else if(members[j].type == 'checkbox' && members[j].checked != members[j].defaultChecked) {
-			var myname=members[j].name;
-			for (var k=members.length;k--;){
-			    if(members[k].disabled && members[k].name == myname){
-				members[k].disabled=false;
-			    }
-			}
-			alldisabled=false;	    
-		    }
-		}
-	}
-    }
-    return alldisabled;
-}
-/*
-submitPageForm -- submits pageform to href, appending inputs corresponding to class.
-*/
-function submitPageForm(href,classes,inMethod){
-    if(!href){return}
-    var localhref=localHrefOf(removePageForm(href));
-var theMethod='GET';
-if(inMethod){
-    theMethod=inMethod;
-}
-var myform=document.getElementById('pageform');
-if(myform){
-    var alldisabled=alldisabledPageForm(classes);
-    if(alldisabled && theMethod == 'GET'){
-	if(localhref.substring(0,5) =='file:'){
-/*
-	    if(localhref.charAt(localhref.length-1) == '/'){
-		localhref=localhref+'index.html';
-	    }
-*/
-	}
-	document.location.href=localhref;
-    }
-    else {
-/* our rewrite rules do not handle Set-Language for a directory, so we avoid doing it
-	if(localhref.charAt(localhref.length-1) == '/'){
-	    localhref=localhref+'index.html';
-	}
- */
-	if(localhref.indexOf('?')>0){
-	    localhref = appendPageForm(href,classes,false);
-	    document.location.href=localhref;
-	}
-	else {
-	myform.action=localhref;
-	myform.method=theMethod;
-	myform.submit();
-	}
-    }
-}
-else {
-    document.location.href=localhref;
-}
-}
-/* removePageForm -- removes all values in url that exist in page form
-*/
-function removePageForm(href,overridePageForm){
-    var newhref = href;
-    var myform=document.getElementById('pageform');
-    if(href && myform){
-	var action = String(href);
-	var thehash;
-	if(action.indexOf && action.indexOf("#") >= 0){
-	    thehash = action.substring(action.indexOf('#'));
-	    action=action.substring(0,action.indexOf('#'));
-	}
-	var inputs=myform.elements;
-	var hrefparts = action.split('?');
-	var newhref=hrefparts[0];
-        var query = hrefparts[1];
-	if(query){
-	    var delim='?';
-	    var vars = query.split("&");
-		var pair;
-		for (var i = 0; i < vars.length; i++) {
-		    pair = vars[i].split("=");
-		    var iname=pair[0];
-		    if (!inputs[iname]) {
-			newhref=newhref + delim + vars[i];
-			delim='&';
-		    }
-		    else if(overridePageForm) {
-			inputs[iname].value = unescape(pair[1]);
-		    }
-		}
-	}
-	if(thehash){
-	    newhref=newhref+thehash;
-	}
-    }
-    return newhref;
-}
-/*
-appendPageForm -- appends to href, appending pageform inputs corresponding to class.
-*/
-function appendPageForm(href,classes,includeDefaultValues,overridePageForm){
-    var filtered =removePageForm(href,overridePageForm);
-    var localhref=localHrefOf(filtered);
-    var myform=document.getElementById('pageform');
     if(myform){
 	var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
 	if(alldisabled){
