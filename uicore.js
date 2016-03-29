@@ -1509,11 +1509,22 @@ function doPDFgDriveClick(evt){
        gapi.savetodrive.render(it,{"src": urlxml,
 				   "filename":document.title,
 				   "sitename": "IRI"});
-
-
-/*       submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-       ga('send','social', 'ImageDownload','asGDrive',location.href);
-*/
+   }
+}
+function doPDFgDriveRender(it){
+    var figimg = getFigureImage(it.clipthis);
+   if(figimg && figimg.src){
+       var pdfurl=figimg.src;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+       var linkurl = appendPageForm(location.pathname,'share');
+       var pform=document.getElementById('pageform');
+       pform.elements['linkurl'].value=linkurl;
+       /* gapi.savetodrive.render */
+       var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
+       gapi.savetodrive.render(it,{"src": urlxml,
+				   "filename":document.title,
+				   "sitename": "IRI"});
    }
 }
 function doPDFImageClick(evt){
@@ -4108,10 +4119,11 @@ function DLimageBuildControls(mydlimage,mylink){
 	var gb= document.createElement('div');
 	gb.className='sharebutton asGDrive';
 	gb.setAttribute("title","GDrive with link back");
-	gb.onclick=doPDFgDriveClick;
-	gb.myonclick=doPDFgDriveClick;
+/*	gb.onclick=doPDFgDriveClick;
+	gb.myonclick=doPDFgDriveClick; */
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+	var firstRenderedChild=gb;
 /* KML */
 	var gb= document.createElement('div');
 	gb.className='sharebutton asKML';
@@ -4240,6 +4252,9 @@ function DLimageBuildControls(mydlimage,mylink){
 	}
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+/* do render set up */
+        doPDFgDriveRender(firstRenderedChild);
+/* ctl becomes current */
 	currentObj=ctl;
 /* adds message area for download controls e.g. ArcGIS */
 	var msga = document.createElement('div');
