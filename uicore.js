@@ -1525,6 +1525,7 @@ function doPDFgDriveRender(it){
        gapi.savetodrive.render(it,{"src": urlxml,
 				   "filename":document.title,
 				   "sitename": "IRI"});
+       it.renderedUrl=urlxml;
    }
 }
 function doPDFImageClick(evt){
@@ -4119,8 +4120,10 @@ function DLimageBuildControls(mydlimage,mylink){
 	var gb= document.createElement('div');
 	gb.className='sharebutton asGDrive';
 	gb.setAttribute("title","GDrive with link back");
-/*	gb.onclick=doPDFgDriveClick;
-	gb.myonclick=doPDFgDriveClick; */
+/*	enable to use gDriveClick
+	otherwise uses gDriveRender */ 
+	gb.onclick=doPDFgDriveClick;
+	gb.myonclick=doPDFgDriveClick; 
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 	var firstRenderedChild=gb;
@@ -4253,7 +4256,9 @@ function DLimageBuildControls(mydlimage,mylink){
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 /* do render set up */
-        doPDFgDriveRender(firstRenderedChild);
+	if(firstRenderedChild && !firstRenderedChild.onclick){
+            doPDFgDriveRender(firstRenderedChild);
+	}
 /* ctl becomes current */
 	currentObj=ctl;
 /* adds message area for download controls e.g. ArcGIS */
