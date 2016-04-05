@@ -129,6 +129,8 @@ scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
 jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
+/* google api (gdrive) */
+jsDependsOn('https://apis.google.com/js/platform.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
@@ -1023,11 +1025,7 @@ gb.innerHTML='<div class="g-plusone" data-annotation="' + annote + '" ></div>';
 s.appendChild(gb);
 }
 // adds scripts to share to activate buttons
-    var pf = document.createElement('script'); pf.type = 'text/javascript'; pf.async = true;
-    pf.defer = true; 
-    pf.src = 'https://apis.google.com/js/platform.js';
-s.appendChild(pf);
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
     po.src = 'https://apis.google.com/js/plusone.js';
 s.appendChild(po);
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -4121,9 +4119,9 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.className='sharebutton asGDrive';
 	gb.setAttribute("title","GDrive with link back");
 /*	enable to use gDriveClick
-	otherwise uses gDriveRender */ 
+	otherwise uses gDriveRender
 	gb.onclick=doPDFgDriveClick;
-	gb.myonclick=doPDFgDriveClick; 
+	gb.myonclick=doPDFgDriveClick; */ 
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
 	var firstRenderedChild=gb;
