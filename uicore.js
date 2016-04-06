@@ -1520,10 +1520,30 @@ function doPDFgDriveRender(it){
        pform.elements['linkurl'].value=linkurl;
        /* gapi.savetodrive.render */
        var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
-       gapi.savetodrive.render(it,{"src": urlxml,
+	var gDriveBlist=it.getElementsByClassName('gDriveSubButton');
+       var ucheck=false;
+       if (gDriveBlist.length){
+	   for (var idrive=gDriveBlist.length; idrive--;){
+	       if(gDriveBlist[idrive].getAttribute("rUrl",urlxml) == urlxml){ucheck=true}
+	   }
+	}
+       if(!ucheck){
+/*
+       if (gDriveBlist.length){
+	   for (var idrive=gDriveBlist.length; idrive--;){
+	       gDriveBlist[idrive].ParentNode.removeChild(gDriveBlist[idrive]);
+	   }
+	}
+*/
+	   var gdrivespan=document.createElement('span');
+       gdrivespan.className="gDriveSubButton";
+       it.appendChild(gdrivespan);
+       gdrivespan.renderedUrl=urlxml;
+       gdrivespan.setAttribute("rUrl",urlxml);
+gapi.savetodrive.render(gdrivespan,{"src": urlxml,
 				   "filename":document.title,
 				   "sitename": "IRI"});
-       it.renderedUrl=urlxml;
+       }
    }
 }
 function doPDFImageClick(evt){
@@ -4249,7 +4269,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	}
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-/* do render set up */
+/* do render loop */
 	var gDrivelist=document.getElementsByClassName('asGDrive');
 	if (gDrivelist.length){
 	    for (var idrive=gDrivelist.length; idrive--;){
@@ -6026,6 +6046,13 @@ updatePageFormConditionalClassesAndFlags(false);
 	    }
 	}
     }
+/* do render loop */
+	var gDrivelist=document.getElementsByClassName('asGDrive');
+	if (gDrivelist.length){
+	    for (var idrive=gDrivelist.length; idrive--;){
+            doPDFgDriveRender(gDrivelist[idrive]);
+	    }
+	}
 }
 }
 function updatePageFormConditionalClassesAndFlags(doflags){
