@@ -1837,7 +1837,14 @@ opacity: 0.8;
 .arcgis:hover {
 opacity: 1.0;
 }
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asGDrive,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
+/* asGDrive buttons
+gDriveSubButton is marked gdriveurl="standby" and then hidden
+so that only the gdriveurl="active" button is shown
+*/
+.asGDrive .gDriveSubButton[gdriveurl="active"]{}
+.asGDrive .gDriveSubButton[gdriveurl="standby"]{display: none  !important;}
+
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1872,9 +1879,6 @@ content: "table";
 .asPDF:before {
 content: "PDF";
 }
-.asGDrive:before {
-content: "GDrive";
-}
 .asPNG:before {
 content: "PNG";
 }
@@ -1904,9 +1908,6 @@ content: "TSV table";
 }
 .asPDF:before {
 content: "PDF";
-}
-.asGDrive::before {
-content: "GDrive";
 }
 .asPNG::before {
 content: "PNG";
