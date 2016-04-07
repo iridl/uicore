@@ -1524,25 +1524,25 @@ function doPDFgDriveRender(it){
        var ucheck=false;
        if (gDriveBlist.length){
 	   for (var idrive=gDriveBlist.length; idrive--;){
-	       if(gDriveBlist[idrive].getAttribute("rUrl",urlxml) == urlxml){ucheck=true}
+	       if(gDriveBlist[idrive].getAttribute("rUrl",urlxml) == urlxml)
+	       {ucheck=true;
+		gDriveBlist[idrive].setAttribute("gDriveUrl","active");
+	       }
+	       else
+	       {gDriveBlist[idrive].setAttribute("gDriveUrl","standby");
+	       }
 	   }
 	}
        if(!ucheck){
-/*
-       if (gDriveBlist.length){
-	   for (var idrive=gDriveBlist.length; idrive--;){
-	       gDriveBlist[idrive].ParentNode.removeChild(gDriveBlist[idrive]);
-	   }
-	}
-*/
 	   var gdrivespan=document.createElement('span');
-       gdrivespan.className="gDriveSubButton";
-       it.appendChild(gdrivespan);
-       gdrivespan.renderedUrl=urlxml;
-       gdrivespan.setAttribute("rUrl",urlxml);
-gapi.savetodrive.render(gdrivespan,{"src": urlxml,
-				   "filename":document.title,
-				   "sitename": "IRI"});
+	   gdrivespan.className="gDriveSubButton";
+	   it.appendChild(gdrivespan);
+	   gdrivespan.renderedUrl=urlxml;
+	   gdrivespan.setAttribute("rUrl",urlxml);
+	   gdrivespan.setAttribute("gDriveUrl","active");
+	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
+					       "filename":document.title,
+					       "sitename": "IRI"});
        }
    }
 }
