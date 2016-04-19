@@ -15,6 +15,8 @@ if(!uicoreConfig.resolutionQueryServers){
 /* to set the help e-mail, redefine this after uicore.js
 uicoreConfig.helpemail='help@iri.columbia.edu'; */
 uicoreConfig.helpemail='';
+/* DL site name */
+uicoreConfig.SiteName="Data Library";
 /* to add a server for a new resolution, run something like the following */
 uicoreConfig.resolutionQueryServers["irids:SOURCES:Ethiopia:Features:Forecast:kiremt_2013:ds"] = "http://www.ethiometmaprooms.gov.et:8082/";
 /* additional default uicoreConfig settings */
@@ -1491,6 +1493,21 @@ function doPDFClick(evt){
        ga('send','social', 'ImageDownload','asPDF',location.href);
    }
 }
+function doPDFClickGET(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+     
+   if(figimg && figimg.src){
+       var pdfurl=figimg.src;
+       var pdfclass=figimg.className;
+       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+       var linkurl = appendPageForm(location.href,'share');
+       var pform=document.getElementById('pageform');
+       pform.elements['linkurl'].value=linkurl;
+       submitPageForm(pdfurl,pdfclass+' linkurl','GET'); 
+   }
+}
 function doPDFgDriveClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -1506,7 +1523,7 @@ function doPDFgDriveClick(evt){
        var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
        gapi.savetodrive.render(it,{"src": urlxml,
 				   "filename":document.title,
-				   "sitename": "IRI"});
+				   "sitename": uicoreConfig.SiteName});
    }
 }
 function doPDFgDriveRender(it){
@@ -1542,7 +1559,7 @@ function doPDFgDriveRender(it){
 	   gdrivespan.setAttribute("gDriveUrl","active");
 	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
 					       "filename":document.title,
-					       "sitename": "IRI"});
+					       "sitename": uicoreConfig.SiteName});
        }
    }
 }
@@ -4231,6 +4248,23 @@ function DLimageBuildControls(mydlimage,mylink){
 		pform.appendChild(ipt);
 	    }
 	    ctl.appendChild(gb);
+/* PDFget test version using GET instead of POST to make sure both
+	work equally well */
+/*	    gb= document.createElement('div');
+	    gb.className='sharebutton asPDFget';
+	    gb.setAttribute("title","PDF image with link back");
+	    gb.onclick=doPDFClickGET;
+	    gb.myonclick=doPDFClickGET;
+	    gb.clipthis = currentObj.parentNode;
+	    if(pform && !pform.elements['linkurl']){
+		var ipt= document.createElement('input');
+		ipt.type='hidden';
+		ipt.name='linkurl';
+		ipt.className='linkurl';
+		pform.appendChild(ipt);
+	    }
+	    ctl.appendChild(gb);
+*/
 /* GIF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asGIF';

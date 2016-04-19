@@ -1844,7 +1844,7 @@ so that only the gdriveurl="active" button is shown
 .asGDrive .gDriveSubButton[gdriveurl="active"]{}
 .asGDrive .gDriveSubButton[gdriveurl="standby"]{display: none  !important;}
 
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPDFget,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1879,6 +1879,9 @@ content: "table";
 .asPDF:before {
 content: "PDF";
 }
+.asPDFget:before {
+content: "PDFget";
+}
 .asPNG:before {
 content: "PNG";
 }
@@ -1908,6 +1911,9 @@ content: "TSV table";
 }
 .asPDF:before {
 content: "PDF";
+}
+.asPDFget:before {
+content: "PDFget";
 }
 .asPNG::before {
 content: "PNG";
