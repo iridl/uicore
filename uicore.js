@@ -3889,13 +3889,15 @@ function doinfobutton (evt) {
    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
    var newloc = mylink[0].href;
+    if(location.host == mylink[0].host){
+	newloc = mylink[0].pathname;
+    }
+    else {
+	newloc = mylink[0].href;
+    }
     var lastslashindex = newloc.lastIndexOf('/');
     newloc = newloc.substr(0,lastslashindex+1);
-   var locq = mylink[0].href.indexOf('?');
-	if(locq>0){
-	    newloc=newloc.substr(0,locq);
-	}
-location.href=appendPageForm(newloc+'index.html',mylink[0].figureimage.className);
+    location.href=appendPageForm(newloc+'index.html',mylink[0].figureimage.className);
 }
 function DLimageResizeImage(mylink){
     if(mylink.figureimage){
