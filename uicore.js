@@ -1555,12 +1555,15 @@ function doPDFgDriveRender(it){
 	   gdrivespan.className="gDriveSubButton";
 	   it.appendChild(gdrivespan);
 	   gdrivespan.renderedUrl=urlxml;
+	   gdrivespan.filename=document.title;
+	   gdrivespan.sitename=uicoreConfig.SiteName;
 	   gdrivespan.setAttribute("rUrl",urlxml);
 	   gdrivespan.setAttribute("gDriveUrl","active");
-	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
+	   gdrivespan.setAttribute("rendered",false);
+/*	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
 					       "filename":document.title,
 					       "sitename": uicoreConfig.SiteName});
-       }
+ */      }
    }
 }
 function doPDFImageClick(evt){
@@ -4306,13 +4309,8 @@ function DLimageBuildControls(mydlimage,mylink){
 /* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 /* do render loop */
-	var gDrivelist=document.getElementsByClassName('asGDrive');
-	if (gDrivelist.length){
-	    for (var idrive=gDrivelist.length; idrive--;){
-            doPDFgDriveRender(gDrivelist[idrive]);
-	    }
-	}
-
+	renderAsGDrive();
+	secondRenderAsGDrive();
 /* ctl becomes current */
 	currentObj=ctl;
 /* adds message area for download controls e.g. ArcGIS */
@@ -6083,6 +6081,11 @@ updatePageFormConditionalClassesAndFlags(false);
 	}
     }
 /* do render loop */
+   renderAsGDrive();
+	secondRenderAsGDrive();
+}}
+/* do render loop */
+function renderAsGDrive(){
 	var gDrivelist=document.getElementsByClassName('asGDrive');
 	if (gDrivelist.length){
 	    for (var idrive=gDrivelist.length; idrive--;){
@@ -6090,6 +6093,46 @@ updatePageFormConditionalClassesAndFlags(false);
 	    }
 	}
 }
+var firstRender=true;
+function firstRenderAsGDrive(){
+    if(!!firstRender){
+	var gDrivelist=document.getElementsByClassName('gDriveSubButton');
+	if (gDrivelist.length){
+	    for (var idrive=gDrivelist.length; idrive--;){
+		var gdrivespan=gDrivelist[idrive];
+		var gflag=gdrivespan.getAttribute("rendered");
+		if(!!gflag){
+		} else {
+		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
+							"filename": gdrivespan.filename,
+							"sitename": gdrivespan.sitename});
+		    gdrivespan.setAttribute("rendered",true);
+		    alert("first " + gdrivespan.renderedUrl);
+		}
+	    }
+	}
+	firstRender=false;
+    }
+}
+function secondRenderAsGDrive(){
+    if(!!firstRender){
+    } else
+    {
+	var gDrivelist=document.getElementsByClassName('gDriveSubButton');
+	if (gDrivelist.length){
+	    for (var idrive=gDrivelist.length; idrive--;){
+		var gdrivespan=gDrivelist[idrive];
+		var gflag=gdrivespan.getAttribute("rendered");
+		if(!!gflag){
+		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
+							"filename": gdrivespan.filename,
+							"sitename": gdrivespan.sitename});
+		    gdrivespan.setAttribute("rendered",true);
+		    alert("second " + gdrivespan.renderedUrl);
+	}
+	    }
+	}
+    }
 }
 function updatePageFormConditionalClassesAndFlags(doflags){
 var myform=document.getElementById('pageform');
@@ -6872,6 +6915,7 @@ loadHasJSON();
 loadHasRqlEndpoint();
 githubSetup();
 $(window).resize(refreshConnectedGraphs);
+firstRenderAsGDrive();
 if(uicoreConfig.GoogleAnalyticsId){
 /*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
   _gaq.push(['_trackPageview']);
