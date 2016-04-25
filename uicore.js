@@ -6107,7 +6107,6 @@ function firstRenderAsGDrive(){
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
 		    gdrivespan.setAttribute("rendered",true);
-		    alert("first " + gdrivespan.renderedUrl);
 		}
 	    }
 	}
@@ -6128,7 +6127,6 @@ function secondRenderAsGDrive(){
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
 		    gdrivespan.setAttribute("rendered",true);
-		    alert("second " + gdrivespan.renderedUrl);
 	}
 	    }
 	}
