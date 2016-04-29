@@ -66,10 +66,16 @@ loaded before execution.
 */
     function jsDependsOn(srcfile){
 	var s=document.getElementsByTagName('script')[0];
-
-    var po = document.createElement('script');
-    po.type = 'text/javascript';
-    po.src = srcfile;
+	var po = document.createElement('script');
+	po.type = 'text/javascript';
+	if(typeof srcfile == "object"){
+	    for(var key in srcfile){
+		po.setAttribute(key,srcfile[key]);
+	}
+	}
+	else {
+	    po.src = srcfile;
+	}
     po.onload = jsLoaded;
     po.onreadystatechange = jsLoaded;
     po.myevtfn = jsLoaded;
@@ -132,7 +138,12 @@ var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
 jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* google api (gdrive) */
-jsDependsOn('https://apis.google.com/js/platform.js');
+ window.___gcfg = {
+        parsetags: 'explicit'
+      };
+jsDependsOn({"src": "https://apis.google.com/js/platform.js",
+             "async": "",
+	     "defer": ""});
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
@@ -1537,6 +1548,8 @@ function doPDFgDriveRender(it){
        pform.elements['linkurl'].value=linkurl;
        /* gapi.savetodrive.render */
        var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
+/* remove protocol */
+/*       urlxml=urlxml.replace(/^(https?:\/\/)/,'//'); */
 	var gDriveBlist=it.getElementsByClassName('gDriveSubButton');
        var ucheck=false;
        if (gDriveBlist.length){
@@ -2309,7 +2322,7 @@ function rqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
 	    }
 	}
 	else {
-/* sparql -- simple comma-seperated list of values to replace ?key */
+/* sparql -- simple comma-separated list of values to replace ?key */
 	    myregexp = new RegExp('[?]' + key + '([ ,.;])','g');
 	    newquery = myquery.replace(myregexp,replacewith+ "$1");
 	}
@@ -6101,7 +6114,7 @@ function firstRenderAsGDrive(){
 	    for (var idrive=gDrivelist.length; idrive--;){
 		var gdrivespan=gDrivelist[idrive];
 		var gflag=gdrivespan.getAttribute("rendered");
-		if(!!gflag){
+		if((gflag == "true")){
 		} else {
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
@@ -6122,12 +6135,13 @@ function secondRenderAsGDrive(){
 	    for (var idrive=gDrivelist.length; idrive--;){
 		var gdrivespan=gDrivelist[idrive];
 		var gflag=gdrivespan.getAttribute("rendered");
-		if(!!gflag){
+		if((gflag == "true")){
+		} else{
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
 		    gdrivespan.setAttribute("rendered",true);
-	}
+		}
 	    }
 	}
     }
