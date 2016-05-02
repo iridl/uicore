@@ -133,10 +133,6 @@ var scriptroot;
 if(scriptsrc){
 scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 }
-/* loads pure javascript */
-var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
-jsDependsOn(puredir + 'pure.js');
-jsDependsOn(puredir + 'jquery.js');
 /* google api (gdrive) */
  window.___gcfg = {
         parsetags: 'explicit'
@@ -144,6 +140,10 @@ jsDependsOn(puredir + 'jquery.js');
 jsDependsOn({"src": "https://apis.google.com/js/platform.js",
              "async": "",
 	     "defer": ""});
+/* loads pure javascript */
+var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
+jsDependsOn(puredir + 'pure.js');
+jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
@@ -349,218 +349,6 @@ function limitclickevent(evt){
 	    evt.currentTarget=this;
 	}
 	imageinputvaluechange(evt);
-}
-/*
-To simplify writing maproom documents, and accessing them locally,
-from test locations, and from the server, urls that start /maproom/
-are prepending with the document root, as long as the urls are processed
-by the maproom javascript code.
-
-maproomroot: holds the document root
-localHrefOf: converts a /maproom/ reference to be relative to the current document
-*/
-var IE8=(navigator.appVersion.indexOf('MSIE 8')>=0);
-var slist=document.getElementsByTagName('script');
-var scriptsrc='';
-for (var i=0; i<slist.length; i++){
-var shref=slist[i].src;
-if(shref.substr(shref.length-9,9) == 'uicore.js'){
-scriptsrc=shref;
-break;
-}
-}
-var scriptroot;
-if(scriptsrc){
-scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
-}
-/* loads pure javascript */
-var puredir = scriptroot.substr(0,scriptroot.length-7) + 'pure/libs/';
-jsDependsOn(puredir + 'pure.js');
-jsDependsOn(puredir + 'jquery.js');
-/* loads jsonld javascript */
-jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
-var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
-var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
-
-function localHrefOf(ghref){
-var lhref;
-    var ifmap=-1;
-    var ifscript=-1;
-    if(ghref){
-	ifmap  = ghref.lastIndexOf('/maproom/');
-	ifscript  = ghref.lastIndexOf('/uicore/');
-    }
-if(ifmaproomroot > -1 && ifmap > -1){
-var maproomurl = ghref.substr(0,ifmap+9);
-lhref = maproomroot + ghref.substr(maproomurl.length);
-}
-    else if(ifscript > -1){
-var scripturl = ghref.substr(0,ifscript+8);
-lhref = scriptroot + ghref.substr(scripturl.length);
-    }
-else {
-lhref= ghref;
-}
-if(lhref && lhref.substr(0,1) == '/'){
-    lhref = location.protocol + '//' + location.host + lhref;
-}
-return lhref;
-}
-/* some javascript functions might be missing */
-/* replacement for getElementsByClassName when missing */
-if (typeof document.getElementsByClassName!='function') {
-document.getElementsByClassName = function() {
-        var elms = this.getElementsByTagName('*');
-        var ei = new Array();
-        for (i=0;i<elms.length;i++) {
-            if (elms[i].getAttribute('class')) {
-                ecl = elms[i].getAttribute('class').split(' ');
-                for (j=0;j<ecl.length;j++) {
-                    if (ecl[j].toLowerCase() == arguments[0].toLowerCase()) {
-                        ei.push(elms[i]);
-                    }
-                }
-            } else if (elms[i].className) {
-                ecl = elms[i].className.split(' ');
-                for (j=0;j<ecl.length;j++) {
-                    if (ecl[j].toLowerCase() == arguments[0].toLowerCase()) {
-                        ei.push(elms[i]);
-                    }
-                }
-            }
-        }
-        return ei;
-    }
-Element.prototype.getElementsByClassName=document.getElementsByClassName;
-}
-/* IE 8 is missing hasOwnProperty for Elements */
-if(!Element.prototype.hasOwnProperty){
-    Element.prototype.hasOwnProperty=Object.prototype.hasOwnProperty;
-}
-if(typeof [].indexOf != 'function'){
-Array.prototype.indexOf = function(obj, start) {
-     for (var i = (start || 0), j = this.length; i < j; i++) {
-         if (this[i] === obj) { return i; }
-     }
-     return -1;
-}
-}
-// Add ECMA262-5 Array methods if not supported natively
-//
-if (!('indexOf' in Array.prototype)) {
-    Array.prototype.indexOf= function(find, i /*opt*/) {
-        if (i===undefined) i= 0;
-        if (i<0) i+= this.length;
-        if (i<0) i= 0;
-
-        for (var n= this.length; i<n; i++)
-            if (i in this && this[i]===find)
-                return i;
-        return -1;
-    };
-}
-if (!('lastIndexOf' in Array.prototype)) {
-    Array.prototype.lastIndexOf= function(find, i /*opt*/) {
-        if (i===undefined) i= this.length-1;
-        if (i<0) i+= this.length;
-        if (i>this.length-1) i= this.length-1;
-        for (i++; i-->0;) /* i++ because from-argument is sadly inclusive */
-            if (i in this && this[i]===find)
-                return i;
-        return -1;
-    };
-}
-if (!('forEach' in Array.prototype)) {
-    Array.prototype.forEach= function(action, that /*opt*/) {
-        for (var i= 0, n= this.length; i<n; i++)
-            if (i in this)
-                action.call(that, this[i], i, this);
-    };
-}
-if (!('map' in Array.prototype)) {
-    Array.prototype.map= function(mapper, that /*opt*/) {
-        var other= new Array(this.length);
-        for (var i= 0, n= this.length; i<n; i++)
-            if (i in this)
-                other[i]= mapper.call(that, this[i], i, this);
-        return other;
-    };
-}
-if (!('filter' in Array.prototype)) {
-    Array.prototype.filter= function(filter, that /*opt*/) {
-        var other= [], v;
-        for (var i=0, n= this.length; i<n; i++)
-            if (i in this && filter.call(that, v= this[i], i, this))
-                other.push(v);
-        return other;
-    };
-}
-if (!('every' in Array.prototype)) {
-    Array.prototype.every= function(tester, that /*opt*/) {
-        for (var i= 0, n= this.length; i<n; i++)
-            if (i in this && !tester.call(that, this[i], i, this))
-                return false;
-        return true;
-    };
-}
-if (!('some' in Array.prototype)) {
-    Array.prototype.some= function(tester, that /*opt*/) {
-        for (var i= 0, n= this.length; i<n; i++)
-            if (i in this && tester.call(that, this[i], i, this))
-                return true;
-        return false;
-    };
-}
-/* dohomesel ( evt -- ) event function to handle home menu select.*/
-function dohomesel(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var opt=it.options[it.selectedIndex];
-var fullpathname = document.location.href;
-var optvalue = opt.value;
-    var optpath = optvalue.replace(/\?.*/,'');
-    if(optpath == location.pathname){
-	var optclass = "share carryLanguage";
-    }
-    else {
-	var optclass = "carryup carryLanguage";
-    }
-if(optvalue){
-/*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
-    ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
-    var url = appendPageForm(optvalue,optclass,false,true);
-
-    document.location.href=url;
-}
-    }
-/* dosectionsel ( -- ) function to handle mapselect menu */
-function dosectionsel(){
-it=document.getElementById('mapselect');
-if(it.options[it.selectedIndex].parentNode.label){
-    it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;}
-it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
-
-var opt=it.options[it.selectedIndex];
-var fullpathname = document.location.href;
-var optvalue = opt.value;
-var optclass="carry";
-if(optvalue.indexOf('@')>0){
-    optclass = optvalue.split('@')[1];
-    optvalue = optvalue.split('@')[0];
-}
-if(optvalue.substring(0,5)!='http:'){
-if(fullpathname.indexOf("?")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
-}
-if(fullpathname.indexOf("#")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
-}
-if (it.hrefroot + optvalue != fullpathname){
-submitPageForm(it.hrefroot + optvalue,optclass);
-}
-} else {
-submitPageForm(optvalue,optclass);
-}
 }
 /* stepupclickevent ( evt -- ) handles step up click for grid 
    controls. */
@@ -6116,6 +5904,7 @@ function firstRenderAsGDrive(){
 		var gflag=gdrivespan.getAttribute("rendered");
 		if((gflag == "true")){
 		} else {
+/*		    alert("do first render " + idrive); */
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
@@ -6137,6 +5926,7 @@ function secondRenderAsGDrive(){
 		var gflag=gdrivespan.getAttribute("rendered");
 		if((gflag == "true")){
 		} else{
+/*		    alert("do second render " + idrive); */
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
