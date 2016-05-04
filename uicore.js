@@ -1326,7 +1326,7 @@ function doPDFgDriveClick(evt){
    }
 }
 function doPDFgDriveRender(it){
-    var figimg = getFigureImage(it.clipthis);
+    var figimg = getFigureImage(it.clipthis) || getTable(it.clipthis);
    if(figimg && figimg.src){
        var pdfurl=figimg.src;
        var pdfclass=figimg.className;
@@ -3956,7 +3956,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	ipt.className='controlLabel';
 	ipt.innerHTML='Download as' + '  ';
 	ctl.appendChild(ipt);
-	if(mylink){
+	if(mylink||getTable(mydlimage)){
 /* google drive */
 	var gb= document.createElement('div');
 	gb.className='sharebutton asGDrive';
@@ -3964,7 +3964,9 @@ function DLimageBuildControls(mydlimage,mylink){
 /*	uses gDriveRender */
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
+	}
 /* KML */
+	if(mylink){
 	var gb= document.createElement('div');
 	gb.className='sharebutton asKML';
 	gb.setAttribute("title","KML with link back");
