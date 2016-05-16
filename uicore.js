@@ -6156,41 +6156,49 @@ function validateAndCorrectPageForm(context){
     if(!mycontext || !mycontext.getElementsByClassName){
 	mycontext=document;
     }
-var myform=document.getElementById('pageform');
-if(myform){
-    var valid=true;
-/* checks for null region and bbox not null */
-    var region = myform.elements['region'];
-    var bbox = myform.elements['bbox'];
-    if(region && typeof(region.value)!='undefined'){
-	if((!region.value) && typeof(bbox)!='undefined' && bbox.value !=''){
-	    region.value = bbox.value;
-	    valid=false;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var valid=true;
+	/* checks for null region and bbox not null */
+	var region = myform.elements['region'];
+	var bbox = myform.elements['bbox'];
+	if(region && typeof(region.value)!='undefined'){
+	    if((!region.value) && typeof(bbox)!='undefined' && bbox.value !=''){
+		region.value = bbox.value;
+		valid=false;
+	    }
+	}
+/* containsAllValids
+Normally a select menu allows selectedIndex=-1, i.e. a choice that is not from 
+the list of possible values (particularly useful for bbox anywhere and also having
+a list of selected boxes).
+
+containsAllValids is a class (so class="pageformcopy containsAllValids") so that
+only values from the list are allowed, i.e. selectedIndex=-1 becomes =0).  
+*/
+	var stag = mycontext.getElementsByClassName('containsAllValids');
+	for (var i=0; i< stag.length ; i++){
+	    var sel=stag[i];
+	    if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
+		valid=false;
+		sel.selectedIndex=0;
+		if(sel.selectedIndex == 0){
+		    myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
+		    if(sel.previousSibling.className == 'selectvalue'){
+			sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+			sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
+		    }
+		}
+	    }   
+	}
+	if(!valid){
+	    var historyid;
+	    if(history){
+		historyid = history.state;
+	    }
+	    updatePageForm(undefined,undefined,undefined,historyid);
 	}
     }
-    var stag = mycontext.getElementsByClassName('containsAllValids');
-for (var i=0; i< stag.length ; i++){
-var sel=stag[i];
-if(sel.selectedIndex == -1 && typeof(myform.elements[sel.name]) != 'undefined'){
-    valid=false;
-    sel.selectedIndex=0;
-    if(sel.selectedIndex == 0){
-myform.elements[sel.name].value=sel.options[sel.selectedIndex].value;
-if(sel.previousSibling.className == 'selectvalue'){
-sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
-    sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
-}
-    }
- }   
-}
-if(!valid){
-    var historyid;
-    if(history){
-	    historyid = history.state;
-    }
-    updatePageForm(undefined,undefined,undefined,historyid);
-}
-}
 }
 function imageabortedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
