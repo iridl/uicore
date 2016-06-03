@@ -134,9 +134,6 @@ if(scriptsrc){
 scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 }
 /* google api (gdrive) */
- window.___gcfg = {
-        parsetags: 'explicit'
-      };
 jsDependsOn({"src": "https://apis.google.com/js/platform.js",
              "async": "",
 	     "defer": ""});
