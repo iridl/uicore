@@ -3488,7 +3488,6 @@ function setbbox (newbbox,myinfo,myclasses) {
 	    } /* end of resolution-dependent click */
 	    else {
 		clickpt.value='';
-		
 		myin.value="bb:" + newbbox.slice(0,4).join(':') + ifCRS + ":bb";
 	    }
 	    update=true;
@@ -3560,6 +3559,19 @@ function setbbox (newbbox,myinfo,myclasses) {
 		    update=true;
 		}
 	    }
+	}
+	/* not done as grids */
+	else {
+/*	    alert('got '+ myinfo["iridl:hasAbscissa"]["iridl:name"]);
+	    alert('got '+ myinfo["iridl:hasAbscissa"]["iridl:plotfirst"]);
+	    alert('got '+ myinfo["iridl:hasAbscissa"]["iridl:plotlast"]);
+	    alert('got '+ myinfo["iridl:hasOrdinate"]["iridl:name"]);
+	    alert('got '+ myinfo["iridl:hasOrdinate"]["iridl:plotfirst"]);
+	    alert('got '+ myinfo["iridl:hasOrdinate"]["iridl:plotlast"]);
+*/
+	   var newbb ="bb:" + newbbox.slice(0,4).join(':') + ifCRS + ":bb";
+	    myform.elements['clickpt'].value=newbb;
+	    update=true;
 	}
     
 	if(update){
