@@ -18,47 +18,47 @@ body[lang="ar"]{direction: rtl}
 .langgroup [lang] {display:inline}
 .langgroup [lang] + [lang] {display:none}
 body[failed]::before {
-content: attr(failed) " downloads unavailable";
-display: block;
-border: 4pt;
-border-style: outset;
-border-color: DarkGrey;
-text-align: center;
-color: brown;
-padding: 5pt;
-position: fixed;
-bottom: 5pt;
-right: 5pt;
-z-index: 100;
-background-color: WhiteSmoke;
-border-radius: 10px;
+    content: attr(failed) " downloads unavailable";
+    display: block;
+    border: 4pt;
+    border-style: outset;
+    border-color: DarkGrey;
+    text-align: center;
+    color: brown;
+    padding: 5pt;
+    position: fixed;
+    bottom: 5pt;
+    right: 5pt;
+    z-index: 100;
+    background-color: WhiteSmoke;
+    border-radius: 10px;
 }
 body[failed="1"]::before {
 content: attr(failed) " download unavailable";
 }
 /* gloss support: lbl followed by gloss shows gloss on hover over lbl*/
 .gloss {
-display: none;
--webkit-column-break-inside: avoid;
+    display: none;
+    -webkit-column-break-inside: avoid;
 }
 .lbl:hover + .gloss:not(:empty) {
-display: block;
-position: absolute;
-z-index: 30;
-white-space: normal;
-color: #111;
-border: 1px solid #DCA;
-background: #FFFAF0;
-text-indent: 0pt;
-margin-left: 5pt;
-padding-left: 2pt;
-padding-right: 2pt;
-min-width: 100pt;
-max-width: 300pt;
-overflow: visible;
+    display: block;
+    position: absolute;
+    z-index: 30;
+    white-space: normal;
+    color: #111;
+    border: 1px solid #DCA;
+    background: #FFFAF0;
+    text-indent: 0pt;
+    margin-left: 5pt;
+    padding-left: 2pt;
+    padding-right: 2pt;
+    min-width: 100pt;
+    max-width: 300pt;
+    overflow: visible;
 }
 .lbl:hover {
-cursor: help;
+    cursor: help;
 }
 
 [property="wn20schema:lexicalForm"],[rel="wn20schema:containsWordSense"],[property="wn30:lexicalForm"],[rel="wn30:hasSense"]{
@@ -295,88 +295,89 @@ left: 42px;
 top: 42px;
 }
 .controlBar {
-             border-style: outset;
-	     border-color: LightGrey;
-             border-width: 4px;
-             margin: 1px;
-	     margin-bottom: 1px;
-	font-size: 12pt;
-	background-color: WhiteSmoke;
-	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
--moz-border-radius: 12px;
-border-radius: 12px;
-padding-bottom: 2px;
-padding-right: 2px;
-            }
+    border-style: outset;
+    border-color: LightGrey;
+    border-width: 4px;
+    margin: 1px;
+    margin-bottom: 1px;
+    font-size: 12pt;
+    background-color: WhiteSmoke;
+    font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    padding-bottom: 2px;
+    padding-right: 2px;
+}
 .controlBar::after, .controlBar:after {
-content: ".";
-display: block;
-clear: both;
-visibility: hidden;
-height: 0px;
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0px;
 }
 .optionsBar {
-             clear: both;
-             border-style: outset;
-	     border-color: LightGrey;
-             border-width: 4px;
-             margin: 1px;
-	     margin-bottom: 3px;
-             min-height: 54px;
-	     max-width: 100%;
-	font-size: 12pt;
+    clear: both;
+    border-style: outset;
+    border-color: LightGrey;
+    border-width: 4px;
+    margin: 1px;
+    margin-bottom: 3px;
+    min-height: 54px;
+    max-width: 100%;
+    font-size: 12pt;
     background: url('icons/iriwh.png') right no-repeat;
-	background-size: 50pt;
-	background-color: WhiteSmoke;
-	padding-right: 52pt;
-	font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
--moz-border-radius: 12px;
-border-radius: 12px;
-padding-bottom: 2px;
-overflow: hidden;
-            }
+    background-size: 50pt;
+    background-color: WhiteSmoke;
+    padding-right: 52pt;
+    font-family: Helvetica, Arial, "Lucida Sans Unicode", Verdana, sans-serif;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    padding-bottom: 2px;
+    overflow: hidden;
+}
 #share, #contactus {
-overflow: hidden;
-opacity:  .75;
+    overflow: hidden;
+    opacity:  .75;
 }
 .clear {
-	clear: both;
-	height: 0px;
+    clear: both;
+    height: 0px;
 }
 .navlink {
-         font-size: 16pt;
-         text-decoration: none;
-         color: navy;
-	 line-height: 1.1;
-         }
+    font-size: 16pt;
+    text-decoration: none;
+    color: navy;
+    line-height: 1.1;
+}
 .alttablink {
-         text-decoration: none;
-         color: black;
-         }
+    text-decoration: none;
+    color: black;
+}
 .navtext {
-         font-size: 16pt;
-         text-decoration: none;
-         }
+    font-size: 16pt;
+    text-decoration: none;
+}
 .navlink:hover,.alttablink:hover {
-         font-weight: bold;
-         color: blue;
-         }
+    font-weight: bold;
+    color: blue;
+}
 .navmore {
-	display: none;
-	margin: 5px;
--moz-border-radius: 10px;
-border-radius: 10px;
-       min-height: 36px;
+    display: none;
+    margin: 5px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    min-height: 36px;
 }
 /* Google Search Element */
 #GoogleSearch, .search {
-margin-top: 5pt;
-float: right;
-width: 35%;
+    margin-top: 5pt;
+    float: right;
+    width: 35%;
 }
 #GoogleSearch div, .search div {
-margin-top: 2px;
+    margin-top: 2px;
 }
+/* smaller max width for controlBar */
 @media only all and (max-width: 600px) 
 {
     #GoogleSearch, .search {
@@ -418,7 +419,6 @@ margin-top: 2px;
 .controlBar:hover .navitem .selectvalue,.controlBar:active .navitem .selectvalue {
     display: none;
 }
-
 .navitem {
     padding-left: 4px;
     padding-right: 4px;
@@ -675,49 +675,49 @@ display: none;
 .dlimage.hasLayers.ControlLock > legend > div.layers,
 .dlimage.hasDownload.ControlLock > legend > div.download
  {
-display: inline-block;
-}
+     display: inline-block;
+ }
 .dlimage div.arcgis,
 .dlimage div.googleearth,
 .dlimage div.asKML,
 .dlimage div.asGeoTiff,
 .dlimage div.asGeoTiffPaletteColor,
 .dlimage div.asWMS {
-display: none;
+    display: none;
 }
 .dlimage.hasKML div.googleearth,
 .dlimage.hasKML div.asKML {
-display: inline-block;
+    display: inline-block;
 }
 .dlimage.hasWMS div.arcgis,
 .dlimage.hasWMS div.asWMS,
 .dlimage.hasGeoTiffPaletteColor div.asGeoTiffPaletteColor,
 .dlimage.hasGeoTiff div.asGeoTiff
  {
-display: inline-block;
-}
+     display: inline-block;
+ }
 .dlimage .dlcontrol {
-display: none;
+    display: none;
 }
 .dlimage .messagearea {
-display: none
+    display: none
 }
 .dlimage .messagearea.show {
-display: block;
-white-space: normal;
-z-index: 100;
+    display: block;
+    white-space: normal;
+    z-index: 100;
 }
 .dlimage.ShowControlLayers .dlcontrol.layers {
-display: block;
+    display: block;
 }
 .dlimage.ShowControlShare .dlcontrol.share {
-display: block;
+    display: block;
 }
 .dlimage.ShowControlDownload .dlcontrol.download {
-display: block;
+    display: block;
 }
 .dlimage.ShowControlIvars .dlcontrol.ivar {
-display: block;
+    display: block;
 }
 .dlimage.ShowControlDownload .selectedImage,
 .dlimage.ShowControlShare .selectedImage {
@@ -847,8 +847,7 @@ display: none;
 .selectvalue + select {
 display: inline;
 }
-
-
+/* instead of 600px,  this is 750px */
 @media only all and (max-width: 750px) {
 .selectvalue {
 display: inline;
@@ -884,6 +883,7 @@ font-size: 10pt;
 font-size: 10pt;
 }
 }
+/* 750px hover */
 @media only all and (max-width: 750px) {
 .selectvalue {
 display: inline;
@@ -1047,6 +1047,7 @@ img.dlimg, img.dlauximg, img.dlimgts {
 	background: LightGrey;
 	 font-size: 9pt;
 }
+/* 600px small */
 @media only all and (max-width: 600px) {
 .dlimage, .dlimage.wide, .dlimage.tall{
 	width: 92%;
@@ -1055,6 +1056,7 @@ img.dlimg, img.dlauximg, img.dlimgts {
 	width: 40%;
 }
 }
+/* 479px small */
 @media only all and (max-width: 479px) {
 .dlimage, .dlimage.wide, .dlimage.tall, .dlimage.narrow {
 	width: 89%;
@@ -1169,7 +1171,7 @@ display: inline;
 }
 
 }
-
+/* 750px small - 750 and above */
 @media only all and (min-width: 750px) {
 .dlimage {
 	width: 95%;
@@ -1181,7 +1183,7 @@ display: inline;
 	width: 25%;
 }
 }
-/* ipad is 1024 -- this 1024 and above */
+/* ipad is 1024 -- this 1024px and above */
 @media only all and (min-width: 900px) {
 .dlimage {
 	width: 45%;
@@ -1200,6 +1202,7 @@ display: inline;
 }
 
 }
+/* ipad is 1024 -- this 1400px and above */
 @media only all and (min-width: 1400px) {
 .dlimage {
 	width: 47%;
@@ -1211,6 +1214,7 @@ display: inline;
 	width: 55%;
 }
 }
+/* ipad is 750px -- this 750px and above */
 @media only all and (min-width: 750px) and (orientation: landscape){
 .dlimage.tall {
 	width: 25%;
@@ -1219,6 +1223,7 @@ display: inline;
 	width: 15%;
 }
 }
+/* tabs */
 .ui-widget-header .ui-state-default {
         background: #ECECEC;
 }
