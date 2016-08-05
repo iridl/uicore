@@ -1100,14 +1100,13 @@ background-size: 37px;
 height: 37px;
 width: 37px;
 min-width: 37px;
-}*/
+}
 .selectvalue {
 display: inline;
 }
 .navitem + .navitem + .navitem .selectvalue {
 font-size: 6pt;
 }
-
 .controlBar .navitem > legend {
        font-size: 4pt;
 }
@@ -1116,11 +1115,11 @@ font-size: 6pt;
 }
 .controlBar .navitem + .navitem + .navitem > legend {
        font-size: 4pt;
-}
-/* suppress lang control on very small screens */
+*/
+/* suppress lang control on very small screens 
 .lang {
 display: inline;
-}
+} */
 /*.lang:hover, .lang:active {
 display: inline;
 }*/
@@ -1151,6 +1150,7 @@ margin-top: 2pt;
 .navitem + .navitem{
        font-size: 10pt;
 }
+/*
 .lang {
        font-size: 4pt;
 }
@@ -1180,7 +1180,7 @@ display: inline;
        font-size: 6pt;
 display: inline;
 }
-
+*/
 }
 /* 479px small */
 @media only all and (max-width: 479px) {
@@ -1259,41 +1259,6 @@ display: none !important;
 }
 .dlimage {
 margin-top: 2pt;
-}
-.navitem, .alttablink{
-       font-size: 10pt;
-}
-.navitem + .navitem{
-       font-size: 10pt;
-}
-.lang {
-       font-size: 4pt;
-}
-.controlBar .navlink {
-       font-size: 10pt;
-}
-.controlBar .navtext {
-       font-size: 10pt;
-}
-.controlBar .navitem {
-       display: inline;
-       font-size: 7pt;
-}
-.controlBar .lang select{
-       display: inline;
-       font-size: 6pt;
-}
-.controlBar .navitem > legend  {
-display: inline;
-       font-size: 6pt;
-}
-.controlBar .navitem + .navitem > legend  {
-display: inline;
-       font-size: 6pt;
-}
-.controlBar .lang > legend  {
-       font-size: 6pt;
-display: inline;
 }
 
 }
