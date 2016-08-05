@@ -308,13 +308,14 @@ top: 42px;
     padding-bottom: 2px;
     padding-right: 2px;
 }
+/*
 .controlBar::after, .controlBar:after {
     content: ".";
     display: block;
     clear: both;
     visibility: hidden;
     height: 0px;
-}
+}*/
 .optionsBar {
     clear: both;
     border-style: outset;
@@ -385,6 +386,7 @@ top: 42px;
 	width: 95%;
     }
 }
+/*
 .selectvalue {
     padding: 0px;
     padding-left: 2px;
@@ -399,6 +401,8 @@ top: 42px;
 .navitem + .navitem + .navitem .selectvalue {
     font-size: 12pt;
 }
+*/
+/*
 .selectvalue::after, .selectvalue:after {
     background-color: #EDEDED;
     padding-left: 3px;
@@ -419,6 +423,7 @@ top: 42px;
 .controlBar:hover .navitem .selectvalue,.controlBar:active .navitem .selectvalue {
     display: none;
 }
+*/
 .navitem {
     padding-left: 4px;
     padding-right: 4px;
@@ -453,6 +458,7 @@ top: 42px;
 .login {
     display: none
 }
+/* adds legend */
 .navitem > legend {
     font-size: 10pt;
     border-style: outset;
@@ -467,6 +473,7 @@ top: 42px;
     padding-left: 2px;
     padding-right: 2px;
 }
+/* adds legend */
 .lang > legend {
     font-size: 10pt;
     border-style: outset;
@@ -935,7 +942,7 @@ font-size: 8pt;
 }
 .lang select {
 font-size: 8pt;
-display: none;
+display: inline;
 }
 .navitem {
 font-size: 10pt;
@@ -957,64 +964,67 @@ display: none;
 .lang {
        min-height: 10px;
 }
-.navitem:hover select {
+.navitem select {
 display: inline;
 }
-.navitem:hover .selectvalue {
+.navitem .selectvalue {
 display: none;
 }
-
-.lang:hover select {
+/*
+.lang select {
 display: inline;
 }
-.controlBar:hover .navlink {
+.controlBar .navlink {
 }
-.controlBar:hover .navtext {
+.controlBar .navtext {
 }
-.controlBar:hover .navitem {
+.controlBar .navitem {
        min-height: 20pt;
        display: inline;
 }
-.controlBar:hover .lang {
+.controlBar .lang {
        display: inline;
 }
-.controlBar:hover .navmore {
-	display: none;
+.controlBar .navmore {
+	display: inline;
 }
-.controlBar:hover .navitem select {
+.controlBar .navitem select {
 	font-size: 7pt;
 display: inline;
 }
-.controlBar:hover .navitem .selectvalue {
-display: none;
+.controlBar .navitem .selectvalue {
+display: inline;
 }
-.controlBar:hover .lang select {
+*/
+/*
+.controlBar .lang select {
 	font-size: 7pt;
 	display: inline;
 }
-.controlBar:active .navitem {
+.controlBar .navitem {
        display: inline;
        min-height: 16px;
 }
-.controlBar:active .navmore {
-	display: none;
+.controlBar .navmore {
+	display: inline;
 }
 
-.controlBar:active .navitem select {
+.controlBar .navitem select {
 display: inline;
 }
-.controlBar:active .navitem .selectvalue {
-display: none;
-}
-.controlBar:active .lang select {
+.controlBar .navitem .selectvalue {
 display: inline;
 }
-.navitem:active select {
+.controlBar .lang select {
 display: inline;
 }
-.lang:active select {
+.navitem select {
 display: inline;
 }
+.lang select {
+display: inline;
+*/
+/*
 .navitem + .navitem > legend {
        font-size: 7pt;
 }
@@ -1027,15 +1037,16 @@ display: inline;
 .lang > legend {
        font-size: 6pt;
 }
-.controlBar:hover .navitem > legend  {
+.controlBar .navitem > legend  {
 display: inline;
 }
-.controlBar:hover .navitem + .navitem > legend  {
+.controlBar .navitem + .navitem > legend  {
 display: inline;
 }
-.controlBar:hover .lang > legend  {
+.controlBar .lang > legend  {
 display: inline;
 }
+*/
 }
 
 img.dlimg, img.dlauximg, img.dlimgts {
@@ -1078,18 +1089,18 @@ top: 24px;
 left: 30px;
 top: 30px;
 }
-.controlBar:hover #homelink {
+.controlBar #homelink {
 height: 37px;
 width: 37px;
 }
-.controlBar:hover #homelink:hover{
+/*.controlBar #homelink:hover{
 background-size: 37px;
 }
 .controlBar:hover #homelink select {
 height: 37px;
 width: 37px;
 min-width: 37px;
-}
+}*/
 .selectvalue {
 display: inline;
 }
@@ -1108,16 +1119,16 @@ font-size: 6pt;
 }
 /* suppress lang control on very small screens */
 .lang {
-display: none;
-}
-.lang:hover, .lang:active {
 display: inline;
 }
+/*.lang:hover, .lang:active {
+display: inline;
+}*/
 /* suppress tabs on very small screens */
 .ui-tabs-nav {
 border-width: 2pt !important;
 padding-top: 0pt !important;
-display: none !important;
+display: inline !important;
 }
 .alttablink {
          color: navy;
@@ -1143,35 +1154,150 @@ margin-top: 2pt;
 .lang {
        font-size: 4pt;
 }
-.controlBar:hover .navlink {
+.controlBar .navlink {
        font-size: 10pt;
 }
-.controlBar:hover .navtext {
+.controlBar .navtext {
        font-size: 10pt;
 }
-.controlBar:hover .navitem {
+.controlBar .navitem {
        display: inline;
        font-size: 7pt;
 }
-.controlBar:hover .lang select{
+.controlBar .lang select{
        display: inline;
        font-size: 6pt;
 }
-.controlBar:hover .navitem > legend  {
+.controlBar .navitem > legend  {
 display: inline;
        font-size: 6pt;
 }
-.controlBar:hover .navitem + .navitem > legend  {
+.controlBar .navitem + .navitem > legend  {
 display: inline;
        font-size: 6pt;
 }
-.controlBar:hover .lang > legend  {
+.controlBar .lang > legend  {
        font-size: 6pt;
 display: inline;
 }
 
 }
-/* 750px small - 750 and above */
+/* 479px small */
+@media only all and (max-width: 479px) {
+.dlimage, .dlimage.wide, .dlimage.tall, .dlimage.narrow {
+	width: 89%;
+}
+ #homelink {
+height: 30px;
+width: 30px;
+}
+#homelink select {
+height: 30px;
+width: 30px;
+min-width: 30px;
+}
+#homelink.HomeSelect::after{
+left: 24px;
+top: 24px;
+}
+.controlBar:hover #homelink.HomeSelect::after{
+left: 30px;
+top: 30px;
+}
+.controlBar #homelink {
+height: 37px;
+width: 37px;
+}
+/*.controlBar #homelink:hover{
+background-size: 37px;
+}
+.controlBar:hover #homelink select {
+height: 37px;
+width: 37px;
+min-width: 37px;
+}*/
+.selectvalue {
+display: inline;
+}
+.navitem + .navitem + .navitem .selectvalue {
+font-size: 6pt;
+}
+
+.controlBar .navitem > legend {
+       font-size: 4pt;
+}
+.controlBar .navitem + .navitem > legend {
+       font-size: 4pt;
+}
+.controlBar .navitem + .navitem + .navitem > legend {
+       font-size: 4pt;
+}
+/* suppress lang control on very small screens */
+.lang {
+display: inline;
+}
+/*.lang:hover, .lang:active {
+display: inline;
+}*/
+/* suppress tabs on very small screens */
+.ui-tabs-nav {
+border-width: 2pt !important;
+padding-top: 0pt !important;
+display: inline !important;
+}
+.alttablink {
+         color: navy;
+         }
+.ui-tabs-panel, .ui-tabs-panel-float {
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+        -moz-border-radius-topleft: 10px !important;
+        -moz-border-radius-topright: 10px !important;
+}
+.ui-tabs-nav li {
+display: none !important;
+}
+.dlimage {
+margin-top: 2pt;
+}
+.navitem, .alttablink{
+       font-size: 10pt;
+}
+.navitem + .navitem{
+       font-size: 10pt;
+}
+.lang {
+       font-size: 4pt;
+}
+.controlBar .navlink {
+       font-size: 10pt;
+}
+.controlBar .navtext {
+       font-size: 10pt;
+}
+.controlBar .navitem {
+       display: inline;
+       font-size: 7pt;
+}
+.controlBar .lang select{
+       display: inline;
+       font-size: 6pt;
+}
+.controlBar .navitem > legend  {
+display: inline;
+       font-size: 6pt;
+}
+.controlBar .navitem + .navitem > legend  {
+display: inline;
+       font-size: 6pt;
+}
+.controlBar .lang > legend  {
+       font-size: 6pt;
+display: inline;
+}
+
+}
+  /* 750px small - 750 and above */
 @media only all and (min-width: 750px) {
 .dlimage {
 	width: 95%;
