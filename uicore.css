@@ -1123,12 +1123,12 @@ display: inline;
 /*.lang:hover, .lang:active {
 display: inline;
 }*/
-/* suppress tabs on very small screens */
+/* suppress tabs on very small screens 
 .ui-tabs-nav {
 border-width: 2pt !important;
 padding-top: 0pt !important;
 display: inline !important;
-}
+}*/
 .alttablink {
          color: navy;
          }
@@ -1216,9 +1216,9 @@ height: 37px;
 width: 37px;
 min-width: 37px;
 }*/
-.selectvalue {
+/*.selectvalue {
 display: inline;
-}
+}*/
 .navitem + .navitem + .navitem .selectvalue {
 font-size: 6pt;
 }
@@ -1232,10 +1232,10 @@ font-size: 6pt;
 .controlBar .navitem + .navitem + .navitem > legend {
        font-size: 4pt;
 }
-/* suppress lang control on very small screens */
+/* suppress lang control on very small screens 
 .lang {
 display: inline;
-}
+}*/
 /*.lang:hover, .lang:active {
 display: inline;
 }*/
@@ -1243,7 +1243,7 @@ display: inline;
 .ui-tabs-nav {
 border-width: 2pt !important;
 padding-top: 0pt !important;
-display: inline !important;
+display: none !important;
 }
 .alttablink {
          color: navy;
