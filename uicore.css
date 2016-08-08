@@ -1107,9 +1107,10 @@ display: inline;
 .navitem + .navitem + .navitem .selectvalue {
 font-size: 6pt;
 }
-.controlBar .navitem > legend {
+*/
+.controlBar .lang > legend {
        font-size: 4pt;
-}
+}/*
 .controlBar .navitem + .navitem > legend {
        font-size: 4pt;
 }
@@ -1153,7 +1154,8 @@ margin-top: 2pt;
 /*
 .lang {
        font-size: 4pt;
-}
+}*/
+/*
 .controlBar .navlink {
        font-size: 10pt;
 }
