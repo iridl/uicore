@@ -5923,8 +5923,10 @@ function secondRenderAsGDrive(){
 		var gdrivespan=gDrivelist[idrive];
 		var gflag=gdrivespan.getAttribute("rendered");
 		if((gflag == "true")){
-		} else{
-/*		    alert("do second render " + idrive); */
+		} else if 
+		(gdrivespan.renderedUrl.length<1024) 
+		{
+		    /* alert("do second render " + idrive); */ 
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
