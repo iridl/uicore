@@ -1485,6 +1485,18 @@ function doGifClick(evt){
        ga('send','social', 'ImageDownload', 'asGIF',location.href);
     }
 }
+function doPngClick(evt){
+   var evt = (evt) ? evt : ((event) ? event : null );
+   var it = (evt.currentTarget) ? evt.currentTarget : this;
+   var figimg = getFigureImage(it.clipthis);
+   if(figimg && figimg.src){
+    var pdfurl=figimg.src;
+    var pdfurl = figimg.src.replace(/.gif/,'.png');
+       var pdfclass=figimg.className;
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+       ga('send','social', 'ImageDownload', 'asPNG',location.href);
+    }
+}
 function doJpgClick(evt){
    var evt = (evt) ? evt : ((event) ? event : null );
    var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -4075,6 +4087,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.setAttribute("title","GIF image");
 	    gb.onclick=doGifClick;
 	    gb.myonclick=doGifClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+/* PNG */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asPNG';
+	    gb.setAttribute("title","PNG");
+	    gb.onclick=doPngClick;
+	    gb.myonclick=doPngClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
 /* JPG */
