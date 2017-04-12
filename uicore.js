@@ -1,6 +1,6 @@
 /*
-uicore implementation in javascript
-primarily used for maprooms  */
+  uicore implementation in javascript
+  primarily used for maprooms  */
 /* uicoreConfig ( -- ) possible parameters and settings.  Can be set
    in different files, so a bit careful in coding.
 */
@@ -13,7 +13,7 @@ if(!uicoreConfig.resolutionQueryServers){
 /* to change the GoogleAnalyticsId, redefine this after uicore.js */
 /* uicoreConfig.GoogleAnalyticsId='UA-xxxxx-xx'; */
 /* to set the help e-mail, redefine this after uicore.js
-uicoreConfig.helpemail='help@iri.columbia.edu'; */
+   uicoreConfig.helpemail='help@iri.columbia.edu'; */
 uicoreConfig.helpemail='';
 /* DL site name */
 uicoreConfig.SiteName="Data Library";
@@ -25,113 +25,114 @@ uicoreConfig.resolutionQueryServers["irids:SOURCES:TMA:Features:Forecast:vuli_20
 /* to change json used for setting preferred language on multi-language pages, reset this */
 uicoreConfig.languageSettingDocument="/uicore/toolinfo/buttoninfo.json";
 /*
-Multiple File Load (.js and .css)
-This is the basic check that all the needed js files are loaded
-asynchrously before executing. 
-jsAllLoading() is run at the end if all the files are loaded,
-otherwise it waits for the missing files.
+  Multiple File Load (.js and .css)
+  This is the basic check that all the needed js files are loaded
+  asynchrously before executing. 
+  jsAllLoading() is run at the end if all the files are loaded,
+  otherwise it waits for the missing files.
 
-$.ready runs a function at DOMContentLoaded if possible, otherwise onload
-runs immediately if already loaded.  It is invoked at the end of this file.
+  $.ready runs a function at DOMContentLoaded if possible, otherwise onload
+  runs immediately if already loaded.  It is invoked at the end of this file.
 */
 window.$ = {};
 $.ready = function(fn) {
     if (jsAllLoaded()){
-      return fn();
+	return fn();
     }
-      jsAllLoadedFn = fn;
+    jsAllLoadedFn = fn;
     if (!(document.readyState == "complete" )){
-  if (window.addEventListener) {
-      window.addEventListener("DOMContentLoaded", jsAllLoadedRun, false);
-      window.addEventListener("load", jsAllLoadedRun, false);
-}
-  else if (window.attachEvent){
-      window.attachEvent("onload", jsAllLoadedRun);
-  }
-  else{
-      window.onload = jsAllLoadedRun;
-  }
+	if (window.addEventListener) {
+	    window.addEventListener("DOMContentLoaded", jsAllLoadedRun, false);
+	    window.addEventListener("load", jsAllLoadedRun, false);
+	}
+	else if (window.attachEvent){
+	    window.attachEvent("onload", jsAllLoadedRun);
+	}
+	else{
+	    window.onload = jsAllLoadedRun;
+	}
     }
     if (jsAllLoaded()){
-      return fn();
+	return fn();
     }
 }
-    var FBloaded=false;
+
+var FBloaded=false;
 var jsDependsOnList = new Array();
 var jsAllLoadedFn = null;
 jsDependsOnList.push(document);
 /*
-jsDependsOn ( srcfile -- ) adds to the list of files that must be
-loaded before execution.
+  jsDependsOn ( srcfile -- ) adds to the list of files that must be
+  loaded before execution.
 */
-    function jsDependsOn(srcfile){
-	var s=document.getElementsByTagName('script')[0];
-	var po = document.createElement('script');
-	po.type = 'text/javascript';
-	if(typeof srcfile == "object"){
-	    for(var key in srcfile){
-		po.setAttribute(key,srcfile[key]);
+function jsDependsOn(srcfile){
+    var s=document.getElementsByTagName('script')[0];
+    var po = document.createElement('script');
+    po.type = 'text/javascript';
+    if(typeof srcfile == "object"){
+	for(var key in srcfile){
+	    po.setAttribute(key,srcfile[key]);
 	}
-	}
-	else {
-	    po.src = srcfile;
-	}
+    }
+    else {
+	po.src = srcfile;
+    }
     po.onload = jsLoaded;
     po.onreadystatechange = jsLoaded;
     po.myevtfn = jsLoaded;
     if(! po.readyState) po.readyState = "loadingScript";
     jsDependsOnList.push(po);
     s.parentNode.insertBefore(po,s);
-    }
+}
 /* jsAllLoaded ( -- boolean ) returns true if all files have been
-    loaded.
+   loaded.
 */
 function jsAllLoaded() {
-var ans = true;
-for (var i=0; i<jsDependsOnList.length; i++){
-    if(jsDependsOnList[i].readyState && (!(jsDependsOnList[i].readyState === 'interactive' && !!document.getElementsByTagName('body')[0])) && jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
-}
-return ans;
+    var ans = true;
+    for (var i=0; i<jsDependsOnList.length; i++){
+	if(jsDependsOnList[i].readyState && (!(jsDependsOnList[i].readyState === 'interactive' && !!document.getElementsByTagName('body')[0])) && jsDependsOnList[i].readyState != 'loaded' && jsDependsOnList[i].readyState != 'complete'){ans=false;}
+    }
+    return ans;
 }
 function jsLoaded (evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if(it && it.readyState == 'loadingScript'){
-    it.readyState="complete";
-}
-jsAllLoadedRun();
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    if(it && it.readyState == 'loadingScript'){
+	it.readyState="complete";
+    }
+    jsAllLoadedRun();
 }
 var jsAllLoadedNotRun = true;
 function jsAllLoadedRun(){
     if(jsAllLoadedNotRun && jsAllLoaded()){
-if(!!jsAllLoadedFn){
-    jsAllLoadedNotRun = false;
-jsAllLoadedFn();
-}
-}
+	if(!!jsAllLoadedFn){
+	    jsAllLoadedNotRun = false;
+	    jsAllLoadedFn();
+	}
+    }
 }
 /*
-To simplify writing maproom documents, and accessing them locally,
-from test locations, and from the server, urls that start /maproom/
-are prepending with the document root, as long as the urls are processed
-by the maproom javascript code.
+  To simplify writing maproom documents, and accessing them locally,
+  from test locations, and from the server, urls that start /maproom/
+  are prepending with the document root, as long as the urls are processed
+  by the maproom javascript code.
 
-maproomroot: holds the document root
-localHrefOf: converts a /maproom/ reference to be relative to the current document
+  maproomroot: holds the document root
+  localHrefOf: converts a /maproom/ reference to be relative to the current document
 */
 var IE8=(navigator.appVersion.indexOf('MSIE 8')>=0);
 var slist=document.getElementsByTagName('script');
 var scriptsrc='';
 for (var i=0; i<slist.length; i++){
-var shref=slist[i].src;
-if(shref.substr(shref.length-9,9) == 'uicore.js'){
-scriptsrc=shref;
-break;
-}
+    var shref=slist[i].src;
+    if(shref.substr(shref.length-9,9) == 'uicore.js'){
+	scriptsrc=shref;
+	break;
+    }
 }
 var scriptroot;
 if(scriptsrc){
-scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
+    scriptroot = scriptsrc.substr(0,scriptsrc.indexOf('uicore.js'));
 }
 /* google api (gdrive) */
 jsDependsOn({"src": "https://apis.google.com/js/platform.js",
@@ -143,37 +144,39 @@ jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
+jsDependsOn('https://maps.googleapis.com/maps/api/js?v=3&libraries=drawing,geometry,places,visualization');
+jsDependsOn('https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
 function localHrefOf(ghref){
-var lhref;
+    var lhref;
     var ifmap=-1;
     var ifscript=-1;
     if(ghref){
 	ifmap  = ghref.lastIndexOf('/maproom/');
 	ifscript  = ghref.lastIndexOf('/uicore/');
     }
-if(ifmaproomroot > -1 && ifmap > -1){
-var maproomurl = ghref.substr(0,ifmap+9);
-lhref = maproomroot + ghref.substr(maproomurl.length);
-}
-    else if(ifscript > -1){
-var scripturl = ghref.substr(0,ifscript+8);
-lhref = scriptroot + ghref.substr(scripturl.length);
+    if(ifmaproomroot > -1 && ifmap > -1){
+	var maproomurl = ghref.substr(0,ifmap+9);
+	lhref = maproomroot + ghref.substr(maproomurl.length);
     }
-else {
-lhref= ghref;
-}
-if(lhref && lhref.substr(0,1) == '/'){
-    lhref = location.protocol + '//' + location.host + lhref;
-}
-return lhref;
+    else if(ifscript > -1){
+	var scripturl = ghref.substr(0,ifscript+8);
+	lhref = scriptroot + ghref.substr(scripturl.length);
+    }
+    else {
+	lhref= ghref;
+    }
+    if(lhref && lhref.substr(0,1) == '/'){
+	lhref = location.protocol + '//' + location.host + lhref;
+    }
+    return lhref;
 }
 /* some javascript functions might be missing */
 /* replacement for getElementsByClassName when missing */
 if (typeof document.getElementsByClassName!='function') {
-document.getElementsByClassName = function() {
+    document.getElementsByClassName = function() {
         var elms = this.getElementsByTagName('*');
         var ei = new Array();
         for (i=0;i<elms.length;i++) {
@@ -195,19 +198,19 @@ document.getElementsByClassName = function() {
         }
         return ei;
     }
-Element.prototype.getElementsByClassName=document.getElementsByClassName;
+    Element.prototype.getElementsByClassName=document.getElementsByClassName;
 }
 /* IE 8 is missing hasOwnProperty for Elements */
 if(!Element.prototype.hasOwnProperty){
     Element.prototype.hasOwnProperty=Object.prototype.hasOwnProperty;
 }
 if(typeof [].indexOf != 'function'){
-Array.prototype.indexOf = function(obj, start) {
-     for (var i = (start || 0), j = this.length; i < j; i++) {
-         if (this[i] === obj) { return i; }
-     }
-     return -1;
-}
+    Array.prototype.indexOf = function(obj, start) {
+	for (var i = (start || 0), j = this.length; i < j; i++) {
+            if (this[i] === obj) { return i; }
+	}
+	return -1;
+    }
 }
 // Add ECMA262-5 Array methods if not supported natively
 //
@@ -277,11 +280,11 @@ if (!('some' in Array.prototype)) {
 }
 /* dohomesel ( evt -- ) event function to handle home menu select.*/
 function dohomesel(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var opt=it.options[it.selectedIndex];
-var fullpathname = document.location.href;
-var optvalue = opt.value;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var opt=it.options[it.selectedIndex];
+    var fullpathname = document.location.href;
+    var optvalue = opt.value;
     var optpath = optvalue.replace(/\?.*/,'');
     if(optpath == location.pathname){
 	var optclass = "share carryLanguage";
@@ -289,124 +292,125 @@ var optvalue = opt.value;
     else {
 	var optclass = "carryup carryLanguage";
     }
-if(optvalue){
-/*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
-    ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
-    var url = appendPageForm(optvalue,optclass,false,true);
+    if(optvalue){
+	/*    _gaq.push(['_trackSocial', 'HomeMenu', opt.innerHTML]); */
+	ga('send','social', 'HomeMenu', opt.innerHTML,location.href);
+	var url = appendPageForm(optvalue,optclass,false,true);
 
-    document.location.href=url;
-}
+	document.location.href=url;
     }
+}
 /* dosectionsel ( -- ) function to handle mapselect menu */
 function dosectionsel(){
-it=document.getElementById('mapselect');
-if(it.options[it.selectedIndex].parentNode.label){
-    it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;}
-it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
+    it=document.getElementById('mapselect');
+    if(it.options[it.selectedIndex].parentNode.label){
+	it.parentNode.getElementsByTagName('legend')[0].innerHTML=it.options[it.selectedIndex].parentNode.label;}
+    it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
 
-var opt=it.options[it.selectedIndex];
-var fullpathname = document.location.href;
-var optvalue = opt.value;
-var optclass="carry";
-if(optvalue.indexOf('@')>0){
-    optclass = optvalue.split('@')[1];
-    optvalue = optvalue.split('@')[0];
-}
-if(optvalue.substring(0,5)!='http:'){
-if(fullpathname.indexOf("?")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
-}
-if(fullpathname.indexOf("#")>= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
-}
-if (it.hrefroot + optvalue != fullpathname){
-submitPageForm(it.hrefroot + optvalue,optclass);
-}
-} else {
-submitPageForm(optvalue,optclass);
-}
+    var opt=it.options[it.selectedIndex];
+    var fullpathname = document.location.href;
+    var optvalue = opt.value;
+    var optclass="carry";
+    if(optvalue.indexOf('@')>0){
+	optclass = optvalue.split('@')[1];
+	optvalue = optvalue.split('@')[0];
+    }
+    if(optvalue.substring(0,5)!='http:'){
+	if(fullpathname.indexOf("?")>= 0){
+	    fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
+	}
+	if(fullpathname.indexOf("#")>= 0){
+	    fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
+	}
+	if (it.hrefroot + optvalue != fullpathname){
+	    submitPageForm(it.hrefroot + optvalue,optclass);
+	}
+    } else {
+	submitPageForm(optvalue,optclass);
+    }
 }
 /* functions for handling events needed for the grid controls */
 /* limitclickevent ( evt -- ) handles first/last limit click for grid 
    controls. */
 function limitclickevent(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var myinput = it.parentNode.getElementsByTagName('input')[0];
-	var last = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
-	myinput.value=it.innerHTML;
-	var c0 = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
-	if(c0 == 0){
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var myinput = it.parentNode.getElementsByTagName('input')[0];
+    var last = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
+    myinput.value=it.innerHTML;
+    var c0 = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
+    if(c0 == 0){
 	myinput.guessvalue=it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][1];
-}
-	if(c0 == last){
+    }
+    if(c0 == last){
 	myinput.guessvalue=it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][last-1];
-}
-	if(!evt.currentTarget){
-	    evt.currentTarget=this;
-	}
-	imageinputvaluechange(evt);
+    }
+    if(!evt.currentTarget){
+	evt.currentTarget=this;
+    }
+    imageinputvaluechange(evt);
 }
 /* stepupclickevent ( evt -- ) handles step up click for grid 
    controls. */
 function stepupclickevent(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var myinput = it.parentNode.getElementsByTagName('input')[0];
-	var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
-	if(cin > -1 && cin < it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1) {
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var myinput = it.parentNode.getElementsByTagName('input')[0];
+    var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
+    if(cin > -1 && cin < it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1) {
 	myinput.value = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin+1];
 	if(cin < it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-2) {
-	myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin+2];
+	    myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin+2];
 	}
 	if(!evt.currentTarget){
 	    evt.currentTarget=this;
 	}
 	imageinputvaluechange(evt);
-	}
- }
+    }
+}
 /* stepdownclickevent ( evt -- ) handles step down click for grid 
    controls. */
 
 function stepdownclickevent(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var myinput = it.parentNode.getElementsByTagName('input')[0];
-	var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
-	if(cin >0) {
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var myinput = it.parentNode.getElementsByTagName('input')[0];
+    var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(myinput.value);
+    if(cin >0) {
 	myinput.value = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin-1];
 	if(cin > 1) {
-	myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin-2];
+	    myinput.guessvalue = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'][cin-2];
 	}
 	if(!evt.currentTarget){
 	    evt.currentTarget=this;
 	}
 	imageinputvaluechange(evt);
-	}
- }
+    }
+}
 /* imageimputvaluechange ( evt -- ) handles explicit value change for grid 
    controls. */
 function imageinputvaluechange(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
- var myinput = it.parentNode.getElementsByTagName('input')[0];
- var myimage =  it.parentNode.mylink.figureimage;
-// copy value(s) to page form and get url
-var pform=document.getElementById('pageform');
-var guess='';
-  if(myinput.guessvalue){
-  pform.elements[myinput.name].value = myinput.guessvalue;
-//  guess = appendPageForm(myimage.src,myimage.className);
-    guess = myinput.guessvalue;
+
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var myinput = it.parentNode.getElementsByTagName('input')[0];
+    var myimage =  it.parentNode.mylink.figureimage;
+    // copy value(s) to page form and get url
+    var pform=document.getElementById('pageform');
+    var guess='';
+    if(myinput.guessvalue){
+	pform.elements[myinput.name].value = myinput.guessvalue;
+	//  guess = appendPageForm(myimage.src,myimage.className);
+	guess = myinput.guessvalue;
 	myinput.guessvalue='';
+    }
+    updatePageForm(pform.elements[myinput.name],myinput.value,guess);
+    //  pform.elements[myinput.name].value = myinput.value;
+    //  myimage.src = appendPageForm(myimage.src,myimage.className);
+    //	if(guess){
+    //        preload(guess);
+    //	}
 }
-  updatePageForm(pform.elements[myinput.name],myinput.value,guess);
-//  pform.elements[myinput.name].value = myinput.value;
-//  myimage.src = appendPageForm(myimage.src,myimage.className);
-//	if(guess){
-//        preload(guess);
-//	}
- }
 /* tab events */
 /* tabclickevent ( evt -- ) click on tab (select tab) and shift click
    on tab (multiple active tabs if screen is large) . */
@@ -418,24 +422,24 @@ function tabclickevent(evt){
     if(evt.shiftKey){
 	toggleClass(it,'toggle');
 	if(it.children[0] && it.children[0].hash){
-	if(it.className.indexOf('toggle')<0){
-	    var tlists = decodeURIComponent(getCookie('toggletabs'));
-	    var tlist = tlists.split(' ');
-	    tlists='';
-	    var delim='';
-	    for(var i=0; i<tlist.length; i++){
-		if(tlist[i] != it.children[0].hash){
-		    tlists = tlists + delim + tlist[i];
-		    delim=' ';
+	    if(it.className.indexOf('toggle')<0){
+		var tlists = decodeURIComponent(getCookie('toggletabs'));
+		var tlist = tlists.split(' ');
+		tlists='';
+		var delim='';
+		for(var i=0; i<tlist.length; i++){
+		    if(tlist[i] != it.children[0].hash){
+			tlists = tlists + delim + tlist[i];
+			delim=' ';
+		    }
 		}
+		document.cookie='toggletabs' + '=' + encodeURIComponent(tlists) + "; path=/";
 	    }
-	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlists) + "; path=/";
-	}
-	else {
-	    var tlist = decodeURIComponent(getCookie('toggletabs'));
-	    tlist = tlist + ' ' + it.children[0].hash;
-	    document.cookie='toggletabs' + '=' + encodeURIComponent(tlist) + "; path=/";
-	}
+	    else {
+		var tlist = decodeURIComponent(getCookie('toggletabs'));
+		tlist = tlist + ' ' + it.children[0].hash;
+		document.cookie='toggletabs' + '=' + encodeURIComponent(tlist) + "; path=/";
+	    }
 	}
     }
     if(makeTabActive(it,true)){
@@ -444,21 +448,21 @@ function tabclickevent(evt){
 	    if(it.className.indexOf("ui-state-active") < 0){
 		var mylist=it.parentNode.getElementsByClassName("ui-state-active");
 		if(mylist.length > 0){
-		url = mylist[0].children[0].hash;
+		    url = mylist[0].children[0].hash;
 		}
 	    }
 	    if(url){
-	    var mylabel = it.children[0].innerText;
-	    var mytitle = document.title;
-	    if(mylabel){
-		mytitle=addTabToTitle(mylabel);
-	    }
-	    else {
-		mylabel = url.substr(1);
-	    }
-	    history.pushState(url,mytitle,url);
-	    document.title=mytitle;
-	       ga('send','social', 'Tabs', mylabel, window.location.href);
+		var mylabel = it.children[0].innerText;
+		var mytitle = document.title;
+		if(mylabel){
+		    mytitle=addTabToTitle(mylabel);
+		}
+		else {
+		    mylabel = url.substr(1);
+		}
+		history.pushState(url,mytitle,url);
+		document.title=mytitle;
+		ga('send','social', 'Tabs', mylabel, window.location.href);
 	    }
 	}
 	refreshConnectedGraphs();
@@ -469,65 +473,65 @@ function makeSubTabActive(tab,ifclick){
     var iftoggle=ifclick && ($(tab).css('float') == 'right');
     var ifchange=iftoggle || (tab.className.indexOf("ui-state-active") <0);
     if(iftoggle){
-    var sid="";
-    if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
-	sid = tab.children[0].hash.substr(1);
-    }
+	var sid="";
+	if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
+	    sid = tab.children[0].hash.substr(1);
+	}
 	else {
 	    location.href = tab.children[0].href;
 	}
-    if(tab.className.indexOf("ui-state-active") >=0){
-	changeClass(tab,"ui-state-active","ui-state-default");
-	if(sid && document.getElementById(sid)){
-        document.getElementById(sid).className="ui-tabs-panel-hidden";
-	}
-    }
-    else {
-	changeClass(tab,"ui-state-default","ui-state-active");
-	if(sid && document.getElementById(sid)){
-        document.getElementById(sid).className="ui-tabs-panel-float";
-	var mypanel = document.getElementById(sid);
-	var myset = mypanel.parentNode;
-	var togglelist = tab.parentNode.getElementsByClassName("toggle");
-	var insertAfter=myset.firstElementChild;
-	    for(var j=0; j<togglelist.length ; j++){
-		var tsid =  togglelist[j].firstElementChild.hash.substr(1);
-		var tpanel = document.getElementById(tsid);
-		if(tpanel){
-		    myset.insertBefore(tpanel,insertAfter.nextElementSibling);
-		    insertAfter=tpanel;
-		}
-		}
-	}
-    }
-    }
-    else {
-    var mylist=tab.parentNode.getElementsByClassName("ui-state-active");
-    for (var i= 0; i<mylist.length; i++){
-	var sid;
-	if(!(ifclick && $(mylist[i]).css('float') == 'right')){
-	if(mylist[i].children[0].hash){
-	    sid = mylist[i].children[0].hash.substr(1);
-	}
-	if(sid && document.getElementById(sid)){
-        document.getElementById(sid).className="ui-tabs-panel-hidden";
-	}
-	changeClass(mylist[i],"ui-state-active","ui-state-default");
-	}
-    }
-    changeClass(tab,"ui-state-default","ui-state-active");
-    var sid="";
-    if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
-	sid = tab.children[0].hash.substr(1);
-    }
-	if(sid && document.getElementById(sid)){
-        document.getElementById(sid).className="ui-tabs-panel";
+	if(tab.className.indexOf("ui-state-active") >=0){
+	    changeClass(tab,"ui-state-active","ui-state-default");
+	    if(sid && document.getElementById(sid)){
+		document.getElementById(sid).className="ui-tabs-panel-hidden";
+	    }
 	}
 	else {
-	location.href= tab.children[0].href;
+	    changeClass(tab,"ui-state-default","ui-state-active");
+	    if(sid && document.getElementById(sid)){
+		document.getElementById(sid).className="ui-tabs-panel-float";
+		var mypanel = document.getElementById(sid);
+		var myset = mypanel.parentNode;
+		var togglelist = tab.parentNode.getElementsByClassName("toggle");
+		var insertAfter=myset.firstElementChild;
+		for(var j=0; j<togglelist.length ; j++){
+		    var tsid =  togglelist[j].firstElementChild.hash.substr(1);
+		    var tpanel = document.getElementById(tsid);
+		    if(tpanel){
+			myset.insertBefore(tpanel,insertAfter.nextElementSibling);
+			insertAfter=tpanel;
+		    }
+		}
+	    }
+	}
+    }
+    else {
+	var mylist=tab.parentNode.getElementsByClassName("ui-state-active");
+	for (var i= 0; i<mylist.length; i++){
+	    var sid;
+	    if(!(ifclick && $(mylist[i]).css('float') == 'right')){
+		if(mylist[i].children[0].hash){
+		    sid = mylist[i].children[0].hash.substr(1);
+		}
+		if(sid && document.getElementById(sid)){
+		    document.getElementById(sid).className="ui-tabs-panel-hidden";
+		}
+		changeClass(mylist[i],"ui-state-active","ui-state-default");
+	    }
+	}
+	changeClass(tab,"ui-state-default","ui-state-active");
+	var sid="";
+	if(tab.children[0].pathname==location.pathname && tab.children[0].hash){
+	    sid = tab.children[0].hash.substr(1);
+	}
+	if(sid && document.getElementById(sid)){
+            document.getElementById(sid).className="ui-tabs-panel";
+	}
+	else {
+	    location.href= tab.children[0].href;
 	}
         if(document.width < 750){
-	location.href= tab.children[0].href;
+	    location.href= tab.children[0].href;
 	}
     }
     return ifchange;
@@ -567,15 +571,15 @@ function getTabParent(tabnode){
     }
 }
 function tabtarget(evt){
-	var ret = (document.width < 750);
-	evt = (evt) ? evt : ((event) ? event : null );
-	if (evt) {
+    var ret = (document.width < 750);
+    evt = (evt) ? evt : ((event) ? event : null );
+    if (evt) {
 	if(ret){
-	 if(evt.returnValue){
-	evt.returnValue="false";
+	    if(evt.returnValue){
+		evt.returnValue="false";
+	    }
 	}
-	}
-	}
+    }
     return(ret);
 }
 /* tabsSetup ( -- ) set up tabs. */
@@ -590,7 +594,7 @@ function tabsSetup(){
 	var tabset=mylist[i];
 	var tablist;
 	if(tabset.getElementsByClassName("ui-tabs-nav")[0]){
-	tablist=tabset.getElementsByClassName("ui-tabs-nav")[0].getElementsByTagName("li");
+	    tablist=tabset.getElementsByClassName("ui-tabs-nav")[0].getElementsByTagName("li");
 	}
 	else {
 	    tablist=[];
@@ -633,7 +637,7 @@ function tabsSetup(){
     }
 }
 /* makeTabActiveFromHash ( hash flag -- ) makes tab active using the
-	hash from the url */
+   hash from the url */
 function makeTabActiveFromHash (myhash,dontClearChildren){
     var mytab="";
     if(myhash){
@@ -669,251 +673,251 @@ function clearTabActive (mytabsets){
     if(!mytabsets){
 	mytabsets = document.getElementsByClassName('ui-tabs-nav');
     }
-	for(var i=mytabsets.length;i--;){
-	    var mytabset=mytabsets[i];
-	    var mytabs=mytabset.getElementsByTagName('li');
-	    if(mytabs.length && mytabs[0].children[0].hash){
-		makeSubTabActive(mytabs[0],false);
-	    }
+    for(var i=mytabsets.length;i--;){
+	var mytabset=mytabsets[i];
+	var mytabs=mytabset.getElementsByTagName('li');
+	if(mytabs.length && mytabs[0].children[0].hash){
+	    makeSubTabActive(mytabs[0],false);
 	}
+    }
 }
 /* insertcontactus ( -- ) insert contactus element. */
 function insertcontactus(){
-var s = document.getElementById('contactus');
-if(s){
-var sl = s.getElementsByTagName('legend');
-if(!sl.length){
-var lls=document.createElement('legend');
-    appendMissingClass(lls,'langgroup');
-s.insertBefore(lls,s.firstChild);
-ls=document.createElement('span');
-    ls.setAttribute('lang','es');
-ls.appendChild(document.createTextNode('Contáctenos'));
-lls.insertBefore(ls,lls.firstChild);
+    var s = document.getElementById('contactus');
+    if(s){
+	var sl = s.getElementsByTagName('legend');
+	if(!sl.length){
+	    var lls=document.createElement('legend');
+	    appendMissingClass(lls,'langgroup');
+	    s.insertBefore(lls,s.firstChild);
+	    ls=document.createElement('span');
+	    ls.setAttribute('lang','es');
+	    ls.appendChild(document.createTextNode('Contáctenos'));
+	    lls.insertBefore(ls,lls.firstChild);
 
-ls=document.createElement('span');
-    ls.setAttribute('lang','fr');
-ls.appendChild(document.createTextNode('Contactez Nous'));
-lls.insertBefore(ls,lls.firstChild);
-ls=document.createElement('span');
-    ls.setAttribute('lang','ru');
-ls.appendChild(document.createTextNode('Контактная информация'));
-lls.insertBefore(ls,lls.firstChild);
-ls=document.createElement('span');
-    ls.setAttribute('lang','en');
-ls.appendChild(document.createTextNode('Contact Us'));
-lls.insertBefore(ls,lls.firstChild);
-    updateLangGroups(s);
-}
-sl = document.getElementById('googleplus');
-if(!sl){
-    var tumblr_button;
-    if(uicoreConfig.helpemail){
-/* code to add Mail-help buttons */
-    gb= document.createElement('div');
-    gb.className='sharebutton';
-    gb.id='helpmailbutton';
-    tumblr_button = document.createElement("a");
-    tumblr_button.onclick=doHelpMail;
-    tumblr_button.setAttribute("title", uicoreConfig.helpemail);
-    gb.appendChild(tumblr_button);
-    s.appendChild(gb);
+	    ls=document.createElement('span');
+	    ls.setAttribute('lang','fr');
+	    ls.appendChild(document.createTextNode('Contactez Nous'));
+	    lls.insertBefore(ls,lls.firstChild);
+	    ls=document.createElement('span');
+	    ls.setAttribute('lang','ru');
+	    ls.appendChild(document.createTextNode('Контактная информация'));
+	    lls.insertBefore(ls,lls.firstChild);
+	    ls=document.createElement('span');
+	    ls.setAttribute('lang','en');
+	    ls.appendChild(document.createTextNode('Contact Us'));
+	    lls.insertBefore(ls,lls.firstChild);
+	    updateLangGroups(s);
+	}
+	sl = document.getElementById('googleplus');
+	if(!sl){
+	    var tumblr_button;
+	    if(uicoreConfig.helpemail){
+		/* code to add Mail-help buttons */
+		gb= document.createElement('div');
+		gb.className='sharebutton';
+		gb.id='helpmailbutton';
+		tumblr_button = document.createElement("a");
+		tumblr_button.onclick=doHelpMail;
+		tumblr_button.setAttribute("title", uicoreConfig.helpemail);
+		gb.appendChild(tumblr_button);
+		s.appendChild(gb);
+	    }
+	}
     }
-}
-}
 }
 function insertshare(){
     insertcontactus();
-var s = document.getElementById('share');
-if(s){
-var sl = s.getElementsByTagName('legend');
-if(!sl.length){
-var ls=document.createElement('legend');
-ls.appendChild(document.createTextNode('Share'));
-s.insertBefore(ls,s.firstChild);
-}
-sl = document.getElementById('googleplus');
-if(!sl){
-    var tumblr_button;
-/* twitter */
-gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='custom-tweet-button';
-var gba = document.createElement('a');
-gba.setAttribute("title","Tweet");
-gba.onclick=doTwitter;
-gb.appendChild(gba);
-s.appendChild(gb);
-/* evernote */
-var gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='evernote';
-gba = document.createElement('a');
-gba.setAttribute("title","Save to Evernote with link back");
-gba.onclick=doEvernoteClip;
-gb.appendChild(gba);
-s.appendChild(gb);
-/* Pinterest */
-gb= document.createElement('div');
-gb.className='sharebutton pinterest';
-gb.onclick=doPinterestClip;
-/* s.appendChild(gb); */
-/* tumblr */
-gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='tumblr';
-    tumblr_button = document.createElement("a");
-	tumblr_button.onclick=doTumblrClip;
-    tumblr_button.setAttribute("title", "Share on Tumblr with link back");
-    gb.appendChild(tumblr_button);
-s.appendChild(gb);
-/* CSP Forum */
-gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='csp';
-    tumblr_button = document.createElement("a");
-	tumblr_button.onclick=doIRIFClipElement;
-    tumblr_button.setAttribute("title", "Share with Climate Services Partnership Forums");
-    gb.appendChild(tumblr_button);
-s.appendChild(gb);
-/* code to add Mail buttons */
-gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='mailbutton';
-    tumblr_button = document.createElement("a");
-	tumblr_button.onclick=doMail;
-    tumblr_button.setAttribute("title", "Share with e-mail");
-    gb.appendChild(tumblr_button);
-s.appendChild(gb);
-/* facebook */
-gb=document.createElement('div');
-// FB with url following share variables 
-// gb.className="fb-like share";
-//    var url = appendPageForm(location.href,'share');
-// FB with parameters stripped from url 
-gb.className="fb-like";
-var url = location.href.replace(/[?].*/,'');
-// End of Choice
-    url = url.replace(/[?]/,"/QS/");
-gb.setAttribute("data-href",url);
-gb.setAttribute("data-send","false");
-gb.setAttribute("data-layout","button_count");
-gb.setAttribute("data-width","24");
-gb.setAttribute("data-show-faces","true");
-var s = document.getElementById('custom-tweet-button').parentNode;
-/* s.insertBefore(gb,document.getElementById('custom-tweet-button')); */
-    s.appendChild(gb);
-loadFB();
-/* code to add GMail buttons
-gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='gmailbutton';
-    tumblr_button = document.createElement("a");
-	tumblr_button.onclick=doGMail;
-    tumblr_button.setAttribute("title", "Share on GMail");
-    gb.appendChild(tumblr_button);
-s.appendChild(gb);
-*/
-var gb= document.createElement('div');
-gb.className='sharebutton';
-gb.id='googleplusbutton';
-    var annote = "inline";
-    if(window.innerWidth < 480)annote="bubble";
-gb.innerHTML='<div class="g-plusone" data-annotation="' + annote + '" ></div>';
-s.appendChild(gb);
-}
-// adds scripts to share to activate buttons
-   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-s.appendChild(po);
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = "//static.evernote.com/noteit.js";
-s.appendChild(ga);
-/* var pi = document.createElement('script'); pi.type = 'text/javascript'; pi.async = true;
-    pi.src = "//assets.pinterest.com/js/pinit.js";
-s.appendChild(pi);
-*/
-}
+    var s = document.getElementById('share');
+    if(s){
+	var sl = s.getElementsByTagName('legend');
+	if(!sl.length){
+	    var ls=document.createElement('legend');
+	    ls.appendChild(document.createTextNode('Share'));
+	    s.insertBefore(ls,s.firstChild);
+	}
+	sl = document.getElementById('googleplus');
+	if(!sl){
+	    var tumblr_button;
+	    /* twitter */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='custom-tweet-button';
+	    var gba = document.createElement('a');
+	    gba.setAttribute("title","Tweet");
+	    gba.onclick=doTwitter;
+	    gb.appendChild(gba);
+	    s.appendChild(gb);
+	    /* evernote */
+	    var gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='evernote';
+	    gba = document.createElement('a');
+	    gba.setAttribute("title","Save to Evernote with link back");
+	    gba.onclick=doEvernoteClip;
+	    gb.appendChild(gba);
+	    s.appendChild(gb);
+	    /* Pinterest */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton pinterest';
+	    gb.onclick=doPinterestClip;
+	    /* s.appendChild(gb); */
+	    /* tumblr */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='tumblr';
+	    tumblr_button = document.createElement("a");
+	    tumblr_button.onclick=doTumblrClip;
+	    tumblr_button.setAttribute("title", "Share on Tumblr with link back");
+	    gb.appendChild(tumblr_button);
+	    s.appendChild(gb);
+	    /* CSP Forum */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='csp';
+	    tumblr_button = document.createElement("a");
+	    tumblr_button.onclick=doIRIFClipElement;
+	    tumblr_button.setAttribute("title", "Share with Climate Services Partnership Forums");
+	    gb.appendChild(tumblr_button);
+	    s.appendChild(gb);
+	    /* code to add Mail buttons */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='mailbutton';
+	    tumblr_button = document.createElement("a");
+	    tumblr_button.onclick=doMail;
+	    tumblr_button.setAttribute("title", "Share with e-mail");
+	    gb.appendChild(tumblr_button);
+	    s.appendChild(gb);
+	    /* facebook */
+	    gb=document.createElement('div');
+	    // FB with url following share variables 
+	    // gb.className="fb-like share";
+	    //    var url = appendPageForm(location.href,'share');
+	    // FB with parameters stripped from url 
+	    gb.className="fb-like";
+	    var url = location.href.replace(/[?].*/,'');
+	    // End of Choice
+	    url = url.replace(/[?]/,"/QS/");
+	    gb.setAttribute("data-href",url);
+	    gb.setAttribute("data-send","false");
+	    gb.setAttribute("data-layout","button_count");
+	    gb.setAttribute("data-width","24");
+	    gb.setAttribute("data-show-faces","true");
+	    var s = document.getElementById('custom-tweet-button').parentNode;
+	    /* s.insertBefore(gb,document.getElementById('custom-tweet-button')); */
+	    s.appendChild(gb);
+	    loadFB();
+	    /* code to add GMail buttons
+	       gb= document.createElement('div');
+	       gb.className='sharebutton';
+	       gb.id='gmailbutton';
+	       tumblr_button = document.createElement("a");
+	       tumblr_button.onclick=doGMail;
+	       tumblr_button.setAttribute("title", "Share on GMail");
+	       gb.appendChild(tumblr_button);
+	       s.appendChild(gb);
+	    */
+	    var gb= document.createElement('div');
+	    gb.className='sharebutton';
+	    gb.id='googleplusbutton';
+	    var annote = "inline";
+	    if(window.innerWidth < 480)annote="bubble";
+	    gb.innerHTML='<div class="g-plusone" data-annotation="' + annote + '" ></div>';
+	    s.appendChild(gb);
+	}
+	// adds scripts to share to activate buttons
+	var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	po.src = 'https://apis.google.com/js/plusone.js';
+	s.appendChild(po);
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = "//static.evernote.com/noteit.js";
+	s.appendChild(ga);
+	/* var pi = document.createElement('script'); pi.type = 'text/javascript'; pi.async = true;
+	   pi.src = "//assets.pinterest.com/js/pinit.js";
+	   s.appendChild(pi);
+	*/
+    }
 }
 function loadFB(){
-var js, id = 'facebook-jssdk', ref = document.getElementsByTagName('script')[0];
-           if (document.getElementById(id)) {return;}
-	   js = document.createElement('div');
-	   js.id='fb-root';
-	   var b= document.getElementsByTagName('body')[0];
-	   b.insertBefore(js, b.firstChild);
-	   window.fbAsyncInit = function() {
-	       /*          FB.init({
-            appId      : 'myId', // App ID
-            channelUrl : '', // Channel File
-            status     : true, // check login status
-            cookie     : true, // enable cookies to allow the server to access the session
-            xfbml      : true  // parse XFBML
-	    }); */
-           FB.Event.subscribe('edge.create', function(targetUrl) {
-/*              _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);*/
+    var js, id = 'facebook-jssdk', ref = document.getElementsByTagName('script')[0];
+    if (document.getElementById(id)) {return;}
+    js = document.createElement('div');
+    js.id='fb-root';
+    var b= document.getElementsByTagName('body')[0];
+    b.insertBefore(js, b.firstChild);
+    window.fbAsyncInit = function() {
+	/*          FB.init({
+		    appId      : 'myId', // App ID
+		    channelUrl : '', // Channel File
+		    status     : true, // check login status
+		    cookie     : true, // enable cookies to allow the server to access the session
+		    xfbml      : true  // parse XFBML
+		    }); */
+        FB.Event.subscribe('edge.create', function(targetUrl) {
+	    /*              _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);*/
             ga('send','social', 'facebook','like', targetUrl);
-             });
-};
-           js = document.createElement('script'); js.id = id; js.async = true;
-	   js.onload=finishFB();
-           js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-           ref.parentNode.insertBefore(js, ref);
+        });
+    };
+    js = document.createElement('script'); js.id = id; js.async = true;
+    js.onload=finishFB();
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+    ref.parentNode.insertBefore(js, ref);
 }
 function finishFB(){
-/* fb followup FB.XFBML.parse() to rerender */
-FBloaded=true;
+    /* fb followup FB.XFBML.parse() to rerender */
+    FBloaded=true;
 }
 function doTwitter(){
- var url = appendPageForm(location.href,'share');
+    var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
     var dpar = getElementsByAttribute(document,'*','property','term:description');
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
-var twitter_url = "https://twitter.com/share?via=iridl&hashtags=dataviz&url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(title);
-/* _gaq.push(['_trackSocial', 'twitter', 'tweet', url]);*/
+    }
+    if(!title)title=document.title;
+    var twitter_url = "https://twitter.com/share?via=iridl&hashtags=dataviz&url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(title);
+    /* _gaq.push(['_trackSocial', 'twitter', 'tweet', url]);*/
     ga('send','social', 'twitter','tweet', url);
-window.open(twitter_url);
+    window.open(twitter_url);
 }
 function doGMail(){
- var url = appendPageForm(location.href,'share');
+    var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
-var m='http://mail.google.com/mail/?ui=1&view=cm&fs=1&tf=1&to=&su='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
-window.open(m);
+    }
+    if(!title)title=document.title;
+    var m='http://mail.google.com/mail/?ui=1&view=cm&fs=1&tf=1&to=&su='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
+    window.open(m);
 }
 function doMail(){
- var url = appendPageForm(location.href,'share');
+    var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
-var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
-/* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
+    }
+    if(!title)title=document.title;
+    var m='mailto:?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
+    /* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
     ga('send','social', 'mail','mail', url);
-window.open(m);
+    window.open(m);
 }
 function doHelpMail(){
- var url = appendPageForm(location.href,'share');
+    var url = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'*','property','term:title');
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
-var m='mailto:' + uicoreConfig.helpemail +'?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
-/* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
+    }
+    if(!title)title=document.title;
+    var m='mailto:' + uicoreConfig.helpemail +'?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(url);
+    /* _gaq.push(['_trackSocial', 'mail', 'mail', url]);*/
     ga('send','social', 'mail','help', url);
-window.open(m);
+    window.open(m);
 }
 function doTumblrClip(){
     var content = document.getElementById("content");
@@ -922,52 +926,52 @@ function doTumblrClip(){
     var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
+    }
+    if(!title)title=document.title;
     var description="";
-	if(dpar.length>0){
+    if(dpar.length>0){
 	description=dpar[0].innerHTML;
-	}
-      var tumblr_url;
+    }
+    var tumblr_url;
     var tumblr_photo_source = "";
     var tumblr_photo_caption = "";
-	if(description){
+    if(description){
 	tumblr_photo_caption = description;
-	}
-	else {
+    }
+    else {
 	tumblr_photo_caption = title;
-	}
-	if(content){
+    }
+    if(content){
 	if(content.getElementsByTagName('link').length>0){
-	tumblr_photo_source = content.getElementsByTagName('link')[0].figureimage.src;
+	    tumblr_photo_source = content.getElementsByTagName('link')[0].figureimage.src;
 	}
-	}
+    }
     else {
 	var figimg = getFigureImage(document);
 	if(figimg)tumblr_photo_source = figimg.src;
     }
-	var tumblr_photo_click_thru = url;
-	if(tumblr_photo_source){
-	    ttype='photo';
-tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
-}
-else {
-	    ttype='link';
-    var tumblr_link_url = url;
-    var tumblr_link_name = title;
-    var tumblr_link_description = description;
-tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
-}
-/* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
+    var tumblr_photo_click_thru = url;
+    if(tumblr_photo_source){
+	ttype='photo';
+	tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
+    }
+    else {
+	ttype='link';
+	var tumblr_link_url = url;
+	var tumblr_link_name = title;
+	var tumblr_link_description = description;
+	tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
+    }
+    /* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
     ga('send','social', 'tumblr',ttype, url);
-window.open(tumblr_url);
+    window.open(tumblr_url);
 }
 function doTumblrClipElement(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
 
     var content = document.getElementById("content");
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
@@ -975,68 +979,68 @@ function doTumblrClipElement(evt){
     var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
+    }
+    if(!title)title=document.title;
     var description="";
-	if(dpar.length>0){
+    if(dpar.length>0){
 	description=dpar[0].innerHTML;
-	}
-      var tumblr_url;
+    }
+    var tumblr_url;
     var tumblr_photo_source = "";
     var tumblr_photo_caption = "";
-	if(description){
+    if(description){
 	tumblr_photo_caption = description;
-	}
-	else {
+    }
+    else {
 	tumblr_photo_caption = title;
-	}
+    }
     if(figimg && figimg.src){
 	tumblr_photo_source = figimg.src
-	}
-	var tumblr_photo_click_thru = url;
-	if(tumblr_photo_source){
-	    ttype='photo';
-tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
-}
-else {
-	    ttype='link';
-    var tumblr_link_url = url;
-    var tumblr_link_name = title;
-    var tumblr_link_description = description;
-tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
-}
-/* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
+    }
+    var tumblr_photo_click_thru = url;
+    if(tumblr_photo_source){
+	ttype='photo';
+	tumblr_url = "//www.tumblr.com/share/photo?source=" + encodeURIComponent(tumblr_photo_source) + "&caption=" + encodeURIComponent(tumblr_photo_caption) + "&clickthru=" + encodeURIComponent(tumblr_photo_click_thru);
+    }
+    else {
+	ttype='link';
+	var tumblr_link_url = url;
+	var tumblr_link_name = title;
+	var tumblr_link_description = description;
+	tumblr_url = "//www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description);
+    }
+    /* _gaq.push(['_trackSocial', 'tumblr', ttype , url]);*/
     ga('send','social', 'tumblr',ttype, url);
-window.open(tumblr_url);
+    window.open(tumblr_url);
 }
 function homelinkclick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var myurl;
-var homelinks=getElementsByAttribute(document,'link','rel','home');
-if(homelinks.length == 1){
-myurl=homelinks[0].href;
-document.location.href=myurl;
-}
-else if(homelinks.length == 0){
-myurl="http://iri.columbia.edu/";
-document.location.href=myurl;
-}
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var myurl;
+    var homelinks=getElementsByAttribute(document,'link','rel','home');
+    if(homelinks.length == 1){
+	myurl=homelinks[0].href;
+	document.location.href=myurl;
+    }
+    else if(homelinks.length == 0){
+	myurl="http://iri.columbia.edu/";
+	document.location.href=myurl;
+    }
 }
 function doEvernoteClip(){
-var clipargs = {};
-clipargs.contentId = 'content';
+    var clipargs = {};
+    clipargs.contentId = 'content';
     clipargs.url = appendPageForm(location,'share');
-clipargs.filter= function (arg){
-if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 || arg.style.visibility=='hidden')){
-return arg;
-}
-};
-/* _gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);*/
+    clipargs.filter= function (arg){
+	if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0 || arg.style.visibility=='hidden')){
+	    return arg;
+	}
+    };
+    /* _gaq.push(['_trackSocial', 'evernote', 'clip', clipargs.url]);*/
     ga('send','social', 'evernote','clip', clipargs.url);
-Evernote.doClip(clipargs);
+    Evernote.doClip(clipargs);
 }
 function doPinterestClip(){
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
@@ -1044,105 +1048,105 @@ function doPinterestClip(){
     var url = appendPageForm(location.href,'share');
     var ttype='';
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
+    }
+    if(!title)title=document.title;
     var description="";
-	if(dpar.length>0){
+    if(dpar.length>0){
 	description=dpar[0].innerHTML;
-	}
-/*      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); */
+    }
+    /*      _gaq.push(['_trackSocial', 'Pinterest', 'clipPage']); */
     ga('send','social', 'Pinterest','clipPage',location.href); 
     var pinterest_link_url = url;
     var pinterest_link_description = title + ":  " +description;
-pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
-window.open(pinterest_url)
+    pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(pinterest_link_url) + "&description=" + encodeURIComponent(pinterest_link_description);
+    window.open(pinterest_url)
 }
 function doEvernoteClipElement(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var clipargs = {};
-clipargs.content = it.clipthis;
-clipargs.url = appendPageForm(location.href,'share');
-clipargs.filter= function (arg){
-    if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0|| arg.style.visibility=='hidden')){
-return arg;
-}
-};
-/* _gaq.push(['_trackSocial', 'evernote', 'clipelement']);*/
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var clipargs = {};
+    clipargs.content = it.clipthis;
+    clipargs.url = appendPageForm(location.href,'share');
+    clipargs.filter= function (arg){
+	if(!(arg.className == 'imagecontrols' || arg.className.indexOf('dlcontrol')>=0|| arg.style.visibility=='hidden')){
+	    return arg;
+	}
+    };
+    /* _gaq.push(['_trackSocial', 'evernote', 'clipelement']);*/
     ga('send','social', 'evernote','clipelement',location.href);
-Evernote.doClip(clipargs);
+    Evernote.doClip(clipargs);
 }
 function doGoogleEarthClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var kmlurl=sfigs[0].info['iridl:hasKML'];
-    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(kmlurl){
-	var linkurl = appendPageForm(location.href,'share');
-	var pform=document.getElementById('pageform');
-	pform.elements['linkurl'].value=linkurl;
-	submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
-/*	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);*/
-	ga('send','social', 'googleearth','asKML',location.href);
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    if(sfigs.length){
+	var kmlurl=sfigs[0].info['iridl:hasKML'];
+	var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+	if(kmlurl){
+	    var linkurl = appendPageForm(location.href,'share');
+	    var pform=document.getElementById('pageform');
+	    pform.elements['linkurl'].value=linkurl;
+	    submitPageForm(kmlurl,kmlclass+' linkurl','POST'); 
+	    /*	_gaq.push(['_trackSocial', 'googleearth', 'asKML']);*/
+	    ga('send','social', 'googleearth','asKML',location.href);
+	}
     }
-}
 }
 function doWMSClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var kmlurl=sfigs[0].info['iridl:hasWMS'];
-    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(kmlurl){
-	var myurl = appendPageForm(kmlurl,kmlclass);
-	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
-	if(msga.length>0){
-	    msga[0].innerHTML="<p>To open using WMS, enter this URL for the WMSserver</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea>';
-	    toggleClass(msga[0],'show');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    if(sfigs.length){
+	var kmlurl=sfigs[0].info['iridl:hasWMS'];
+	var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+	if(kmlurl){
+	    var myurl = appendPageForm(kmlurl,kmlclass);
+	    var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
+	    if(msga.length>0){
+		msga[0].innerHTML="<p>To open using WMS, enter this URL for the WMSserver</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea>';
+		toggleClass(msga[0],'show');
+	    }
+	    else {
+		alert(myurl);
+	    }
+	    /*	location.href=myurl; */
+	    /*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
+	    ga('send','social', 'WMS','asWMS',location.href);
 	}
-	else {
-	alert(myurl);
-	}
-	/*	location.href=myurl; */
-/*	_gaq.push(['_trackSocial', 'WMS', 'asWMS']);*/
-	ga('send','social', 'WMS','asWMS',location.href);
     }
-}
 }
 function doGeoTiffClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var kmlurl=sfigs[0].info['iridl:hasGeoTiff'];
-    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(kmlurl){
-	var myurl = appendPageForm(kmlurl,kmlclass);
-	location.href=myurl;
-/*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);*/
-	ga('send','social', 'DataDownload','asGeoTiff',location.href);
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    if(sfigs.length){
+	var kmlurl=sfigs[0].info['iridl:hasGeoTiff'];
+	var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+	if(kmlurl){
+	    var myurl = appendPageForm(kmlurl,kmlclass);
+	    location.href=myurl;
+	    /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiff']);*/
+	    ga('send','social', 'DataDownload','asGeoTiff',location.href);
+	}
     }
-}
 }
 function doGeoTiffPCClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var kmlurl=sfigs[0].info['iridl:hasGeoTiffPaletteColor'];
-    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(kmlurl){
-	var myurl = appendPageForm(kmlurl,kmlclass);
-	location.href=myurl;
-/*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);*/
-	ga('send','social', 'DataDownload','asGeoTiffPC',location.href);
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    if(sfigs.length){
+	var kmlurl=sfigs[0].info['iridl:hasGeoTiffPaletteColor'];
+	var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+	if(kmlurl){
+	    var myurl = appendPageForm(kmlurl,kmlclass);
+	    location.href=myurl;
+	    /*	_gaq.push(['_trackSocial', 'DataDownload', 'asGeoTiffPC']);*/
+	    ga('send','social', 'DataDownload','asGeoTiffPC',location.href);
+	}
     }
-}
 }
 function getFigureImage(clipthis){
     var figimg;
@@ -1157,10 +1161,10 @@ function getFigureImage(clipthis){
     if(sfigimgs.length){
 	figimg=sfigimgs[0];
 	for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
-	       figimg=sfigimgs[i];
-	   }
-       }
+	    if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+		figimg=sfigimgs[i];
+	    }
+	}
     }
     else if(sfigs.length){
 	figimg=sfigs[0].figureimage;
@@ -1171,17 +1175,17 @@ function getFigureImage(clipthis){
 	var imax = -1;
 	for(var i=sfigimgs.length;i--;){
 	    var isize = sfigimgs[i].width * sfigimgs[i].height;
-	   if( isize >= imax){
-	       imax = isize;
-	       imax = i;
-	   }
-       }
+	    if( isize >= imax){
+		imax = isize;
+		imax = i;
+	    }
+	}
 	if(imax >= 0){
 	    figimg = sfigimgs[imax];
 	}
     }
 
-   return(figimg);
+    return(figimg);
 }
 function getOnlyFigureImage(clipthis){
     var figimg;
@@ -1196,293 +1200,293 @@ function getOnlyFigureImage(clipthis){
     if(sfigimgs.length){
 	figimg=sfigimgs[0];
 	for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
-	       figimg=sfigimgs[i];
-	   }
-       }
+	    if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+		figimg=sfigimgs[i];
+	    }
+	}
     }
     else if(sfigs.length){
 	figimg=sfigs[0].figureimage;
     }
-   return(figimg);
+    return(figimg);
 }
 function getPDFImage(clipthis){
-  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPDFImage');
-   var figimg;
-   if(sfigimgs.length){
-       figimg=sfigimgs[0];
-       for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
-	       figimg=sfigimgs[i];
-	   }
-       }
-   }
-   return(figimg);
+    var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPDFImage');
+    var figimg;
+    if(sfigimgs.length){
+	figimg=sfigimgs[0];
+	for(var i=sfigimgs.length;i--;){
+	    if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+		figimg=sfigimgs[i];
+	    }
+	}
+    }
+    return(figimg);
 }
 function getPNGImage(clipthis){
-  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPNGImage');
-   var figimg;
-   if(sfigimgs.length){
-       figimg=sfigimgs[0];
-       for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
-	       figimg=sfigimgs[i];
-	   }
-       }
-   }
-   return(figimg);
+    var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasPNGImage');
+    var figimg;
+    if(sfigimgs.length){
+	figimg=sfigimgs[0];
+	for(var i=sfigimgs.length;i--;){
+	    if(sfigimgs[i].className.indexOf("selectedImage") >= 0){
+		figimg=sfigimgs[i];
+	    }
+	}
+    }
+    return(figimg);
 }
 function getTable(clipthis){
-  var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasTable');
-   var figimg;
-   if(sfigimgs.length){
-       figimg=sfigimgs[0];
-       for(var i=sfigimgs.length;i--;){
-	   if(sfigimgs[i].parentNode.getElementsByClassName("selectedImage").length > 0){
-	       figimg=sfigimgs[i];
-	   }
-       }
-   }
-   return(figimg);
+    var sfigimgs=getElementsByAttribute(clipthis,'*','rel','iridl:hasTable');
+    var figimg;
+    if(sfigimgs.length){
+	figimg=sfigimgs[0];
+	for(var i=sfigimgs.length;i--;){
+	    if(sfigimgs[i].parentNode.getElementsByClassName("selectedImage").length > 0){
+		figimg=sfigimgs[i];
+	    }
+	}
+    }
+    return(figimg);
 }
 function doTSVClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getTable(it.clipthis);
-     
-   if(figimg && figimg.href){
-       var pdfurl=figimg.href;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getTable(it.clipthis);
+    
+    if(figimg && figimg.href){
+	var pdfurl=figimg.href;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/[?].*/,'') + '.tsv';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-/*       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);*/
-       ga('send','social', 'DataDownload','asTSV',location.href);
-   }
+	/*       _gaq.push(['_trackSocial', 'DataDownload', 'asTSV']);*/
+	ga('send','social', 'DataDownload','asTSV',location.href);
+    }
 }
 function doHTMLClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getTable(it.clipthis);
-     
-   if(figimg && figimg.href){
-       var pdfurl=figimg.href;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getTable(it.clipthis);
+    
+    if(figimg && figimg.href){
+	var pdfurl=figimg.href;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/[?].*/,'') + '.html';
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-/*       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);*/
-       ga('send','social', 'DataDownload','asHTML',location.href);
-   }
+	/*       _gaq.push(['_trackSocial', 'DataDownload', 'asHTML']);*/
+	ga('send','social', 'DataDownload','asHTML',location.href);
+    }
 }
 function doPDFClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-     
-   if(figimg && figimg.src){
-       var pdfurl=figimg.src;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.href,'share');
-       var pform=document.getElementById('pageform');
-       pform.elements['linkurl'].value=linkurl;
-       submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
-       ga('send','social', 'ImageDownload','asPDF',location.href);
-   }
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    
+    if(figimg && figimg.src){
+	var pdfurl=figimg.src;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+	var linkurl = appendPageForm(location.href,'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	submitPageForm(pdfurl,pdfclass+' linkurl','POST'); 
+	ga('send','social', 'ImageDownload','asPDF',location.href);
+    }
 }
 function doPDFClickGET(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-     
-   if(figimg && figimg.src){
-       var pdfurl=figimg.src;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.href,'share');
-       var pform=document.getElementById('pageform');
-       pform.elements['linkurl'].value=linkurl;
-       submitPageForm(pdfurl,pdfclass+' linkurl','GET'); 
-   }
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    
+    if(figimg && figimg.src){
+	var pdfurl=figimg.src;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+	var linkurl = appendPageForm(location.href,'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	submitPageForm(pdfurl,pdfclass+' linkurl','GET'); 
+    }
 }
 function doPDFgDriveClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-   if(figimg && figimg.src){
-       var pdfurl=figimg.src;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.pathname,'share');
-       var pform=document.getElementById('pageform');
-       pform.elements['linkurl'].value=linkurl;
-       /* gapi.savetodrive.render */
-       var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
-       gapi.savetodrive.render(it,{"src": urlxml,
-				   "filename":document.title,
-				   "sitename": uicoreConfig.SiteName});
-   }
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    if(figimg && figimg.src){
+	var pdfurl=figimg.src;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+	var linkurl = appendPageForm(location.pathname,'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	/* gapi.savetodrive.render */
+	var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
+	gapi.savetodrive.render(it,{"src": urlxml,
+				    "filename":document.title,
+				    "sitename": uicoreConfig.SiteName});
+    }
 }
 function doPDFgDriveRender(it){
     var figimg = getFigureImage(it.clipthis) || getTable(it.clipthis);
-   if(figimg && figimg.src){
-       var pdfurl=figimg.src;
-       var pdfclass=figimg.className;
-       pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
-       var linkurl = appendPageForm(location.pathname,'share');
-       var pform=document.getElementById('pageform');
-       pform.elements['linkurl'].value=linkurl;
-       /* gapi.savetodrive.render */
-       var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
-/* remove protocol */
-/*       urlxml=urlxml.replace(/^(https?:\/\/)/,'//'); */
+    if(figimg && figimg.src){
+	var pdfurl=figimg.src;
+	var pdfclass=figimg.className;
+	pdfurl = pdfurl.replace(/\.(gif|png|jpg)/,'.pdf');
+	var linkurl = appendPageForm(location.pathname,'share');
+	var pform=document.getElementById('pageform');
+	pform.elements['linkurl'].value=linkurl;
+	/* gapi.savetodrive.render */
+	var urlxml=appendPageForm(pdfurl,pdfclass+' linkurl');
+	/* remove protocol */
+	/*       urlxml=urlxml.replace(/^(https?:\/\/)/,'//'); */
 	var gDriveBlist=it.getElementsByClassName('gDriveSubButton');
-       var ucheck=false;
-       if (gDriveBlist.length){
-	   for (var idrive=gDriveBlist.length; idrive--;){
-	       if(gDriveBlist[idrive].getAttribute("rUrl",urlxml) == urlxml)
-	       {ucheck=true;
-		gDriveBlist[idrive].setAttribute("gDriveUrl","active");
-	       }
-	       else
-	       {gDriveBlist[idrive].setAttribute("gDriveUrl","standby");
-	       }
-	   }
+	var ucheck=false;
+	if (gDriveBlist.length){
+	    for (var idrive=gDriveBlist.length; idrive--;){
+		if(gDriveBlist[idrive].getAttribute("rUrl",urlxml) == urlxml)
+		{ucheck=true;
+		 gDriveBlist[idrive].setAttribute("gDriveUrl","active");
+		}
+		else
+		{gDriveBlist[idrive].setAttribute("gDriveUrl","standby");
+		}
+	    }
 	}
-       if(!ucheck){
-	   var gdrivespan=document.createElement('span');
-	   gdrivespan.className="gDriveSubButton";
-	   it.appendChild(gdrivespan);
-	   gdrivespan.renderedUrl=urlxml;
-	   gdrivespan.filename=document.title;
-	   gdrivespan.sitename=uicoreConfig.SiteName;
-	   gdrivespan.setAttribute("rUrl",urlxml);
-	   gdrivespan.setAttribute("gDriveUrl","active");
-	   gdrivespan.setAttribute("rendered",false);
-/*	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
-					       "filename":document.title,
-					       "sitename": uicoreConfig.SiteName});
- */      }
-   }
+	if(!ucheck){
+	    var gdrivespan=document.createElement('span');
+	    gdrivespan.className="gDriveSubButton";
+	    it.appendChild(gdrivespan);
+	    gdrivespan.renderedUrl=urlxml;
+	    gdrivespan.filename=document.title;
+	    gdrivespan.sitename=uicoreConfig.SiteName;
+	    gdrivespan.setAttribute("rUrl",urlxml);
+	    gdrivespan.setAttribute("gDriveUrl","active");
+	    gdrivespan.setAttribute("rendered",false);
+	    /*	   gapi.savetodrive.render(gdrivespan,{"src": urlxml,
+		   "filename":document.title,
+		   "sitename": uicoreConfig.SiteName});
+	    */      }
+    }
 }
 function doPDFImageClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getPDFImage(it.clipthis);
-   if(figimg && figimg.href){
-       var pdfurl=figimg.href;
-       var pdfclass=figimg.className;
-       var pform=document.getElementById('pageform');
-       submitPageForm(pdfurl,pdfclass,'GET'); 
-       ga('send','social', 'ImageDownload','asPDF',location.href);
-   }
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getPDFImage(it.clipthis);
+    if(figimg && figimg.href){
+	var pdfurl=figimg.href;
+	var pdfclass=figimg.className;
+	var pform=document.getElementById('pageform');
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+	ga('send','social', 'ImageDownload','asPDF',location.href);
+    }
 }
 function doPNGImageClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getPNGImage(it.clipthis);
-   if(figimg && figimg.href){
-       var pdfurl=figimg.href;
-       var pdfclass=figimg.className;
-       var pform=document.getElementById('pageform');
-       submitPageForm(pdfurl,pdfclass,'GET'); 
-       ga('send','social', 'ImageDownload','asPNG',location.href);
-   }
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getPNGImage(it.clipthis);
+    if(figimg && figimg.href){
+	var pdfurl=figimg.href;
+	var pdfclass=figimg.className;
+	var pform=document.getElementById('pageform');
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+	ga('send','social', 'ImageDownload','asPNG',location.href);
+    }
 }
 function doPinterestClipElement(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-     
-   if(figimg && figimg.src){
-       var pinurl=figimg.src;
-       var pinclass=figimg.className;
-       var linkurl = appendPageForm(location.href,'share');
-       pinrul = pinurl.replace(/[/]expert[/]/,'/');
-       pinurl = pinurl.substr(0,8) + pinurl.substring(8).replace(/[/][/]([^/+]+)/g,function(match){
-		   return '(' + match.substring(2,match.length) + ')cvn';
-	       });
-    var tpar = getElementsByAttribute(document,'h2','property','term:title');
-    var dpar = getElementsByAttribute(document,'p','property','term:description')
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    
+    if(figimg && figimg.src){
+	var pinurl=figimg.src;
+	var pinclass=figimg.className;
+	var linkurl = appendPageForm(location.href,'share');
+	pinrul = pinurl.replace(/[/]expert[/]/,'/');
+	pinurl = pinurl.substr(0,8) + pinurl.substring(8).replace(/[/][/]([^/+]+)/g,function(match){
+	    return '(' + match.substring(2,match.length) + ')cvn';
+	});
+var tpar = getElementsByAttribute(document,'h2','property','term:title');
+var dpar = getElementsByAttribute(document,'p','property','term:description')
 
-    var title="";
-	if(tpar.length>0){
-	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
-    var description="";
-	if(dpar.length>0){
-	description=dpar[0].innerHTML;
-	}
-    var pinterest_link_description = title + ":  " +description;
+var title="";
+if(tpar.length>0){
+    title=tpar[0].innerHTML;
+}
+if(!title)title=document.title;
+var description="";
+if(dpar.length>0){
+    description=dpar[0].innerHTML;
+}
+var pinterest_link_description = title + ":  " +description;
 
 /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
 ga('send','social', 'Pinterest','clipelement',location.href);
-       pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
-           window.open(pinterest_url); 
-   }
+pinterest_url = "//pinterest.com/pin/create/button/?url=" + encodeURIComponent(linkurl) + "&media=" + encodeURIComponent(pinurl) + "&description=" + encodeURIComponent(pinterest_link_description);
+window.open(pinterest_url); 
+}
 }
 function doIRIFClipElement(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-     
-       var pinurl;
-       var pinclass;
-   if(figimg && figimg.src){
-       pinurl=figimg.src;
-       pinclass=figimg.className;
-   }
-       var linkurl = appendPageForm(location.href,'share');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    
+    var pinurl;
+    var pinclass;
+    if(figimg && figimg.src){
+	pinurl=figimg.src;
+	pinclass=figimg.className;
+    }
+    var linkurl = appendPageForm(location.href,'share');
     var tpar = getElementsByAttribute(document,'h2','property','term:title');
     var dpar = getElementsByAttribute(document,'p','property','term:description')
 
     var title="";
-	if(tpar.length>0){
+    if(tpar.length>0){
 	title=tpar[0].innerHTML;
-	}
-	if(!title)title=document.title;
+    }
+    if(!title)title=document.title;
     var description="";
-	if(dpar.length>0){
+    if(dpar.length>0){
 	description=dpar[0].innerHTML;
-	}
+    }
     var pinterest_link_description = title + ":  " +description;
 
-/*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
-ga('send','social', 'IRIForum','clipelement',location.href);
+    /*           _gaq.push(['_trackSocial', 'Pinterest', 'clipelement']);*/
+    ga('send','social', 'IRIForum','clipelement',location.href);
     pinterest_url = "http://forums.climate-services.org/RemotePosts/post_dl.php?link=" + encodeURIComponent(linkurl);
     if(pinurl){
 	pinterest_url = pinterest_url + "&image=" + encodeURIComponent(pinurl);
     }
-	pinterest_url = pinterest_url + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
-           window.open(pinterest_url);
-   
+    pinterest_url = pinterest_url + "&title=" + encodeURIComponent(pinterest_link_description) + "&start=true";
+    window.open(pinterest_url);
+    
 }
 function doFigureImageClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = it;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = it;
 
-   toggleClass(figimg,'selectedImage');
-   var mydlimage = figimg.mydlimage;
-   var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
-   if(sfigs.length){
-       for(var i= sfigs.length;i--;){
-	   if(sfigs[i] != figimg){
-	       removeClass(sfigs[i],'selectedImage');
-	   }
-       }
-   }
+    toggleClass(figimg,'selectedImage');
+    var mydlimage = figimg.mydlimage;
+    var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
+    if(sfigs.length){
+	for(var i= sfigs.length;i--;){
+	    if(sfigs[i] != figimg){
+		removeClass(sfigs[i],'selectedImage');
+	    }
+	}
+    }
 }
 function doGifClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-   if(figimg && figimg.src){
-       var pdfurl=figimg.src;
-       var pdfclass=figimg.className;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    if(figimg && figimg.src){
+	var pdfurl=figimg.src;
+	var pdfclass=figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);*/
-       ga('send','social', 'ImageDownload', 'asGIF',location.href);
+	/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asGIF']);*/
+	ga('send','social', 'ImageDownload', 'asGIF',location.href);
     }
 }
 function doPngClick(evt){
@@ -1498,44 +1502,44 @@ function doPngClick(evt){
     }
 }
 function doJpgClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-   var figimg = getFigureImage(it.clipthis);
-   if(figimg && figimg.src){
-    var pdfurl = figimg.src.replace(/.gif/,'.jpg');
-    var pdfclass = figimg.className;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getFigureImage(it.clipthis);
+    if(figimg && figimg.src){
+	var pdfurl = figimg.src.replace(/.gif/,'.jpg');
+	var pdfclass = figimg.className;
 	submitPageForm(pdfurl,pdfclass,'GET'); 
-/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);*/
-       ga('send','social', 'ImageDownload', 'asJPG',location.href);
-   }
-}
-function doarcgisClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    var kmlurl=sfigs[0].info['iridl:hasWMS'];
-    var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
-    if(kmlurl){
-	var myurl = appendPageForm(kmlurl,kmlclass);
-	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
-	if(msga.length>0){
-	    msga[0].innerHTML="<p>To open directly in ArcGIS using WMS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea><p>Alternatively, choose a GeoTiff option under the download button <span class="dlimagecontrol download" title="Download"></span> to download an image ArcGIS can read';
-	    toggleClass(msga[0],'show');
-	}
-	else {
-	alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
-	}
-	/*	location.href=myurl; */
-/*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
-	ga('send','social', 'arcgis', 'asWMS',location.href);
+	/*	_gaq.push(['_trackSocial', 'ImageDownload', 'asJPG']);*/
+	ga('send','social', 'ImageDownload', 'asJPG',location.href);
     }
 }
+function doarcgisClick(evt){
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    if(sfigs.length){
+	var kmlurl=sfigs[0].info['iridl:hasWMS'];
+	var kmlclass = sfigs[0].figureimage.className.split(' ')[0];
+	if(kmlurl){
+	    var myurl = appendPageForm(kmlurl,kmlclass);
+	    var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
+	    if(msga.length>0){
+		msga[0].innerHTML="<p>To open directly in ArcGIS using WMS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL</p><textarea style='width:100%;' rows=20>" + myurl + '</textarea><p>Alternatively, choose a GeoTiff option under the download button <span class="dlimagecontrol download" title="Download"></span> to download an image ArcGIS can read';
+		toggleClass(msga[0],'show');
+	    }
+	    else {
+		alert("To open in ArcGIS, use menus Add Data -> Add GISserver -> WMSserver, and enter this URL\n\n" + myurl);
+	    }
+	    /*	location.href=myurl; */
+	    /*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
+	    ga('send','social', 'arcgis', 'asWMS',location.href);
+	}
+    }
 }
 /* short url -- remove https? and server -- also remove /expert if not needed
-*/
+ */
 function shorturl(url){
-   var nohttpmach = new RegExp("^(https?://[^/]+)?(.*)$");
+    var nohttpmach = new RegExp("^(https?://[^/]+)?(.*)$");
     var noneedexpert = new RegExp("^(/expert/[^/])");
     var myurl;
     myurl=url.match (nohttpmach)[2];
@@ -1545,15 +1549,15 @@ function shorturl(url){
     return myurl;
 }
 function docutandpasteClick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
     var nohttp = new RegExp("^(https?:)?(.*)$");
- if(sfigs.length){
+    if(sfigs.length){
 	var myurl = sfigs[0].href;
         var iconurl=sfigs[0].info['iridl:icon'];
 	var msga=it.parentNode.parentNode.getElementsByClassName('messagearea');
-    
+	
 	if(msga.length>0){
 	    var mymsg="<p>To add this widget to a web page, cut-and-paste this code</p><textarea style='width:100%;' rows=20><script type=\"text/javascript\" src=\"" + scriptroot.match (nohttp)[2] + 'insertui.js\"></script>\n';
 	    if(iconurl){
@@ -1574,370 +1578,370 @@ var sfigs=getElementsByAttribute(it.clipthis,'*','rel','iridl:hasFigure');
 	    toggleClass(msga[0],'show'); 
 	}
 	/*	location.href=myurl; */
-/*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
+	/*	_gaq.push(['_trackSocial', 'arcgis', 'asWMS']);*/
 	ga('send','social', 'ImageDownload', 'asWidget',location.href);
-}
+    }
 }
 function readwithiframe(slhref,s,readfn){
-var iframe=document.getElementById('sectioniframe');
-if(!iframe) {
-iframe = document.createElement('iframe');
-iframe.id='sectioniframe';
-iframe.style.display="none";
-iframe.onload = readfn;
-s.appendChild(iframe);
-}
-iframe.src=slhref;
+    var iframe=document.getElementById('sectioniframe');
+    if(!iframe) {
+	iframe = document.createElement('iframe');
+	iframe.id='sectioniframe';
+	iframe.style.display="none";
+	iframe.onload = readfn;
+	s.appendChild(iframe);
+    }
+    iframe.src=slhref;
 }
 function getXMLhttp(){
-var xmlhttp;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-return xmlhttp;
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+	xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return xmlhttp;
 }
 
 function preload(href){
-var xmlhttp=getXMLhttp();
-xmlhttp.onreadystatechange=function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if (it.readyState==4) {
-  }
-}
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",href,true);
-xmlhttp.send();
+    var xmlhttp=getXMLhttp();
+    xmlhttp.onreadystatechange=function(evt) {
+	var evt = (evt) ? evt : ((event) ? event : null );
+	var it = (evt.currentTarget) ? evt.currentTarget : this;
+	if (it.readyState==4) {
+	}
+    }
+    xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+    xmlhttp.open("GET",href,true);
+    xmlhttp.send();
 }
 function getLanguageFrom(href){
-var xmlhttp=getXMLhttp();
-xmlhttp.onreadystatechange=function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-    if(it.readyState == 4){
-	if(it.status == 200){
-	    var jsontxt = it.responseText;
-	    var info=JSON.parse(jsontxt);
- 	    var plang = info['uicore:lang'];
-	if(plang){
-	    var myform=document.getElementById('pageform');
-	    if(myform){
-		var lang=myform.elements['lang'];
-		var slang=myform.elements['Set-Language'];
-		if(lang.value != plang && ( !slang || (slang && !slang.value))){
-		    var s=document.getElementById('chooseLanguage');
-		    var sel=s.getElementsByTagName('select')[0];
-		    sel.value = plang;
-		    if(sel.selectedIndex<0){
-			sel.value=lang.value;
+    var xmlhttp=getXMLhttp();
+    xmlhttp.onreadystatechange=function(evt) {
+	var evt = (evt) ? evt : ((event) ? event : null );
+	var it = (evt.currentTarget) ? evt.currentTarget : this;
+	if(it.readyState == 4){
+	    if(it.status == 200){
+		var jsontxt = it.responseText;
+		var info=JSON.parse(jsontxt);
+ 		var plang = info['uicore:lang'];
+		if(plang){
+		    var myform=document.getElementById('pageform');
+		    if(myform){
+			var lang=myform.elements['lang'];
+			var slang=myform.elements['Set-Language'];
+			if(lang.value != plang && ( !slang || (slang && !slang.value))){
+			    var s=document.getElementById('chooseLanguage');
+			    var sel=s.getElementsByTagName('select')[0];
+			    sel.value = plang;
+			    if(sel.selectedIndex<0){
+				sel.value=lang.value;
+			    }
+			    lang.value=sel.options[sel.selectedIndex].value;
+			}
 		    }
-		    lang.value=sel.options[sel.selectedIndex].value;
+		}
+	    }
+	}
+    };
+    xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+    xmlhttp.open("GET",localHrefOf(href),true);
+    xmlhttp.send();
+}
+
+function readwithxmlhttp(slhref,sel){
+    var xmlhttp=getXMLhttp();
+    xmlhttp.mysel=sel;
+    xmlhttp.onreadystatechange = function(evt) {
+	var evt = (evt) ? evt : ((event) ? event : null );
+	var xmlhttp = (evt.currentTarget) ? evt.currentTarget : this;
+	if(xmlhttp.readyState == 4){
+	    var xmlDoc;
+	    // used to test on xmlDoc, but explorer did not work, so now I parse
+	    if(true){
+		if(window.DOMParser){
+		    parser= new DOMParser();
+		    xmlDoc=parser.parseFromString(xmlhttp.responseText,"text/xml");
+		}
+		else {
+		    xmlDoc= new ActiveXObject("Microsoft.XMLDOM");
+		    xmlDoc.async=false;
+		    /* IE8 gets confused by either the doctype or the ?xml, so we skip it */
+		    xmlDoc.loadXML(xmlhttp.responseText.substr(xmlhttp.responseText.indexOf('<html')));
+		    if(xmlDoc.parseError.reason){
+			alert(xmlDoc.parseError.reason + ' on ' + xmlDoc.parseError.line);
+			alert(xmlhttp.responseText);
+		    }
+		}
+	    }
+	    dofinishchooseSection(xmlhttp.mysel,xmlDoc);
+	}
+    };
+    xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+    xmlhttp.open("GET",slhref,true);
+    xmlhttp.send();
+}
+function getElementsByAttribute(oElm, strTagName, strAttributeName, strAttributeValue){
+    var arrElements = (strTagName == "*" && oElm.all)? oElm.all : oElm.getElementsByTagName(strTagName);
+    var arrReturnElements = new Array();
+    var oAttributeValue = (typeof strAttributeValue != "undefined")? new RegExp("(^|\\s)" + strAttributeValue + "(\\s|$)", "i") : null;
+    var oCurrent;
+    var oAttribute;
+    for(var i=0; i<arrElements.length; i++){
+	oCurrent = arrElements[i];
+	oAttribute = oCurrent.getAttribute && oCurrent.getAttribute(strAttributeName);
+	if(typeof oAttribute == "string" && oAttribute.length > 0){
+	    if(typeof strAttributeValue == "undefined" || (oAttributeValue && oAttributeValue.test(oAttribute))){
+		arrReturnElements.push(oCurrent);
+	    }
+	}
+    }
+    return arrReturnElements;
+}
+function insertchooseSection(){
+    var s=document.getElementById('chooseSection');
+    var sl=document.getElementById('toSectionList');
+    var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
+    if (s && sl  && titleobj){
+	var sels=s.getElementsByTagName('select');
+	if(sels.length < 1){
+	    var sel=document.createElement('span');
+	    sel.className='selectvalue';
+	    sel.onclick=selectvalueclick;
+	    sel.onclickFn=selectvalueclick;
+	    sel.innerHTML=titleobj.innerHTML;
+	    sel.setAttribute('value',titleobj.innerHTML);
+	    s.appendChild(sel);
+	    sel=document.createElement('select');
+	    sel.name="mapsel";
+	    sel.onchange=dosectionsel;
+	    sel.id='mapselect';
+	    var slhref=sl.getElementsByTagName('a')[0].href;
+	    slhref=addLanguageVar(localHrefOf(slhref));
+	    s.appendChild(sel);
+	    if(slhref){
+		var lin = slhref.lastIndexOf('/');
+		if(lin){
+		    sel.hrefroot=slhref.substr(0,lin+1);
+		}else {
+		    sel.hrefroot=slhref;
+		}
+		if(slhref.substring(0,4) == "http"){
+		    readwithxmlhttp(slhref,sel);
+		}
+		else {
+		    // otherwise permissions prevent us from reading the file
+		    /* faking select when read from a file */
+		    var stitle=getElementsByAttribute(document,'*','property','term:title');
+		    if(stitle.length > 0){
+			var opt = document.createElement('option');
+			opt.innerHTML=stitle[0].innerHTML;
+			opt.value="";
+			sel.appendChild(opt);
+		    }
 		}
 	    }
 	}
     }
-    }
-};
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-    xmlhttp.open("GET",localHrefOf(href),true);
-xmlhttp.send();
 }
-
-function readwithxmlhttp(slhref,sel){
-var xmlhttp=getXMLhttp();
-xmlhttp.mysel=sel;
-xmlhttp.onreadystatechange = function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var xmlhttp = (evt.currentTarget) ? evt.currentTarget : this;
-if(xmlhttp.readyState == 4){
-    var xmlDoc;
-// used to test on xmlDoc, but explorer did not work, so now I parse
-if(true){
-    if(window.DOMParser){
-parser= new DOMParser();
-xmlDoc=parser.parseFromString(xmlhttp.responseText,"text/xml");
-    }
-    else {
-	xmlDoc= new ActiveXObject("Microsoft.XMLDOM");
-	xmlDoc.async=false;
-	/* IE8 gets confused by either the doctype or the ?xml, so we skip it */
-	xmlDoc.loadXML(xmlhttp.responseText.substr(xmlhttp.responseText.indexOf('<html')));
-	if(xmlDoc.parseError.reason){
-	alert(xmlDoc.parseError.reason + ' on ' + xmlDoc.parseError.line);
-	alert(xmlhttp.responseText);
+function updateHasSectionList(selectlink){
+    var s=document.getElementById('chooseSection');
+    var sl=document.getElementById('toSectionList');
+    var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
+    if (s && sl  && titleobj){
+	var sels=s.getElementsByTagName('select');
+	if(sels.length > 0){
+	    var sel=sels[0];
+	    var slhref=selectlink.href;
+	    if(slhref){
+		var lin = slhref.lastIndexOf('/');
+		if(lin){
+		    sel.hrefroot=slhref.substr(0,lin+1);
+		}else {
+		    sel.hrefroot=slhref;
+		}
+		if(slhref.substring(0,4) == "http"){
+		    readwithxmlhttp(slhref,sel);
+		}
+	    }
 	}
     }
 }
-dofinishchooseSection(xmlhttp.mysel,xmlDoc);
-}
-};
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",slhref,true);
-xmlhttp.send();
-}
-      function getElementsByAttribute(oElm, strTagName, strAttributeName, strAttributeValue){
-      var arrElements = (strTagName == "*" && oElm.all)? oElm.all : oElm.getElementsByTagName(strTagName);
-      var arrReturnElements = new Array();
-      var oAttributeValue = (typeof strAttributeValue != "undefined")? new RegExp("(^|\\s)" + strAttributeValue + "(\\s|$)", "i") : null;
-      var oCurrent;
-      var oAttribute;
-      for(var i=0; i<arrElements.length; i++){
-      oCurrent = arrElements[i];
-      oAttribute = oCurrent.getAttribute && oCurrent.getAttribute(strAttributeName);
-      if(typeof oAttribute == "string" && oAttribute.length > 0){
-      if(typeof strAttributeValue == "undefined" || (oAttributeValue && oAttributeValue.test(oAttribute))){
-      arrReturnElements.push(oCurrent);
-      }
-      }
-      }
-      return arrReturnElements;
-      }
-function insertchooseSection(){
-var s=document.getElementById('chooseSection');
-var sl=document.getElementById('toSectionList');
-var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
-if (s && sl  && titleobj){
-var sels=s.getElementsByTagName('select');
-if(sels.length < 1){
-var sel=document.createElement('span');
-sel.className='selectvalue';
-sel.onclick=selectvalueclick;
-sel.onclickFn=selectvalueclick;
-sel.innerHTML=titleobj.innerHTML;
-    sel.setAttribute('value',titleobj.innerHTML);
-s.appendChild(sel);
-sel=document.createElement('select');
-sel.name="mapsel";
-sel.onchange=dosectionsel;
-sel.id='mapselect';
-var slhref=sl.getElementsByTagName('a')[0].href;
-slhref=addLanguageVar(localHrefOf(slhref));
-s.appendChild(sel);
-if(slhref){
-var lin = slhref.lastIndexOf('/');
-if(lin){
-sel.hrefroot=slhref.substr(0,lin+1);
-}else {
-sel.hrefroot=slhref;
-}
-if(slhref.substring(0,4) == "http"){
-readwithxmlhttp(slhref,sel);
-}
-else {
-// otherwise permissions prevent us from reading the file
-    /* faking select when read from a file */
-var stitle=getElementsByAttribute(document,'*','property','term:title');
-if(stitle.length > 0){
-    var opt = document.createElement('option');
-    opt.innerHTML=stitle[0].innerHTML;
-    opt.value="";
-    sel.appendChild(opt);
-}
-}
-}
-}
-}
-}
-function updateHasSectionList(selectlink){
-var s=document.getElementById('chooseSection');
-var sl=document.getElementById('toSectionList');
-var titleobj=getElementsByAttribute(document,'*','property','term:title')[0];
-if (s && sl  && titleobj){
-var sels=s.getElementsByTagName('select');
-if(sels.length > 0){
-    var sel=sels[0];
-var slhref=selectlink.href;
-if(slhref){
-var lin = slhref.lastIndexOf('/');
-if(lin){
-sel.hrefroot=slhref.substr(0,lin+1);
-}else {
-sel.hrefroot=slhref;
-}
-if(slhref.substring(0,4) == "http"){
-readwithxmlhttp(slhref,sel);
-}
-}
-}
-}
-}
 function previousElement(mynode){
-if(mynode.previousSibling && mynode.previousSibling.nodeType == 3){
-return previousElement(mynode.previousSibling);
-}
-else {
-return mynode.previousSibling;
-}
+    if(mynode.previousSibling && mynode.previousSibling.nodeType == 3){
+	return previousElement(mynode.previousSibling);
+    }
+    else {
+	return mynode.previousSibling;
+    }
 }
 function finishchooseSectioniframe(){
-var iframe=document.getElementById('sectioniframe');
-var sel=document.getElementById('mapselect');
+    var iframe=document.getElementById('sectioniframe');
+    var sel=document.getElementById('mapselect');
 
-var xmlDoc = iframe.contentDocument;
-dofinishchooseSection(sel,xmlDoc);
+    var xmlDoc = iframe.contentDocument;
+    dofinishchooseSection(sel,xmlDoc);
 }
 function dofinishchooseSection(sel,xmlDoc){
     var opts = sel.options;
     for (var i=opts.length; i>0  ; i--){
 	sel.remove(opts[i]);
     }
-//removes sections as well  if needed
-while (sel.firstChild) {
-    sel.removeChild(sel.firstChild);
-}
-if(xmlDoc){
-    var itemlist;
-    if(xmlDoc.getElementsByClassName){
-	itemlist=xmlDoc.getElementsByClassName('item');
+    //removes sections as well  if needed
+    while (sel.firstChild) {
+	sel.removeChild(sel.firstChild);
     }
-    else {
-	var mynodes = xmlDoc.documentElement.getElementsByTagName('div');
-	var oAttributeValue = 'item';
-	itemlist=new Array;
-       for (var i = 0; i<mynodes.length ; i++){
-	   var oCurrent = mynodes[i];
-	   var oAttribute = oCurrent.getAttribute('class');
-      if(typeof oAttribute == "string" && oAttribute.length > 0){
-      if(oAttributeValue.indexOf(oAttribute)>=0){
-      itemlist.push(oCurrent);
-      }
-      }
-       }
+    if(xmlDoc){
+	var itemlist;
+	if(xmlDoc.getElementsByClassName){
+	    itemlist=xmlDoc.getElementsByClassName('item');
+	}
+	else {
+	    var mynodes = xmlDoc.documentElement.getElementsByTagName('div');
+	    var oAttributeValue = 'item';
+	    itemlist=new Array;
+	    for (var i = 0; i<mynodes.length ; i++){
+		var oCurrent = mynodes[i];
+		var oAttribute = oCurrent.getAttribute('class');
+		if(typeof oAttribute == "string" && oAttribute.length > 0){
+		    if(oAttributeValue.indexOf(oAttribute)>=0){
+			itemlist.push(oCurrent);
+		    }
+		}
+	    }
+	}
+	var og=sel;
+	if(itemlist.length>0){
+	    for (var i = 0; i<itemlist.length ; i++){
+		var item=itemlist[i];
+		if(previousElement(item) && previousElement(item).getAttribute('class') == 'itemGroup'){
+		    og=document.createElement('optgroup');
+		    var petext = previousElement(item).innerHTML ? previousElement(item).innerHTML : previousElement(item).text;
+		    og.label=petext;
+		    sel.appendChild(og);
+		}
+		var anc =item.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
+		var anctext = anc.innerHTML? anc.innerHTML : anc.text;
+		var ancclass = anc.getAttribute('class');
+		var anchref = anc.getAttribute('href');
+		if(ancclass){optValue=anchref + '@' + ancclass;}
+		else {
+		    optValue = anchref;
+		}
+		var opt= new Option(anctext,optValue,false,false);
+		var fullpathname = document.location.href;
+		if(fullpathname.indexOf("?") >=0){
+		    fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
+		}
+		if(fullpathname.indexOf("#") >= 0){
+		    fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
+		}
+		var altpathname = fullpathname + 'index.html';
+		if (sel.hrefroot + anchref == fullpathname || sel.hrefroot + anchref == altpathname){
+		    opt.selected=true;
+		}
+		/* IE8 has strange optgroup behavior */
+		if(!IE8){
+		    og.appendChild(opt);
+		}else
+		    sel.add(opt);
+	    }
+	    if(typeof(sel.selectedIndex) === 'number'){
+		if(sel.options[sel.selectedIndex].parentNode.label){
+		    sel.parentNode.getElementsByTagName('legend')[0].innerHTML=sel.options[sel.selectedIndex].parentNode.label;
+		}
+		sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+	    }
+	}
     }
-var og=sel;
-if(itemlist.length>0){
-for (var i = 0; i<itemlist.length ; i++){
-var item=itemlist[i];
-if(previousElement(item) && previousElement(item).getAttribute('class') == 'itemGroup'){
-og=document.createElement('optgroup');
-var petext = previousElement(item).innerHTML ? previousElement(item).innerHTML : previousElement(item).text;
-og.label=petext;
-sel.appendChild(og);
-}
-var anc =item.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
-var anctext = anc.innerHTML? anc.innerHTML : anc.text;
-var ancclass = anc.getAttribute('class');
-var anchref = anc.getAttribute('href');
-if(ancclass){optValue=anchref + '@' + ancclass;}
-else {
-    optValue = anchref;
-}
-var opt= new Option(anctext,optValue,false,false);
-var fullpathname = document.location.href;
-if(fullpathname.indexOf("?") >=0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("?"));
-}
-if(fullpathname.indexOf("#") >= 0){
-fullpathname = fullpathname.substring(0,fullpathname.indexOf("#"));
-}
-var altpathname = fullpathname + 'index.html';
-if (sel.hrefroot + anchref == fullpathname || sel.hrefroot + anchref == altpathname){
-opt.selected=true;
-}
-/* IE8 has strange optgroup behavior */
-if(!IE8){
-og.appendChild(opt);
-}else
-    sel.add(opt);
-}
-if(typeof(sel.selectedIndex) === 'number'){
-    if(sel.options[sel.selectedIndex].parentNode.label){
-sel.parentNode.getElementsByTagName('legend')[0].innerHTML=sel.options[sel.selectedIndex].parentNode.label;
-    }
-sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
-}
-}
-}
-else alert("cannot parse")
+    else alert("cannot parse")
 }
 function insertRegion(){
     var theregion=document.getElementById("chooseRegion");
-if(theregion){
-var sel=theregion.getElementsByTagName('select');
-if (sel.length != 0){
-    sel=sel[0];
-    sel.onchange=regiononchange;
-}
-else {
-sel=document.createElement('span');
-sel.className='selectvalue';
-sel.onclick=selectvalueclick;
-sel.onclickFn=selectvalueclick;
-sel.innerHTML='Global';
-    sel.setAttribute('value','Global');
-theregion.appendChild(sel);
-sel=document.createElement('select');
-sel.size=1;
-sel.name="bbox";
-sel.className='pageformcopy';
-sel.onchange=regiononchange;
-var optgrp=document.createElement('optgroup');
-optgrp.label="Region";
-var opt = document.createElement('option');
-opt.value="bb:-20:-40:55:40:bb";
-opt.innerHTML="Africa";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:40:-10:170:75:bb";
-opt.innerHTML="Asia";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:100:-55:180:0:bb";
-opt.innerHTML="Australia";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:-20:35:40:75:bb";
-opt.innerHTML="Europe";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:10:15:75:45:bb";
-opt.innerHTML="Middle East";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:-170:15:-40:75:bb";
-opt.innerHTML="North America";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:-100:0:-70:35:bb";
-opt.innerHTML="Central America";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:-90:-60:-30:15:bb";
-opt.innerHTML="South America";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="bb:100:-60:300:60:bb";
-opt.innerHTML="Pacific";
-optgrp.appendChild(opt);
-opt = document.createElement('option');
-opt.value="";
-opt.selected="selected";
-opt.innerHTML="Global";
-optgrp.appendChild(opt);
-sel.appendChild(optgrp);
-theregion.appendChild(sel);
-}
-}
+    if(theregion){
+	var sel=theregion.getElementsByTagName('select');
+	if (sel.length != 0){
+	    sel=sel[0];
+	    sel.onchange=regiononchange;
+	}
+	else {
+	    sel=document.createElement('span');
+	    sel.className='selectvalue';
+	    sel.onclick=selectvalueclick;
+	    sel.onclickFn=selectvalueclick;
+	    sel.innerHTML='Global';
+	    sel.setAttribute('value','Global');
+	    theregion.appendChild(sel);
+	    sel=document.createElement('select');
+	    sel.size=1;
+	    sel.name="bbox";
+	    sel.className='pageformcopy';
+	    sel.onchange=regiononchange;
+	    var optgrp=document.createElement('optgroup');
+	    optgrp.label="Region";
+	    var opt = document.createElement('option');
+	    opt.value="bb:-20:-40:55:40:bb";
+	    opt.innerHTML="Africa";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:40:-10:170:75:bb";
+	    opt.innerHTML="Asia";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:100:-55:180:0:bb";
+	    opt.innerHTML="Australia";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:-20:35:40:75:bb";
+	    opt.innerHTML="Europe";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:10:15:75:45:bb";
+	    opt.innerHTML="Middle East";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:-170:15:-40:75:bb";
+	    opt.innerHTML="North America";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:-100:0:-70:35:bb";
+	    opt.innerHTML="Central America";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:-90:-60:-30:15:bb";
+	    opt.innerHTML="South America";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="bb:100:-60:300:60:bb";
+	    opt.innerHTML="Pacific";
+	    optgrp.appendChild(opt);
+	    opt = document.createElement('option');
+	    opt.value="";
+	    opt.selected="selected";
+	    opt.innerHTML="Global";
+	    optgrp.appendChild(opt);
+	    sel.appendChild(optgrp);
+	    theregion.appendChild(sel);
+	}
+    }
 }
 var regionIsWithinBbox = false;
 function setregionwithinbbox(mydisplay,doflags){
-var thebody = document.getElementsByTagName('body')[0];
+    var thebody = document.getElementsByTagName('body')[0];
     if(!mydisplay){
 	if(doflags){
-	regionIsWithinBbox = false;
+	    regionIsWithinBbox = false;
 	}
 	else {
-	removeClass(thebody,'regioniswithinbbox');
+	    removeClass(thebody,'regioniswithinbbox');
 	}
     }
     else {
 	if(doflags){
-	regionIsWithinBbox = true;
+	    regionIsWithinBbox = true;
 	}
 	else {
 	    appendMissingClass(thebody,'regioniswithinbbox');
@@ -1945,133 +1949,133 @@ var thebody = document.getElementsByTagName('body')[0];
     }
 }
 function regiononchange(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-/* updates selectvalue element*/
-it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
-it.previousSibling.setAttribute('value',it.options[it.selectedIndex].value);
-var pform=document.getElementById('pageform');
-if(pform){
-if(it.name == 'bbox'){
-var myin = pform.elements['region'];
-if(myin){
-if(it.options[it.selectedIndex].value){
-    myin.value = it.options[it.selectedIndex].value
-}
-else {
-myin.value="";
-}
-}
-var myin = pform.elements['clickpt'];
-if(myin){
-myin.value="";
-}
-}
-if(pform.elements[it.name]){
-pform.elements[it.name].value=it.options[it.selectedIndex].value;
-updatePageForm();
-}
-}
-}
-function pageformcopyonchange(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var pform=document.getElementById('pageform');
-if(pform){
-    var elbyname = pform.elements[it.name];
-if(elbyname){
-    var changed = "";
-if(it.options){
-    changed = pform.elements[it.name];
-    if(changed.length){
-	    /* multivalued but not checkbox -- copy first
-	     unless data-nameindex is set */
-	var ind = 0;
-	var myind = it.getAttribute('data-nameindex');
-	if(myind){ind = myind};
-	changed[ind].value=it.options[it.selectedIndex].value;
-    }
-    else {
-	changed.value=it.options[it.selectedIndex].value;
-    }
-}
-/* no options, not a select */
-else if(elbyname.length) {
-	/* multivalued copy -- hopefully checkbox */
-	if(elbyname[0].type == 'checkbox'){
-	    /* multivalued copy -- checkbox */
-	    for(var j = elbyname.length; j-- ;){
-		if(elbyname[j].value == it.value){
-		    elbyname[j].checked = it.checked;
-		    changed = elbyname[j];
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    /* updates selectvalue element*/
+    it.previousSibling.innerHTML=it.options[it.selectedIndex].innerHTML;
+    it.previousSibling.setAttribute('value',it.options[it.selectedIndex].value);
+    var pform=document.getElementById('pageform');
+    if(pform){
+	if(it.name == 'bbox'){
+	    var myin = pform.elements['region'];
+	    if(myin){
+		if(it.options[it.selectedIndex].value){
+		    myin.value = it.options[it.selectedIndex].value
+		}
+		else {
+		    myin.value="";
 		}
 	    }
+	    var myin = pform.elements['clickpt'];
+	    if(myin){
+		myin.value="";
+	    }
 	}
-	else {
-	    /* multivalued but not pageform not a checkbox 
-	     if it is a checkbox, looks for match or unset*/
-	    if(it.type == 'checkbox'){
-/* sets first unset element */
-		if(it.checked){
-		    for(var j = 0 ; j< elbyname.length; j++){
-			if(elbyname[j].value == ''){
-			    elbyname[j].value = it.value;
+	if(pform.elements[it.name]){
+	    pform.elements[it.name].value=it.options[it.selectedIndex].value;
+	    updatePageForm();
+	}
+    }
+}
+function pageformcopyonchange(evt){
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var pform=document.getElementById('pageform');
+    if(pform){
+	var elbyname = pform.elements[it.name];
+	if(elbyname){
+	    var changed = "";
+	    if(it.options){
+		changed = pform.elements[it.name];
+		if(changed.length){
+		    /* multivalued but not checkbox -- copy first
+		       unless data-nameindex is set */
+		    var ind = 0;
+		    var myind = it.getAttribute('data-nameindex');
+		    if(myind){ind = myind};
+		    changed[ind].value=it.options[it.selectedIndex].value;
+		}
+		else {
+		    changed.value=it.options[it.selectedIndex].value;
+		}
+	    }
+	    /* no options, not a select */
+	    else if(elbyname.length) {
+		/* multivalued copy -- hopefully checkbox */
+		if(elbyname[0].type == 'checkbox'){
+		    /* multivalued copy -- checkbox */
+		    for(var j = elbyname.length; j-- ;){
+			if(elbyname[j].value == it.value){
+			    elbyname[j].checked = it.checked;
 			    changed = elbyname[j];
-			    break;
 			}
 		    }
 		}
 		else {
-/* unchecked checkbox -- unsets matching element */
-		    for(var j = 0 ; j< elbyname.length; j++){
-			if(elbyname[j].value == it.value){
-			    for(var k=j ; k< elbyname.length-1 ; k++){
-				elbyname[k].value=elbyname[k+1].value;
+		    /* multivalued but not pageform not a checkbox 
+		       if it is a checkbox, looks for match or unset*/
+		    if(it.type == 'checkbox'){
+			/* sets first unset element */
+			if(it.checked){
+			    for(var j = 0 ; j< elbyname.length; j++){
+				if(elbyname[j].value == ''){
+				    elbyname[j].value = it.value;
+				    changed = elbyname[j];
+				    break;
+				}
 			    }
-			    elbyname[elbyname.length-1].value = '';
-			    changed = elbyname[j];
-			    break;
+			}
+			else {
+			    /* unchecked checkbox -- unsets matching element */
+			    for(var j = 0 ; j< elbyname.length; j++){
+				if(elbyname[j].value == it.value){
+				    for(var k=j ; k< elbyname.length-1 ; k++){
+					elbyname[k].value=elbyname[k+1].value;
+				    }
+				    elbyname[elbyname.length-1].value = '';
+				    changed = elbyname[j];
+				    break;
+				}
+			    }
 			}
 		    }
+		    else {
+			/* punts by setting first one unless data-nameindex is set */
+			var ind=0;
+			var myind = it.getAttribute('data-nameindex');
+			if(myind){ind = myind};
+			changed = pform.elements[it.name][ind];
+			changed.value=it.value;
+		    }
 		}
-	    }
+	    } 
 	    else {
-       /* punts by setting first one unless data-nameindex is set */
-		var ind=0;
-	var myind = it.getAttribute('data-nameindex');
-	if(myind){ind = myind};
-	    changed = pform.elements[it.name][ind];
-	    changed.value=it.value;
+		changed = pform.elements[it.name];
+		changed.value=it.value;
 	    }
+	    updatePageForm(changed);
 	}
-} 
-else {
-    changed = pform.elements[it.name];
-changed.value=it.value;
-}
-updatePageForm(changed);
-}
-}
+    }
     if (it.className && it.className.indexOf('scrollToTop')){
 	scrollTo(0,0);
     }
 
 }
 function loadHasRqlEndpoint(){
-var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasSparqlEndpoint');
-for (var i=0 ; i<sfigs.length ; i++){
-    if(!sfigs[i].parentNode.parsedJSON){updateHasRqlEndpoint(sfigs[i])};
-}
+    var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasSparqlEndpoint');
+    for (var i=0 ; i<sfigs.length ; i++){
+	if(!sfigs[i].parentNode.parsedJSON){updateHasRqlEndpoint(sfigs[i])};
+    }
 }
 /* 
-The parent of the link object we call the Context.
-when file is returned, if the url retrieved is still the url that the
-link object points to, stores parsedJSON in the Context,
-and calls runPureOnContext.
+   The parent of the link object we call the Context.
+   when file is returned, if the url retrieved is still the url that the
+   link object points to, stores parsedJSON in the Context,
+   and calls runPureOnContext.
 
-Here we call all the queries associated with a particular SparqlEndpoint
-We do both iridl:hasSerqlQuery and iridl:hasSparqlQuery
- */
+   Here we call all the queries associated with a particular SparqlEndpoint
+   We do both iridl:hasSerqlQuery and iridl:hasSparqlQuery
+*/
 function updateHasRqlEndpoint(myLink){
     var queries=getElementsByAttribute(myLink.parentNode,'*','property','iridl:hasSerqlQuery');
     for (var i=0 ; i<queries.length ; i++){
@@ -2083,17 +2087,17 @@ function updateHasRqlEndpoint(myLink){
     }
 }
 /* RqlEndpointUrl ( endpoint query querylang varclasses varmap -- ) 
-builds url from endpoint and Rql query. varclasses controls the
-variables that can be using for single bindings -- multiple-valued 
-variables have to be inserted in the query. varmap allows variable
-renaming in the case where the pageform variable and the query
-variable cannot have precisely the same name.
-querylang is serql or sparql for sesame */
+   builds url from endpoint and Rql query. varclasses controls the
+   variables that can be using for single bindings -- multiple-valued 
+   variables have to be inserted in the query. varmap allows variable
+   renaming in the case where the pageform variable and the query
+   variable cannot have precisely the same name.
+   querylang is serql or sparql for sesame */
 function rqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
     var appendurl = appendPageForm("",varclasses,true);
     var myquery = query;
     var myform=document.getElementById('pageform');
-/* finds multivalued variables, if any */
+    /* finds multivalued variables, if any */
     var inlist = myform.getElementsByClassName(varclasses.replace(/loading/,''));
     var multi = {};
     for (var i = 0 ; i < inlist.length ; i++){
@@ -2119,7 +2123,7 @@ function rqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
 	    }
 	}
 	else {
-/* sparql -- simple comma-separated list of values to replace ?key */
+	    /* sparql -- simple comma-separated list of values to replace ?key */
 	    myregexp = new RegExp('[?]' + key + '([ ,.;])','g');
 	    newquery = myquery.replace(myregexp,replacewith+ "$1");
 	}
@@ -2137,27 +2141,27 @@ function rqlEndpointUrl(endpoint,query,querylang,varclasses,varmap){
 	    var ifid=false;
 	    var mys = false;
 	    if(myform[pair[0]].length) {
-/* skips multi as currently no way to bind */
+		/* skips multi as currently no way to bind */
 	    }
 	    else {
-/* single valued -- use variable binding */
-	    if(myform.jsonldContext && myform.jsonldContext['@context']){
-		mys = myform.jsonldContext['@context'][pair[0]];
-		if(mys){
-		    ifid=(mys['@type'] == '@id');
+		/* single valued -- use variable binding */
+		if(myform.jsonldContext && myform.jsonldContext['@context']){
+		    mys = myform.jsonldContext['@context'][pair[0]];
+		    if(mys){
+			ifid=(mys['@type'] == '@id');
+		    }
 		}
-	    }
-	    if(ifid){
-		newvalue =  "<" + expandNS(unescape(pair[1]),myform.nsContext['@context']) + '>';
-	    }
-	    else {
-		newvalue = '"' + unescape(pair[1]) + '"';
-	    }
+		if(ifid){
+		    newvalue =  "<" + expandNS(unescape(pair[1]),myform.nsContext['@context']) + '>';
+		}
+		else {
+		    newvalue = '"' + unescape(pair[1]) + '"';
+		}
 		var varname = pair[0];
 		if(varmap && varmap[varname]){
 		    varname=varmap[varname];
 		}
-	    localurl = localurl + "&" + encodeURIComponent("$" + varname ) + "=" + encodeURIComponent(newvalue);
+		localurl = localurl + "&" + encodeURIComponent("$" + varname ) + "=" + encodeURIComponent(newvalue);
 	    }
 	}
     }
@@ -2171,12 +2175,12 @@ var escaped_one_to_xml_special_map = {
 
 function decodeXML(string) {
     return string.replace(/(&lt;|&gt;|&amp;)/g,
-        function(str, item) {
-            return escaped_one_to_xml_special_map[item];
-    });
+			  function(str, item) {
+			      return escaped_one_to_xml_special_map[item];
+			  });
 }
 /* updateHasRqlQuery ( endpoint query querylang -- ) builds url
-    from endpoint and query and retrieves from server if necessary */
+   from endpoint and query and retrieves from server if necessary */
 function updateHasRqlQuery(myLink,myQuery,querylang){
     var xmlhttp= getXMLhttp();
     var varmap = myQuery.getAttribute('data-varmap');
@@ -2187,7 +2191,7 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 	myQuery.cleantxt = decodeXML(myQuery.text);
     }
     var localurl = rqlEndpointUrl(myLink.href, myQuery.cleantxt,
-    querylang, myQuery.className,varmap);
+				  querylang, myQuery.className,varmap);
     /* possibly restricted use of query */
     var restrictif = myQuery.getAttribute('data-if');
     /* possibly restricted use of query (not) */
@@ -2197,15 +2201,15 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
     /* check tests for query use */
     if(restrictif){
 	if($(restrictif).length == 0){
-	ifneeded=false;
+	    ifneeded=false;
 	    myQuery.localurl='';
-    }
+	}
     }
     if(restrictnotif){
 	if($(restrictnotif).length > 0){
-	ifneeded=false;
+	    ifneeded=false;
 	    myQuery.localurl='';
-    }
+	}
     }
     /* if query is needed */
     if(ifneeded){
@@ -2231,12 +2235,12 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 	dumpelement=getElementsByAttribute(myLink.parentNode,'*','property','iridl:JsonAsText');
 	if(dumpelement.length > 0 ){dumpelement[0].innerHTML=''}
 	/* setup callback for server request for query result 
-	 xmlhttp ( -- ) object containing callback 
-	infourl ( -- ) the infourl that matches the callback when it 
-          is returned
-       myContext ( -- context ) parentNode of the link i.e. the context
-       myLink ( -- endpoint ) the link iridl:hasSparqlEndpoint
-       myQuery ( -- query) the query */ 
+	   xmlhttp ( -- ) object containing callback 
+	   infourl ( -- ) the infourl that matches the callback when it 
+           is returned
+	   myContext ( -- context ) parentNode of the link i.e. the context
+	   myLink ( -- endpoint ) the link iridl:hasSparqlEndpoint
+	   myQuery ( -- query) the query */ 
 	xmlhttp.infourl = localurl;
 	xmlhttp.myContext = myLink.parentNode;
 	xmlhttp.myLink=myLink;
@@ -2265,8 +2269,8 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
 			/* iridl:hasJsondlFrame -- uses jsonld.frame callback to frame raw JSON */
 			if(it.myQuery.nextElementSibling &&
-    it.myQuery.nextElementSibling.getAttribute('property') ==
-    'iridl:hasJsonldFrame'){
+			   it.myQuery.nextElementSibling.getAttribute('property') ==
+			   'iridl:hasJsonldFrame'){
 			    /* using jsonld.frame to process raw RDF JSON */
 			    var frame = JSON.parse(it.myQuery.nextElementSibling.text);
                             var framedforPure;
@@ -2297,8 +2301,8 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
 				updatePageFormCopies(myquery.parentNode);
 				validateAndCorrectPageForm(myquery.parentNode);
 			    }
-		         /* finishes jsonld.frame callback */
-			);
+					 /* finishes jsonld.frame callback */
+					);
 			}
 			else {
 			    /* finish without frame */
@@ -2329,36 +2333,36 @@ function updateHasRqlQuery(myLink,myQuery,querylang){
     }
 }
 function loadHasJSON(){
-var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
-for (var i=0 ; i<sfigs.length ; i++){
-    if(!sfigs[i].parentNode.parsedJSON){updateHasJSON(sfigs[i])};
-}
-sfigs=getElementsByAttribute(document,'*','property','iridl:hasJSON');
-for (var i=0 ; i<sfigs.length ; i++){
-    if(!sfigs[i].parentNode.parsedJSON){readHasJSON(sfigs[i])};
-}
+    var sfigs=getElementsByAttribute(document,'*','rel','iridl:hasJSON');
+    for (var i=0 ; i<sfigs.length ; i++){
+	if(!sfigs[i].parentNode.parsedJSON){updateHasJSON(sfigs[i])};
+    }
+    sfigs=getElementsByAttribute(document,'*','property','iridl:hasJSON');
+    for (var i=0 ; i<sfigs.length ; i++){
+	if(!sfigs[i].parentNode.parsedJSON){readHasJSON(sfigs[i])};
+    }
 }
 function readfileinto(url,inputelement){
-var xmlhttp= getXMLhttp();
-xmlhttp.infourl=url;
-xmlhttp.inputelement=inputelement;
-xmlhttp.onreadystatechange = function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if(it.readyState == 4){
-    if(it.status == 200){
-	var jsontxt = it.responseText;
-	it.inputelement.value=jsontxt;
-    }
-    else {
-	/* failed */
-	setFailed(it.inputelement, it.status, it.statusText + it.responseText);
-    }
-}
-};
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",xmlhttp.infourl,true);
-xmlhttp.send();
+    var xmlhttp= getXMLhttp();
+    xmlhttp.infourl=url;
+    xmlhttp.inputelement=inputelement;
+    xmlhttp.onreadystatechange = function(evt) {
+	var evt = (evt) ? evt : ((event) ? event : null );
+	var it = (evt.currentTarget) ? evt.currentTarget : this;
+	if(it.readyState == 4){
+	    if(it.status == 200){
+		var jsontxt = it.responseText;
+		it.inputelement.value=jsontxt;
+	    }
+	    else {
+		/* failed */
+		setFailed(it.inputelement, it.status, it.statusText + it.responseText);
+	    }
+	}
+    };
+    xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+    xmlhttp.open("GET",xmlhttp.infourl,true);
+    xmlhttp.send();
 }
 function readHasJSON(myScript){
     var myContext=myScript.parentNode;
@@ -2376,22 +2380,22 @@ function readHasJSON(myScript){
     runPureOnContext(myContext);
     updatePageFormCopies(myContext);
     validateAndCorrectPageForm(myContext);
-/* experimental connected graph support */
+    /* experimental connected graph support */
     refreshConnectedGraphs();
 }
 function refreshConnectedGraphs(evt){
-var graphs = document.getElementsByClassName('connectedgraph');
+    var graphs = document.getElementsByClassName('connectedgraph');
     for (var i=0;i<graphs.length; i++){
 	var graph = graphs[i];
 	var objs = graph.getElementsByClassName('graphobject');
-	    if(objs.length){
-		var tobj = objs[0];
-		if(!tobj.getAttribute('glevel')){
-		    tobj.setAttribute('glevel',0);
-		    graph.setAttribute('glevelmax',0);
-		    }
-		}	
-//initialization loop
+	if(objs.length){
+	    var tobj = objs[0];
+	    if(!tobj.getAttribute('glevel')){
+		tobj.setAttribute('glevel',0);
+		graph.setAttribute('glevelmax',0);
+	    }
+	}	
+	//initialization loop
 	for (var iob=0; iob < objs.length ; iob++){
 	    var tobj = objs[iob];
 	    if(!tobj.getAttribute('glevel')){
@@ -2413,7 +2417,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		tobj.onmouseout=refreshConnectedGraphs;
 	    }
 	}
-// button setup
+	// button setup
 	var canvas = graph.getElementsByTagName('canvas')[0];
 	var ifbut=graph.getElementsByClassName('moreglevelbutton').length;
 	var tlevel = graph.getAttribute('data-glevel');
@@ -2437,12 +2441,12 @@ var graphs = document.getElementsByClassName('connectedgraph');
 		var ref=document.getElementsByTagName('head')[0];
 		ref.appendChild(glevelstyle);
 		if(IE8){
-	    document.styleSheets['glevellimit'].addRule('.var[glevel="' + tlevel + '"]',"display:none");
-		    }
-		    else {
-			glevelstyle.innerHTML = '.var[glevel="' + tlevel + '"]' + "{display:none}\n";
-		    }
+		    document.styleSheets['glevellimit'].addRule('.var[glevel="' + tlevel + '"]',"display:none");
 		}
+		else {
+		    glevelstyle.innerHTML = '.var[glevel="' + tlevel + '"]' + "{display:none}\n";
+		}
+	    }
  	    var gbut = document.createElement('div');
 	    gbut.className='moreglevelbutton oneStep leftarrow';
 	    gbut.onclick  =moreglevelclick;
@@ -2455,7 +2459,7 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	    graph.insertBefore(gbut,canvas);
 	}
 	var forcereflow=graph.offsetHeight;
-// drawing setup
+	// drawing setup
 	if(canvas.getContext){
 	    canvas.width=canvas.clientWidth;
             canvas.height=canvas.clientHeight;
@@ -2466,18 +2470,18 @@ var graphs = document.getElementsByClassName('connectedgraph');
 	    else {
 		ctx = canvas.getContext("2d");
 		canvas.ctx=ctx;
-		}
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-// drawing loop
+	    }
+	    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	    // drawing loop
 	    for (var iob=0; iob < objs.length ; iob++){
-	    var tobj = objs[iob];
+		var tobj = objs[iob];
 
-	    var llist = $(tobj.parentNode).children(".lineset").children("[linefrom]");
-	    for (var iline = 0 ; iline < llist.length ; iline++){
-		var lfrom = llist[iline].getAttribute('linefrom');
-		if(lfrom){
-		    var fobj = document.getElementById(lfrom);
-		    gconnect(canvas,fobj,tobj);
+		var llist = $(tobj.parentNode).children(".lineset").children("[linefrom]");
+		for (var iline = 0 ; iline < llist.length ; iline++){
+		    var lfrom = llist[iline].getAttribute('linefrom');
+		    if(lfrom){
+			var fobj = document.getElementById(lfrom);
+			gconnect(canvas,fobj,tobj);
 		    }
 		}
 	    }
@@ -2485,9 +2489,9 @@ var graphs = document.getElementsByClassName('connectedgraph');
     }
 }
 function highlightConnectedGraphs(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var graphs = document.getElementsByClassName('connectedgraph');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var graphs = document.getElementsByClassName('connectedgraph');
     for (var i=0;i<graphs.length; i++){
 	var graph = graphs[i];
 	var canvas = graph.getElementsByTagName('canvas')[0];
@@ -2533,13 +2537,13 @@ function gconnect(canvas,fobj,tobj){
     }
     else {
 	if(Math.abs(ty-fy)>15){
-	var mx = (tx+fx)/2;
-	var my;
+	    var mx = (tx+fx)/2;
+	    var my;
 	    my = (ty + fy)/2;
-	var toff = 15;
-	var foff = 15;
-	ctx.bezierCurveTo(mx,fy,mx,my,mx,my);
-	ctx.bezierCurveTo(mx,my,mx,ty,tx,ty);
+	    var toff = 15;
+	    var foff = 15;
+	    ctx.bezierCurveTo(mx,fy,mx,my,mx,my);
+	    ctx.bezierCurveTo(mx,my,mx,ty,tx,ty);
 	}
 	else {
 	    ctx.lineTo(tx,ty);
@@ -2548,122 +2552,122 @@ function gconnect(canvas,fobj,tobj){
     ctx.stroke();
 }
 function moreglevelclick(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
 
     var leftarrow = (it.className.indexOf('leftarrow') >= 0);
     if(leftarrow){
 	var tlist = $('.toggle.ui-state-active').click();
     }
 
-   var gmax = parseInt(it.parentNode.getAttribute('glevelmax'));
+    var gmax = parseInt(it.parentNode.getAttribute('glevelmax'));
     var grule;
     var glevelstyle = document.getElementById('glevellimit').sheet;
     if(glevelstyle){
-    if(IE8){
-	grule = glevelstyle.rules[0];
-    }
-    else {
-	grule = glevelstyle.cssRules[0];
-    }
-   var glimit = parseInt(grule.selectorText.replace(/.*glevel="(.*)".*/i,"$1"));
-   var newlimit;
-   if(leftarrow){
-   newlimit = glimit + 1;
-   }
-   else {
-      newlimit = glimit - 1;
-   }
-    if(newlimit <= gmax + 1 && newlimit > 0) {
-	var old = grule.selectorText;
+	if(IE8){
+	    grule = glevelstyle.rules[0];
+	}
+	else {
+	    grule = glevelstyle.cssRules[0];
+	}
+	var glimit = parseInt(grule.selectorText.replace(/.*glevel="(.*)".*/i,"$1"));
+	var newlimit;
+	if(leftarrow){
+	    newlimit = glimit + 1;
+	}
+	else {
+	    newlimit = glimit - 1;
+	}
+	if(newlimit <= gmax + 1 && newlimit > 0) {
+	    var old = grule.selectorText;
 	    grule.selectorText='.var[glevel="' + newlimit + '"]';
 	    if(old == grule.selectorText){
 		document.getElementById('glevellimit').innerHTML='.var[glevel="' + newlimit + '"]{display: none}' + "\n";
 	    }
-    }
-    if(newlimit > gmax) {
-        removeClass(it.parentNode,'aboveLower');
-    }else {
-    appendMissingClass(it.parentNode,'aboveLower');
-    }
-    if(newlimit <= 1) {
-        removeClass(it.parentNode,'belowUpper');
-    } else {
-    appendMissingClass(it.parentNode,'belowUpper');
-    }
+	}
+	if(newlimit > gmax) {
+            removeClass(it.parentNode,'aboveLower');
+	}else {
+	    appendMissingClass(it.parentNode,'aboveLower');
+	}
+	if(newlimit <= 1) {
+            removeClass(it.parentNode,'belowUpper');
+	} else {
+	    appendMissingClass(it.parentNode,'belowUpper');
+	}
     }
     refreshConnectedGraphs();
 }
 
 /* reads JSON file referred to by a link object
-The parent of the link object we call the Context.
-when file is returned, if the url retrieved is still the url that the
-link object points to, stores parsedJSON in the Context,
-and calls runPureOnContext.
- */
+   The parent of the link object we call the Context.
+   when file is returned, if the url retrieved is still the url that the
+   link object points to, stores parsedJSON in the Context,
+   and calls runPureOnContext.
+*/
 function updateHasJSON(myLink){
-var xmlhttp= getXMLhttp();
-var localurl = localHrefOf(myLink.href);
-if(myLink.href && myLink.localurl != localurl){
-    relStartLoading(myLink);
-    clearFailed(myLink);
-myLink.localurl = localurl;
-xmlhttp.infourl = localurl;
-xmlhttp.myContext = myLink.parentNode;
-xmlhttp.myLink=myLink;
-changeClassWithin(myLink.parentNode,'valid','invalid');
-xmlhttp.onreadystatechange = function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if(it.readyState == 4){
-    if(it.status == 200){
-	var jsontxt = it.responseText;
-	var jsonparser=it.myLink.getAttribute('data-parser');
-	if(jsonparser){
-	    var expr = jsonparser + '(jsontxt);';
-	    jsontxt=eval(expr);
-	}
-	if(it.myLink.localurl == it.infourl){
-	    var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
-	    if(dumpelement.length > 0){dumpelement[0].innerHTML=jsontxt;}
-	    var qid = (it.myLink.id) ? it.myLink.id : it.myLink.getAttribute('data-id');
-	    if(qid){
-		if(!it.myContext.parsedJSON){
-		    it.myContext.parsedJSON = {};
+    var xmlhttp= getXMLhttp();
+    var localurl = localHrefOf(myLink.href);
+    if(myLink.href && myLink.localurl != localurl){
+	relStartLoading(myLink);
+	clearFailed(myLink);
+	myLink.localurl = localurl;
+	xmlhttp.infourl = localurl;
+	xmlhttp.myContext = myLink.parentNode;
+	xmlhttp.myLink=myLink;
+	changeClassWithin(myLink.parentNode,'valid','invalid');
+	xmlhttp.onreadystatechange = function(evt) {
+	    var evt = (evt) ? evt : ((event) ? event : null );
+	    var it = (evt.currentTarget) ? evt.currentTarget : this;
+	    if(it.readyState == 4){
+		if(it.status == 200){
+		    var jsontxt = it.responseText;
+		    var jsonparser=it.myLink.getAttribute('data-parser');
+		    if(jsonparser){
+			var expr = jsonparser + '(jsontxt);';
+			jsontxt=eval(expr);
+		    }
+		    if(it.myLink.localurl == it.infourl){
+			var dumpelement=getElementsByAttribute(it.myContext,'*','property','iridl:JsonAsText');
+			if(dumpelement.length > 0){dumpelement[0].innerHTML=jsontxt;}
+			var qid = (it.myLink.id) ? it.myLink.id : it.myLink.getAttribute('data-id');
+			if(qid){
+			    if(!it.myContext.parsedJSON){
+				it.myContext.parsedJSON = {};
+			    }
+			    it.myContext.parsedJSON[qid]=JSON.parse(jsontxt);
+			}
+			else {
+			    it.myContext.parsedJSON=JSON.parse(jsontxt);
+			}
+			relStopLoading(it.myLink);
+			runPureOnContext(it.myContext);
+			updatePageFormCopies(it.myContext);
+			validateAndCorrectPageForm(it.myContext);
+		    }
 		}
-		it.myContext.parsedJSON[qid]=JSON.parse(jsontxt);
+		else {
+		    /* failed */
+		    relStopLoading(it.myLink);
+		    setFailed(it.myLink, it.status, it.statusText + it.responseText);
+		}
 	    }
-	    else {
-		it.myContext.parsedJSON=JSON.parse(jsontxt);
-	    }
-	    relStopLoading(it.myLink);
-	    runPureOnContext(it.myContext);
-	    updatePageFormCopies(it.myContext);
-	    validateAndCorrectPageForm(it.myContext);
-	}
+	};
+	xmlhttp.myevtfn=xmlhttp.onreadystatechange;
+	xmlhttp.open("GET",xmlhttp.infourl,true);
+	xmlhttp.send();
     }
-    else {
-	/* failed */
-	relStopLoading(it.myLink);
-	setFailed(it.myLink, it.status, it.statusText + it.responseText);
-    }
-}
-};
-xmlhttp.myevtfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",xmlhttp.infourl,true);
-xmlhttp.send();
-}
 }
 /*
-runs pure on what I am calling a context.  It only runs on elements
-within the context which have a class that matches the directive element (default value "template" if no directive element).
+  runs pure on what I am calling a context.  It only runs on elements
+  within the context which have a class that matches the directive element (default value "template" if no directive element).
 
-Because this can be called more than once, I use the compile/render
-form of pure.
+  Because this can be called more than once, I use the compile/render
+  form of pure.
 
-Note that you can now explicitly set the template, called a 'directive' by PURE,
-by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
- */
+  Note that you can now explicitly set the template, called a 'directive' by PURE,
+  by using a script type="application/json" property="iridl:hasPUREdirective" in your context.
+*/
 var contextcount=0;
 function runPureOnContext(myContext){
     if(!myContext.byDirective){
@@ -2681,7 +2685,7 @@ function runPureOnContext(myContext){
 	        if(myscript.parentNode == myContext){
 		    doDefaultScript=false;
                     var holdtxt = myscript.text;
-		   var mystuff = {};
+		    var mystuff = {};
 		    mystuff.pureDirective="";
 		    if(holdtxt){
 			var directive;
@@ -2709,18 +2713,18 @@ function runPureOnContext(myContext){
 	    }
 	}
 	if(doDefaultScript){
-	/* does default single directive or not*/
+	    /* does default single directive or not*/
 	    myContext.byDirective[0]={};
 	    myContext.byDirective[0].pureDirective=myContext.pureDirective;
 	    if(myContext.pureTemplateClass){
-	    	    myContext.byDirective[0].pureTemplateClass=myContext.pureTemplateClass;
-		    }
+	    	myContext.byDirective[0].pureTemplateClass=myContext.pureTemplateClass;
+	    }
 	    else if(myContext.getAttribute('data-hasTemplate')){
-	    	    myContext.byDirective[0].pureTemplateClass=myContext.getAttribute('data-hasTemplate');
-		}
-		    else {
-	    	    myContext.byDirective[0].pureTemplateClass='template';
-		    }
+	    	myContext.byDirective[0].pureTemplateClass=myContext.getAttribute('data-hasTemplate');
+	    }
+	    else {
+	    	myContext.byDirective[0].pureTemplateClass='template';
+	    }
 	}
 	/* finds templates for each directive */
 	var mydirs = myContext.byDirective;
@@ -2764,122 +2768,122 @@ function runPureOnContext(myContext){
     }
     setupPageFormLinks(myContext);
     changeClassWithin(myContext,'invalid','valid');
-	    updateLangGroups(myContext);
+    updateLangGroups(myContext);
     var forcereflow=myContext.offsetHeight;
 }
 function enhancedPureDirective(directivestring,myDirective){
     var cleanstring = decodeXML(directivestring);
     var directive = JSON.parse(cleanstring);
     var newdirective = transformObject(directive,mapObject,myDirective);
-	directive=newdirective;
+    directive=newdirective;
     return directive;
 }
 function transformObject(object,func,myDirective){
     var newobj = {};
     for (var key in object ){
 	var newval = func(object[key],key,myDirective);
-	    newobj[key]=newval;
+	newobj[key]=newval;
     }
     return newobj;
 }
 function mapObject (obj,key,myDirective){
-	var newobj = obj;
-	var findlg=new RegExp('([^"]*).iridl:asLangGroup');
-	var findrc=new RegExp('([^".]*)[.]([^".]*).iridl:recurse');
-	var findfl=new RegExp('([^"]*).iridl:firstLetter');
-	var findcnt=new RegExp('([^"]*).iridl:length');
-	if(typeof(obj) == 'object'){
-	    newobj = transformObject(obj,mapObject,myDirective);
-	}
-        if(key=='sort'){
-	    var sortvar = obj;
-	    newobj = function(a,b){
-		var mysortvar = sortvar;
-		var ret;
-		var sa,sb;
-		if(sortvar == '.'){
-		    sa = a;
-		    sb = b;
-		}
-		else {
-		    sa = a[sortvar];
-		    if(typeof(sa) == 'object' && sa.length){
-/* sa is an array -- could be strings or objects */
-			if(typeof(sa[sa.length-1]) == 'object' && sa.length > 1){
-			    var sanew = sa[0];
-/* array of objects -- look for current language if possible*/
-			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
-			    if(clang){
-				for(var ilang=0; ilang < sa.length; ilang++){
-				    if(sa[ilang]['@language'] == clang){
-					sanew = sa[ilang];
-					break;
-				    }
+    var newobj = obj;
+    var findlg=new RegExp('([^"]*).iridl:asLangGroup');
+    var findrc=new RegExp('([^".]*)[.]([^".]*).iridl:recurse');
+    var findfl=new RegExp('([^"]*).iridl:firstLetter');
+    var findcnt=new RegExp('([^"]*).iridl:length');
+    if(typeof(obj) == 'object'){
+	newobj = transformObject(obj,mapObject,myDirective);
+    }
+    if(key=='sort'){
+	var sortvar = obj;
+	newobj = function(a,b){
+	    var mysortvar = sortvar;
+	    var ret;
+	    var sa,sb;
+	    if(sortvar == '.'){
+		sa = a;
+		sb = b;
+	    }
+	    else {
+		sa = a[sortvar];
+		if(typeof(sa) == 'object' && sa.length){
+		    /* sa is an array -- could be strings or objects */
+		    if(typeof(sa[sa.length-1]) == 'object' && sa.length > 1){
+			var sanew = sa[0];
+			/* array of objects -- look for current language if possible*/
+			var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
+			if(clang){
+			    for(var ilang=0; ilang < sa.length; ilang++){
+				if(sa[ilang]['@language'] == clang){
+				    sanew = sa[ilang];
+				    break;
 				}
 			    }
-			    sa = sanew;
 			}
-			else {
-			    sa = sa[0];
-			}
+			sa = sanew;
+		    }
+		    else {
+			sa = sa[0];
+		    }
 
-		    }
-/* if sa is an object, look for a @value attribute */
-		    if (typeof(sa) == 'object' && sa['@value']){
-			sa = sa['@value'];
-		    }
-/* same processing for sb */
-		    sb = b[sortvar];
-		    if(typeof(sb) == 'object' && sb.length){
-			if(typeof(sb[sb.length-1]) == 'object' && sb.length > 1){
-			    var sbnew = sb[0];
-/* array of objects -- look for current language if possible*/
-			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
-			    if(clang){
-				for(var ilang=0; ilang < sb.length; ilang++){
-				    if(sb[ilang]['@language'] == clang){
-					sbnew = sb[ilang];
-					break;
-				    }
+		}
+		/* if sa is an object, look for a @value attribute */
+		if (typeof(sa) == 'object' && sa['@value']){
+		    sa = sa['@value'];
+		}
+		/* same processing for sb */
+		sb = b[sortvar];
+		if(typeof(sb) == 'object' && sb.length){
+		    if(typeof(sb[sb.length-1]) == 'object' && sb.length > 1){
+			var sbnew = sb[0];
+			/* array of objects -- look for current language if possible*/
+			var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
+			if(clang){
+			    for(var ilang=0; ilang < sb.length; ilang++){
+				if(sb[ilang]['@language'] == clang){
+				    sbnew = sb[ilang];
+				    break;
 				}
 			    }
-			    sb = sbnew;
 			}
-			else {
-			    sb = sb[0];
-			}
+			sb = sbnew;
 		    }
-		    if (typeof(sb) == 'object' && sb['@value']){
-			sb = sb['@value'];
+		    else {
+			sb = sb[0];
 		    }
 		}
-		if(!sa){
-		    return -1
+		if (typeof(sb) == 'object' && sb['@value']){
+		    sb = sb['@value'];
 		}
-		else if (!sb){
-		    return 1}
-		else {
-		    return removeDiacritics(sa.toLowerCase()) > removeDiacritics(sb.toLowerCase()) ? 1 : -1;
-		}
-	    };
-	}
-	else if(typeof(obj) == 'string'){
-	    var res = findlg.exec(obj);
-	    if(res){
-		var localref=res[1];
-		newobj = function(arg){
-		    var local=localref; 
-		    var ret; 
+	    }
+	    if(!sa){
+		return -1
+	    }
+	    else if (!sb){
+		return 1}
+	    else {
+		return removeDiacritics(sa.toLowerCase()) > removeDiacritics(sb.toLowerCase()) ? 1 : -1;
+	    }
+	};
+    }
+    else if(typeof(obj) == 'string'){
+	var res = findlg.exec(obj);
+	if(res){
+	    var localref=res[1];
+	    newobj = function(arg){
+		var local=localref; 
+		var ret; 
 
-		    var mycontid = local.substr(1+local.indexOf('.'));
-		    var contidlist = mycontid.split(".");
-		    var mycont = arg.item;
-		    for (var i=0 ; i < contidlist.length ; i++) {
-                        if (mycont) {
+		var mycontid = local.substr(1+local.indexOf('.'));
+		var contidlist = mycontid.split(".");
+		var mycont = arg.item;
+		for (var i=0 ; i < contidlist.length ; i++) {
+                    if (mycont) {
 			mycont = mycont[contidlist[i]];
-			}
 		    }
-		    if(mycont && mycont.sort){
+		}
+		if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
 			if(typeof(a) == 'string' || !a['@language']){
 			    return 1;
@@ -2895,21 +2899,21 @@ function mapObject (obj,key,myDirective){
 				return -1;
 			    }
 			}
-});
-		    };	
-		    if(!mycont){
-			ret='';
-		    }
-		    else if(typeof(mycont)=='string' || mycont['@value']){
-			var entry=mycont;
-			if(typeof(entry)=='object'){
+		    });
+		};	
+		if(!mycont){
+		    ret='';
+		}
+		else if(typeof(mycont)=='string' || mycont['@value']){
+		    var entry=mycont;
+		    if(typeof(entry)=='object'){
 			ret = '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
-			}
-			else {
-			    ret= '<span lang="">' + entry + '</span>' ;
-			}
 		    }
 		    else {
+			ret= '<span lang="">' + entry + '</span>' ;
+		    }
+		}
+		else {
 		    ret='';
 		    if(mycont.length > 1){
 			ret = '<span class="langgroup">';
@@ -2917,7 +2921,7 @@ function mapObject (obj,key,myDirective){
 		    for (var i = 0 ; i < mycont.length ; i++){
 			var entry = mycont[i];
 			if(typeof(entry)=='object'){
-			ret += '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
+			    ret += '<span lang="' + entry['@language'] + '">' + entry['@value'] + '</span>'; 
 			}
 			else {
 			    ret+= '<span lang="">' + entry + '</span>' ;
@@ -2926,45 +2930,45 @@ function mapObject (obj,key,myDirective){
 		    if(mycont.length > 1){
 			ret += '</span>';
 		    }
-		    }
-		    return ret}; 
-	    }
-	    if(res = findcnt.exec(obj)){
-		var localref=res[1];
-		newobj = function(arg){
-		    var local=localref; 
-		    var ret; 
+		}
+		return ret}; 
+	}
+	if(res = findcnt.exec(obj)){
+	    var localref=res[1];
+	    newobj = function(arg){
+		var local=localref; 
+		var ret; 
 
-		    var mycontid = local.substr(1+local.indexOf('.'));
-		    var contidlist = mycontid.split(".");
-		    var mycont = arg.context;
-		    if(arg.item){mycont=arg.item};
-		    for (var i=0 ; i < contidlist.length ; i++) {
-                        if (mycont) {
+		var mycontid = local.substr(1+local.indexOf('.'));
+		var contidlist = mycontid.split(".");
+		var mycont = arg.context;
+		if(arg.item){mycont=arg.item};
+		for (var i=0 ; i < contidlist.length ; i++) {
+                    if (mycont) {
 			mycont = mycont[contidlist[i]];
-			}
-		    }
-		    if(mycont){
-		    ret = mycont.length;
-		    }
-		    return ret;
 		    }
 		}
-	    if(res = findfl.exec(obj)){
-		var localref=res[1];
-		newobj = function(arg){
-		    var local=localref; 
-		    var ret; 
+		if(mycont){
+		    ret = mycont.length;
+		}
+		return ret;
+	    }
+	}
+	if(res = findfl.exec(obj)){
+	    var localref=res[1];
+	    newobj = function(arg){
+		var local=localref; 
+		var ret; 
 
-		    var mycontid = local.substr(1+local.indexOf('.'));
-		    var contidlist = mycontid.split(".");
-		    var mycont = arg.item;
-		    for (var i=0 ; i < contidlist.length ; i++) {
-                        if (mycont) {
+		var mycontid = local.substr(1+local.indexOf('.'));
+		var contidlist = mycontid.split(".");
+		var mycont = arg.item;
+		for (var i=0 ; i < contidlist.length ; i++) {
+                    if (mycont) {
 			mycont = mycont[contidlist[i]];
-			}
 		    }
-		    if(mycont && mycont.sort){
+		}
+		if(mycont && mycont.sort){
 		    mycont.sort(function(a,b){
 			if(typeof(a) == 'string' || !a['@language']){
 			    return 1;
@@ -2980,20 +2984,20 @@ function mapObject (obj,key,myDirective){
 				return -1;
 			    }
 			}
-});
-		    };	
-		    if(!mycont){
-			ret='';
+		    });
+		};	
+		if(!mycont){
+		    ret='';
+		}
+		else{
+		    var entry;
+		    if(!mycont.length){
+			entry=mycont;
 		    }
-		    else{
-			var entry;
-			if(!mycont.length){
-			    entry=mycont;
-			}
-			else {
-			    entry=mycont[0];
+		    else {
+			entry=mycont[0];
 			if(typeof(mycont[mycont.length-1]) == 'object' && mycont.length > 1){
-/* array of objects -- look for current language if possible*/
+			    /* array of objects -- look for current language if possible*/
 			    var clang=document.getElementsByTagName('body')[0].getAttribute("lang");
 			    if(clang){
 				for(var ilang=0; ilang < mycont.length; ilang++){
@@ -3005,42 +3009,42 @@ function mapObject (obj,key,myDirective){
 			    }
 			}
 
-			}
-			if(typeof(entry)=='object'){
-			    ret = removeDiacritics(entry['@value'].substr(0,1).toLowerCase()); 
-			}
-			else {
-			    ret= removeDiacritics(entry.substr(0,1).toLowerCase());
-			}
 		    }
-		    return ret;
-		}; 
-	    }
-	    if (res = findrc.exec(obj)){
-		var localref=res[1];
-		var localloopon=res[2];
-		var myd = myDirective;
-		newobj = function(arg){
-		    var local=localref;
-		    var loopon=localloopon;
-		    var context=myd;
-		    var ret='';
-		    if(context.pureFunction){
-			var myfunc = context.pureFunction;
-			if(arg[local] && arg[local].item && arg[local].item[loopon]){
-			    ret = myfunc(arg[local].item);
-			    var el = document.createElement('div');
-			    el.innerHTML=ret;
-			    ret=el.firstChild.innerHTML;
-			}
+		    if(typeof(entry)=='object'){
+			ret = removeDiacritics(entry['@value'].substr(0,1).toLowerCase()); 
 		    }
-		    return ret;
-		};
-	    }
-
+		    else {
+			ret= removeDiacritics(entry.substr(0,1).toLowerCase());
+		    }
+		}
+		return ret;
+	    }; 
 	}
-	return newobj;
+	if (res = findrc.exec(obj)){
+	    var localref=res[1];
+	    var localloopon=res[2];
+	    var myd = myDirective;
+	    newobj = function(arg){
+		var local=localref;
+		var loopon=localloopon;
+		var context=myd;
+		var ret='';
+		if(context.pureFunction){
+		    var myfunc = context.pureFunction;
+		    if(arg[local] && arg[local].item && arg[local].item[loopon]){
+			ret = myfunc(arg[local].item);
+			var el = document.createElement('div');
+			el.innerHTML=ret;
+			ret=el.firstChild.innerHTML;
+		    }
+		}
+		return ret;
+	    };
+	}
+
     }
+    return newobj;
+}
 function validate(context,vid){
 }
 function invalidate(context,vid){
@@ -3060,11 +3064,11 @@ function clearFailed(cmem){
 	mybody.removeAttribute('failed');
     }
 }
-    function setFailed(cmem,scode,msg){
-	if(scode){
-	    cmem.setAttribute('failcode',scode);
-	    cmem.setAttribute('failmsg',msg);
-	}
+function setFailed(cmem,scode,msg){
+    if(scode){
+	cmem.setAttribute('failcode',scode);
+	cmem.setAttribute('failmsg',msg);
+    }
     if(appendMissingClass(cmem,'failed')){
 	var mybody = document.getElementsByTagName('body')[0];
 	var cnt = parseInt(mybody.getAttribute('failed'));
@@ -3081,7 +3085,7 @@ function clearFailed(cmem){
 function relStartLoading(link){
     myContext = link.parentNode;
     if(appendMissingClass(link,'loading')){
-/* set loading in context */
+	/* set loading in context */
 	if(myContext.loading && myContext.loading > 0){
 	    myContext.loading = myContext.loading + 1;
 	}
@@ -3089,7 +3093,7 @@ function relStartLoading(link){
 	    myContext.loading = 1;
 	    appendMissingClass(myContext,'loading');
 	}
-/* set loading on body */
+	/* set loading on body */
 	var mybody = document.getElementsByTagName('body')[0];
 	var cnt = parseInt(mybody.getAttribute('loading'));
 	if(cnt){
@@ -3125,95 +3129,91 @@ function relStopLoading(link){
 	removeClass(myContext,'loading');
     }
 }
+
 function initializeDLimage(){
     var mylist=document.getElementsByClassName("dlimage");
-for( var idlimage=0 ; idlimage < mylist.length ; idlimage++){
-var s = mylist[idlimage];
-var sl = s.getElementsByTagName('legend');
-var leg;
-var ctl;
-var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    appendMissingClass(s,'hasFigure');
+    for( var idlimage=0 ; idlimage < mylist.length ; idlimage++){
+
+        var hasGMap = (mylist[idlimage].getElementsByClassName("dlimgGMap").length > 0);
+	var s = mylist[idlimage];
+	var sl = s.getElementsByTagName('legend');
+	var leg;
+	var ctl;
+	var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
+	if(sfigs.length){
+	    appendMissingClass(s,'hasFigure');
+	}
+	if(!sl.length){
+	    leg=document.createElement('legend');
+	    leg.className='imagecontrols';
+	    /* zoom info settings layers only if hasFigure */
+	    if(sfigs.length){
+		ctl=document.createElement('div');
+		ctl.className="dlimagecontrol zoomout";
+		ctl.title="Zoom Out";
+		ctl.onclick=dozoomout;
+		ctl.myonclick=dozoomout;
+		leg.appendChild(ctl);
+		ctl=document.createElement('div');
+		ctl.className="dlimagecontrol info";
+		ctl.title="More Information";
+		ctl.onclick=doinfobutton;
+		ctl.myonclick=doinfobutton;
+		leg.appendChild(ctl);
+		ctl=document.createElement('div');
+		ctl.className="dlimagecontrol settings ivarswitch";
+		ctl.title="Independent Variables";
+		ctl.onclick=dosettingsbutton;
+		ctl.myonclick=dosettingsbutton;
+		leg.appendChild(ctl);
+
+                if (!hasGMap) {
+		   ctl=document.createElement('div');
+		   ctl.className="dlimagecontrol layers";
+		   ctl.title="Layers";
+		   ctl.onclick=dolayersbutton;
+		   ctl.myonclick=dolayersbutton;
+		   leg.appendChild(ctl);
+                }
+
+		if(s.className.indexOf('NoDefaultIvars')<0){
+		    appendMissingClass(s,'ShowControlIvars');
+		}
+	    }
+	    /* share download buttons always appear */
+	    ctl=document.createElement('div');
+	    ctl.className="dlimagecontrol share";
+	    ctl.title="Share";
+	    ctl.onclick=dosharebutton;
+	    ctl.myonclick=dosharebutton;
+	    leg.appendChild(ctl);
+	    ctl=document.createElement('div');
+	    ctl.className="dlimagecontrol download";
+	    ctl.title="Download";
+	    ctl.onclick=dodownloadbutton;
+	    ctl.myonclick=dodownloadbutton;
+	    leg.appendChild(ctl);
+	    ctl=document.createElement('div');
+	    ctl.className="dlimageswitch";
+	    ctl.title="Control Lock";
+	    ctl.onclick=docontrollockbutton;
+	    ctl.myonclick=docontrollockbutton;
+	    leg.appendChild(ctl);
+	    s.insertBefore(leg,s.firstChild);
+	}
+	else {
+	    leg=sl[0];
+	}
+	var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
+	if(sfigs.length){
+	    updateHasFigure(sfigs[0]);
+	}
+	else {
+	    DLimageBuildControls(s);
+	}
+    }
 }
-if(!sl.length){
-leg=document.createElement('legend');
-leg.className='imagecontrols';
-/* var ctl=document.createElement('img');
-ctl.className="dlimagecontrol";
-ctl.width="13";
-ctl.height="13";
-ctl.border="0";
-ctl.hspace="2";
-ctl.vspace="2";
-ctl.src="http://iridl.ldeo.columbia.edu/icons/RedrawButton.jpg";
-ctl.title="Redraw";
-ctl.onclick=doredrawbutton;
-leg.appendChild(ctl);
-*/
-/* zoom info settings layers only if hasFigure */
-if(sfigs.length){
-ctl=document.createElement('div');
-ctl.className="dlimagecontrol zoomout";
-ctl.title="Zoom Out";
-ctl.onclick=dozoomout;
-ctl.myonclick=dozoomout;
-leg.appendChild(ctl);
- ctl=document.createElement('div');
-ctl.className="dlimagecontrol info";
-ctl.title="More Information";
-ctl.onclick=doinfobutton;
-ctl.myonclick=doinfobutton;
-leg.appendChild(ctl);
-ctl=document.createElement('div');
-ctl.className="dlimagecontrol settings ivarswitch";
-ctl.title="Independent Variables";
-ctl.onclick=dosettingsbutton;
-ctl.myonclick=dosettingsbutton;
-leg.appendChild(ctl);
-ctl=document.createElement('div');
-ctl.className="dlimagecontrol layers";
-ctl.title="Layers";
-ctl.onclick=dolayersbutton;
-ctl.myonclick=dolayersbutton;
-leg.appendChild(ctl);
-if(s.className.indexOf('NoDefaultIvars')<0){
-appendMissingClass(s,'ShowControlIvars');
-}
-}
-/* share download buttons always appear */
-ctl=document.createElement('div');
-ctl.className="dlimagecontrol share";
-ctl.title="Share";
-ctl.onclick=dosharebutton;
-ctl.myonclick=dosharebutton;
-leg.appendChild(ctl);
-ctl=document.createElement('div');
-ctl.className="dlimagecontrol download";
-ctl.title="Download";
-ctl.onclick=dodownloadbutton;
-ctl.myonclick=dodownloadbutton;
-leg.appendChild(ctl);
-ctl=document.createElement('div');
-ctl.className="dlimageswitch";
-ctl.title="Control Lock";
-ctl.onclick=docontrollockbutton;
-ctl.myonclick=docontrollockbutton;
-leg.appendChild(ctl);
-s.insertBefore(leg,s.firstChild);
-}
-else {
-leg=sl[0];
-}
-var sfigs=getElementsByAttribute(s,'*','rel','iridl:hasFigure');
-if(sfigs.length){
-    updateHasFigure(sfigs[0]);
-}
-else {
-DLimageBuildControls(s);
-}
-}
-}
+
 function updateHasFigure(myfig){
     var newinfourl = myfig.href;
     var lastslashindex = newinfourl.lastIndexOf('/');
@@ -3222,78 +3222,84 @@ function updateHasFigure(myfig){
     if(myfig.href.indexOf('?')>0){
 	newinfourl=myfig.href.substr(0,myfig.href.indexOf('?')) + 'info.json' + myfig.href.substr(myfig.href.indexOf('?'));
     }
-if(!myfig.info || myfig.infourl != newinfourl){
-    if(myfig.info){
-	DLimageRemoveControls(myfig);
-    }
-myfig.info="seeking";
-var s=myfig.parentNode;
-var figurl=myfig.href;
-var infourl=newinfourl;
-var xmlhttp= getXMLhttp();
-xmlhttp.mylink=myfig;
-xmlhttp.infourl=infourl;
-var imglist=s.getElementsByTagName('img');
-for (var i = 0; i<imglist.length; i++){
-    if(imglist[i].className.indexOf('dlimg')>-1){
-myfig.figureimage=imglist[i];
-myfig.figureimage.mylink=xmlhttp.mylink;
-/* sets the infourl so that we know what we are "seeking" */
-myfig.infourl=infourl;
-break;
-}
-}
-xmlhttp.onreadystatechange= function(evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-if(it.readyState == 4){
-var jsontxt = it.responseText;
-/* checks the infourl so that we know we have the current json */
-    if(it.mylink.infourl==it.infourl){
-it.mylink.info=JSON.parse(jsontxt);
-/* info now has figure information */
-DLimageBuildControls(it.mylink.parentNode,it.mylink);
-DLimageBuildZoom(it.mylink);
-    }
-}
-	 };
-	 xmlhttp.myfn=xmlhttp.onreadystatechange;
-xmlhttp.open("GET",infourl,true);
-xmlhttp.send();
-DLimageResizeImage(xmlhttp.mylink);
-}
-}
-function dozoomout (evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-   var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-    var myclasses = mylink[0].figureimage.className;
-var myform=document.getElementById('pageform');
-if(myform){
-var myin = myform.elements['region'];
-if(myin){
-myin.value='';
-}
-myin = myform.elements['clickpt'];
-if(myin){
-myin.value='';
-}
-myin = myform.elements['bbox'];
-if(myin){
-    if(myin.length){
-	for (var i = 0;i < myin.length;i++){
-	    if(matchToken(myin[i].className,myclasses)){
-		myin[i].value='';
+    if(!myfig.info || myfig.infourl != newinfourl){
+	if(myfig.info){
+	    DLimageRemoveControls(myfig);
+	}
+	myfig.info="seeking";
+	var s=myfig.parentNode;
+	var figurl=myfig.href;
+	var infourl=newinfourl;
+	var xmlhttp= getXMLhttp();
+	xmlhttp.mylink=myfig;
+	xmlhttp.infourl=infourl;
+	var imglist=s.getElementsByTagName('img');
+	for (var i = 0; i<imglist.length; i++){
+	    if(imglist[i].className.indexOf('dlimg')>-1){
+		myfig.figureimage=imglist[i];
+		myfig.figureimage.mylink=xmlhttp.mylink;
+		/* sets the infourl so that we know what we are "seeking" */
+		myfig.infourl=infourl;
 		break;
 	    }
 	}
+	xmlhttp.onreadystatechange= function(evt) {
+	    var evt = (evt) ? evt : ((event) ? event : null );
+	    var it = (evt.currentTarget) ? evt.currentTarget : this;
+	    if(it.readyState == 4){
+		var jsontxt = it.responseText;
+		/* checks the infourl so that we know we have the current json */
+		if(it.mylink.infourl==it.infourl){
+		    it.mylink.info=JSON.parse(jsontxt);
+		    /* info now has figure information */
+		    DLimageBuildControls(it.mylink.parentNode,it.mylink);
+		    DLimageBuildZoom(it.mylink);
+		}
+	    }
+	};
+	xmlhttp.myfn=xmlhttp.onreadystatechange;
+	xmlhttp.open("GET",infourl,true);
+	xmlhttp.send();
+	DLimageResizeImage(xmlhttp.mylink);
     }
-    else {
-myin.value='';
+}
+function dozoomout (evt) {
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+
+    var myclasses = mylink[0].figureimage.className;
+    var myform=document.getElementById('pageform');
+    if(myform){
+        var gs = it.parentNode.parentNode.getElementsByClassName('dlimgGMap');
+        if (gs && gs.length==1) {
+           resetGMap(gmaps[ gs[0].id ]);
+        }
+    
+	var myin = myform.elements['region'];
+	if(myin){
+	    myin.value='';
+	}
+	myin = myform.elements['clickpt'];
+	if(myin){
+	    myin.value='';
+	}
+	myin = myform.elements['bbox'];
+	if(myin){
+	    if(myin.length){
+		for (var i = 0;i < myin.length;i++){
+		    if(matchToken(myin[i].className,myclasses)){
+			myin[i].value='';
+			break;
+		    }
+		}
+	    }
+	    else {
+		myin.value='';
+	    }
+	    updatePageForm();
+	}
     }
-updatePageForm();
-}
-}
 }
 function matchToken(astring,bstring){
     var alist = astring.split(' ');
@@ -3308,25 +3314,25 @@ function matchToken(astring,bstring){
     return false;
 }
 function clearregionwithin () {
-var myform=document.getElementById('pageform');
-if(myform){
-    var myin;
-myin = myform.elements['clickpt'];
-if(myin){
-myin.value='';
-}
-myin = myform.elements['region'];
-var mybbox = myform.elements['bbox'];
-if(myin && mybbox){
-    if(mybbox.length){
-    myin.value=mybbox[0].value;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var myin;
+	myin = myform.elements['clickpt'];
+	if(myin){
+	    myin.value='';
+	}
+	myin = myform.elements['region'];
+	var mybbox = myform.elements['bbox'];
+	if(myin && mybbox){
+	    if(mybbox.length){
+		myin.value=mybbox[0].value;
+	    }
+	    else {
+		myin.value=mybbox.value;
+	    }
+	    updatePageForm();
+	}
     }
-    else {
-    myin.value=mybbox.value;
-    }
-updatePageForm();
-}
-}
 }
 function setbbox (newbbox,myinfo,myclasses) {
     var update=false;
@@ -3471,7 +3477,7 @@ function setbbox (newbbox,myinfo,myclasses) {
 				    }
 				    else {
 					myin.value=result["value"];
-	
+					
 					updatePageForm(undefined,undefined,undefined,it.historyid);
 				    }
 				}
@@ -3572,7 +3578,7 @@ function setbbox (newbbox,myinfo,myclasses) {
 		}
 	    }
 	}
-    
+	
 	if(update){
 	    updatePageForm(undefined,undefined,undefined,historyid);
 	}
@@ -3588,119 +3594,119 @@ function parseBbox(bboxstr){
 	mybbox[3] = parseFloat(mybbox[3]);
     }
     else {
-mybbox=JSON.parse(bboxstr);
+	mybbox=JSON.parse(bboxstr);
     }
     return mybbox;
 }
 function getbbox (myinfo,myclasses) {
-var mybbox;
-var myform=document.getElementById('pageform');
-if(myform){
-var myin = myform.elements['bbox'];
-/* parses a non-blank bounding box */
-if(myin){
-    if(myin.length){
-	for (var i = 0;i < myin.length;i++){
-	    if(matchToken(myin[i].className,myclasses)){
-		if(myin[i].value){
-		    mybbox=parseBbox(myin[i].value);
+    var mybbox;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var myin = myform.elements['bbox'];
+	/* parses a non-blank bounding box */
+	if(myin){
+	    if(myin.length){
+		for (var i = 0;i < myin.length;i++){
+		    if(matchToken(myin[i].className,myclasses)){
+			if(myin[i].value){
+			    mybbox=parseBbox(myin[i].value);
+			}
+			break;
+		    }
 		}
-		break;
+	    }
+	    else {
+		if(myin.value){
+		    mybbox=parseBbox(myin.value);
+		}
 	    }
 	}
     }
-    else {
-	if(myin.value){
-	    mybbox=parseBbox(myin.value);
+    if(!mybbox){
+	var X0,X1,Y0,Y1;
+	if(typeof(myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]) != 'undefined'){
+	    var Xare = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["@type"];
+	    var Yare = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["@type"];
+	    if(Xare == 'iridl:EvenGridEdges'){
+		X0 = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
+		X1 = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:last"];
+	    }
+	    if(Xare == 'iridl:CenterValues'){
+		X0 = myinfo["iridl:hasAbscissa"]["iridl:plotfirst"];
+		X1 = myinfo["iridl:hasAbscissa"]["iridl:plotlast"];
+	    }
+	    if(Yare == 'iridl:EvenGridEdges'){
+		Y0 = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+		Y1 = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:last"];
+	    }
+	    if(Yare == 'iridl:CenterValues'){
+		Y0 = myinfo["iridl:hasOrdinate"]["iridl:plotfirst"];
+		Y1 = myinfo["iridl:hasOrdinate"]["iridl:plotlast"];
+	    }
 	}
+	else {
+	    X0 = myinfo["iridl:hasAbscissa"]["iridl:plotfirst"];
+	    X1 = myinfo["iridl:hasAbscissa"]["iridl:plotlast"];
+	    Y0 = myinfo["iridl:hasOrdinate"]["iridl:plotfirst"];
+	    Y1 = myinfo["iridl:hasOrdinate"]["iridl:plotlast"];
+	}
+	mybbox=[X0,Y0,X1,Y1,true];
     }
-}
-}
-if(!mybbox){
-var X0,X1,Y0,Y1;
-if(typeof(myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]) != 'undefined'){
-var Xare = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["@type"];
-var Yare = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["@type"];
-if(Xare == 'iridl:EvenGridEdges'){
-X0 = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
-X1 = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:last"];
-}
-if(Xare == 'iridl:CenterValues'){
-X0 = myinfo["iridl:hasAbscissa"]["iridl:plotfirst"];
-X1 = myinfo["iridl:hasAbscissa"]["iridl:plotlast"];
-}
-if(Yare == 'iridl:EvenGridEdges'){
-Y0 = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
-Y1 = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:last"];
-}
-if(Yare == 'iridl:CenterValues'){
-Y0 = myinfo["iridl:hasOrdinate"]["iridl:plotfirst"];
-Y1 = myinfo["iridl:hasOrdinate"]["iridl:plotlast"];
-}
-}
-    else {
-X0 = myinfo["iridl:hasAbscissa"]["iridl:plotfirst"];
-X1 = myinfo["iridl:hasAbscissa"]["iridl:plotlast"];
-Y0 = myinfo["iridl:hasOrdinate"]["iridl:plotfirst"];
-Y1 = myinfo["iridl:hasOrdinate"]["iridl:plotlast"];
-    }
-    mybbox=[X0,Y0,X1,Y1,true];
-}
-return mybbox;
+    return mybbox;
 }
 function doredrawbutton () {
-var myform=document.getElementById('pageform');
-if(myform){
-updatePageForm();
-}
+    var myform=document.getElementById('pageform');
+    if(myform){
+	updatePageForm();
+    }
 }
 function dolayersbutton(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlIvars ShowControlShare ShowControlDownload');
-toggleClass(mycontainer,'ShowControlLayers');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var mycontainer = it.parentNode.parentNode;
+    removeClass(mycontainer,'ShowControlIvars ShowControlShare ShowControlDownload');
+    toggleClass(mycontainer,'ShowControlLayers');
 }
 function dosettingsbutton(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlLayers ShowControlShare ShowControlDownload');
-toggleClass(mycontainer,'ShowControlIvars');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var mycontainer = it.parentNode.parentNode;
+    removeClass(mycontainer,'ShowControlLayers ShowControlShare ShowControlDownload');
+    toggleClass(mycontainer,'ShowControlIvars');
 }
 function docontrollockbutton(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-var mycontainer = it.parentNode.parentNode;
-toggleClass(mycontainer,'ControlLock');
-if(mycontainer.className.indexOf('ControlLock')<0){
-    it.blur();
-    mycontainer.blur();
-}
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var mycontainer = it.parentNode.parentNode;
+    toggleClass(mycontainer,'ControlLock');
+    if(mycontainer.className.indexOf('ControlLock')<0){
+	it.blur();
+	mycontainer.blur();
+    }
 }
 function dosharebutton(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlDownload');
-toggleClass(mycontainer,'ShowControlShare');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var mycontainer = it.parentNode.parentNode;
+    removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlDownload');
+    toggleClass(mycontainer,'ShowControlShare');
 }
 function dodownloadbutton(evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-var mycontainer = it.parentNode.parentNode;
-removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlShare');
-toggleClass(mycontainer,'ShowControlDownload');
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var mycontainer = it.parentNode.parentNode;
+    removeClass(mycontainer,'ShowControlIvars ShowControlLayers ShowControlShare');
+    toggleClass(mycontainer,'ShowControlDownload');
 }
 function doinfobutton (evt) {
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
-   var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
-   var newloc = mylink[0].href;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement.parentNode;
+    var mylink = getElementsByAttribute(it.parentNode.parentNode,'*','rel','iridl:hasFigure');
+    var newloc = mylink[0].href;
     if(location.host == mylink[0].host){
 	newloc = mylink[0].pathname;
     }
@@ -3713,44 +3719,44 @@ function doinfobutton (evt) {
 }
 function DLimageResizeImage(mylink){
     if(mylink.figureimage){
-var imagesrc=mylink.figureimage.src;
-var patt = new RegExp('//plotaxislength.([0-9]*).psdef');
-var csize = imagesrc.match(patt);
-if (!csize || csize.length<2){
-	csize=432;
-}
-else {
-	csize=csize[1];
-}
-var pform=document.getElementById('pageform');
-var ckres=pform.elements['resolution'];
-var ipt=pform.elements['clickpt'];
-if(!ipt){
-ipt= document.createElement('input');
-ipt.className = 'transformRegion';
-ipt.name = 'clickpt';
-ipt.type='hidden';
-    ipt.initialValue='';
-pform.appendChild(ipt);
-}
-ipt=pform.elements['plotaxislength'];
-if(!ipt){
-ipt= document.createElement('input');
-ipt.className = mylink.figureimage.className.split(' ')[0];
-appendMissingClass(pform,ipt.className);
-    appendMissingClass(ipt,'dlauximg');
-appendMissingClass(pform,'dlauximg');
-ipt.name = 'plotaxislength';
-ipt.type='hidden';
-pform.appendChild(ipt);
-}
-var clientsize = Math.max(mylink.parentNode.clientWidth,mylink.parentNode.clientHeight); 
-var targetsize = 20*Math.round((clientsize - 20 - 72 + 9)/20,0);
-if(targetsize > csize){
-ipt.value=targetsize;
-var newsrc=appendPageForm(mylink.figureimage.src,mylink.figureimage.className);
-mylink.figureimage.src=newsrc;
-}
+	var imagesrc=mylink.figureimage.src;
+	var patt = new RegExp('//plotaxislength.([0-9]*).psdef');
+	var csize = imagesrc.match(patt);
+	if (!csize || csize.length<2){
+	    csize=432;
+	}
+	else {
+	    csize=csize[1];
+	}
+	var pform=document.getElementById('pageform');
+	var ckres=pform.elements['resolution'];
+	var ipt=pform.elements['clickpt'];
+	if(!ipt){
+	    ipt= document.createElement('input');
+	    ipt.className = 'transformRegion';
+	    ipt.name = 'clickpt';
+	    ipt.type='hidden';
+	    ipt.initialValue='';
+	    pform.appendChild(ipt);
+	}
+	ipt=pform.elements['plotaxislength'];
+	if(!ipt){
+	    ipt= document.createElement('input');
+	    ipt.className = mylink.figureimage.className.split(' ')[0];
+	    appendMissingClass(pform,ipt.className);
+	    appendMissingClass(ipt,'dlauximg');
+	    appendMissingClass(pform,'dlauximg');
+	    ipt.name = 'plotaxislength';
+	    ipt.type='hidden';
+	    pform.appendChild(ipt);
+	}
+	var clientsize = Math.max(mylink.parentNode.clientWidth,mylink.parentNode.clientHeight); 
+	var targetsize = 20*Math.round((clientsize - 20 - 72 + 9)/20,0);
+	if(targetsize > csize){
+	    ipt.value=targetsize;
+	    var newsrc=appendPageForm(mylink.figureimage.src,mylink.figureimage.className);
+	    mylink.figureimage.src=newsrc;
+	}
     }
 }
 function DLimageRemoveControls(mylink){
@@ -3759,17 +3765,17 @@ function DLimageRemoveControls(mylink){
     while(maybecontrol && maybecontrol != myimage){
 	var nextcontrol=maybecontrol.nextSibling;
         if(maybecontrol.className && maybecontrol.className.indexOf('dlcontrol') >= 0){
-	mylink.parentNode.removeChild(maybecontrol);
+	    mylink.parentNode.removeChild(maybecontrol);
 	}
 	maybecontrol=nextcontrol;
     }
 }
 /* handles building of image controls from info.json information
-invoked when load of info.json completes
+   invoked when load of info.json completes
 */
 function DLimageBuildControls(mydlimage,mylink){
-/* builds image choice controls and places them immediately after the link if it exists, otherwise the legend
-*/
+    /* builds image choice controls and places them immediately after the link if it exists, otherwise the legend
+     */
     var currentObj;
     if(mylink){
 	currentObj=mylink;
@@ -3777,7 +3783,7 @@ function DLimageBuildControls(mydlimage,mylink){
     else {
 	var llist = mydlimage.getElementsByTagName('legend');
 	if(llist.length > 0){
-	currentObj=llist[0];
+	    currentObj=llist[0];
 	}
     }
     var pform=document.getElementById('pageform');
@@ -3825,7 +3831,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	else {
 	    removeClass(mydlimage,'hasGeoTiffPaletteColor');
 	}
-/* builds layer controls */
+	/* builds layer controls */
 	var layerlist;
 	if(mylink && mylink.info){
 	    layerlist=mylink.info["iridl:hasLayers"]; 
@@ -3898,14 +3904,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	    currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 	    currentObj=ctl;
 	}
-/* creates share control */
+	/* creates share control */
 	var ctl=document.createElement('div');
 	ctl.className='dlcontrol ' + 'share';
 	var ipt = document.createElement('span');
 	ipt.className='controlLabel';
 	ipt.innerHTML='Open in' + '  ';
 	ctl.appendChild(ipt);
-/* evernote */
+	/* evernote */
 	var gb= document.createElement('div');
 	gb.className='sharebutton evernote';
 	gb.setAttribute("title","Save to Evernote with link back");
@@ -3913,7 +3919,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doEvernoteClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
-/* tumblr */
+	/* tumblr */
 	var gb= document.createElement('div');
 	gb.className='sharebutton tumblr';
 	gb.setAttribute("title","Save to Tumblr with link back");
@@ -3921,7 +3927,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doTumblrClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
-/* CSPF */
+	/* CSPF */
 	var gb= document.createElement('div');
 	gb.className='sharebutton iriforum';
 	gb.setAttribute("title","Share image and link using the Climate Services Partnership Forums");
@@ -3929,7 +3935,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doIRIFClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
-/* pinterest */
+	/* pinterest */
 	var gb= document.createElement('div');
 	gb.className='sharebutton pinterest';
 	gb.setAttribute("title","Save to Pinterest with link back");
@@ -3937,27 +3943,27 @@ function DLimageBuildControls(mydlimage,mylink){
 	gb.myonclick=doPinterestClipElement;
 	gb.clipthis = currentObj.parentNode;
 	ctl.appendChild(gb);
-/* Google Earth */
+	/* Google Earth */
 	if(mylink){
-	gb= document.createElement('div');
-	gb.className='sharebutton googleearth';
-	gb.setAttribute("title","View in Google Earth");
-	gb.onclick=doGoogleEarthClick;
-	gb.myonclick=doGoogleEarthClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-/* ArcGIS */
-	gb= document.createElement('div');
-	gb.className='sharebutton arcgis';
-	gb.setAttribute("title","View in ArcGIS");
-	gb.onclick=doarcgisClick;
-	gb.myonclick=doarcgisClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
+	    gb= document.createElement('div');
+	    gb.className='sharebutton googleearth';
+	    gb.setAttribute("title","View in Google Earth");
+	    gb.onclick=doGoogleEarthClick;
+	    gb.myonclick=doGoogleEarthClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    /* ArcGIS */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton arcgis';
+	    gb.setAttribute("title","View in ArcGIS");
+	    gb.onclick=doarcgisClick;
+	    gb.myonclick=doarcgisClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
 	}
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
 	currentObj=ctl;
-/* Download Control */
+	/* Download Control */
 	var ctl=document.createElement('div');
 	ctl.className='dlcontrol ' + 'download';
 	var ipt = document.createElement('span');
@@ -3965,51 +3971,51 @@ function DLimageBuildControls(mydlimage,mylink){
 	ipt.innerHTML='Download as' + '  ';
 	ctl.appendChild(ipt);
 	if(mylink||getTable(mydlimage)){
-/* google drive */
-	var gb= document.createElement('div');
-	gb.className='sharebutton asGDrive';
-	gb.setAttribute("title","GDrive with link back");
-/*	uses gDriveRender */
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
+	    /* google drive */
+	    var gb= document.createElement('div');
+	    gb.className='sharebutton asGDrive';
+	    gb.setAttribute("title","GDrive with link back");
+	    /*	uses gDriveRender */
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
 	}
-/* KML */
+	/* KML */
 	if(mylink){
-	var gb= document.createElement('div');
-	gb.className='sharebutton asKML';
-	gb.setAttribute("title","KML with link back");
-	gb.onclick=doGoogleEarthClick;
-	gb.myonclick=doGoogleEarthClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-/* WMS */
-	gb= document.createElement('div');
-	gb.className='sharebutton asWMS';
-	gb.setAttribute("title","WMS");
-	gb.onclick=doWMSClick;
-	gb.myonclick=doWMSClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-/* GeoTiffPC */
-	gb= document.createElement('div');
-	gb.className='sharebutton asGeoTiffPaletteColor';
-	gb.setAttribute("title","GeoTiff");
-	gb.onclick=doGeoTiffPCClick;
-	gb.myonclick=doGeoTiffPCClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-/* GeoTiff */
-	gb= document.createElement('div');
-	gb.className='sharebutton asGeoTiff';
-	gb.setAttribute("title","data GeoTiff");
-	gb.onclick=doGeoTiffClick;
-	gb.myonclick=doGeoTiffClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
-	appendMissingClass(mydlimage,'hasDownload');
+	    var gb= document.createElement('div');
+	    gb.className='sharebutton asKML';
+	    gb.setAttribute("title","KML with link back");
+	    gb.onclick=doGoogleEarthClick;
+	    gb.myonclick=doGoogleEarthClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    /* WMS */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asWMS';
+	    gb.setAttribute("title","WMS");
+	    gb.onclick=doWMSClick;
+	    gb.myonclick=doWMSClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    /* GeoTiffPC */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asGeoTiffPaletteColor';
+	    gb.setAttribute("title","GeoTiff");
+	    gb.onclick=doGeoTiffPCClick;
+	    gb.myonclick=doGeoTiffPCClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    /* GeoTiff */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asGeoTiff';
+	    gb.setAttribute("title","data GeoTiff");
+	    gb.onclick=doGeoTiffClick;
+	    gb.myonclick=doGeoTiffClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getTable(mydlimage)){
-/* tsv */
+	    /* tsv */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asHTML';
 	    gb.setAttribute("title","HTML");
@@ -4027,7 +4033,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getPNGImage(mydlimage)){
-/* PNG */
+	    /* PNG */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPNG';
 	    gb.setAttribute("title","PNG image");
@@ -4035,10 +4041,10 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.myonclick=doPNGImageClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
-	appendMissingClass(mydlimage,'hasDownload');
+	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getPDFImage(mydlimage)){
-/* PDF */
+	    /* PDF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPDF';
 	    gb.setAttribute("title","PDF image");
@@ -4046,10 +4052,10 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.myonclick=doPDFImageClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
-	appendMissingClass(mydlimage,'hasDownload');
+	    appendMissingClass(mydlimage,'hasDownload');
 	}
 	if(getOnlyFigureImage(mydlimage)){
-/* PDF */
+	    /* PDF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asPDF';
 	    gb.setAttribute("title","PDF image with link back");
@@ -4064,24 +4070,24 @@ function DLimageBuildControls(mydlimage,mylink){
 		pform.appendChild(ipt);
 	    }
 	    ctl.appendChild(gb);
-/* PDFget test version using GET instead of POST to make sure both
-	work equally well */
-/*	    gb= document.createElement('div');
-	    gb.className='sharebutton asPDFget';
-	    gb.setAttribute("title","PDF image with link back");
-	    gb.onclick=doPDFClickGET;
-	    gb.myonclick=doPDFClickGET;
-	    gb.clipthis = currentObj.parentNode;
-	    if(pform && !pform.elements['linkurl']){
-		var ipt= document.createElement('input');
-		ipt.type='hidden';
-		ipt.name='linkurl';
-		ipt.className='linkurl';
-		pform.appendChild(ipt);
-	    }
-	    ctl.appendChild(gb);
-*/
-/* GIF */
+	    /* PDFget test version using GET instead of POST to make sure both
+	       work equally well */
+	    /*	    gb= document.createElement('div');
+		    gb.className='sharebutton asPDFget';
+		    gb.setAttribute("title","PDF image with link back");
+		    gb.onclick=doPDFClickGET;
+		    gb.myonclick=doPDFClickGET;
+		    gb.clipthis = currentObj.parentNode;
+		    if(pform && !pform.elements['linkurl']){
+		    var ipt= document.createElement('input');
+		    ipt.type='hidden';
+		    ipt.name='linkurl';
+		    ipt.className='linkurl';
+		    pform.appendChild(ipt);
+		    }
+		    ctl.appendChild(gb);
+	    */
+	    /* GIF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asGIF';
 	    gb.setAttribute("title","GIF image");
@@ -4105,14 +4111,14 @@ function DLimageBuildControls(mydlimage,mylink){
 	    gb.myonclick=doJpgClick;
 	    gb.clipthis = currentObj.parentNode;
 	    ctl.appendChild(gb);
-/* cut and paste */
-	gb= document.createElement('div');
-	gb.className='sharebutton asCutAndPaste';
-	gb.setAttribute("title","copy to html");
-	gb.onclick=docutandpasteClick;
-	gb.myonclick=docutandpasteClick;
-	gb.clipthis = currentObj.parentNode;
-	ctl.appendChild(gb);
+	    /* cut and paste */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asCutAndPaste';
+	    gb.setAttribute("title","copy to html");
+	    gb.onclick=docutandpasteClick;
+	    gb.myonclick=docutandpasteClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
 
 	    appendMissingClass(mydlimage,'hasDownload');
 	    var sfigs = getElementsByAttribute(mydlimage,'*','rel','iridl:hasFigureImage');
@@ -4125,250 +4131,250 @@ function DLimageBuildControls(mydlimage,mylink){
 		if(sfigs.length>1){appendMissingClass(sfigs[0],'selectedImage')}
 	    }
 	}
-/* add download control area to parent */
+	/* add download control area to parent */
 	currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-/* do render loop */
+	/* do render loop */
 	renderAsGDrive();
 	secondRenderAsGDrive();
-/* ctl becomes current */
+	/* ctl becomes current */
 	currentObj=ctl;
-/* adds message area for download controls e.g. ArcGIS */
+	/* adds message area for download controls e.g. ArcGIS */
 	var msga = document.createElement('div');
 	msga.className='messagearea';
 	currentObj.parentNode.insertBefore(msga,currentObj.nextSibling);
 	currentObj=msga;
-/* builds fig dimension controls */
+	/* builds fig dimension controls */
 	if(mylink) {
-var dimlist=mylink.info["iridl:hasDimensions"];
-if(dimlist){
-for (var i = 0; i<dimlist.length; i++) {
-var glist=dimlist[i]['iridl:gridvalues']['iridl:valuelist'];
-if(glist && (glist.length > 1)){
-var ctl = document.createElement('div');
-ctl.className='dlcontrol ivar ' + dimlist[i]['iridl:name'];
-var ipt = document.createElement('span');
-ipt.className='controlLabel';
-ctl.longName=dimlist[i]['cfatt:long_name'];
-ipt.innerHTML=dimlist[i]['cfatt:long_name'] + '  ';
-ctl.appendChild(ipt);
-var iptset = document.createElement('span');
-iptset.className='controlSet';
-iptset.info=dimlist[i];
-iptset.mylink=mylink;
-ctl.appendChild(iptset);
-ipt = document.createElement('span');
-ipt.className='lowerLimit';
-ipt.onclick=limitclickevent;
-ipt.myevtfn=limitclickevent;
-ipt.innerHTML=glist[0];
-iptset.appendChild(ipt);
-ipt = document.createElement('div');
-ipt.className='oneStep leftarrow';
-ipt.onclick=stepdownclickevent;
-ipt.myclickfn=stepdownclickevent;
-/*ipt.innerHTML='&lt;';*/
-iptset.appendChild(ipt);
-ipt = document.createElement('input');
-ipt.className=mylink.figureimage.className.split(' ')[0] + ' pageformcopy';
-ipt.name=dimlist[i]['iridl:name'];
-ipt.value=dimlist[i]['iridl:defaultvalue'];
-ipt.onchange=imageinputvaluechange;
-ipt.mychangeevtfn=imageinputvaluechange;
-ipt.size=16;
-iptset.appendChild(ipt);
-/* resets class of iptset to reflect whether the defaultvalue
- corresponds to singleValue (in list of values) or multiValue (not
- in list of values and presumably a range) */
+	    var dimlist=mylink.info["iridl:hasDimensions"];
+	    if(dimlist){
+		for (var i = 0; i<dimlist.length; i++) {
+		    var glist=dimlist[i]['iridl:gridvalues']['iridl:valuelist'];
+		    if(glist && (glist.length > 1)){
+			var ctl = document.createElement('div');
+			ctl.className='dlcontrol ivar ' + dimlist[i]['iridl:name'];
+			var ipt = document.createElement('span');
+			ipt.className='controlLabel';
+			ctl.longName=dimlist[i]['cfatt:long_name'];
+			ipt.innerHTML=dimlist[i]['cfatt:long_name'] + '  ';
+			ctl.appendChild(ipt);
+			var iptset = document.createElement('span');
+			iptset.className='controlSet';
+			iptset.info=dimlist[i];
+			iptset.mylink=mylink;
+			ctl.appendChild(iptset);
+			ipt = document.createElement('span');
+			ipt.className='lowerLimit';
+			ipt.onclick=limitclickevent;
+			ipt.myevtfn=limitclickevent;
+			ipt.innerHTML=glist[0];
+			iptset.appendChild(ipt);
+			ipt = document.createElement('div');
+			ipt.className='oneStep leftarrow';
+			ipt.onclick=stepdownclickevent;
+			ipt.myclickfn=stepdownclickevent;
+			/*ipt.innerHTML='&lt;';*/
+			iptset.appendChild(ipt);
+			ipt = document.createElement('input');
+			ipt.className=mylink.figureimage.className.split(' ')[0] + ' pageformcopy';
+			ipt.name=dimlist[i]['iridl:name'];
+			ipt.value=dimlist[i]['iridl:defaultvalue'];
+			ipt.onchange=imageinputvaluechange;
+			ipt.mychangeevtfn=imageinputvaluechange;
+			ipt.size=16;
+			iptset.appendChild(ipt);
+			/* resets class of iptset to reflect whether the defaultvalue
+			   corresponds to singleValue (in list of values) or multiValue (not
+			   in list of values and presumably a range) */
 
-var cin = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].indexOf(ipt.value);
-var cmax = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].length-1;
-var controlClass;
-appendMissingClass(ipt,'hasValueList');
-if(cin > -1){
-    controlClass="singleValue";
-}
-else {
-    controlClass="multiValue";
-}
-appendMissingClass(iptset,controlClass);
- if(cin > 0){
-     controlClass= 'aboveLower';
- }
-    else if(cin == 0){
-     controlClass='atLower';
-    }
-appendMissingClass(iptset,controlClass);
- if(cin >= 0 && cin < cmax){
-     controlClass='belowUpper';
- }
-    else if(cin == cmax){
-	controlClass='atUpper';
-    }
-appendMissingClass(iptset,controlClass);
-if(document.getElementById('pageform')){
-var pform=document.getElementById('pageform');
-if(!pform.elements[ipt.name]){
-var iptcpy= document.createElement('input');
-    iptcpy.className = ipt.className;
-    appendMissingClass(pform,ipt.className);
-    appendMissingClass(iptcpy,'dlauximg');
-    appendMissingClass(iptcpy,'share');
-    iptcpy.name = ipt.name;
-    iptcpy.value='';
-    iptcpy.type='hidden';
-    pform.appendChild(iptcpy);
-    updatePageFormFromUrl(iptcpy);
-}
-if(pform.elements[ipt.name].value != ''){
-ipt.value=pform.elements[ipt.name].value;
-}
-}
-ipt = document.createElement('span');
-ipt.onclick=stepupclickevent;
-ipt.className='oneStep rightarrow';
-/*ipt.innerHTML='>';*/
-iptset.appendChild(ipt);
-ipt = document.createElement('span');
-ipt.className='upperLimit';
-ipt.onclick=limitclickevent;
-ipt.innerHTML=glist[glist.length-1];
-iptset.appendChild(ipt);
-currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
-currentObj=ctl;
-}
-}
-}
-var ivarlist = mylink.parentNode.getElementsByClassName('ivar');
-if(ivarlist.length > 0){
-    appendMissingClass(mylink.parentNode,'hasIvars');
-    var ivars = [];
-    for (var i=ivarlist.length; i--; ivars.unshift(ivarlist[i].longName));
-    var ivarswitch = mylink.parentNode.getElementsByClassName('ivarswitch')[0];
-    ivarswitch.setAttribute('title',ivars.join(', '));
-}
-else {
-    removeClass(mylink.parentNode,'hasIvars');
-}
-var layerlist =mylink.info["iridl:hasLayers"]; 
-if(layerlist){
-    appendMissingClass(mylink.parentNode,'hasLayers');
-}
-else {
-    removeClass(mylink.parentNode,'hasLayers');
-}
-if(pformchanged){
-    updatePageFormNoHistory();
-}
-    }
+			var cin = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].indexOf(ipt.value);
+			var cmax = dimlist[i]['iridl:gridvalues']['iridl:valuelist'].length-1;
+			var controlClass;
+			appendMissingClass(ipt,'hasValueList');
+			if(cin > -1){
+			    controlClass="singleValue";
+			}
+			else {
+			    controlClass="multiValue";
+			}
+			appendMissingClass(iptset,controlClass);
+			if(cin > 0){
+			    controlClass= 'aboveLower';
+			}
+			else if(cin == 0){
+			    controlClass='atLower';
+			}
+			appendMissingClass(iptset,controlClass);
+			if(cin >= 0 && cin < cmax){
+			    controlClass='belowUpper';
+			}
+			else if(cin == cmax){
+			    controlClass='atUpper';
+			}
+			appendMissingClass(iptset,controlClass);
+			if(document.getElementById('pageform')){
+			    var pform=document.getElementById('pageform');
+			    if(!pform.elements[ipt.name]){
+				var iptcpy= document.createElement('input');
+				iptcpy.className = ipt.className;
+				appendMissingClass(pform,ipt.className);
+				appendMissingClass(iptcpy,'dlauximg');
+				appendMissingClass(iptcpy,'share');
+				iptcpy.name = ipt.name;
+				iptcpy.value='';
+				iptcpy.type='hidden';
+				pform.appendChild(iptcpy);
+				updatePageFormFromUrl(iptcpy);
+			    }
+			    if(pform.elements[ipt.name].value != ''){
+				ipt.value=pform.elements[ipt.name].value;
+			    }
+			}
+			ipt = document.createElement('span');
+			ipt.onclick=stepupclickevent;
+			ipt.className='oneStep rightarrow';
+			/*ipt.innerHTML='>';*/
+			iptset.appendChild(ipt);
+			ipt = document.createElement('span');
+			ipt.className='upperLimit';
+			ipt.onclick=limitclickevent;
+			ipt.innerHTML=glist[glist.length-1];
+			iptset.appendChild(ipt);
+			currentObj.parentNode.insertBefore(ctl,currentObj.nextSibling);
+			currentObj=ctl;
+		    }
+		}
+	    }
+	    var ivarlist = mylink.parentNode.getElementsByClassName('ivar');
+	    if(ivarlist.length > 0){
+		appendMissingClass(mylink.parentNode,'hasIvars');
+		var ivars = [];
+		for (var i=ivarlist.length; i--; ivars.unshift(ivarlist[i].longName));
+		var ivarswitch = mylink.parentNode.getElementsByClassName('ivarswitch')[0];
+		ivarswitch.setAttribute('title',ivars.join(', '));
+	    }
+	    else {
+		removeClass(mylink.parentNode,'hasIvars');
+	    }
+	    var layerlist =mylink.info["iridl:hasLayers"]; 
+	    if(layerlist){
+		appendMissingClass(mylink.parentNode,'hasLayers');
+	    }
+	    else {
+		removeClass(mylink.parentNode,'hasLayers');
+	    }
+	    if(pformchanged){
+		updatePageFormNoHistory();
+	    }
+	}
     } // end of image (dimension) control builds
 }
 function DLimageBuildZoom(mylink){
-var myfigure = mylink.figureimage;
-if(!myfigure.myoverlay){
-//if(false){
-var myimgdiv = document.createElement('div');
-myfigure.myoverlay=myimgdiv;
-myimgdiv.className="imageOverlayDiv inactive imageoverlaypart";
-myimgdiv.style.position='absolute';
-// myimgdiv.style.width=myfigure.width + 'px';
-// myimgdiv.style.height=myfigure.height + 'px';
-// image is not necessarily loaded yet, so cannot be sure of the image size.
-myimgdiv.style.width=myfigure.clientWidth + 'px';
-myimgdiv.style.height=myfigure.clientHeight + 'px';
-myimgdiv.style.padding='0px';
-// events on div for almost everybody
-myimgdiv.onmousedown=startdrag;
-myimgdiv.onmouseup=stopdrag;
-myimgdiv.onmousemove=followdrag;
-myimgdiv.evtfnonmousedown=startdrag;
-myimgdiv.evtfnonmouseup=stopdrag;
-myimgdiv.evtfnonmousemove=followdrag;
-/* myimgdiv.onmouseover=hello; */
-myimgdiv.onmouseout=goodbye;
-// hello for everybody -- turns on overlays
-myfigure.onmouseover=hello;
-// events on figure for IE9
-myfigure.onmousedown=startdrag;
-myfigure.onmouseup=stopdrag;
-myfigure.onmousemove=followdrag;
-myfigure.onmouseout=goodbye;
-myfigure.onclick=skipme;
-myimgdiv.mycontainer=myfigure.parentNode;
-myimgdiv.zoomstatus=document.createElement('div');
-myimgdiv.zoomstatus.className='zoomStatus imageoverlaypart';
-myimgdiv.zoomstatus.style.position='absolute';
-myimgdiv.zoomstatus.style.visibility='hidden';
-myimgdiv.appendChild(myimgdiv.zoomstatus);
-myimgdiv.outline=document.createElement('div');
-myimgdiv.outline.className='imageoverlaypart clipper';
-myimgdiv.outline.style.visibility='hidden';
-myimgdiv.outline.style.position='absolute';
-myimgdiv.outline.style.width='85px';
-myimgdiv.outline.style.height='54px';
-myimgdiv.outline.style.left='102px';
-myimgdiv.outline.style.top='50px';
-myimgdiv.outline.style.zindex='5';
-myimgdiv.outline.style.backgroundColor='#E00000';
-myimgdiv.outline.style.color='#ffff99';
-myimgdiv.outline.onclick=skipme;
-myimgdiv.outline.onmousemove=skipme;
-myimgdiv.appendChild(myimgdiv.outline);
-myimgdiv.outlineimage=document.createElement('div');
-myimgdiv.outlineimage.className='imageoverlaypart';
-myimgdiv.outlineimage.style.position='absolute';
-myimgdiv.outlineimage.style.left='-102px';
-myimgdiv.outlineimage.style.top='-50px';
-myimgdiv.outlineimage.style.clip='rect(52px 184px 102px 104px)';
-myimgdiv.outline.appendChild(myimgdiv.outlineimage);
-myimgdiv.outlineimage.onclick=skipme;
-myimgdiv.outlineimage.onmousemove=skipme;
-myimgdiv.inputimage=myfigure;
-var newimg=document.createElement("img");
-newimg.width=myimgdiv.inputimage.width;
-newimg.height=myimgdiv.inputimage.height;
-newimg.src=myimgdiv.inputimage.src;
-myimgdiv.outlineimage.appendChild(newimg);
-myfigure.parentNode.insertBefore(myimgdiv,myfigure);
-// myimgdiv.appendChild(myfigure);
-var pform=document.getElementById('pageform');
-    if(pform){
-	var bbox = pform.elements['bbox'];
-	if(!bbox){
-	    bbox = document.createElement('input');
-	    bbox.name='bbox';
-	    bbox.type='hidden';
-	    bbox.className = myfigure.className.split(' ')[0] + ' share';
-	    pform.appendChild(bbox);
+    var myfigure = mylink.figureimage;
+    if(!myfigure.myoverlay){
+	//if(false){
+	var myimgdiv = document.createElement('div');
+	myfigure.myoverlay=myimgdiv;
+	myimgdiv.className="imageOverlayDiv inactive imageoverlaypart";
+	myimgdiv.style.position='absolute';
+	// myimgdiv.style.width=myfigure.width + 'px';
+	// myimgdiv.style.height=myfigure.height + 'px';
+	// image is not necessarily loaded yet, so cannot be sure of the image size.
+	myimgdiv.style.width=myfigure.clientWidth + 'px';
+	myimgdiv.style.height=myfigure.clientHeight + 'px';
+	myimgdiv.style.padding='0px';
+	// events on div for almost everybody
+	myimgdiv.onmousedown=startdrag;
+	myimgdiv.onmouseup=stopdrag;
+	myimgdiv.onmousemove=followdrag;
+	myimgdiv.evtfnonmousedown=startdrag;
+	myimgdiv.evtfnonmouseup=stopdrag;
+	myimgdiv.evtfnonmousemove=followdrag;
+	/* myimgdiv.onmouseover=hello; */
+	myimgdiv.onmouseout=goodbye;
+	// hello for everybody -- turns on overlays
+	myfigure.onmouseover=hello;
+	// events on figure for IE9
+	myfigure.onmousedown=startdrag;
+	myfigure.onmouseup=stopdrag;
+	myfigure.onmousemove=followdrag;
+	myfigure.onmouseout=goodbye;
+	myfigure.onclick=skipme;
+	myimgdiv.mycontainer=myfigure.parentNode;
+	myimgdiv.zoomstatus=document.createElement('div');
+	myimgdiv.zoomstatus.className='zoomStatus imageoverlaypart';
+	myimgdiv.zoomstatus.style.position='absolute';
+	myimgdiv.zoomstatus.style.visibility='hidden';
+	myimgdiv.appendChild(myimgdiv.zoomstatus);
+	myimgdiv.outline=document.createElement('div');
+	myimgdiv.outline.className='imageoverlaypart clipper';
+	myimgdiv.outline.style.visibility='hidden';
+	myimgdiv.outline.style.position='absolute';
+	myimgdiv.outline.style.width='85px';
+	myimgdiv.outline.style.height='54px';
+	myimgdiv.outline.style.left='102px';
+	myimgdiv.outline.style.top='50px';
+	myimgdiv.outline.style.zindex='5';
+	myimgdiv.outline.style.backgroundColor='#E00000';
+	myimgdiv.outline.style.color='#ffff99';
+	myimgdiv.outline.onclick=skipme;
+	myimgdiv.outline.onmousemove=skipme;
+	myimgdiv.appendChild(myimgdiv.outline);
+	myimgdiv.outlineimage=document.createElement('div');
+	myimgdiv.outlineimage.className='imageoverlaypart';
+	myimgdiv.outlineimage.style.position='absolute';
+	myimgdiv.outlineimage.style.left='-102px';
+	myimgdiv.outlineimage.style.top='-50px';
+	myimgdiv.outlineimage.style.clip='rect(52px 184px 102px 104px)';
+	myimgdiv.outline.appendChild(myimgdiv.outlineimage);
+	myimgdiv.outlineimage.onclick=skipme;
+	myimgdiv.outlineimage.onmousemove=skipme;
+	myimgdiv.inputimage=myfigure;
+	var newimg=document.createElement("img");
+	newimg.width=myimgdiv.inputimage.width;
+	newimg.height=myimgdiv.inputimage.height;
+	newimg.src=myimgdiv.inputimage.src;
+	myimgdiv.outlineimage.appendChild(newimg);
+	myfigure.parentNode.insertBefore(myimgdiv,myfigure);
+	// myimgdiv.appendChild(myfigure);
+	var pform=document.getElementById('pageform');
+	if(pform){
+	    var bbox = pform.elements['bbox'];
+	    if(!bbox){
+		bbox = document.createElement('input');
+		bbox.name='bbox';
+		bbox.type='hidden';
+		bbox.className = myfigure.className.split(' ')[0] + ' share';
+		pform.appendChild(bbox);
+	    }
 	}
-}
-}
+    }
 }
 function hideImageOverlay(myfigure){
-if(myfigure.myoverlay){
-var myimgdiv=myfigure.myoverlay;
-myimgdiv.outline.style.visibility='hidden';
-myimgdiv.inputimage.style.visibility='visible';
-}
+    if(myfigure.myoverlay){
+	var myimgdiv=myfigure.myoverlay;
+	myimgdiv.outline.style.visibility='hidden';
+	myimgdiv.inputimage.style.visibility='visible';
+    }
 }
 function resetImageOverlay(myfigure){
-if(myfigure.myoverlay){
-var myimgdiv = myfigure.myoverlay;
-myimgdiv.style.width=myfigure.clientWidth + 'px';
-myimgdiv.style.height=myfigure.clientHeight + 'px';
-myimgdiv.outlineimage.children[0].width=myfigure.width;
-myimgdiv.outlineimage.children[0].height=myfigure.height;
-myimgdiv.outlineimage.children[0].src=myfigure.src;
-}
+    if(myfigure.myoverlay){
+	var myimgdiv = myfigure.myoverlay;
+	myimgdiv.style.width=myfigure.clientWidth + 'px';
+	myimgdiv.style.height=myfigure.clientHeight + 'px';
+	myimgdiv.outlineimage.children[0].width=myfigure.width;
+	myimgdiv.outlineimage.children[0].height=myfigure.height;
+	myimgdiv.outlineimage.children[0].src=myfigure.src;
+    }
 }
 function getcurrentTarget(evt) {
-evt = (evt) ? evt : event;
-if(evt){
-var elem = (evt.currentTarget) ? evt.currentTarget :  null;
-if(elem){
-return elem;
-}
-}
-return null;
+    evt = (evt) ? evt : event;
+    if(evt){
+	var elem = (evt.currentTarget) ? evt.currentTarget :  null;
+	if(elem){
+	    return elem;
+	}
+    }
+    return null;
 }
 var myobj=null;
 function clearmyobj(){
@@ -4377,152 +4383,152 @@ function clearmyobj(){
 function hello(evt){
     var myimgdiv;
     var newentrance=false;
-var mytarget=getcurrentTarget(evt);
-if(!mytarget){mytarget=this};
-if(mytarget.myoverlay){
-    myimgdiv = mytarget.myoverlay;
-    if(myimgdiv.className.indexOf('inactive')>=0){
+    var mytarget=getcurrentTarget(evt);
+    if(!mytarget){mytarget=this};
+    if(mytarget.myoverlay){
+	myimgdiv = mytarget.myoverlay;
+	if(myimgdiv.className.indexOf('inactive')>=0){
 	    newentrance='true';
-    changeClass(myimgdiv,'inactive','active');
+	    changeClass(myimgdiv,'inactive','active');
 	}
-}
-else {
-    myimgdiv = mytarget;
-}
-if(newentrance){
-var myform=document.getElementById('pageform');
-var myinfo = myimgdiv.inputimage.mylink.info;
-var checkobj;
-sizeto(myimgdiv.outline,0,0);
-clearmyobj();
-if(myform){
-checkobj = myform.elements['region'];
-}
-var mypar=myimgdiv.zoomstatus;
-if(mypar){
-if(checkobj){
-var res = myform.elements['resolution'];
-    if(res && res.length){
-	/* if multiple resolutions, uses first */
-	res = res[0];
     }
-    var resclass="point";
-/* if there is a resolution select menu, uses its labels */
-    var resselect = document.getElementsByClassName('pageformcopy');
-    if(resselect.length>0){
-	for(var i=resselect.length;i--;){
-	    if(resselect[i].name=='resolution'){
-		for (var j=resselect[i].options.length;j--;){
-		    if(resselect[i].options[j].value==res.value){
-			resclass=resselect[i].options[j].text;
+    else {
+	myimgdiv = mytarget;
+    }
+    if(newentrance){
+	var myform=document.getElementById('pageform');
+	var myinfo = myimgdiv.inputimage.mylink.info;
+	var checkobj;
+	sizeto(myimgdiv.outline,0,0);
+	clearmyobj();
+	if(myform){
+	    checkobj = myform.elements['region'];
+	}
+	var mypar=myimgdiv.zoomstatus;
+	if(mypar){
+	    if(checkobj){
+		var res = myform.elements['resolution'];
+		if(res && res.length){
+		    /* if multiple resolutions, uses first */
+		    res = res[0];
+		}
+		var resclass="point";
+		/* if there is a resolution select menu, uses its labels */
+		var resselect = document.getElementsByClassName('pageformcopy');
+		if(resselect.length>0){
+		    for(var i=resselect.length;i--;){
+			if(resselect[i].name=='resolution'){
+			    for (var j=resselect[i].options.length;j--;){
+				if(resselect[i].options[j].value==res.value){
+				    resclass=resselect[i].options[j].text;
+				}
+			    }
+			}
 		    }
+		}
+		if(res && resclass=='point'){
+		    if(res.value.substring && res.value.substring(0,6)=='irids:'){
+			var parts = res.value.split(':');
+			resclass = parts[parts.length-2];
+		    }
+		    else {
+			if(myinfo['wms:CRS'] == 'EPSG:4326'){
+			    resclass = res.value + "&deg; box";
+			}
+			else {
+			    resclass = res.value + "m box";
+			}
+		    }
+		}
+		// adds pickRegion if necessary to indicate that we could pick a point or choose an area
+		appendMissingClass(myimgdiv,'pickRegion');
+		mypar.innerHTML="click for " + resclass +"<br /> click-drag-release for larger or to zoom in";
+	    }
+	    else {
+		mypar.innerHTML="click-drag-release to zoom in";
+	    }
+	    mypar.style.visibility="visible";
+	    mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},10000);
+	}
+    }
+    return true;
+}
+function goodbye(evt){
+    var myimgdiv;
+    var mytarget=getcurrentTarget(evt);
+    if(!mytarget){mytarget=this};
+    evt = (evt) ? evt : event;
+
+    if(mytarget.myoverlay){
+	myimgdiv = mytarget.myoverlay;
+    }
+    else {
+	myimgdiv = mytarget;
+    }
+    if(myimgdiv){
+	if(!evt.relatedTarget || (evt.relatedTarget.className.indexOf('imageoverlaypart') == -1 && evt.relatedTarget != myimgdiv.inputimage  && evt.relatedTarget.parentNode != myimgdiv.outlineimage )){
+	    changeClass(myimgdiv,'active','inactive');
+	    if(myimgdiv.zoomstatus){
+		myimgdiv.zoomstatus.style.visibility="hidden";
+		if(myimgdiv.zoomstatus.timeoutId){
+
+		    clearTimeout(myimgdiv.zoomstatus.timeoutId);
+		    myimgdiv.zoomstatus.timeoutID=null;
 		}
 	    }
 	}
     }
-    if(res && resclass=='point'){
-	if(res.value.substring && res.value.substring(0,6)=='irids:'){
-	    var parts = res.value.split(':');
-	    resclass = parts[parts.length-2];
-	}
-	else {
-	    if(myinfo['wms:CRS'] == 'EPSG:4326'){
-		resclass = res.value + "&deg; box";
-	    }
-	    else {
-		resclass = res.value + "m box";
-	    }
-	}
-    }
-// adds pickRegion if necessary to indicate that we could pick a point or choose an area
-appendMissingClass(myimgdiv,'pickRegion');
-mypar.innerHTML="click for " + resclass +"<br /> click-drag-release for larger or to zoom in";
-}
-else {
-mypar.innerHTML="click-drag-release to zoom in";
-}
-mypar.style.visibility="visible";
-mypar.timeoutId=setTimeout(function () {mypar.style.visibility='hidden'},10000);
-}
-}
-return true;
-}
-function goodbye(evt){
-    var myimgdiv;
-var mytarget=getcurrentTarget(evt);
-if(!mytarget){mytarget=this};
-evt = (evt) ? evt : event;
-
-if(mytarget.myoverlay){
-    myimgdiv = mytarget.myoverlay;
-}
-else {
-    myimgdiv = mytarget;
-}
-if(myimgdiv){
-    if(!evt.relatedTarget || (evt.relatedTarget.className.indexOf('imageoverlaypart') == -1 && evt.relatedTarget != myimgdiv.inputimage  && evt.relatedTarget.parentNode != myimgdiv.outlineimage )){
-    changeClass(myimgdiv,'active','inactive');
-    if(myimgdiv.zoomstatus){
-myimgdiv.zoomstatus.style.visibility="hidden";
-if(myimgdiv.zoomstatus.timeoutId){
-
-clearTimeout(myimgdiv.zoomstatus.timeoutId);
-myimgdiv.zoomstatus.timeoutID=null;
-}
-    }
-    }
-}
-return true;
+    return true;
 }
 /* drag zoom routines */
 var myx,myy;
 function doit(state){
-myit=document.getElementById("outline");
-myit.style.visibility=state;
-return false;
+    myit=document.getElementById("outline");
+    myit.style.visibility=state;
+    return false;
 }
 function stopdrag(evt){
-evt = (evt) ? evt : event;
+    evt = (evt) ? evt : event;
     var myimgdiv;
-var mytarget=getcurrentTarget(evt);
-if(!mytarget){mytarget=this};
-if(mytarget.myoverlay){
-    myimgdiv = mytarget.myoverlay;
-}
-else {
-    myimgdiv = mytarget;
-}
-var myinfo = myimgdiv.inputimage.mylink.info;
+    var mytarget=getcurrentTarget(evt);
+    if(!mytarget){mytarget=this};
+    if(mytarget.myoverlay){
+	myimgdiv = mytarget.myoverlay;
+    }
+    else {
+	myimgdiv = mytarget;
+    }
+    var myinfo = myimgdiv.inputimage.mylink.info;
     var myclasses = myimgdiv.inputimage.className;
-removeClass(myimgdiv,'zoomArea');
-var myvals;
-if(myobj != null && myinfo){
-if(myobj.style.visibility == 'visible'){
-    myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,parseInt(myobj.style.left),parseInt(myobj.style.top),parseInt(myobj.style.width),parseInt(myobj.style.height));
-changeClass(myimgdiv.inputimage,'valid','invalid-zooming');
-}
-else {
-var dx,dy;
-/* using inputimage as coordinate reference because firefox performs better with it -- I think because it is a visible object unlike myimgdiv, so it is positioned more reliably.  Also helps keep the overlay and the image aligned.  */
-dx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
-dy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
-myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
-}
-    setbbox(myvals,myinfo,myclasses);
-}
-if(myobj != null && myobj.style.visibility == 'visible'){
-evt.cancelBubble = true;
-myobj=null;
-mypar=myimgdiv.zoomstatus;
-// mypar.innerHTML="zooming " + JSON.stringify(myvals);
-mypar.innerHTML="zooming... ";
-// mypar.style.visibility="visible";
-return false;
-}
-else {
-myobj=null;
-return true;
-}
+    removeClass(myimgdiv,'zoomArea');
+    var myvals;
+    if(myobj != null && myinfo){
+	if(myobj.style.visibility == 'visible'){
+	    myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,parseInt(myobj.style.left),parseInt(myobj.style.top),parseInt(myobj.style.width),parseInt(myobj.style.height));
+	    changeClass(myimgdiv.inputimage,'valid','invalid-zooming');
+	}
+	else {
+	    var dx,dy;
+	    /* using inputimage as coordinate reference because firefox performs better with it -- I think because it is a visible object unlike myimgdiv, so it is positioned more reliably.  Also helps keep the overlay and the image aligned.  */
+	    dx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
+	    dy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
+	    myvals=lonlat(myinfo,myimgdiv.inputimage.className,myimgdiv.inputimage.clientWidth,dx,dy,0,0);
+	}
+	setbbox(myvals,myinfo,myclasses);
+    }
+    if(myobj != null && myobj.style.visibility == 'visible'){
+	evt.cancelBubble = true;
+	myobj=null;
+	mypar=myimgdiv.zoomstatus;
+	// mypar.innerHTML="zooming " + JSON.stringify(myvals);
+	mypar.innerHTML="zooming... ";
+	// mypar.style.visibility="visible";
+	return false;
+    }
+    else {
+	myobj=null;
+	return true;
+    }
 }
 function absLeft(obj){
     var	myval=0;
@@ -4546,228 +4552,228 @@ function absTop(obj){
 	    myval=obj.offsetTop;
 	}
     }
-return myval;
+    return myval;
 }
 function startdrag(evt){
-evt = (evt) ? evt : event;
+    evt = (evt) ? evt : event;
     var myimgdiv;
-var mytarget=getcurrentTarget(evt);
-if(!mytarget){mytarget=this};
-if(mytarget.myoverlay){
-    myimgdiv = mytarget.myoverlay;
-}
-else {
-    myimgdiv = mytarget;
-}
-/* makes sure myimgdiv is active, otherwise will not have valid position */
+    var mytarget=getcurrentTarget(evt);
+    if(!mytarget){mytarget=this};
+    if(mytarget.myoverlay){
+	myimgdiv = mytarget.myoverlay;
+    }
+    else {
+	myimgdiv = mytarget;
+    }
+    /* makes sure myimgdiv is active, otherwise will not have valid position */
     changeClass(myimgdiv,'inactive','active');
-var myworld = myimgdiv.mycontainer;
-if(myworld){
-var myinfo = myimgdiv.inputimage.mylink.info;
-var plotborderleft = myinfo["iridl:plotborderleft"];
-var plotbordertop = myinfo["iridl:plotbordertop"];
-var plotborderright = myinfo["iridl:plotborderright"];
-var plotborderbottom = myinfo["iridl:plotborderbottom"];
-// alert(evt.layerX + ' ' + evt.x + ' ' + evt.pageX + ' ' + absLeft(myimgdiv));
-    myx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
-myy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
-if(myobj == null){
-myobj = myimgdiv.outline;
-sizeto(myobj,0,0);
-// added zoomArea class to imgdiv to indicate that we are now choosing an area
-appendMissingClass(myimgdiv,'zoomArea');
-return false;
-}else
-{return true;
-}
-}
-}
-function followdrag(evt){
-evt = (evt) ? evt : event;
-    var myimgdiv;
-var mytarget=getcurrentTarget(evt);
-if(!mytarget){mytarget=this};
-if(mytarget.myoverlay){
-    myimgdiv = mytarget.myoverlay;
-}
-else {
-    myimgdiv = mytarget;
-}
-var myworld = myimgdiv.mycontainer;
-if(myworld){
-var myinfo = myimgdiv.inputimage.mylink.info;
-var plotborderleft = myinfo["iridl:plotborderleft"];
-var plotbordertop = myinfo["iridl:plotbordertop"];
-var plotborderright = myinfo["iridl:plotborderright"];
-var plotborderbottom = myinfo["iridl:plotborderbottom"];
-var Xaxislength = myinfo["iridl:Xaxislength"];
-var Yaxislength = myinfo["iridl:Yaxislength"];
-    var px,py;
-if(myobj != null){
-    px=evt.clientX + window.pageXOffset;
-    py=evt.clientY + window.pageYOffset;
-    dx = px - absLeft(myimgdiv.inputimage);
-    dy = py - absTop(myimgdiv.inputimage);
-cw=parseInt(myobj.style.width);
-ch=parseInt(myobj.style.height);
-newx=Math.min(dx,myx);
-newy=Math.min(dy,myy);
-neww=Math.max(dx,myx)-newx;
-newh=Math.max(dy,myy)-newy;
-//if(newx >plotborderleft && newy>plotborderright&& newx+neww<Xaxislength+plotborderleft && newy+newh < Yaxislength+plotbordertop)
-if(true){
-sizeto(myimgdiv.outline,neww,newh);
-if(cw*ch > 0){
-myimgdiv.outline.style.visibility='visible';
-}
-shiftto(myimgdiv.outline,newx,newy);
-}
-evt.cancelBubble = true;
-}
-}
-return false;
-}
-function skipme(evt){
-return false;
-}
-function stopevent(evt){
-evt = (evt) ? evt : event;
-evt.cancelBubble = true;
-return true;
-}
-function classMatch (clists, clists2){
-var clist = clists.split(' ');
-var clist2 = clists2.split(' ');
-for ( var i = 0; i < clist.length; i++ ){
-    for (var j = 0 ; j < clist2.length; j++){
-	if(clist[i] == clist2[j]){
-	    return true;
+    var myworld = myimgdiv.mycontainer;
+    if(myworld){
+	var myinfo = myimgdiv.inputimage.mylink.info;
+	var plotborderleft = myinfo["iridl:plotborderleft"];
+	var plotbordertop = myinfo["iridl:plotbordertop"];
+	var plotborderright = myinfo["iridl:plotborderright"];
+	var plotborderbottom = myinfo["iridl:plotborderbottom"];
+	// alert(evt.layerX + ' ' + evt.x + ' ' + evt.pageX + ' ' + absLeft(myimgdiv));
+	myx=evt.clientX + window.pageXOffset - absLeft(myimgdiv.inputimage);
+	myy=evt.clientY + window.pageYOffset - absTop(myimgdiv.inputimage);
+	if(myobj == null){
+	    myobj = myimgdiv.outline;
+	    sizeto(myobj,0,0);
+	    // added zoomArea class to imgdiv to indicate that we are now choosing an area
+	    appendMissingClass(myimgdiv,'zoomArea');
+	    return false;
+	}else
+	{return true;
 	}
     }
 }
-return false;
+function followdrag(evt){
+    evt = (evt) ? evt : event;
+    var myimgdiv;
+    var mytarget=getcurrentTarget(evt);
+    if(!mytarget){mytarget=this};
+    if(mytarget.myoverlay){
+	myimgdiv = mytarget.myoverlay;
+    }
+    else {
+	myimgdiv = mytarget;
+    }
+    var myworld = myimgdiv.mycontainer;
+    if(myworld){
+	var myinfo = myimgdiv.inputimage.mylink.info;
+	var plotborderleft = myinfo["iridl:plotborderleft"];
+	var plotbordertop = myinfo["iridl:plotbordertop"];
+	var plotborderright = myinfo["iridl:plotborderright"];
+	var plotborderbottom = myinfo["iridl:plotborderbottom"];
+	var Xaxislength = myinfo["iridl:Xaxislength"];
+	var Yaxislength = myinfo["iridl:Yaxislength"];
+	var px,py;
+	if(myobj != null){
+	    px=evt.clientX + window.pageXOffset;
+	    py=evt.clientY + window.pageYOffset;
+	    dx = px - absLeft(myimgdiv.inputimage);
+	    dy = py - absTop(myimgdiv.inputimage);
+	    cw=parseInt(myobj.style.width);
+	    ch=parseInt(myobj.style.height);
+	    newx=Math.min(dx,myx);
+	    newy=Math.min(dy,myy);
+	    neww=Math.max(dx,myx)-newx;
+	    newh=Math.max(dy,myy)-newy;
+	    //if(newx >plotborderleft && newy>plotborderright&& newx+neww<Xaxislength+plotborderleft && newy+newh < Yaxislength+plotbordertop)
+	    if(true){
+		sizeto(myimgdiv.outline,neww,newh);
+		if(cw*ch > 0){
+		    myimgdiv.outline.style.visibility='visible';
+		}
+		shiftto(myimgdiv.outline,newx,newy);
+	    }
+	    evt.cancelBubble = true;
+	}
+    }
+    return false;
+}
+function skipme(evt){
+    return false;
+}
+function stopevent(evt){
+    evt = (evt) ? evt : event;
+    evt.cancelBubble = true;
+    return true;
+}
+function classMatch (clists, clists2){
+    var clist = clists.split(' ');
+    var clist2 = clists2.split(' ');
+    for ( var i = 0; i < clist.length; i++ ){
+	for (var j = 0 ; j < clist2.length; j++){
+	    if(clist[i] == clist2[j]){
+		return true;
+	    }
+	}
+    }
+    return false;
 }
 function plotaxislengthfn(myinfo,imageclass){
-var plotaxislength;
-var Xaxislength = myinfo["iridl:Xaxislength"];
-var Yaxislength = myinfo["iridl:Yaxislength"];
-var pform=document.getElementById('pageform');
+    var plotaxislength;
+    var Xaxislength = myinfo["iridl:Xaxislength"];
+    var Yaxislength = myinfo["iridl:Yaxislength"];
+    var pform=document.getElementById('pageform');
 
-if(pform && pform.elements['plotaxislength'] && classMatch(imageclass,pform.elements['plotaxislength'].className) && pform.elements['plotaxislength'].value){
+    if(pform && pform.elements['plotaxislength'] && classMatch(imageclass,pform.elements['plotaxislength'].className) && pform.elements['plotaxislength'].value){
 	plotaxislength = pform.elements['plotaxislength'].value;
-}
-else {
+    }
+    else {
 	if(Xaxislength >= Yaxislength){
-	plotaxislength = Xaxislength;
+	    plotaxislength = Xaxislength;
 	}
 	else {
-	plotaxislength = Yaxislength;
+	    plotaxislength = Yaxislength;
 	}
-}
-return(plotaxislength);
+    }
+    return(plotaxislength);
 }
 lonlatA=new Array();
 function lonlat(myinfo,myclass,imagewidth,left,top,width,height){
-myA=lonlatA;
-var plotborderleft = myinfo["iridl:plotborderleft"];
-var plotbordertop = myinfo["iridl:plotbordertop"];
-var plotborderright = myinfo["iridl:plotborderright"];
-var plotborderbottom = myinfo["iridl:plotborderbottom"];
-var plotaxislength = plotaxislengthfn(myinfo,myclass);
-var Xaxislength = myinfo["iridl:Xaxislength"];
-var Yaxislength = myinfo["iridl:Yaxislength"];
+    myA=lonlatA;
+    var plotborderleft = myinfo["iridl:plotborderleft"];
+    var plotbordertop = myinfo["iridl:plotbordertop"];
+    var plotborderright = myinfo["iridl:plotborderright"];
+    var plotborderbottom = myinfo["iridl:plotborderbottom"];
+    var plotaxislength = plotaxislengthfn(myinfo,myclass);
+    var Xaxislength = myinfo["iridl:Xaxislength"];
+    var Yaxislength = myinfo["iridl:Yaxislength"];
     myA = getbbox(myinfo,myclass);
-var X0,X1,Y0,Y1,DX,DY;
-X0 = myA[0];
-Y0 = myA[1];
-X1 = myA[2];
-Y1 = myA[3];
+    var X0,X1,Y0,Y1,DX,DY;
+    X0 = myA[0];
+    Y0 = myA[1];
+    X1 = myA[2];
+    Y1 = myA[3];
     ifdefault = myA[4];
-if(X1>X0) {
-    DX = X1-X0;
-} else {
-    DX = X0 - X1;
-}
-if(Y1>Y0) {
-    DY = Y1-Y0;
-} else {
-    DY = Y0 - Y1;
-}
-/* needs to use bbox limits to modify if not full range */
+    if(X1>X0) {
+	DX = X1-X0;
+    } else {
+	DX = X0 - X1;
+    }
+    if(Y1>Y0) {
+	DY = Y1-Y0;
+    } else {
+	DY = Y0 - Y1;
+    }
+    /* needs to use bbox limits to modify if not full range */
     if(ifdefault){
-if(Xaxislength >= Yaxislength) {
-Yaxislength = Math.round((plotaxislength * Yaxislength)/Xaxislength);
-Xaxislength = plotaxislength;
-}
-else {
-    Xaxislength = Math.round((plotaxislength * Xaxislength)/Yaxislength);
-Yaxislength = plotaxislength;
-}
+	if(Xaxislength >= Yaxislength) {
+	    Yaxislength = Math.round((plotaxislength * Yaxislength)/Xaxislength);
+	    Xaxislength = plotaxislength;
+	}
+	else {
+	    Xaxislength = Math.round((plotaxislength * Xaxislength)/Yaxislength);
+	    Yaxislength = plotaxislength;
+	}
     }
     else {
-if(DX >= DY) {
-Yaxislength = Math.round((plotaxislength * DY)/DX);
-Xaxislength = plotaxislength;
-}
-else {
-    Xaxislength = Math.round((plotaxislength * DX)/DY);
-Yaxislength = plotaxislength;
-}
+	if(DX >= DY) {
+	    Yaxislength = Math.round((plotaxislength * DY)/DX);
+	    Xaxislength = plotaxislength;
+	}
+	else {
+	    Xaxislength = Math.round((plotaxislength * DX)/DY);
+	    Yaxislength = plotaxislength;
+	}
     }
-frac = imagewidth/(parseFloat(plotborderleft) + parseFloat(Xaxislength) + parseFloat(plotborderright));
-nxl =  X0 + (X1-X0)*(left-frac*plotborderleft)/(frac*Xaxislength);
-nxr =  X0 + (X1-X0)*(left+width-frac*plotborderleft)/(frac*Xaxislength);
-nyt =  Y1 - (Y1-Y0)*(top-frac*plotbordertop)/(frac*Yaxislength);
-nyb =  Y1 - (Y1-Y0)*(top+height-frac*plotbordertop)/(frac*Yaxislength);
-var scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(X1-X0))/Math.log(10.)));
-         nxl = nxl.toFixed(scale);
-         nxr = nxr.toFixed(scale);
-scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(Y1-Y0))/Math.log(10.)));
-         nyt = nyt.toFixed(scale);
-         nyb = nyb.toFixed(scale);
-myA[0]=nxl;
-myA[1]=nyb;
-myA[2]=nxr;
-myA[3]=nyt;
-return myA;
+    frac = imagewidth/(parseFloat(plotborderleft) + parseFloat(Xaxislength) + parseFloat(plotborderright));
+    nxl =  X0 + (X1-X0)*(left-frac*plotborderleft)/(frac*Xaxislength);
+    nxr =  X0 + (X1-X0)*(left+width-frac*plotborderleft)/(frac*Xaxislength);
+    nyt =  Y1 - (Y1-Y0)*(top-frac*plotbordertop)/(frac*Yaxislength);
+    nyb =  Y1 - (Y1-Y0)*(top+height-frac*plotbordertop)/(frac*Yaxislength);
+    var scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(X1-X0))/Math.log(10.)));
+    nxl = nxl.toFixed(scale);
+    nxr = nxr.toFixed(scale);
+    scale = Math.max(0,4 - Math.floor(Math.log(Math.abs(Y1-Y0))/Math.log(10.)));
+    nyt = nyt.toFixed(scale);
+    nyb = nyb.toFixed(scale);
+    myA[0]=nxl;
+    myA[1]=nyb;
+    myA[2]=nxr;
+    myA[3]=nyt;
+    return myA;
 }
 function grow(myit,dx,dy){
-myit.style.width=parseInt(myit.style.width)+dx+'px';
-myit.style.height=parseInt(myit.style.height)+dy+'px';
-myitt=myit.childNodes[0];
-var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
-var results = re.exec(myitt.style.clip);
-myitt.style.clip="rect(" + results[1] + "px " + (parseInt(results[2])+dx) + "px " +
-(parseInt(results[3])+dy) + "px " + results[4] + "px)";
-return false;
+    myit.style.width=parseInt(myit.style.width)+dx+'px';
+    myit.style.height=parseInt(myit.style.height)+dy+'px';
+    myitt=myit.childNodes[0];
+    var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
+    var results = re.exec(myitt.style.clip);
+    myitt.style.clip="rect(" + results[1] + "px " + (parseInt(results[2])+dx) + "px " +
+	(parseInt(results[3])+dy) + "px " + results[4] + "px)";
+    return false;
 }
 function sizeto(myit,dx,dy){
-cw=parseInt(myit.style.width);
-ch=parseInt(myit.style.height);
-grow(myit,dx-cw,dy-ch);
+    cw=parseInt(myit.style.width);
+    ch=parseInt(myit.style.height);
+    grow(myit,dx-cw,dy-ch);
 }
 function shiftby(myit,dx,dy){
-myit.style.left=parseInt(myit.style.left)+dx+'px';
-myit.style.top=parseInt(myit.style.top)+dy+'px';
-myitt=myit.childNodes[0];
-var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
-var results = re.exec(myitt.style.clip);
-myitt.style.clip="rect(" + (parseInt(results[1])+dy) + "px " + (parseInt(results[2])+dx) + "px " +
-(parseInt(results[3])+dy) + "px " + (parseInt(results[4])+dx) + "px)";
-myitt.style.left=parseInt(myitt.style.left)-dx+'px';
-myitt.style.top=parseInt(myitt.style.top)-dy+'px';
-return false;
+    myit.style.left=parseInt(myit.style.left)+dx+'px';
+    myit.style.top=parseInt(myit.style.top)+dy+'px';
+    myitt=myit.childNodes[0];
+    var re=/(\d+)px,?\s*(\d+)px,?\s*(\d+)px,?\s*(\d+)px/;
+    var results = re.exec(myitt.style.clip);
+    myitt.style.clip="rect(" + (parseInt(results[1])+dy) + "px " + (parseInt(results[2])+dx) + "px " +
+	(parseInt(results[3])+dy) + "px " + (parseInt(results[4])+dx) + "px)";
+    myitt.style.left=parseInt(myitt.style.left)-dx+'px';
+    myitt.style.top=parseInt(myitt.style.top)-dy+'px';
+    return false;
 }
 function shiftto(myit,newx,newy){
-cleft=parseInt(myit.style.left);
-ctop=parseInt(myit.style.top);
-shiftby(myit,newx-cleft,newy-ctop);
+    cleft=parseInt(myit.style.left);
+    ctop=parseInt(myit.style.top);
+    shiftby(myit,newx-cleft,newy-ctop);
 }
 /* end of drag zoom routines */
 function insertInstructions(){
     var mylist=document.getElementsByClassName("buttonInstructions");
     if(mylist.length>0){
-/* make sure Set-Language has carryLanguage */
+	/* make sure Set-Language has carryLanguage */
 	var myform=document.getElementById('pageform');
 	if(myform){
 	    var slang=myform.elements['Set-Language'];
@@ -4813,134 +4819,134 @@ function insertInstructions(){
     }
 }
 function insertcontrolBar(){
-var s=document.getElementById('homelink');
-if(!s){
-    var mylist=document.getElementsByClassName("controlBar");
-if(mylist.length>0){
-var cont=mylist[0];
-var gb= document.createElement('div');
-gb.id='homelink';
-var homelinks=getElementsByAttribute(document,'link','rel','home');
-var homelinkjson=getElementsByAttribute(document,'link','rel','home alternate');
-gb.inout='out';
-gb.onclick=homelinkclick;
-gb.myonclick=homelinkclick;
-if(homelinkjson.length == 1
-&& navigator.appVersion.indexOf('MSIE 8')<0) {
-    // menu from json
-    appendMissingClass(gb,'HomeSelect');
-    var mylink = document.createElement('a');
-    mylink.setAttribute('rel','iridl:hasJSON');
-    mylink.className=homelinkjson[0].className;
-    mylink.href=homelinkjson[0].href;
-    gb.appendChild(mylink);
-    gb.pureTemplateClass = 'homeTemplate';
-    gb.pureDirective = {
-	'option.toplist' : {
-	    'opt<-options':{
-		'.': 'opt.title',
-		'.@value': 'opt.href',
-	    }
-	},	
-	'optgroup' : {
-	    'grp<-groups':{
-		'.@label': 'grp.title',
-		'option' : {
-		    'oopt<-grp.links':{
-			'.': 'oopt.title',
-			'.@value': 'oopt.href',
-		    }
-		}	
+    var s=document.getElementById('homelink');
+    if(!s){
+	var mylist=document.getElementsByClassName("controlBar");
+	if(mylist.length>0){
+	    var cont=mylist[0];
+	    var gb= document.createElement('div');
+	    gb.id='homelink';
+	    var homelinks=getElementsByAttribute(document,'link','rel','home');
+	    var homelinkjson=getElementsByAttribute(document,'link','rel','home alternate');
+	    gb.inout='out';
+	    gb.onclick=homelinkclick;
+	    gb.myonclick=homelinkclick;
+	    if(homelinkjson.length == 1
+	       && navigator.appVersion.indexOf('MSIE 8')<0) {
+		// menu from json
+		appendMissingClass(gb,'HomeSelect');
+		var mylink = document.createElement('a');
+		mylink.setAttribute('rel','iridl:hasJSON');
+		mylink.className=homelinkjson[0].className;
+		mylink.href=homelinkjson[0].href;
+		gb.appendChild(mylink);
+		gb.pureTemplateClass = 'homeTemplate';
+		gb.pureDirective = {
+		    'option.toplist' : {
+			'opt<-options':{
+			    '.': 'opt.title',
+			    '.@value': 'opt.href',
+			}
+		    },	
+		    'optgroup' : {
+			'grp<-groups':{
+			    '.@label': 'grp.title',
+			    'option' : {
+				'oopt<-grp.links':{
+				    '.': 'oopt.title',
+				    '.@value': 'oopt.href',
+				}
+			    }	
 
+			}
+		    }
+		}
+		var sel = document.createElement('select');
+		sel.name = 'homelinksel';
+		sel.id = 'homelinksel';
+		sel.onchange=dohomesel;
+		sel.myonchange=dohomesel;
+		sel.className='homeTemplate homeselect pageformcopy';
+		var opt;
+		opt=document.createElement('option');
+		opt.innerHTML=' ';
+		opt.value='';
+		opt.className='toplist';
+		sel.appendChild(opt);
+		opt=document.createElement('optgroup');
+		opt.innerHTML=' ';
+		opt.value='';
+		var oopt=document.createElement('option');
+		oopt.innerHTML=' ';
+		oopt.value='';
+		opt.appendChild(oopt);
+		sel.appendChild(opt);
+		opt=document.createElement('option');
+		opt.innerHTML=' ';
+		opt.value='';
+		opt.className='emptyOption';
+		sel.appendChild(opt);
+		gb.appendChild(sel);
+		var myform=document.getElementById('pageform');
+		if(myform){
+		    var ipt = document.createElement('input');
+		    ipt.name='homelinksel';
+		    ipt.id = 'homelinksel';
+		    ipt.type='hidden';
+		    ipt.value='unseturl';
+		    myform.appendChild(ipt);
+		}
+	    }
+	    else if(homelinks.length > 1) {
+		// menu from flat list of links
+		var sel = document.createElement('select');
+		appendMissingClass(gb,'HomeSelect');
+		sel.name = 'homelinksel';
+		sel.name = 'homelinksel';
+		sel.onchange=dohomesel;
+		sel.myonchange=dohomesel;
+		var opt=document.createElement('option');
+		opt.innerHTML=' ';
+		opt.value='';
+		sel.appendChild(opt);
+		var cnt=1;
+		for(var i = 0; i < homelinks.length ; i++){
+		    var title = homelinks[i].title;
+		    if(title){
+			var opt=document.createElement('option');
+			opt.innerHTML=title;
+			opt.value=homelinks[i].href;
+			sel.appendChild(opt);
+			cnt = cnt + 1;
+		    }
+		}
+		sel.selectedIndex=-1;
+		gb.appendChild(sel);
+	    }
+	    /* skips over text nodes, links, and scripts to get homelink next to other displayed elements */
+	    var cfirst = cont.firstChild;
+	    while (cfirst && (!cfirst.tagName || cfirst.tagName=='A'  || cfirst.tagName=='SCRIPT')){
+		cfirst = cfirst.nextSibling;
+	    }
+	    cont.insertBefore(gb,cfirst);
+	    var slist = cont.getElementsByTagName('select');
+	    for (var i=0; i<slist.length ; i++){
+		var mysel = slist[i];
+		if(mysel.name != 'homelinksel' && mysel.previousSibling && mysel.previousSibling.className != "selectvalue"){
+		    var sv = document.createElement('span');
+		    sv.className='selectvalue';
+		    sv.onclick=selectvalueclick;
+		    sv.onclickFn=selectvalueclick;
+		    if(mysel.selectedIndex >=0){
+			sv.innerHTML=mysel.options[mysel.selectedIndex].innerHTML;
+			sv.setAttribute('value',sv.innerHTML);
+		    }
+		    mysel.parentNode.insertBefore(sv,mysel);
+		}
 	    }
 	}
     }
-    var sel = document.createElement('select');
-    sel.name = 'homelinksel';
-    sel.id = 'homelinksel';
-    sel.onchange=dohomesel;
-    sel.myonchange=dohomesel;
-    sel.className='homeTemplate homeselect pageformcopy';
-    var opt;
-    opt=document.createElement('option');
-    opt.innerHTML=' ';
-    opt.value='';
-    opt.className='toplist';
-    sel.appendChild(opt);
-    opt=document.createElement('optgroup');
-    opt.innerHTML=' ';
-    opt.value='';
-    var oopt=document.createElement('option');
-    oopt.innerHTML=' ';
-    oopt.value='';
-    opt.appendChild(oopt);
-    sel.appendChild(opt);
-    opt=document.createElement('option');
-    opt.innerHTML=' ';
-    opt.value='';
-    opt.className='emptyOption';
-    sel.appendChild(opt);
-    gb.appendChild(sel);
-var myform=document.getElementById('pageform');
-if(myform){
-    var ipt = document.createElement('input');
-    ipt.name='homelinksel';
-    ipt.id = 'homelinksel';
-    ipt.type='hidden';
-    ipt.value='unseturl';
-    myform.appendChild(ipt);
-}
-    }
-else if(homelinks.length > 1) {
-    // menu from flat list of links
-    var sel = document.createElement('select');
-    appendMissingClass(gb,'HomeSelect');
-    sel.name = 'homelinksel';
-    sel.name = 'homelinksel';
-    sel.onchange=dohomesel;
-    sel.myonchange=dohomesel;
-	var opt=document.createElement('option');
-	opt.innerHTML=' ';
-	opt.value='';
-	sel.appendChild(opt);
-	var cnt=1;
-    for(var i = 0; i < homelinks.length ; i++){
-	var title = homelinks[i].title;
-	if(title){
-	var opt=document.createElement('option');
-	opt.innerHTML=title;
-	opt.value=homelinks[i].href;
-	sel.appendChild(opt);
-	cnt = cnt + 1;
-	}
-    }
-    sel.selectedIndex=-1;
-    gb.appendChild(sel);
-}
-/* skips over text nodes, links, and scripts to get homelink next to other displayed elements */
-    var cfirst = cont.firstChild;
-    while (cfirst && (!cfirst.tagName || cfirst.tagName=='A'  || cfirst.tagName=='SCRIPT')){
-	cfirst = cfirst.nextSibling;
-    }
-cont.insertBefore(gb,cfirst);
-var slist = cont.getElementsByTagName('select');
-for (var i=0; i<slist.length ; i++){
-    var mysel = slist[i];
-    if(mysel.name != 'homelinksel' && mysel.previousSibling && mysel.previousSibling.className != "selectvalue"){
-	var sv = document.createElement('span');
-	sv.className='selectvalue';
-	sv.onclick=selectvalueclick;
-	sv.onclickFn=selectvalueclick;
-	if(mysel.selectedIndex >=0){
-	sv.innerHTML=mysel.options[mysel.selectedIndex].innerHTML;
-	    sv.setAttribute('value',sv.innerHTML);
-	}
-	mysel.parentNode.insertBefore(sv,mysel);
-    }
-}
-}
-}
-insertlang();
+    insertlang();
 }
 /* this exists to convince ios to send events to selectvalue for CSS */
 function selectvalueclick (evt) {
@@ -5004,7 +5010,7 @@ function languageChange(){
 		    appendMissingClass(myform,'bodyAttribute');
 		}
 		if(sel.parentNode.firstChild.tagName == 'LEGEND'){
-		sel.parentNode.firstChild.innerHTML=LanguageTitle[newlang];
+		    sel.parentNode.firstChild.innerHTML=LanguageTitle[newlang];
 		}
 		if(slang){
 		    slang.value=newlang;
@@ -5098,33 +5104,33 @@ function insertlang(){
 }
 /* set up old style Google Analytics */
 /*var _gaq = _gaq || [];
-function setupGA() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  function setupGA() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   } */
 /* set up Google Universal Analytics */
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 
 function getQueryVariable(variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-	var pair;
-        for (var i = 0; i < vars.length; i++) {
-            pair = vars[i].split("=");
-            if (pair[0] == variable) {
-                return unescape(pair[1]);
-            }
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    var pair;
+    for (var i = 0; i < vars.length; i++) {
+        pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return unescape(pair[1]);
         }
-	return undefined;
     }
+    return undefined;
+}
 
 function setPageFormVariable(name,newvalue){
-var myform=document.getElementById('pageform');
+    var myform=document.getElementById('pageform');
     if(myform){
 	if(myform.elements[name]){
 	    myform.elements[name].value=newvalue;
@@ -5134,7 +5140,7 @@ var myform=document.getElementById('pageform');
     return true;
 }
 function setPageForm(){
-var myform=document.getElementById('pageform');
+    var myform=document.getElementById('pageform');
     if(!myform){
 	var body = document.getElementsByTagName('body')[0];
 	myform = document.createElement('form');
@@ -5143,68 +5149,68 @@ var myform=document.getElementById('pageform');
 	body.insertBefore(myform,body.firstChild);
 
     }
-if(myform){
-    window.onpopstate=updatePageFormFromUrlEvt;
-/* makes sure lang element is class bodyAttribute */
-    var langgroups = document.getElementsByClassName('langgroup');
-    if(langgroups.length > 0) {
-	var mylang = myform.elements['lang'];
-	if(!mylang){
-	    mylang = document.createElement('input');
-	    mylang.className='bodyAttribute';
-	    mylang.name='lang';
-	    mylang.type='hidden';
-	    myform.appendChild(mylang);
-	    mybody = document.getElementsByTagName('body')[0];
-	    appendMissingClass(mybody,'reloadOnLanguageChange');
+    if(myform){
+	window.onpopstate=updatePageFormFromUrlEvt;
+	/* makes sure lang element is class bodyAttribute */
+	var langgroups = document.getElementsByClassName('langgroup');
+	if(langgroups.length > 0) {
+	    var mylang = myform.elements['lang'];
+	    if(!mylang){
+		mylang = document.createElement('input');
+		mylang.className='bodyAttribute';
+		mylang.name='lang';
+		mylang.type='hidden';
+		myform.appendChild(mylang);
+		mybody = document.getElementsByTagName('body')[0];
+		appendMissingClass(mybody,'reloadOnLanguageChange');
+	    }
+	    appendMissingClass(mylang,'bodyAttribute');
 	}
-	appendMissingClass(mylang,'bodyAttribute');
-    }
-    /* initializes pageform classes */
-    var inputs = myform.children;
-    var pfclasses = [];
-    var clist = myform.className.split(' ');
-    for (var i = 0 ; i < clist.length ; i++){
-	pfclasses[clist[i]] = true;
-    }
-    for (var i = 0; i < inputs.length ; i++){
-	var inp = inputs[i];
+	/* initializes pageform classes */
+	var inputs = myform.children;
+	var pfclasses = [];
+	var clist = myform.className.split(' ');
+	for (var i = 0 ; i < clist.length ; i++){
+	    pfclasses[clist[i]] = true;
+	}
+	for (var i = 0; i < inputs.length ; i++){
+	    var inp = inputs[i];
 
-	if(typeof(inp.initialValue) == 'undefined'){
-	    inp.initialValue = inp.getAttribute('data-default');
-	    if(inp.initialValue && !inp.value){
-		inp.value=inp.initialValue;
-	    }
-	    if(inp.initialValue && inp.type == 'checkbox'){
-		inp.initialChecked = inp.checked;
-	    }
-
+	    if(typeof(inp.initialValue) == 'undefined'){
+		inp.initialValue = inp.getAttribute('data-default');
+		if(inp.initialValue && !inp.value){
+		    inp.value=inp.initialValue;
+		}
+		if(inp.initialValue && inp.type == 'checkbox'){
+		    inp.initialChecked = inp.checked;
 		}
 
-	clist = inp.className.split(' ');
-	for (var j=0; j< clist.length; j++){
-	    if(!pfclasses[clist[j]]){
-		pfclasses[clist[j]] = true;
-		myform.className = myform.className + ' ' + clist[j];
+	    }
+
+	    clist = inp.className.split(' ');
+	    for (var j=0; j< clist.length; j++){
+		if(!pfclasses[clist[j]]){
+		    pfclasses[clist[j]] = true;
+		    myform.className = myform.className + ' ' + clist[j];
+		}
 	    }
 	}
-    }
-/* sets form jsonldContext 
-jsonldContext == context as written
-nsContext == just the namespace declarations
-structContext == just the structure declarations -- expanded to not depend on nsContext, 
-                 but not changed in meaning: nsContext + structContext is still jsonldContext
-*/
-    if(myform.nextElementSibling && myform.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldContext'){
-	myform.jsonldContext = JSON.parse(myform.nextElementSibling.text);
-	var mysplitContext=splitContext(myform.jsonldContext);
-	myform.nsContext=mysplitContext[0];
-	myform.structContext=mysplitContext[1];
-    }
-    /* updates values from page url */
-var achange=false;
-var inputs=myform.elements;
-var varcnts = {};
+	/* sets form jsonldContext 
+	   jsonldContext == context as written
+	   nsContext == just the namespace declarations
+	   structContext == just the structure declarations -- expanded to not depend on nsContext, 
+           but not changed in meaning: nsContext + structContext is still jsonldContext
+	*/
+	if(myform.nextElementSibling && myform.nextElementSibling.getAttribute('property') == 'iridl:hasJsonldContext'){
+	    myform.jsonldContext = JSON.parse(myform.nextElementSibling.text);
+	    var mysplitContext=splitContext(myform.jsonldContext);
+	    myform.nsContext=mysplitContext[0];
+	    myform.structContext=mysplitContext[1];
+	}
+	/* updates values from page url */
+	var achange=false;
+	var inputs=myform.elements;
+	var varcnts = {};
         var query = window.location.search.substring(1);
         var vars = query.split("&");
 	var pair;
@@ -5213,13 +5219,14 @@ var varcnts = {};
 	    var iname=pair[0];
             if (inputs[iname]) {
 	        achange=true;
-// decode and encode do not properly invert each other w.r.t. space to + conversion
+		// decode and encode do not properly invert each other w.r.t. space to + conversion
 	        var hold = pair[1].replace(/[+]/g," ");
 		if(!varcnts[iname]){
 		    varcnts[iname]=0;
 		}
 		var ipos=varcnts[iname];
 		var refvalue = decodeURIComponent(hold);
+                addGMapParam(iname,refvalue);
 		if(inputs[iname].length){
 		    if(inputs[iname][ipos].type == 'checkbox'){
 			for (var ick = 0 ; ick < inputs[iname].length; ick++){
@@ -5242,7 +5249,7 @@ var varcnts = {};
             }
         }
 	updatePageFormCopies(document);
-}
+    }
     if(history && history.pushState){
 	var url = location.href;
 	history.replaceState(url,'initial',url);
@@ -5254,13 +5261,13 @@ function splitContext(icontext){
     ns['@context']={};
     struct['@context']={};
     var mycontext=icontext['@context'];
-/* extracts namespace declarations */
+    /* extracts namespace declarations */
     for (var key in mycontext){
 	if(typeof(mycontext[key]) == "string"){
 	    ns['@context'][key] = expandNS(mycontext[key],mycontext);
 	}
     }
-/* extracts structures, expanding ns */
+    /* extracts structures, expanding ns */
     var myns=ns['@context']
     for (var key in mycontext){
 	if(typeof(mycontext[key]) != "string"){
@@ -5269,7 +5276,7 @@ function splitContext(icontext){
 	    for (var pkey in myhash){
 		var curr = expandNS(myhash[pkey],myns);
 		newhash[expandNS(pkey,myns)]=curr;
-	}
+	    }
 	    struct['@context'][key] = newhash;
 	}
     }
@@ -5278,14 +5285,14 @@ function splitContext(icontext){
 function expandNS(curi,ns){
     var rstr = curi;
     if(typeof(curi) == "string"){
-    var cat = curi.indexOf(':');
-    if (cat > 0){
-	var abbr = curi.substring(0,cat);
-	var nsexp = ns[abbr];
-	if(nsexp){
-	    rstr = nsexp + curi.substring(cat+1);
+	var cat = curi.indexOf(':');
+	if (cat > 0){
+	    var abbr = curi.substring(0,cat);
+	    var nsexp = ns[abbr];
+	    if(nsexp){
+		rstr = nsexp + curi.substring(cat+1);
+	    }
 	}
-    }
     }
     return rstr;
 }
@@ -5296,37 +5303,37 @@ function updatePageFormFromUrlEvt(evt){
 }
 function updatePageFormFromUrl(elementtocheck){
     /* updates values from page url */
-var myform=document.getElementById('pageform');
-if(myform){
-var achange=false;
-    var inputs;
-    if(elementtocheck){
-	inputs=[];
-	inputs[elementtocheck.name]=elementtocheck;
-	inputs[0]=elementtocheck;
-    }
-    else {
-	inputs=myform.elements;
-    }
-var varcnts = {};
-    for(var i=0; i < inputs.length; i++){
-	var inp=inputs[i];
-	if(typeof(inp.initialValue) != 'undefined' && inp.value != inp.initialValue){
-	    achange=true;
-	    inp.value = inp.initialValue;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var achange=false;
+	var inputs;
+	if(elementtocheck){
+	    inputs=[];
+	    inputs[elementtocheck.name]=elementtocheck;
+	    inputs[0]=elementtocheck;
+	}
+	else {
+	    inputs=myform.elements;
+	}
+	var varcnts = {};
+	for(var i=0; i < inputs.length; i++){
+	    var inp=inputs[i];
+	    if(typeof(inp.initialValue) != 'undefined' && inp.value != inp.initialValue){
+		achange=true;
+		inp.value = inp.initialValue;
+		
+	    }
+	    else if(inp.type == 'checkbox'){
+		if(typeof(inp.initialChecked)=='undefined'){
+		    inp.initialChecked=true;
+		}
+		if(inp.checked != inp.initialChecked){
+		    achange=true;
+		    inp.checked = inp.initialChecked;
+		}
+	    }
 	    
 	}
-	else if(inp.type == 'checkbox'){
-	    if(typeof(inp.initialChecked)=='undefined'){
-		inp.initialChecked=true;
-	    }
-	    if(inp.checked != inp.initialChecked){
-		achange=true;
-		inp.checked = inp.initialChecked;
-	    }
-	}
-	
-    }
         var query = window.location.search.substring(1);
         var vars = query.split("&");
 	var pair;
@@ -5335,7 +5342,7 @@ var varcnts = {};
 	    var iname=pair[0];
             if (inputs[iname]) {
 	        achange=true;
-// decode and encode do not properly invert each other w.r.t. space to + conversion
+		// decode and encode do not properly invert each other w.r.t. space to + conversion
 	        var hold = pair[1].replace(/[+]/g," ");
 		if(!varcnts[iname]){
 		    varcnts[iname]=0;
@@ -5348,10 +5355,10 @@ var varcnts = {};
 			    if(varcnts[iname] == 0){
 				inputs[iname][j].checked = false;
 			    }
-			if(inputs[iname][j].value == newvalue){
-			    inputs[iname][j].checked = true;
+			    if(inputs[iname][j].value == newvalue){
+				inputs[iname][j].checked = true;
+			    }
 			}
-		    }
 		    }
 		    else {
 			inputs[iname][ipos].value=decodeURIComponent(hold);
@@ -5367,8 +5374,8 @@ var varcnts = {};
 		varcnts[iname] = varcnts[iname] + 1;
             }
         }
-    if(achange){updatePageFormNoHistory()};
-}
+	if(achange){updatePageFormNoHistory()};
+    }
     if(window.location.hash){
 	var mytab = makeTabActiveFromHash(window.location.hash);
 	if(mytab){
@@ -5384,9 +5391,9 @@ var varcnts = {};
 
 }
 function disableNullInputs(){
-var myform=document.getElementById('pageform');
-if(myform){
-var inputs=myform.elements;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var inputs=myform.elements;
         for (var i = 0; i < inputs.length; i++) {
 
 	    if(inputs[i].length){
@@ -5394,23 +5401,23 @@ var inputs=myform.elements;
 		var allq=true;
 		var myl=inputs[i];
 		if(myl.type='checkbox'){
-		for(var j=myl.length;j--;){
-		    /* i.e. all disabled if all defaultChecked */
-		    if(myl[j].checked != myl[j].defaultChecked) {allq=false} 
-		};
-		if(!allq){
-		var myl=inputs[i];
-		for(var j=myl.length;j--;myl[j].disabled=true);
-		}
+		    for(var j=myl.length;j--;){
+			/* i.e. all disabled if all defaultChecked */
+			if(myl[j].checked != myl[j].defaultChecked) {allq=false} 
+		    };
+		    if(!allq){
+			var myl=inputs[i];
+			for(var j=myl.length;j--;myl[j].disabled=true);
+		    }
 		}
 		else {
-		for(var j=myl.length;j--;){
-		    if(myl[j].value != myl[j].initialValue) {allq=false}
-		};
-		if(!allq){
-		var myl=inputs[i];
-		for(var j=myl.length;j--;myl[j].disabled=true);
-		}
+		    for(var j=myl.length;j--;){
+			if(myl[j].value != myl[j].initialValue) {allq=false}
+		    };
+		    if(!allq){
+			var myl=inputs[i];
+			for(var j=myl.length;j--;myl[j].disabled=true);
+		    }
 		}
 	    }
 	    else {
@@ -5419,120 +5426,120 @@ var inputs=myform.elements;
 		    inputs[i].disabled=true;
 		}
 	    }
-}
-}
+	}
+    }
 }
 function addLanguageVar(url){
-var myform=document.getElementById('pageform');
-if(myform){
-var lang=myform.elements['Set-Language'];
-if(lang && lang.value){
-    var newurl = url;
-if(newurl.charAt(newurl.length-1) == '/'){
-   newurl=newurl+'index.html';
-}
-newurl= newurl + "?Set-Language=" + lang.value;
-return newurl;
-}
-}
-return url;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var lang=myform.elements['Set-Language'];
+	if(lang && lang.value){
+	    var newurl = url;
+	    if(newurl.charAt(newurl.length-1) == '/'){
+		newurl=newurl+'index.html';
+	    }
+	    newurl= newurl + "?Set-Language=" + lang.value;
+	    return newurl;
+	}
+    }
+    return url;
 }
 function setupPageFormLinks(context){
-var myform=document.getElementById('pageform');
-if(myform){
-var clist = myform.className.split(' ');
-for ( var i = 0; i < clist.length; i++ )
-         {
-var cclass=clist[i];
-var members = context.getElementsByClassName(cclass);
-for ( var j = 0; j < members.length; j++ ) {
-if(members[j].href){
-members[j].onclick=onClickPageForm;
-}
-if(members[j].src){
-members[j].onload=imageloadedevent;
-members[j].onabort=imageabortedevent;
-members[j].onerror=imageerrorevent;
-appendMissingClass(members[j],'valid');
-}
-}
-}
-    setUIHandlers(context);
-updatePageFormNoHistory();
-}
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var clist = myform.className.split(' ');
+	for ( var i = 0; i < clist.length; i++ )
+        {
+	    var cclass=clist[i];
+	    var members = context.getElementsByClassName(cclass);
+	    for ( var j = 0; j < members.length; j++ ) {
+		if(members[j].href){
+		    members[j].onclick=onClickPageForm;
+		}
+		if(members[j].src){
+		    members[j].onload=imageloadedevent;
+		    members[j].onabort=imageabortedevent;
+		    members[j].onerror=imageerrorevent;
+		    appendMissingClass(members[j],'valid');
+		}
+	    }
+	}
+	setUIHandlers(context);
+	updatePageFormNoHistory();
+    }
 }
 function setUIHandlers(context){
-/* pageformcopy form elements copy their values to the pageform */
-var stag = context.getElementsByClassName('pageformcopy');
-for (var i=0; i< stag.length ; i++){
-var sel=stag[i];
-if(typeof(sel.onchange) != 'function'){
-sel.onchange=pageformcopyonchange;
-sel.onchangefn=pageformcopyonchange;
-}
-}
-/* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
-var stag = context.getElementsByClassName('RegionMenu');
-for (var i=0; i< stag.length ; i++){
-    var sel=stag[i];
-    appendMissingClass(sel,'pageformcopy');
-if(typeof(sel.onchange) != 'function'){
-sel.onchange=regiononchange;
-sel.onchangefn=regiononchange;
-}
-}
-/* popup regionwithinbbox:  sets region to match bbox and clears clickpt */
-var stag = context.getElementsByClassName('popup regionwithinbbox');
-for (var i=0; i< stag.length ; i++){
-    var sel=stag[i];
-if(typeof(sel.onchange) != 'function'){
-sel.onclick=clearregionwithin;
-sel.onclickfn=clearregionwithin;
-}
-}
-/* morecount/moreitem:  provides more button if more moreitem's than count */
+    /* pageformcopy form elements copy their values to the pageform */
+    var stag = context.getElementsByClassName('pageformcopy');
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	if(typeof(sel.onchange) != 'function'){
+	    sel.onchange=pageformcopyonchange;
+	    sel.onchangefn=pageformcopyonchange;
+	}
+    }
+    /* like pageformcopy, but in addition to setting bbox, also sets region to match and clears clickpt */
+    var stag = context.getElementsByClassName('RegionMenu');
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	appendMissingClass(sel,'pageformcopy');
+	if(typeof(sel.onchange) != 'function'){
+	    sel.onchange=regiononchange;
+	    sel.onchangefn=regiononchange;
+	}
+    }
+    /* popup regionwithinbbox:  sets region to match bbox and clears clickpt */
+    var stag = context.getElementsByClassName('popup regionwithinbbox');
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	if(typeof(sel.onchange) != 'function'){
+	    sel.onclick=clearregionwithin;
+	    sel.onclickfn=clearregionwithin;
+	}
+    }
+    /* morecount/moreitem:  provides more button if more moreitem's than count */
     var stag = getElementsByAttribute(context,'*','data-morecount','*');
-for (var i=0; i< stag.length ; i++){
-    var sel=stag[i];
-    var morecount = sel.getAttribute('data-morecount');
-    var morechildren = [];
-    for (var j=0 ; j< sel.children.length ; j++){
-	if (sel.children[j].className && sel.children[j].className.indexOf('moreitem')>-1){
-	    morechildren.push(sel.children[j]);
+    for (var i=0; i< stag.length ; i++){
+	var sel=stag[i];
+	var morecount = sel.getAttribute('data-morecount');
+	var morechildren = [];
+	for (var j=0 ; j< sel.children.length ; j++){
+	    if (sel.children[j].className && sel.children[j].className.indexOf('moreitem')>-1){
+		morechildren.push(sel.children[j]);
+	    }
 	}
-    }
 
-    sel.setAttribute('moreitemcount',morechildren.length);
-    if (morecount < morechildren.length-3){
-    /* morecount is restrictive */
-	appendMissingClass(sel,'hasMoreButton');
-	sel.setAttribute('morehide',morechildren.length-morecount);
-	sel.onclick=toggleShowAll;
-	sel.onclickfn=toggleShowAll;
-	for (var j = 0 ; j < morecount ; j++){
-	    appendMissingClass(morechildren[j],'belowMoreCount')
+	sel.setAttribute('moreitemcount',morechildren.length);
+	if (morecount < morechildren.length-3){
+	    /* morecount is restrictive */
+	    appendMissingClass(sel,'hasMoreButton');
+	    sel.setAttribute('morehide',morechildren.length-morecount);
+	    sel.onclick=toggleShowAll;
+	    sel.onclickfn=toggleShowAll;
+	    for (var j = 0 ; j < morecount ; j++){
+		appendMissingClass(morechildren[j],'belowMoreCount')
+	    }
+	}
+	morechildren=sel.getElementsByClassName('moreitem');
+	for (var j = 0 ; j < morechildren.length ; j++){
+	    if(typeof morechildren[j].onclick != 'function'){
+		morechildren[j].onclick=stopevent;
+		morechildren[j].onclickfn=stopevent;
+		morechildren[j].onmouseover=fixglossloc;
+		morechildren[j].onmouseoverfn=fixglossloc;
+	    }
 	}
     }
-    morechildren=sel.getElementsByClassName('moreitem');
-    for (var j = 0 ; j < morechildren.length ; j++){
-	if(typeof morechildren[j].onclick != 'function'){
-	    morechildren[j].onclick=stopevent;
-	    morechildren[j].onclickfn=stopevent;
-	    morechildren[j].onmouseover=fixglossloc;
-	    morechildren[j].onmouseoverfn=fixglossloc;
-	}
-    }
-}
-/* ingrid command form */
+    /* ingrid command form */
     var stag = context.getElementsByClassName('ingridcommand');
     for (var i=0; i< stag.length ; i++){
 	var aform = stag[i];
 	if(typeof aform.onsubmit != 'function'){
 	    aform.onsubmit=dopageformcommand;
 	    aform.onsubmitfn=dopageformcommand;
-	    }
 	}
-/* property=wn20schema:lexicalForm and rel=wn20schema:containsWordSense */
+    }
+    /* property=wn20schema:lexicalForm and rel=wn20schema:containsWordSense */
     var stag = getElementsByAttribute(context,'*','rel','wn20schema:containsWordSense');
     for (var i=0; i< stag.length ; i++){
 	var sel=stag[i];
@@ -5541,7 +5548,7 @@ for (var i=0; i< stag.length ; i++){
 	    sel.onclickfn=handleworddef;
 	}
     }
-/* property=wn30:lexicalForm and rel=wn30:hasSense */
+    /* property=wn30:lexicalForm and rel=wn30:hasSense */
     var stag = getElementsByAttribute(context,'*','rel','wn30:hasSense');
     for (var i=0; i< stag.length ; i++){
 	var sel=stag[i];
@@ -5563,8 +5570,8 @@ for (var i=0; i< stag.length ; i++){
     }
 }
 function dopageformcommand (evt){
-  var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
     var cmd = it.elements["command"].value;
     var url='';
     var ipos = 0;
@@ -5578,35 +5585,35 @@ function dopageformcommand (evt){
 		var cch = cmd.substr(cpos,1);
 		if (cch == '('){
 		    pcnt = pcnt  + 1;
-		    }
+		}
 		else if (cch == ')'){
 		    pcnt = pcnt - 1;
-		    }
-		cpos = cpos + 1;
 		}
+		cpos = cpos + 1;
+	    }
 	    url = url + cmd.substring(ipar,cpos);
 	    ipos = cpos;
-	    }
+	}
 	else {
 	    url = url + cmd.substr(ipos).replace(/\s+/gm,'/');
 	    ipos = cmd.length;
-	    }
 	}
+    }
     if(url.substr(url.length-1) != '/'){
 	url = url + '/';
-	}
+    }
     var cleanurl = encodeURIComponent(url).replace(/%2F/gm,'/');
     if(location.hash){
 	cleanurl = cleanurl + location.hash;
-	}
+    }
     url = appendPageForm(cleanurl,'share carryLanguage');
     location.href=url;
     evt.returnValue=false;
     return false;
 }
 function handleworddef(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
 
     var myglossary = getElementsByAttribute(document,'link','rel','iridl:hasGlossary');
     if(myglossary){
@@ -5620,24 +5627,24 @@ function handleworddef(evt){
     }
 }
 /* this is a work around for a webkit position: absolute bug in multicolumn layout.  Hopefully will be unnecessary someday, though was reported a year ago for Chromium.  
-Note that it assumes gloss is defined with position absolute relative to the page, an intervening position: relative will mess things up.
- 2014-10-13 */
+   Note that it assumes gloss is defined with position absolute relative to the page, an intervening position: relative will mess things up.
+   2014-10-13 */
 function fixglossloc(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
     var isWebkit = 'WebkitAppearance' in document.documentElement.style;
     if(isWebkit){
-    var mylbl = it.getElementsByClassName("lbl");
-    var mygloss = it.getElementsByClassName("gloss");
-    if(mylbl.length > 0 && mygloss.length > 0){
-	mygloss[0].style.top=(absTop(mylbl[0])+mylbl[0].offsetHeight+5)+'px';
-	mygloss[0].style.left=absLeft(mylbl[0])+'px';
-    }
+	var mylbl = it.getElementsByClassName("lbl");
+	var mygloss = it.getElementsByClassName("gloss");
+	if(mylbl.length > 0 && mygloss.length > 0){
+	    mygloss[0].style.top=(absTop(mylbl[0])+mylbl[0].offsetHeight+5)+'px';
+	    mygloss[0].style.left=absLeft(mylbl[0])+'px';
+	}
     }
 }
 function toggleShowAll(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
     toggleClass(it,'ShowAll');
     var forcereflow=it.offsetHeight;
 }
@@ -5659,15 +5666,15 @@ function ChangeClassPageInput(iname,fromclass,toclass){
 	}
 	if(myinput){
 	    if(myinput.className){
-	    var clist = myinput.className.split(' ');
-	    for ( var i = 0; i < clist.length; i++ )
+		var clist = myinput.className.split(' ');
+		for ( var i = 0; i < clist.length; i++ )
 		{
 		    var cclass=clist[i];
 		    var members = document.getElementsByClassName(cclass);
 		    for ( var j = 0; j < members.length; j++ ) {
 			var cmem=members[j];
 			if(cmem.rel == 'iridl:hasJSON'){
-			changeClass(cmem.parentNode,fromclass,toclass);
+			    changeClass(cmem.parentNode,fromclass,toclass);
 			}
 			else if(cmem.rel == 'iridl:hasFigure'){
 			    changeClass(cmem.parentNode,fromclass,toclass);
@@ -5703,7 +5710,7 @@ function updateLangGroups(context){
     for (var i = 0; i < langgroups.length ; i++){
 	var mygrp = langgroups[i];
 	var langs = {};
-/* copies xml:lang attributes to lang if they exist */
+	/* copies xml:lang attributes to lang if they exist */
 	var langlist = getElementsByAttribute(mygrp,'*','xml:lang','*');
 	for (var j=0; j < langlist.length ; j++){
 	    if(!langlist[j].getAttribute('lang')){
@@ -5724,14 +5731,14 @@ function updateLangGroups(context){
 		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: none");
 		}
 		else {
-		langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
+		    langgroupstyle.innerHTML += ctarget + ' {display: none}\n' ;
 		}
 		ctarget = 'body[lang="' + key + '"] .langgroup[langgroup~="' + key + '"] [lang="' + key + '"]';
 		if(IE8){
 		    document.styleSheets['langgroupstyle'].addRule(ctarget,"display: inline");
 		}
 		else {
-		langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
+		    langgroupstyle.innerHTML += ctarget + ' {display: inline}\n' ;
 		}
 	    }
 	}
@@ -5739,178 +5746,179 @@ function updateLangGroups(context){
     }
 }
 /*
-function to indicate an update to the pageform
-updates all image urls that have classes that match the pageform
-updates elements in class pageformcopy with corresponding name.
+  function to indicate an update to the pageform
+  updates all image urls that have classes that match the pageform
+  updates elements in class pageformcopy with corresponding name.
 
-If supplied with the input element that changed,
-1) only checks the classes that correspond, and
-2) uses guessvalue to do readahead, resetting when done. 
+  If supplied with the input element that changed,
+  1) only checks the classes that correspond, and
+  2) uses guessvalue to do readahead, resetting when done. 
 */
 function updatePageFormQuietly(changedInput, newvalue, guessvalue,historyid){
-var addhistory=true;
+    var addhistory=true;
     updatePageFormSub(true,changedInput, newvalue, guessvalue,historyid,addhistory);
 }
 function updatePageForm(changedInput, newvalue, guessvalue,historyid){
-var addhistory=true;
+    var addhistory=true;
     updatePageFormSub(false,changedInput, newvalue, guessvalue,historyid,addhistory);
 }
 function updatePageFormNoHistory(changedInput, newvalue, guessvalue){
-var addhistory=false;
+    var addhistory=false;
     updatePageFormSub(false,changedInput, newvalue, guessvalue,undefined,addhistory);
 }
 function updatePageFormSub(quietflag,changedInput, newvalue, guessvalue,historyid,addhistory){
-var myform=document.getElementById('pageform');
-if(myform){
-updatePageFormConditionalClassesAndFlags(true);
-var clist;
-if(changedInput){
-    if(changedInput.className){
-clist = changedInput.className.split(' ');
-    }
-    else {
-	clist = [];
-    }
-    if(typeof(newvalue)!='undefined'){
-changedInput.value=newvalue;
-}
-}
-else {
-clist = myform.className.split(' ');
-}
-for ( var i = 0; i < clist.length; i++ )
-         {
-var cclass=clist[i];
-var membersnl = document.getElementsByClassName(cclass);
-var members=Array.prototype.slice.call(membersnl,0);
-members.sort(function(a,b) {var ao=Math.abs(a.offsetTop-window.pageYOffset); bo=Math.abs(b.offsetTop-window.pageYOffset); return ao-bo});
-for ( var j = 0; j < members.length; j++ ) {
-var cmem=members[j];
-/* first changes images that are on-screen */
-if(cmem.offsetTop != 0 && cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src,cmem.className);
-if(newsrc != cmem.src){
-if(!quietflag) {
-changeClass(cmem,'valid','invalid');
-    relStartLoading(cmem);
-    clearFailed(cmem);
-}
-    cmem.src = newsrc;
-}
-}
-if(cmem.tagName == 'LINK' || cmem.tagName == 'A'){
-var newsrc = appendPageForm(cmem.href,cmem.className);
-if(newsrc != cmem.href){
-    if(!cmem.sourcehref){
-	cmem.sourcehref = cmem.href;
-    }
-    cmem.href = newsrc;
-    if(cmem.rel == 'iridl:hasJSON'){
-	updateHasJSON(cmem);
-    }
-    if(cmem.rel == 'iridl:hasFigure'){
-	updateHasFigure(cmem);
-    }
-    if(cmem.rev == 'section'){
-	updateHasSectionList(cmem);
-    }
-}
-}
-if(cmem.tagName == 'SCRIPT'){
-    if(cmem.getAttribute('property') == 'iridl:hasSerqlQuery'){
-	var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
-	if(links.length>0)updateHasRqlQuery(links[0],cmem,'serql');
-    }
-    if(cmem.getAttribute('property') == 'iridl:hasSparqlQuery'){
-	var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
-	if(links.length>0)updateHasRqlQuery(links[0],cmem,'sparql');
-    }
-}
-if(cmem.tagName == 'DIV'){
-    if(cmem.getAttribute('data-href') && cmem.indexOf('share')>=0 ) {
-    var url = appendPageForm(location.href,'share');
-    url = url.replace(/[?]/,"/QS/");
-    cmem.setAttribute("data-href",url);
-    if(typeof(FB) != 'undefined'){
-    FB.XFBML.parse();
-    }
-    }
-					   
-}
-}	
-	 } 
-/* changes images that were missed above (presumably off-screen */
-for ( var i = 0; i < clist.length; i++ )
-    {
-var cclass=clist[i];
-var members = document.getElementsByClassName(cclass);
-for ( var j = 0; j < members.length; j++ ) {
-var cmem=members[j];
-if(cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src,cmem.className);
-if(newsrc != cmem.src){
-if(!quietflag) {
-changeClass(cmem,'valid','invalid');
-    appendMissingClass(cmem,'loading');
-    clearFailed(cmem);
-}
-/* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
-if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
-    cmem.src = newsrc;
-}
-}
-}
-}
-	}
-/* processes guessvalue, i.e. readahead for images */
-if(guessvalue){
-changedInput.value=guessvalue;
-for ( var i = 0; i < clist.length; i++ )
-         {
-var cclass=clist[i];
-var members = document.getElementsByClassName(cclass);
-for ( var j = 0; j < members.length; j++ ) {
-var cmem=members[j];
-if(cmem.tagName == 'IMG'){
-var newsrc = appendPageForm(cmem.src,cmem.className);
-if(newsrc != cmem.src){
-	preload(newsrc);
-}
-}
-}
-}
-changedInput.value=newvalue;
-}
-updatePageFormCopies(document);
-updatePageFormConditionalClassesAndFlags(false);
-    if(addhistory && history && history.pushState){
-	var url = appendPageForm(location.href,'share carryLanguage');
-	var currentstate = history.state;
-	if(location.href != url){
-	    var newstate = historyid;
-	    if(!historyid){
-		newstate=url;
-	    }
-	    if(currentstate == historyid){
-	    history.replaceState(newstate,'update',url);
+    updateGMaps(changedInput);
+    var myform=document.getElementById('pageform');
+    if(myform){
+	updatePageFormConditionalClassesAndFlags(true);
+	var clist;
+	if(changedInput){
+	    if(changedInput.className){
+		clist = changedInput.className.split(' ');
 	    }
 	    else {
-	    history.pushState(newstate,'update',url);
+		clist = [];
+	    }
+	    if(typeof(newvalue)!='undefined'){
+		changedInput.value=newvalue;
 	    }
 	}
-    }
-/* do render loop */
-   renderAsGDrive();
+	else {
+	    clist = myform.className.split(' ');
+	}
+	for ( var i = 0; i < clist.length; i++ )
+        {
+	    var cclass=clist[i];
+	    var membersnl = document.getElementsByClassName(cclass);
+	    var members=Array.prototype.slice.call(membersnl,0);
+	    members.sort(function(a,b) {var ao=Math.abs(a.offsetTop-window.pageYOffset); bo=Math.abs(b.offsetTop-window.pageYOffset); return ao-bo});
+	    for ( var j = 0; j < members.length; j++ ) {
+		var cmem=members[j];
+		/* first changes images that are on-screen */
+		if(cmem.offsetTop != 0 && cmem.tagName == 'IMG'){
+		    var newsrc = appendPageForm(cmem.src,cmem.className);
+		    if(newsrc != cmem.src){
+			if(!quietflag) {
+			    changeClass(cmem,'valid','invalid');
+			    relStartLoading(cmem);
+			    clearFailed(cmem);
+			}
+			cmem.src = newsrc;
+		    }
+		}
+		if(cmem.tagName == 'LINK' || cmem.tagName == 'A'){
+		    var newsrc = appendPageForm(cmem.href,cmem.className);
+		    if(newsrc != cmem.href){
+			if(!cmem.sourcehref){
+			    cmem.sourcehref = cmem.href;
+			}
+			cmem.href = newsrc;
+			if(cmem.rel == 'iridl:hasJSON'){
+			    updateHasJSON(cmem);
+			}
+			if(cmem.rel == 'iridl:hasFigure'){
+			    updateHasFigure(cmem);
+			}
+			if(cmem.rev == 'section'){
+			    updateHasSectionList(cmem);
+			}
+		    }
+		}
+		if(cmem.tagName == 'SCRIPT'){
+		    if(cmem.getAttribute('property') == 'iridl:hasSerqlQuery'){
+			var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
+			if(links.length>0)updateHasRqlQuery(links[0],cmem,'serql');
+		    }
+		    if(cmem.getAttribute('property') == 'iridl:hasSparqlQuery'){
+			var links = getElementsByAttribute(cmem.parentNode,'*','rel','iridl:hasSparqlEndpoint');
+			if(links.length>0)updateHasRqlQuery(links[0],cmem,'sparql');
+		    }
+		}
+		if(cmem.tagName == 'DIV'){
+		    if(cmem.getAttribute('data-href') && cmem.indexOf('share')>=0 ) {
+			var url = appendPageForm(location.href,'share');
+			url = url.replace(/[?]/,"/QS/");
+			cmem.setAttribute("data-href",url);
+			if(typeof(FB) != 'undefined'){
+			    FB.XFBML.parse();
+			}
+		    }
+		    
+		}
+	    }	
+	} 
+	/* changes images that were missed above (presumably off-screen */
+	for ( var i = 0; i < clist.length; i++ )
+	{
+	    var cclass=clist[i];
+	    var members = document.getElementsByClassName(cclass);
+	    for ( var j = 0; j < members.length; j++ ) {
+		var cmem=members[j];
+		if(cmem.tagName == 'IMG'){
+		    var newsrc = appendPageForm(cmem.src,cmem.className);
+		    if(newsrc != cmem.src){
+			if(!quietflag) {
+			    changeClass(cmem,'valid','invalid');
+			    appendMissingClass(cmem,'loading');
+			    clearFailed(cmem);
+			}
+			/* to avoid generating unused images, if an image is marked regionwithinbbox and is not being shown, the url is not changed */
+			if(regionIsWithinBbox || cmem.className.indexOf('regionwithinbbox')<0){
+			    cmem.src = newsrc;
+			}
+		    }
+		}
+	    }
+	}
+	/* processes guessvalue, i.e. readahead for images */
+	if(guessvalue){
+	    changedInput.value=guessvalue;
+	    for ( var i = 0; i < clist.length; i++ )
+            {
+		var cclass=clist[i];
+		var members = document.getElementsByClassName(cclass);
+		for ( var j = 0; j < members.length; j++ ) {
+		    var cmem=members[j];
+		    if(cmem.tagName == 'IMG'){
+			var newsrc = appendPageForm(cmem.src,cmem.className);
+			if(newsrc != cmem.src){
+			    preload(newsrc);
+			}
+		    }
+		}
+	    }
+	    changedInput.value=newvalue;
+	}
+	updatePageFormCopies(document);
+	updatePageFormConditionalClassesAndFlags(false);
+	if(addhistory && history && history.pushState){
+	    var url = appendPageForm(location.href,'share carryLanguage');
+	    var currentstate = history.state;
+	    if(location.href != url){
+		var newstate = historyid;
+		if(!historyid){
+		    newstate=url;
+		}
+		if(currentstate == historyid){
+		    history.replaceState(newstate,'update',url);
+		}
+		else {
+		    history.pushState(newstate,'update',url);
+		}
+	    }
+	}
+	/* do render loop */
+	renderAsGDrive();
 	secondRenderAsGDrive();
-}}
+    }}
 /* do render loop */
 function renderAsGDrive(){
-	var gDrivelist=document.getElementsByClassName('asGDrive');
-	if (gDrivelist.length){
-	    for (var idrive=gDrivelist.length; idrive--;){
+    var gDrivelist=document.getElementsByClassName('asGDrive');
+    if (gDrivelist.length){
+	for (var idrive=gDrivelist.length; idrive--;){
             doPDFgDriveRender(gDrivelist[idrive]);
-	    }
 	}
+    }
 }
 var firstRender=true;
 function firstRenderAsGDrive(){
@@ -5922,7 +5930,7 @@ function firstRenderAsGDrive(){
 		var gflag=gdrivespan.getAttribute("rendered");
 		if((gflag == "true")){
 		} else {
-/*		    alert("do first render " + idrive); */
+		    /*		    alert("do first render " + idrive); */
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
 							"filename": gdrivespan.filename,
 							"sitename": gdrivespan.sitename});
@@ -5944,7 +5952,7 @@ function secondRenderAsGDrive(){
 		var gflag=gdrivespan.getAttribute("rendered");
 		if((gflag == "true")){
 		} else if 
-		(gdrivespan.renderedUrl.length<1024) 
+		    (gdrivespan.renderedUrl.length<1024) 
 		{
 		    /* alert("do second render " + idrive); */ 
 		    gapi.savetodrive.render(gdrivespan,{"src": gdrivespan.renderedUrl,
@@ -5957,131 +5965,131 @@ function secondRenderAsGDrive(){
     }
 }
 function updatePageFormConditionalClassesAndFlags(doflags){
-var myform=document.getElementById('pageform');
-if(myform){
-    /* updates regionwithinbbox */
-var mybb = myform.elements['bbox'];
-var myregion = myform.elements['region'];
-var myclickpt = myform.elements['clickpt'];
-var within = false;
-if(myregion && myregion.length){
-    myregion=myregion[0];
-}
-if(myclickpt && myclickpt.value){
-    within = true;
-}
-else {
-if (mybb && mybb.value && mybb.value.length>8 && myregion && myregion.value.length > 8){
-var bba = parseBbox(mybb.value);
-    var regiona = myregion.value.split(':',8);
-    if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
-	within = false;
-    }
-    else {
-	within = true;
-    }
-}
-else 
-    {
-if(myregion && myregion.value.length > 8){
-    within = true;
-}
-    }
-}
-if(within){
-    setregionwithinbbox(true,doflags);
-}
-else {
-    setregionwithinbbox(false,doflags);
-}
-/* does bodyClasses */
-if(myform.className.indexOf('bodyClass')>=0){
-    var mylist = myform.elements;
-    var thebody = document.getElementsByTagName('body')[0];
-    for (var i=0 ; i < mylist.length ; i++){
-	if(mylist[i].className.indexOf('bodyClass')>=0){
-	    var value = mylist[i].name + mylist[i].value.replace(/[: .,@#]/g,'');
-	    if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
-		var cclassi = thebody.className.indexOf(mylist[i].name);
-		if(cclassi>=0){
-		    var oldclass = "" + thebody.className.substr(cclassi).split(" ")[0];
-		    removeClass(thebody,oldclass);
-		}
-		appendMissingClass(thebody,value);
-	    }
+    var myform=document.getElementById('pageform');
+    if(myform){
+	/* updates regionwithinbbox */
+	var mybb = myform.elements['bbox'];
+	var myregion = myform.elements['region'];
+	var myclickpt = myform.elements['clickpt'];
+	var within = false;
+	if(myregion && myregion.length){
+	    myregion=myregion[0];
 	}
-    }
-}
-if(myform.className.indexOf('bodyAttribute')>=0){
-    var mylist = myform.elements;
-    var thebody = document.getElementsByTagName('body')[0];
-    var bodyvars = {};
-   for (var i=0 ; i < mylist.length ; i++){
-	if(mylist[i].className.indexOf('bodyAttribute')>=0){
-	    if(!bodyvars[mylist[i].name]){
-		bodyvars[mylist[i].name] = myform.elements[mylist[i].name];
-	    }
-	}
-    }
-    for (var key in bodyvars){
-	var myinputs = bodyvars[key];
-	if(myinputs.length){
-	    var use = [];
-	    for (var i=0 ; i < myinputs.length; i++){
-		if(myinputs[i].value && !(myinputs[i].type == 'checkbox' && !myinputs[i].checked)){
-		    use.push(myinputs[i].value);
-		}
-	    }
-	    if(use.length){
-		thebody.setAttribute(key,use.join(' '));
-	    }
-	    else {
-		thebody.removeAttribute(key);
-	    }
+	if(myclickpt && myclickpt.value){
+	    within = true;
 	}
 	else {
-	    if(myinputs.value){
-		thebody.setAttribute(key,myinputs.value);
-		if(key == 'lang' && thebody.getAttribute('xml:lang')){
-		    thebody.setAttribute('xml:lang',myinputs.value);
+	    if (mybb && mybb.value && mybb.value.length>8 && myregion && myregion.value.length > 8){
+		var bba = parseBbox(mybb.value);
+		var regiona = myregion.value.split(':',8);
+		if(regiona[0] == 'bb' && regiona.length > 4 && regiona[1] == bba[0] && regiona[2] == bba[1] && regiona[3] == bba[2]   && regiona[4] == bba[3]){
+		    within = false;
+		}
+		else {
+		    within = true;
 		}
 	    }
-	    else {
-		thebody.removeAttribute(key);
+	    else 
+	    {
+		if(myregion && myregion.value.length > 8){
+		    within = true;
+		}
+	    }
+	}
+	if(within){
+	    setregionwithinbbox(true,doflags);
+	}
+	else {
+	    setregionwithinbbox(false,doflags);
+	}
+	/* does bodyClasses */
+	if(myform.className.indexOf('bodyClass')>=0){
+	    var mylist = myform.elements;
+	    var thebody = document.getElementsByTagName('body')[0];
+	    for (var i=0 ; i < mylist.length ; i++){
+		if(mylist[i].className.indexOf('bodyClass')>=0){
+		    var value = mylist[i].name + mylist[i].value.replace(/[: .,@#]/g,'');
+		    if(thebody.className.indexOf(value)<0 || thebody.className.substr(thebody.className.indexOf(value)).split(" ") != value){
+			var cclassi = thebody.className.indexOf(mylist[i].name);
+			if(cclassi>=0){
+			    var oldclass = "" + thebody.className.substr(cclassi).split(" ")[0];
+			    removeClass(thebody,oldclass);
+			}
+			appendMissingClass(thebody,value);
+		    }
+		}
+	    }
+	}
+	if(myform.className.indexOf('bodyAttribute')>=0){
+	    var mylist = myform.elements;
+	    var thebody = document.getElementsByTagName('body')[0];
+	    var bodyvars = {};
+	    for (var i=0 ; i < mylist.length ; i++){
+		if(mylist[i].className.indexOf('bodyAttribute')>=0){
+		    if(!bodyvars[mylist[i].name]){
+			bodyvars[mylist[i].name] = myform.elements[mylist[i].name];
+		    }
+		}
+	    }
+	    for (var key in bodyvars){
+		var myinputs = bodyvars[key];
+		if(myinputs.length){
+		    var use = [];
+		    for (var i=0 ; i < myinputs.length; i++){
+			if(myinputs[i].value && !(myinputs[i].type == 'checkbox' && !myinputs[i].checked)){
+			    use.push(myinputs[i].value);
+			}
+		    }
+		    if(use.length){
+			thebody.setAttribute(key,use.join(' '));
+		    }
+		    else {
+			thebody.removeAttribute(key);
+		    }
+		}
+		else {
+		    if(myinputs.value){
+			thebody.setAttribute(key,myinputs.value);
+			if(key == 'lang' && thebody.getAttribute('xml:lang')){
+			    thebody.setAttribute('xml:lang',myinputs.value);
+			}
+		    }
+		    else {
+			thebody.removeAttribute(key);
+		    }
+		}
+	    }
+	}
+	/* does hasValueList */
+	var mylist = document.getElementsByClassName('hasValueList');
+	for (var i=0 ; i < mylist.length ; i++)
+	{
+	    var it=mylist[i];
+	    // change class of parent whether single (value in list) or multi (value not in list)
+	    if(it.parentNode.info && it.parentNode.info['iridl:gridvalues']){
+		var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(it.value);
+		var cmax = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
+		if(cin > -1){
+		    changeClass(it.parentNode,'multiValue','singleValue');
+		}
+		else {
+		    changeClass(it.parentNode,'singleValue','multiValue');
+		}
+		if(cin > 0){
+		    changeOrAppendClass(it.parentNode,'atLower','aboveLower');
+		}
+		else if(cin == 0){
+		    changeOrAppendClass(it.parentNode,'aboveLower','atLower');
+		}
+		if(cin >= 0 && cin < cmax){
+		    changeOrAppendClass(it.parentNode,'atUpper','belowUpper');
+		}
+		else if(cin == cmax){
+		    changeOrAppendClass(it.parentNode,'belowUpper','atUpper');
+		}
 	    }
 	}
     }
-}
-/* does hasValueList */
-    var mylist = document.getElementsByClassName('hasValueList');
-    for (var i=0 ; i < mylist.length ; i++)
-    {
-	var it=mylist[i];
- // change class of parent whether single (value in list) or multi (value not in list)
-	if(it.parentNode.info && it.parentNode.info['iridl:gridvalues']){
-	    var cin = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].indexOf(it.value);
-	    var cmax = it.parentNode.info['iridl:gridvalues']['iridl:valuelist'].length-1;
-	    if(cin > -1){
-		changeClass(it.parentNode,'multiValue','singleValue');
-	    }
-	    else {
-		changeClass(it.parentNode,'singleValue','multiValue');
-	    }
-	    if(cin > 0){
-		changeOrAppendClass(it.parentNode,'atLower','aboveLower');
-	    }
-	    else if(cin == 0){
-		changeOrAppendClass(it.parentNode,'aboveLower','atLower');
-	    }
-	    if(cin >= 0 && cin < cmax){
-		changeOrAppendClass(it.parentNode,'atUpper','belowUpper');
-	    }
-	    else if(cin == cmax){
-		changeOrAppendClass(it.parentNode,'belowUpper','atUpper');
-	    }
-	}
-    }
-}
 }
 /* updates class pageformcopy selects to match pageform
  */
@@ -6090,83 +6098,83 @@ function updatePageFormCopies(context){
     if(!mycontext || !mycontext.getElementsByClassName){
 	mycontext=document;
     }
-var myform=document.getElementById('pageform');
-if(myform){
-var stag = mycontext.getElementsByClassName('pageformcopy');
-for (var i=0; i< stag.length ; i++){
-var sel=stag[i];
-var cval;
-var elbyname = myform.elements[sel.name];
-if(typeof(elbyname) != 'undefined'){
-    if(elbyname.length){
-	/* multivalued copy -- hopefully checkbox */
-	if(elbyname[0].type == 'checkbox'){
-	    /* multivalued copy -- checkbox */
-	    for(var j = elbyname.length; j-- ;){
-		if(elbyname[j].value == sel.value){
-		    sel.checked = elbyname[j].checked;
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var stag = mycontext.getElementsByClassName('pageformcopy');
+	for (var i=0; i< stag.length ; i++){
+	    var sel=stag[i];
+	    var cval;
+	    var elbyname = myform.elements[sel.name];
+	    if(typeof(elbyname) != 'undefined'){
+		if(elbyname.length){
+		    /* multivalued copy -- hopefully checkbox */
+		    if(elbyname[0].type == 'checkbox'){
+			/* multivalued copy -- checkbox */
+			for(var j = elbyname.length; j-- ;){
+			    if(elbyname[j].value == sel.value){
+				sel.checked = elbyname[j].checked;
+			    }
+			}
+		    }
+		    else {
+			/* multivalued but not checkbox 
+			   looks for matching values to set checkboxes
+			*/
+			if(sel.type == 'checkbox') {
+			    /* multivalued copy to checkbox */
+			    var ifchecked = false;
+			    for(var j = elbyname.length; j-- ;){
+				if(elbyname[j].value == sel.value){
+				    ifchecked=true;
+				    break;
+				}
+			    }
+			    sel.checked=ifchecked;
+			    if(ifchecked){sel.disabled=false;}
+			}
+			else {
+			    /* not a checkbox -- just copies first */
+			    var ind = 0;
+			    var myind = sel.getAttribute('data-nameindex');
+			    if(myind){ind = myind};
+			    cval = myform.elements[sel.name][ind].value;
+			    if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
+				sel.value=cval;
+			    }
+			}
+		    }
 		}
-	    }
-	}
-	else {
-	    /* multivalued but not checkbox 
-	      looks for matching values to set checkboxes
-	    */
-	    if(sel.type == 'checkbox') {
-	    /* multivalued copy to checkbox */
-		var ifchecked = false;
-	    for(var j = elbyname.length; j-- ;){
-		if(elbyname[j].value == sel.value){
-		    ifchecked=true;
-		    break;
+		else {
+		    /* single valued form elements */
+		    cval = myform.elements[sel.name].value;
+		    if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
+			sel.value=cval;
+		    }
 		}
-	    }
-		sel.checked=ifchecked;
-		if(ifchecked){sel.disabled=false;}
 	    }
 	    else {
-		/* not a checkbox -- just copies first */
-		var ind = 0;
-		var myind = sel.getAttribute('data-nameindex');
-		if(myind){ind = myind};
-		cval = myform.elements[sel.name][ind].value;
-		if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
-		    sel.value=cval;
+		alert('no pageform input called ' + sel.name);
+	    }
+	    if(typeof(cval) != 'undefined' && typeof(sel.selectedIndex) === 'number'){
+		var options=sel.options;
+		sel.selectedIndex=-1;
+		if(sel.previousSibling.className == 'selectvalue'){
+		    sel.previousSibling.innerHTML="";
+		    sel.previousSibling.setAttribute('value',"");
+		}
+		for (var j=0; j < options.length ; j++){
+		    if(options[j].value == cval){
+			sel.selectedIndex=j;
+			if(sel.previousSibling.className == 'selectvalue'){
+			    sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
+			    sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
+			}
+			break;
+		    }
 		}
 	    }
 	}
     }
-    else {
-    /* single valued form elements */
-cval = myform.elements[sel.name].value;
-if((typeof(sel.value) != 'undefined') && cval && sel.value != cval){
-sel.value=cval;
-}
-    }
-    }
-    else {
-	alert('no pageform input called ' + sel.name);
-    }
-if(typeof(cval) != 'undefined' && typeof(sel.selectedIndex) === 'number'){
-var options=sel.options;
-sel.selectedIndex=-1;
-if(sel.previousSibling.className == 'selectvalue'){
-sel.previousSibling.innerHTML="";
-    sel.previousSibling.setAttribute('value',"");
-}
-for (var j=0; j < options.length ; j++){
-if(options[j].value == cval){
-sel.selectedIndex=j;
-if(sel.previousSibling.className == 'selectvalue'){
-sel.previousSibling.innerHTML=sel.options[sel.selectedIndex].innerHTML;
-    sel.previousSibling.setAttribute('value',sel.options[sel.selectedIndex].value);
-}
-break;
-}
-}
-}
-}
-}
 }
 /* validateAndCorrectsPageForm */
 function validateAndCorrectPageForm(context){
@@ -6186,14 +6194,14 @@ function validateAndCorrectPageForm(context){
 		valid=false;
 	    }
 	}
-/* containsAllValids
-Normally a select menu allows selectedIndex=-1, i.e. a choice that is not from 
-the list of possible values (particularly useful for bbox anywhere and also having
-a list of selected boxes).
+	/* containsAllValids
+	   Normally a select menu allows selectedIndex=-1, i.e. a choice that is not from 
+	   the list of possible values (particularly useful for bbox anywhere and also having
+	   a list of selected boxes).
 
-containsAllValids is a class (so class="pageformcopy containsAllValids") so that
-only values from the list are allowed, i.e. selectedIndex=-1 becomes =0).  
-*/
+	   containsAllValids is a class (so class="pageformcopy containsAllValids") so that
+	   only values from the list are allowed, i.e. selectedIndex=-1 becomes =0).  
+	*/
 	var stag = mycontext.getElementsByClassName('containsAllValids');
 	for (var i=0; i< stag.length ; i++){
 	    var sel=stag[i];
@@ -6231,173 +6239,173 @@ function imageerrorevent(evt){
 }
 function imageloadedevent(evt){
     evt = (evt) ? evt : ((event) ? event : null );
-var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-changeClass(it,'invalid','valid');
-changeClass(it,'invalid-zooming','valid');
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    changeClass(it,'invalid','valid');
+    changeClass(it,'invalid-zooming','valid');
     relStopLoading(it,'loading');
-if(it.className.indexOf('dlimg') >=0){
-if(it.mylink){
-var mynode = it.mylink.parentNode;
-/* transitions are slightly separate to avoid vibration */
-if(it.height>3.1*it.width && mynode.className.indexOf('narrow')<0){
-mynode.className = mynode.className + ' narrow';
-}
-if(it.height<2.9*it.width && mynode.className.indexOf('narrow')>0){
-mynode.className = mynode.className.replace(' narrow','');
-}
-if(it.height<2.9*it.width &&  it.height>1.5*it.width && mynode.className.indexOf('tall')<0){
-mynode.className = mynode.className + ' tall';
-}
-if((it.height<1.3*it.width || it.height>3.1*it.width)&& mynode.className.indexOf('tall')>0){
-mynode.className = mynode.className.replace(' tall','');
-}
-if(it.height*2<it.width && mynode.className.indexOf('wide')<0){
-mynode.className = mynode.className + ' wide';
-}
-if(it.height*1.8>it.width && mynode.className.indexOf('wide')>0){
-mynode.className = mynode.className.replace(' wide','');
-}
-hideImageOverlay(it);
-/* makes sure the image overlay is the right size if it exists */
-resetImageOverlay(it);
-var pform=document.getElementById('pageform');
-if(pform && pform.elements['plotaxislength'] && pform.elements['plotaxislength'].value){
-var clientsize = Math.max(it.width,it.height); 
-var targetsize = 20*Math.round((clientsize - 20 - 72 + 9)/20,0);
-var plen = pform.elements['plotaxislength'].value;
-var delp = targetsize - plen;
-/* only makes image size changes greater than 20 */
-if(delp >= 21 || delp <= -21){
-pform.elements['plotaxislength'].value = targetsize;
-updatePageFormQuietly(pform.elements['plotaxislength']);
-}
-}
-}
-}
-return true;
+    if(it.className.indexOf('dlimg') >=0){
+	if(it.mylink){
+	    var mynode = it.mylink.parentNode;
+	    /* transitions are slightly separate to avoid vibration */
+	    if(it.height>3.1*it.width && mynode.className.indexOf('narrow')<0){
+		mynode.className = mynode.className + ' narrow';
+	    }
+	    if(it.height<2.9*it.width && mynode.className.indexOf('narrow')>0){
+		mynode.className = mynode.className.replace(' narrow','');
+	    }
+	    if(it.height<2.9*it.width &&  it.height>1.5*it.width && mynode.className.indexOf('tall')<0){
+		mynode.className = mynode.className + ' tall';
+	    }
+	    if((it.height<1.3*it.width || it.height>3.1*it.width)&& mynode.className.indexOf('tall')>0){
+		mynode.className = mynode.className.replace(' tall','');
+	    }
+	    if(it.height*2<it.width && mynode.className.indexOf('wide')<0){
+		mynode.className = mynode.className + ' wide';
+	    }
+	    if(it.height*1.8>it.width && mynode.className.indexOf('wide')>0){
+		mynode.className = mynode.className.replace(' wide','');
+	    }
+	    hideImageOverlay(it);
+	    /* makes sure the image overlay is the right size if it exists */
+	    resetImageOverlay(it);
+	    var pform=document.getElementById('pageform');
+	    if(pform && pform.elements['plotaxislength'] && pform.elements['plotaxislength'].value){
+		var clientsize = Math.max(it.width,it.height); 
+		var targetsize = 20*Math.round((clientsize - 20 - 72 + 9)/20,0);
+		var plen = pform.elements['plotaxislength'].value;
+		var delp = targetsize - plen;
+		/* only makes image size changes greater than 20 */
+		if(delp >= 21 || delp <= -21){
+		    pform.elements['plotaxislength'].value = targetsize;
+		    updatePageFormQuietly(pform.elements['plotaxislength']);
+		}
+	    }
+	}
+    }
+    return true;
 }
 /* if none of the classes in srcclass are in element.className,
-appends the first class in srclass
+   appends the first class in srclass
 */
 function appendMissingClass(element,srcclass){
-var targetclass=element.className;
-var slist = srcclass.split(' ');
-var match = false;
-for (var i = 0 ; i < slist.length; i++){
-if(targetclass && targetclass.indexOf(slist[i]) >=0){
-match = true;
-}
-}
-if(!match){
-    if(!element.className){
-element.className = slist[0];
+    var targetclass=element.className;
+    var slist = srcclass.split(' ');
+    var match = false;
+    for (var i = 0 ; i < slist.length; i++){
+	if(targetclass && targetclass.indexOf(slist[i]) >=0){
+	    match = true;
+	}
     }
-    else {
-element.className = targetclass + ' ' + slist[0];
+    if(!match){
+	if(!element.className){
+	    element.className = slist[0];
+	}
+	else {
+	    element.className = targetclass + ' ' + slist[0];
+	}
     }
-}
     return !match;
 }
 function removeClass(element,srcclass){
-var targetclass=element.className;
-var slist = srcclass.split(' ');
-var match = false;
-for (var i = 0 ; i < slist.length; i++){
-var ind =targetclass.indexOf(slist[i]);
-if( ind>=0){
-if(ind==0){
-element.className=element.className.replace(slist[i],"");
-}
-else {
-element.className=element.className.replace(" "+slist[i],"");
-}
-}
-}
+    var targetclass=element.className;
+    var slist = srcclass.split(' ');
+    var match = false;
+    for (var i = 0 ; i < slist.length; i++){
+	var ind =targetclass.indexOf(slist[i]);
+	if( ind>=0){
+	    if(ind==0){
+		element.className=element.className.replace(slist[i],"");
+	    }
+	    else {
+		element.className=element.className.replace(" "+slist[i],"");
+	    }
+	}
+    }
 }
 function toggleClass(element,toggleName){
-var targetclass=element.className;
-var slist = toggleName.split(' ');
-var match = false;
-for (var i = 0 ; i < slist.length; i++){
-var ind =targetclass.indexOf(slist[i]);
-if( ind>=0){
-if(ind==0){
-element.className=element.className.replace(slist[i],"");
-}
-else {
-element.className=element.className.replace(" "+slist[i],"");
-}
-}
-else {
-    if(element.className){
-	element.className= element.className + " " + slist[i];
+    var targetclass=element.className;
+    var slist = toggleName.split(' ');
+    var match = false;
+    for (var i = 0 ; i < slist.length; i++){
+	var ind =targetclass.indexOf(slist[i]);
+	if( ind>=0){
+	    if(ind==0){
+		element.className=element.className.replace(slist[i],"");
+	    }
+	    else {
+		element.className=element.className.replace(" "+slist[i],"");
+	    }
+	}
+	else {
+	    if(element.className){
+		element.className= element.className + " " + slist[i];
+	    }
+	    else {
+		element.className=slist[i];
+	    }
+	}
     }
-    else {
-	element.className=slist[i];
-    }
-}
-}
 
 }
 // changes class of all sublements within an element
 // traverses list in reverse order because the list updates as it executes
 function sameasthis(ele){return ele=this};
 function changeClassWithin(pelement,fromclass,toclass){
-var classlist = pelement.className.split(' ');
-if(classlist.some(sameasthis,fromclass)){
-    var newlist = new Array;
-    for (var i = classlist.length-1 ; i >=0 ; i--){
-	if(classlist[i] == fromclass){
-	    newlist[i] = toclass;
+    var classlist = pelement.className.split(' ');
+    if(classlist.some(sameasthis,fromclass)){
+	var newlist = new Array;
+	for (var i = classlist.length-1 ; i >=0 ; i--){
+	    if(classlist[i] == fromclass){
+		newlist[i] = toclass;
+	    }
+	    else {
+		newlist[i] = classlist[i];
+	    }
 	}
-	else {
-	newlist[i] = classlist[i];
+	
+	pelement.className = newlist.join(' ');
+    }
+    var targetlist=pelement.getElementsByClassName(fromclass);
+    if(targetlist.length > 0){
+	for (var i = targetlist.length-1 ; i >= 0; i--){
+	    var ind=targetlist[i];
+	    var classlist = ind.className.split(' ');
+	    var newlist = new Array;
+	    for (var i = classlist.length-1 ; i >=0 ; i--){
+		if(classlist[i] == fromclass){
+		    newlist[i] = toclass;
+		}
+		else {
+		    newlist[i] = classlist[i];
+		}
+	    }
+	    
+	    ind.className = newlist.join(' ');
 	}
     }
-	
-    pelement.className = newlist.join(' ');
-}
-var targetlist=pelement.getElementsByClassName(fromclass);
-if(targetlist.length > 0){
-for (var i = targetlist.length-1 ; i >= 0; i--){
-var ind=targetlist[i];
-var classlist = ind.className.split(' ');
-var newlist = new Array;
-    for (var i = classlist.length-1 ; i >=0 ; i--){
-	if(classlist[i] == fromclass){
-	    newlist[i] = toclass;
-	}
-	else {
-	newlist[i] = classlist[i];
-	}
-    }
-	
-    ind.className = newlist.join(' ');
-}
-}
 }
 function changeOrAppendClass(pelement,fromclass,toclass){
     changeClass(pelement,fromclass,toclass);
     appendMissingClass(pelement,toclass);
 }
 function changeClass(pelement,fromclass,toclass){
-var targetlist=pelement.parentNode.getElementsByClassName(fromclass);
-for (var i = targetlist.length-1 ; i >= 0; i--){
-var ind=targetlist[i];
-if(ind == pelement){
-ind.className=ind.className.replace(fromclass,toclass);
-}
-}
+    var targetlist=pelement.parentNode.getElementsByClassName(fromclass);
+    for (var i = targetlist.length-1 ; i >= 0; i--){
+	var ind=targetlist[i];
+	if(ind == pelement){
+	    ind.className=ind.className.replace(fromclass,toclass);
+	}
+    }
 }
 
 function onClickPageForm(evt){
     evt = (evt) ? evt : ((event) ? event : null );
-var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
-submitPageForm(it.href,it.className);
-return false;
+    var it = (evt.currentTarget) ? evt.currentTarget : evt.srcElement;
+    submitPageForm(it.href,it.className);
+    return false;
 }
 /* alldisabledPageForm -- disables FormElements that are default or not in classes,
-returns true if all default values or not in classes */
+   returns true if all default values or not in classes */
 function alldisabledPageForm(classes,includeDefaultValues){
     var myform=document.getElementById('pageform');
     var alldisabled;
@@ -6440,51 +6448,51 @@ function alldisabledPageForm(classes,includeDefaultValues){
     return alldisabled;
 }
 /*
-submitPageForm -- submits pageform to href, appending inputs corresponding to class.
+  submitPageForm -- submits pageform to href, appending inputs corresponding to class.
 */
 function submitPageForm(href,classes,inMethod){
     if(!href){return}
     var localhref=localHrefOf(removePageForm(href));
-var theMethod='GET';
-if(inMethod){
-    theMethod=inMethod;
-}
-var myform=document.getElementById('pageform');
-if(myform){
-    var alldisabled=alldisabledPageForm(classes);
-    if(alldisabled && theMethod == 'GET'){
-	if(localhref.substring(0,5) =='file:'){
-/*
-	    if(localhref.charAt(localhref.length-1) == '/'){
-		localhref=localhref+'index.html';
-	    }
-*/
-	}
-	document.location.href=localhref;
+    var theMethod='GET';
+    if(inMethod){
+	theMethod=inMethod;
     }
-    else {
-/* our rewrite rules do not handle Set-Language for a directory, so we avoid doing it
-	if(localhref.charAt(localhref.length-1) == '/'){
-	    localhref=localhref+'index.html';
-	}
- */
-	if(localhref.indexOf('?')>0){
-	    localhref = appendPageForm(href,classes,false);
+    var myform=document.getElementById('pageform');
+    if(myform){
+	var alldisabled=alldisabledPageForm(classes);
+	if(alldisabled && theMethod == 'GET'){
+	    if(localhref.substring(0,5) =='file:'){
+		/*
+		  if(localhref.charAt(localhref.length-1) == '/'){
+		  localhref=localhref+'index.html';
+		  }
+		*/
+	    }
 	    document.location.href=localhref;
 	}
 	else {
-	myform.action=localhref;
-	myform.method=theMethod;
-	myform.submit();
+	    /* our rewrite rules do not handle Set-Language for a directory, so we avoid doing it
+	       if(localhref.charAt(localhref.length-1) == '/'){
+	       localhref=localhref+'index.html';
+	       }
+	    */
+	    if(localhref.indexOf('?')>0){
+		localhref = appendPageForm(href,classes,false);
+		document.location.href=localhref;
+	    }
+	    else {
+		myform.action=localhref;
+		myform.method=theMethod;
+		myform.submit();
+	    }
 	}
     }
-}
-else {
-    document.location.href=localhref;
-}
+    else {
+	document.location.href=localhref;
+    }
 }
 /* removePageForm -- removes all values in url that exist in page form
-*/
+ */
 function removePageForm(href,overridePageForm){
     var newhref = href;
     var myform=document.getElementById('pageform');
@@ -6502,18 +6510,18 @@ function removePageForm(href,overridePageForm){
 	if(query){
 	    var delim='?';
 	    var vars = query.split("&");
-		var pair;
-		for (var i = 0; i < vars.length; i++) {
-		    pair = vars[i].split("=");
-		    var iname=pair[0];
-		    if (!inputs[iname]) {
-			newhref=newhref + delim + vars[i];
-			delim='&';
-		    }
-		    else if(overridePageForm) {
-			inputs[iname].value = unescape(pair[1]);
-		    }
+	    var pair;
+	    for (var i = 0; i < vars.length; i++) {
+		pair = vars[i].split("=");
+		var iname=pair[0];
+		if (!inputs[iname]) {
+		    newhref=newhref + delim + vars[i];
+		    delim='&';
 		}
+		else if(overridePageForm) {
+		    inputs[iname].value = unescape(pair[1]);
+		}
+	    }
 	}
 	if(thehash){
 	    newhref=newhref+thehash;
@@ -6522,7 +6530,7 @@ function removePageForm(href,overridePageForm){
     return newhref;
 }
 /*
-appendPageForm -- appends to href, appending pageform inputs corresponding to class.
+  appendPageForm -- appends to href, appending pageform inputs corresponding to class.
 */
 function appendPageForm(href,classes,includeDefaultValues,overridePageForm){
     var filtered =removePageForm(href,overridePageForm);
@@ -6673,120 +6681,601 @@ function removeDiacritics (str) {
 
 // GitHub setup
 function githubSetup(){
-var githubform=document.getElementsByClassName('githubconnect');
-if(githubform[0]){
-githubform[0].onsubmit=dogithub;
-githubform[0].onsubmitfn=dogithub;
-githubform[0].elements["github"].onchange=dogithubjson;
-githubform[0].elements["github"].onchangefn=dogithubjson;
-var gid = getCookie('githubid');
-if(gid){
-githubform[0].elements["github"].value=gid;
-setgithubjson(gid);
-}
-}
+    var githubform=document.getElementsByClassName('githubconnect');
+    if(githubform[0]){
+	githubform[0].onsubmit=dogithub;
+	githubform[0].onsubmitfn=dogithub;
+	githubform[0].elements["github"].onchange=dogithubjson;
+	githubform[0].elements["github"].onchangefn=dogithubjson;
+	var gid = getCookie('githubid');
+	if(gid){
+	    githubform[0].elements["github"].value=gid;
+	    setgithubjson(gid);
+	}
+    }
 }
 function dogithub(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-document.cookie="githubid=" + it.elements["github"].value + "; path=/";
-return false;
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    document.cookie="githubid=" + it.elements["github"].value + "; path=/";
+    return false;
 }
 function dogithubjson(evt){
-   var evt = (evt) ? evt : ((event) ? event : null );
-   var it = (evt.currentTarget) ? evt.currentTarget : this;
-setgithubjson(it.value);
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    setgithubjson(it.value);
 }
 function getCookie(wantid){
-var cookies=document.cookie;
-var cookielist=cookies.split(';')
-for(var i=0; i<cookielist.length ; i++){
+    var cookies=document.cookie;
+    var cookielist=cookies.split(';')
+    for(var i=0; i<cookielist.length ; i++){
 	var apair=cookielist[i].split("=");
 	var cname=apair[0];
 	while(cname.charAt(0)==' ')cname = cname.substring(1);
 	if(cname.indexOf(wantid) == 0)return apair[1];
-}
-return "";
+    }
+    return "";
 }
 function setgithubjson(newname){
-var githubjson=document.getElementById('githubjson');
-if(githubjson){
-githubjson.href='https://api.github.com/users/' + newname;
-updateHasJSON(githubjson);
+    var githubjson=document.getElementById('githubjson');
+    if(githubjson){
+	githubjson.href='https://api.github.com/users/' + newname;
+	updateHasJSON(githubjson);
+    }
+    var githubgistjson=document.getElementById('githubgistjson');
+    if(githubgistjson){
+	githubgistjson.href='https://api.github.com/users/' + newname + '/gists';
+	updateHasJSON(githubgistjson);
+    }
 }
-var githubgistjson=document.getElementById('githubgistjson');
-if(githubgistjson){
-githubgistjson.href='https://api.github.com/users/' + newname + '/gists';
-updateHasJSON(githubgistjson);
+
+var gmaps = {};
+
+var gmapStyles = {
+ light: [
+  { elementType: "geometry", stylers: [ { color: "#f5f5f5" } ] },
+  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
+  { elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
+  { elementType: "labels.text.stroke", stylers: [ { color: "#f5f5f5" } ] },
+  { featureType: "administrative", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { featureType: "administrative.country", stylers: [ { visibility: "on" } ] },
+  { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
+  { featureType: "landscape", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { featureType: "poi", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
+  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
+  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
+  { featureType: "road", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { featureType: "road", elementType: "geometry", stylers: [ { color: "#ffffff" } ] },
+  { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#dadada" } ] },
+  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
+  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
+  { featureType: "transit", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { featureType: "transit.line", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
+  { featureType: "transit.station", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
+  { featureType: "water", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { featureType: "water", elementType: "geometry", stylers: [ { color: "#c9c9c9" } ] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] }
+ ],
+ dark: [
+  { stylers: [ { saturation: -100 }, { visibility: "on" } ] },
+  { elementType: "geometry", stylers: [ { color: "#212121" } ] },
+  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
+  { elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
+  { elementType: "labels.text.stroke", stylers: [ { color: "#212121" } ] },
+  { featureType: "administrative", elementType: "geometry", stylers: [ { color: "#757575" } ] },
+  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
+  { featureType: "administrative.land_parcel", stylers: [ { visibility: "off" } ] },
+  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
+  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#181818" } ] },
+  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
+  { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [ { color: "#1b1b1b" } ] },
+  { featureType: "road", elementType: "geometry.fill", stylers: [ { color: "#2c2c2c" } ] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [ { color: "#8a8a8a" } ] },
+  { featureType: "road.arterial", elementType: "geometry", stylers: [ { color: "#373737" } ] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#3c3c3c" } ] },
+  { featureType: "road.highway.controlled_access", elementType: "geometry", stylers: [ { color: "#4e4e4e" } ] },
+  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
+  { featureType: "transit", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
+  { featureType: "water", elementType: "geometry", stylers: [ { color: "#000000" } ] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#3d3d3d" } ] }
+ ],
+ iridl: [
+  { elementType: 'geometry', stylers: [{color: '#f5f5f5'}] },
+  { elementType: 'labels.icon', stylers: [{visibility: 'off'}] },
+  { elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
+  { elementType: 'labels.text.stroke', stylers: [{color: '#f5f5f5'}] },
+  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{color: '#bdbdbd'}] },
+  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
+  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{color: '#ffffff'}] },
+  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{color: '#dadada'}] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
+  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
+  { featureType: 'transit.line', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
+  { featureType: 'transit.station', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{color: '#c9c9c9'}] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] }
+ ]
+};
+
+function createGMapDLImage(options) {
+   gmaps[options.id] = options;
 }
+
+function X(x,z) {
+   return (x/Math.pow(2,z)*360-180);
 }
+
+function Y(y,z) {
+   var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
+   return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
+}
+
+function plotrangeX(x,z) {
+   r1 = X(x,z);
+   r2 = X(x+1,z);
+
+   if (r2%360 == -180) {
+      r1 = r1%360 + 360;
+      r2 = r2%360 + 360;
+   } else if (r1 == 180) {
+      r1 -= 360;
+      r2 -= 360;
+   } else if (r2%360 == 180 && r2 != 180) {
+      r1 = r1%360;
+      r2 = r2%360;
+   }
+   return '/X/'+r1+'/'+r2+'/plotrange';
+}
+function plotrangeY(y,z) {
+   r1 = Y(y,z);
+   r2 = Y(y+1,z);
+   return '/Y/'+r1+'/'+r2+'/plotrange';
+}
+
+function setLayerOpacity(gmapId,layerIndex,opacity) {
+   gmaps[gmapId].map.overlayMapTypes.getAt(layerIndex).setOpacity(opacity);
+}
+
+function createLayersControls(gmap) {
+  var rdiv = document.createElement('div');
+  rdiv.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
+  for (var i in gmap.imageLayers) {
+      var layer = gmap.imageLayers[i];
+      var ldiv = document.createElement('div');
+      ldiv.innerHTML = layer.name+'<br><input type="range" style="width:80px" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
+      rdiv.appendChild(ldiv);
+  }
+  return rdiv;
+}
+
+
+function resetGMap(gmap) {
+   map = gmap.map;
+   map.setCenter(gmap.init.center);
+   map.setZoom(gmap.init.zoom);
+}
+
+function setGMapRectVar(rect) {
+   var f = document.getElementById('pageform');
+   if (f) {
+      var bs = rect.getBounds();
+      var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+      var val = 'bb:' + bb.slice(0,4).join(':') + ':bb';
+      setPageFormVariable('gmapRect',val);
+   }
+}
+
+
+function setGMap(gmap) {
+   var map = gmap.map;
+   gmap.init = {center: map.getCenter(), zoom: map.getZoom()};
+   var f = document.getElementById('pageform');
+   if (f) {
+      var gmapVar = f.elements['gmap'];
+      var bboxVar = f.elements['bbox'];
+      if (gmapVar && gmapVar.value) {
+         var x = JSON.parse(gmapVar.value);
+         if (x.zoom) {
+            map.setZoom(x.zoom);
+         }
+         if (x.center) {
+            map.setCenter(x.center);
+         }
+      } else if (bboxVar && bboxVar.value) {
+         var x = parseBbox(bboxVar.value);
+         if (x) {
+            dx = (x[2] - x[0]) * 0.01;
+            dy = (x[1] - x[3]) * 0.01;
+            map.fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
+         } 
+      } 
+      gmap.init.center = map.getCenter();
+      gmap.init.zoom = map.getZoom();
+      setPageFormVariable('gmap',JSON.stringify(gmap.init));
+   }
+}
+
+var gmapParams = {};
+var excludedParams = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength:1};
+
+function addGMapParam(name,val) {
+   if (!(name in excludedParams)) {
+      gmapParams[name] = val;
+   }
+}
+
+function initializeGMap(gmap) {
+   //document.getElementById('pageform').elements['gmap'].value = 'test';
+   gmap.infowindow = new google.maps.InfoWindow();
+   var map = new google.maps.Map(document.getElementById(gmap.id), gmap.mapOptions);
+   gmap.map = map;
+   setGMap(gmaps[id]);
+   setGMapLayers(gmap);
+   gmap.boundsChanged = false;
+   recttm = null;
+   var mapClickType = (gmap.mapClick ? gmap.mapClick.type : 'none');
+
+   if (mapClickType == 'click') {
+      google.maps.event.addListener(map, "click", function (e) {
+         var y = e.latLng.lat();
+         var x = e.latLng.lng();
+         var bb = [ x, y, x, y, true ];
+         setbbox(bb,{},null);
+      });
+
+   } else if  ( mapClickType == 'marker') {
+      var m = gmap.mapClick.marker;
+      m.map = map;
+      var marker = new google.maps.Marker(m);
+      marker.setVisible(gmap.mapClick.showFeature);
+      marker.addListener("dragend", function (e) {
+         var y = e.latLng.lat();
+         var x = e.latLng.lng();
+         var bb = [ x, y, x, y, true ];
+         setbbox(bb,{},null);
+      });
+      if (gmap.mapClick.moveOnClick) {
+         google.maps.event.addListener(map, "click", function (e) {
+            var y = e.latLng.lat();
+            var x = e.latLng.lng();
+            var bb = [ x, y, x, y, true ];
+            marker.setPosition({lat:y,lng:x});
+            marker.setVisible(true);
+            setbbox(bb,{},null);
+         });
+      }
+
+   } else if  (mapClickType == 'rectangle') {
+      var r = gmap.mapClick.rectangle;
+      r.map = map;
+      var rect = new google.maps.Rectangle(r);
+      setGMapRectVar(rect);
+      rect.setVisible(gmap.mapClick.showFeature);
+      rect.addListener("bounds_changed", function () {
+         if (recttm) { 
+            window.clearTimeout(recttm); 
+         } 
+         recttm = window.setTimeout(function () {
+            setGMapRectVar(rect);
+         }, 1000); 
+      });
+      if (gmap.mapClick.moveOnClick) {
+         google.maps.event.addListener(map, "click", function (e) {
+            var y = e.latLng.lat();
+            var x = e.latLng.lng();
+            var bs = rect.getBounds();
+            var offx = x - (bs.getNorthEast().lng() + bs.getSouthWest().lng()) / 2.0;
+            var offy = y - (bs.getNorthEast().lat() + bs.getSouthWest().lat()) / 2.0;
+            rect.setBounds({east: bs.getNorthEast().lng()+offx, north: bs.getNorthEast().lat()+offy, south: bs.getSouthWest().lat()+offy, west: bs.getSouthWest().lng()+offx});
+            setGMapRectVar(rect);
+            rect.setVisible(true);
+         });
+      }
+
+   }
+
+   if  (gmap.mapClick && gmap.mapClick.setBounds) {
+      google.maps.event.addListener(map, "bounds_changed", function () {
+         gmap.boundsChanged = true;
+      });
+      google.maps.event.addListener(map, "idle", function () {
+         if (gmap.boundsChanged) {
+            var bs = map.getBounds();
+            var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+
+            var f = document.getElementById('pageform');
+            if (f) {
+               var gmapVar = f.elements['gmap'];
+               if (gmapVar) {
+                  var z = {center: map.getCenter(), zoom: map.getZoom()};
+                  gmapVar.value = JSON.stringify(z);
+               }
+            }
+            setbbox(bb,{},null);
+         } 
+      });
+   }
+
+   if (gmap.featureLayer) {
+
+      if (gmap.featureLayer.markerCluster) {
+         var markerClusterer = new MarkerClusterer(map,[],gmap.featureLayer.markerCluster);
+         google.maps.event.addListener(map.data, 'addfeature', function (e) {
+            if (e.feature.getGeometry().getType() === 'Point') {
+                   var opts = gmap.featureLayer.makeMarkerOptions(e.feature);
+                   opts.position = e.feature.getGeometry().get();
+                   opts.map = map;
+                   var marker = new google.maps.Marker(opts);
+                   if (gmap.featureLayer.featureClick == 'infoWindow') {
+                      google.maps.event.addListener(marker, 'click', function (marker, e) {
+                          return function () {
+                              gmap.infowindow.setPosition(e.feature.getGeometry().get());
+                              gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature));
+                              gmap.infowindow.open(map);
+                          };
+                      }(marker, e));
+                   } else if (gmap.featureLayer.featureClick == 'click') {
+                      google.maps.event.addListener(marker, 'click', function (marker, e) {
+                          return function () {
+                             var y = marker.getPosition().lat();
+                             var x = marker.getPosition().lng();
+                             var bb = [ x, y, x, y, true ];
+                             setbbox(bb,{},null);
+                          };
+                      }(marker, e));
+                   }
+                   markerClusterer.addMarker(marker);
+            }
+         });
+         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
+         map.data.setMap(null);
+         google.maps.event.addListener(map, "click", function (e) {
+             gmap.infowindow.close();
+         });
+
+      } else {  
+         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
+         if (gmap.featureLayer.makeMarkerOptions) {
+            map.data.setStyle( gmap.featureLayer.makeMarkerOptions );
+         }
+
+         if (gmap.featureLayer.featureClick == 'infoWindow') {
+            map.data.addListener('click', function(e) {
+               gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature)); 
+               gmap.infowindow.setPosition(e.latLng);
+               gmap.infowindow.open(map);
+            });
+            google.maps.event.addListener(map, "click", function (e) {
+               gmap.infowindow.close();
+            });
+
+         } else if (gmap.featureLayer.featureClick == 'click') {
+            map.data.addListener('click', function(e) {
+               var y = e.latLng.lat();
+               var x = e.latLng.lng();
+               var bb = [ x, y, x, y, true ];
+               setbbox(bb,{},null);
+            });
+         }
+      }
+   }
+
+   if (gmap.debug) {
+      function CoordMapType(tileSize) {
+         this.tileSize = tileSize;
+      }
+
+      CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+          var div = ownerDocument.createElement('div');
+          //div.innerHTML = coord;
+          var scale = Math.pow(2,zoom);
+          //div.innerHTML = "IRI, Columbia Univ.  ("+(coord.x % scale)+", "+(coord.y % scale) + ") "+scale + ", z=" + zoom;
+          div.innerHTML = "("+(coord.x % scale)+","+(coord.y % scale) + ") "+scale + ", z=" + zoom + 
+             "<br/>" + "("+(coord.x)+","+(coord.y) + ") "+ "<br/>"+plotrangeX(coord.x,zoom) + "<br/>"+plotrangeY(coord.y,zoom);
+          div.style.width = this.tileSize.width + 'px';
+          div.style.height = this.tileSize.height + 'px';
+          div.style.fontSize = '10';
+          div.style.borderStyle = 'solid';
+          div.style.borderWidth = '1px';
+          div.style.borderColor = '#AAAAAA';
+          div.style.clor = '#888888';
+          return div;
+      };
+      map.overlayMapTypes.push(new CoordMapType(new google.maps.Size(256, 256)));
+   }
+
+   var lc = createLayersControls(gmap);
+   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(lc);
+}
+
+function initializeGMaps() {
+   $(window).load( function(event) {
+      for (id in gmaps) {
+         initializeGMap(gmaps[id]);
+      }
+   });
+}
+
+function makeParams(ps) {
+   var s = '';
+   for (var name in ps) {
+       s += '&' + name + '=' + encodeURIComponent(ps[name]);
+   } 
+   if (s != '') {
+      s = '?' + s.slice(1,s.length);
+   } 
+   return s;
+}
+
+function setGMapLayers(gmap) {
+   if (gmap && gmap.map) {
+      var opacities = [];
+      gmap.map.overlayMapTypes.forEach( function(e,i) {
+         opacities[i] = e.getOpacity();
+      });
+      gmap.map.overlayMapTypes.clear();
+      var params = makeParams(gmapParams);
+      for (var i in gmap.imageLayers) {
+         var layer = gmap.imageLayers[i];
+         var opts = {
+            getTileUrl: function (l,p) {return function (c, z) {
+               var r =  l.url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef//antialias/true/psdef//SRS/%28EPSG:900913%29/psdef" + 
+                 plotrangeX(c.x,z) + plotrangeY(c.y,z)+"/+.gif" + p;
+               return r;
+            }}(layer,params),
+            tileSize: new google.maps.Size(256, 256),
+            name: layer.name,
+            opacity: (opacities.length > i ? opacities[i] : layer.opacity)
+         };
+         var typ = new google.maps.ImageMapType(opts);
+         gmap.map.overlayMapTypes.push(typ);
+      }
+   }
+}
+
+function inArray(needle,haystack) {
+    var count=haystack.length;
+    for (var i=0;i<count;i++) {
+        if (haystack[i]===needle){
+          return true;
+        }
+    }
+    return false;
+}
+
+function updateGMaps(changedInput) {
+   if(changedInput) {
+      addGMapParam(changedInput.name,changedInput.value);
+      var cs = changedInput.className ? changedInput.className.split(' ') : []; 
+      var es = document.getElementsByClassName('dlimgGMap');
+      if (inArray('dlimg',cs)) {
+         for (var i=0;i!=es.length;i++) {
+            var gmap = gmaps[ es[i].id ]
+            setGMapLayers(gmap);
+         }
+      }
+   }
+}
+
+function defaultMakeFeature(row) {
+   var lon = 0;
+   var lat = 0;
+   if (row.lat && row.lon) {
+      lon = parseFloat(row.lon) * (row.lon[row.lon.length-1]=='W'?-1:1);
+      lat = parseFloat(row.lat) * (row.lat[row.lat.length-1]=='S'?-1:1);
+   }
+   var feature = {type: "Feature", geometry: {type: "Point", coordinates: [lon,lat]}, properties: {}};
+   return feature;
+}
+
+
+function loadGMapGeoJson(map, format, url, makeFeature) {
+   if (format == 'tsv') {
+      var r = getXMLhttp();
+      r.open('GET', url, false);
+      r.send(null);
+      if (r.status == 200) {
+         lines = r.responseText.split(/\r?\n/);
+         var features = [];
+         var ns = lines[0].split(/\t/);
+         for (var i=1; i<lines.length; i++) {
+            if (lines[i] != "") {
+               var x = lines[i].split(/\t/);
+               var fi = {};
+               for (var j=0; j!=ns.length; j++) {
+                  fi[ns[j]] = x[j];
+               }
+               var fo = makeFeature(fi);
+               for (var j=0; j!=fo.length; j++) {
+                  features.push(fo[j]);
+               }
+            }
+         }
+         fcoll = {type: "FeatureCollection", features: features};
+         map.data.addGeoJson(fcoll);
+      }
+   } else if (format == 'geojson') {
+      map.data.loadGeoJson(url);
+   }
+}
+
+
 
 // loadmaproom is run once (at DOMContentLoaded if possible, or onload).
 var loadmaproomneeded=true;
 $.ready(
-function loadmaproom(){
-if(loadmaproomneeded){
-loadmaproomneeded=false;
-    var mybody = document.getElementsByTagName('body')[0];
-    if(window.name){
-	mybody.setAttribute('within',window.name);
-    }
-setPageForm();
-tabsSetup();
-insertcontrolBar();
-initializeDLimage();
-insertchooseSection();
-insertRegion();
-insertshare();
-insertInstructions();
-setupPageFormLinks(document);
-    updateLangGroups(document);
-loadHasJSON();
-loadHasRqlEndpoint();
-githubSetup();
-$(window).resize(refreshConnectedGraphs);
-firstRenderAsGDrive();
-if(uicoreConfig.GoogleAnalyticsId){
-/*  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
-  _gaq.push(['_trackPageview']);
-  _gaq.push(['_trackPageLoadTime']); 
-    setupGA();
-*/
-if (window.matchMedia) {
-        var mediaQueryList = window.matchMedia('print');
-        mediaQueryList.addListener(function(mql) {
-            if (mql.matches) {
-                refreshConnectedGraphs();
-            } else {
-                refreshConnectedGraphs();
-            }
-        });
-    }
+    function loadmaproom(){
+	if(loadmaproomneeded){
+	    loadmaproomneeded=false;
+	    var mybody = document.getElementsByTagName('body')[0];
+	    if(window.name){
+		mybody.setAttribute('within',window.name);
+	    }
+	    setPageForm();
+	    tabsSetup();
+	    insertcontrolBar();
+	    initializeDLimage();
+            initializeGMaps();
+	    insertchooseSection();
+	    insertRegion();
+	    insertshare();
+	    insertInstructions();
+	    setupPageFormLinks(document);
+	    updateLangGroups(document);
+	    loadHasJSON();
+	    loadHasRqlEndpoint();
+	    githubSetup();
+	    $(window).resize(refreshConnectedGraphs);
+	    firstRenderAsGDrive();
+	    if(uicoreConfig.GoogleAnalyticsId){
+		//  _gaq.push(['_setAccount', uicoreConfig.GoogleAnalyticsId]);
+		//    _gaq.push(['_trackPageview']);
+		//    _gaq.push(['_trackPageLoadTime']); 
+		//    setupGA();
+		if (window.matchMedia) {
+		    var mediaQueryList = window.matchMedia('print');
+		    mediaQueryList.addListener(function(mql) {
+			if (mql.matches) {
+			    refreshConnectedGraphs();
+			} else {
+			    refreshConnectedGraphs();
+			}
+		    });
+		}
 
-    window.onbeforeprint = refreshConnectedGraphs;
-    window.onafterprint = refreshConnectedGraphs;
-  ga('create', uicoreConfig.GoogleAnalyticsId, 'columbia.edu');
-  ga('send', 'pageview');
-}
-    if(uicoreConfig.GoogleSearchCX){
-var mynav=document.getElementById('GoogleSearch');
-	if(mynav){
-	    var sb = document.createElement('div');
-	    var sbb = document.createElement('gcse:searchbox-only');
-	    sb.appendChild(sbb);
-	    mynav.appendChild(sbb);
-  (function() {
-    var cx = uicoreConfig.GoogleSearchCX;
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
+		window.onbeforeprint = refreshConnectedGraphs;
+		window.onafterprint = refreshConnectedGraphs;
+		ga('create', uicoreConfig.GoogleAnalyticsId, 'columbia.edu');
+		ga('send', 'pageview');
+	    }
+	    if(uicoreConfig.GoogleSearchCX){
+		var mynav=document.getElementById('GoogleSearch');
+		if(mynav){
+		    var sb = document.createElement('div');
+		    var sbb = document.createElement('gcse:searchbox-only');
+		    sb.appendChild(sbb);
+		    mynav.appendChild(sbb);
+		    (function() {
+			var cx = uicoreConfig.GoogleSearchCX;
+			var gcse = document.createElement('script');
+			gcse.type = 'text/javascript';
+			gcse.async = true;
+			gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+			    '//www.google.com/cse/cse.js?cx=' + cx;
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(gcse, s);
+		    })();
+		}
+	    }
+	}
     }
-    }
-}
-}
 );
