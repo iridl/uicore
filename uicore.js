@@ -6874,6 +6874,31 @@ function setGMapRectVar(rect) {
    }
 }
 
+function parseGMapLoc(gmapValStr) {
+   var vs = JSON.parse(gmapValStr);
+   var x =  {center: new google.maps.LatLng(vs[0],vs[1]), zoom: vs[2]};
+   return x;
+}
+
+function stringifyGMapLoc(gmapVal) {
+   var s = JSON.stringify([gmapVal.center.lat(),gmapVal.center.lng(),gmapVal.zoom]);
+   return s;
+}
+
+function setGMapCenterZoom(map,gmapVarVal) {
+   var x = parseGMapLoc(gmapVarVal);
+   map.setZoom(x.zoom);
+   map.setCenter(x.center);
+}
+function setGMapBbox(map,bboxVarVal) {
+   var x = parseBbox(bboxVarVal);
+   if (x) {
+      var dx = (x[2] - x[0]) * 0.01;
+      var dy = (x[1] - x[3]) * 0.01;
+      map.fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
+   }
+}
+
 
 function setGMap(gmap) {
    var map = gmap.map;
@@ -6883,32 +6908,22 @@ function setGMap(gmap) {
       var gmapVar = f.elements['gmap'];
       var bboxVar = f.elements['bbox'];
       if (gmapVar && gmapVar.value) {
-         var x = JSON.parse(gmapVar.value);
-         if (x.zoom) {
-            map.setZoom(x.zoom);
-         }
-         if (x.center) {
-            map.setCenter(x.center);
-         }
+         setGMapCenterZoom(map,gmapVar.value);
       } else if (bboxVar && bboxVar.value) {
-         var x = parseBbox(bboxVar.value);
-         if (x) {
-            dx = (x[2] - x[0]) * 0.01;
-            dy = (x[1] - x[3]) * 0.01;
-            map.fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
-         } 
+         setGMapBbox(map,bboxVar.value);
       } 
       gmap.init.center = map.getCenter();
       gmap.init.zoom = map.getZoom();
-      setPageFormVariable('gmap',JSON.stringify(gmap.init));
+      setPageFormVariable('gmap',stringifyGMapLoc(gmap.init));
    }
 }
 
 var gmapParams = {};
-var excludedParams = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength:1};
+var GMAP_EXCLUDED_PARAMS = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength:1};
+
 
 function addGMapParam(name,val) {
-   if (!(name in excludedParams)) {
+   if (!(name in GMAP_EXCLUDED_PARAMS)) {
       gmapParams[name] = val;
    }
 }
@@ -6918,7 +6933,7 @@ function initializeGMap(gmap) {
    gmap.infowindow = new google.maps.InfoWindow();
    var map = new google.maps.Map(document.getElementById(gmap.id), gmap.mapOptions);
    gmap.map = map;
-   setGMap(gmaps[id]);
+   setGMap(gmap);
    setGMapLayers(gmap);
    gmap.boundsChanged = false;
    recttm = null;
@@ -6983,27 +6998,21 @@ function initializeGMap(gmap) {
 
    }
 
-   if  (gmap.mapClick && gmap.mapClick.setBounds) {
       google.maps.event.addListener(map, "bounds_changed", function () {
          gmap.boundsChanged = true;
       });
       google.maps.event.addListener(map, "idle", function () {
          if (gmap.boundsChanged) {
-            var bs = map.getBounds();
-            var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+            var z = {center: map.getCenter(), zoom: map.getZoom()};
+            setPageFormVariable('gmap',stringifyGMapLoc(z));
 
-            var f = document.getElementById('pageform');
-            if (f) {
-               var gmapVar = f.elements['gmap'];
-               if (gmapVar) {
-                  var z = {center: map.getCenter(), zoom: map.getZoom()};
-                  gmapVar.value = JSON.stringify(z);
-               }
+            if  (gmap.mapClick && gmap.mapClick.setBounds) {
+               var bs = map.getBounds();
+               var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+               setbbox(bb,{},null);
             }
-            setbbox(bb,{},null);
          } 
       });
-   }
 
    if (gmap.featureLayer) {
 
@@ -7154,13 +7163,28 @@ function inArray(needle,haystack) {
 
 function updateGMaps(changedInput) {
    if(changedInput) {
-      addGMapParam(changedInput.name,changedInput.value);
+      var name = changedInput.name;
+      var value = changedInput.value;
+      addGMapParam(name,value);
       var cs = changedInput.className ? changedInput.className.split(' ') : []; 
       var es = document.getElementsByClassName('dlimgGMap');
       if (inArray('dlimg',cs)) {
          for (var i=0;i!=es.length;i++) {
             var gmap = gmaps[ es[i].id ]
-            setGMapLayers(gmap);
+            var map = gmap.map;
+            if (name == 'gmap' && value) {
+               setGMapCenterZoom(map,value);
+            } else if (name == 'gmap' && !value) {
+               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
+            } else if (name == 'bbox' && value) {
+               setGMapBbox(map,value);
+            } else if (name == 'bbox' && !value) {
+               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
+            } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
+               setGMapLayers(gmap);
+            }
          }
       }
    }
