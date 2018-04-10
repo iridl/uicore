@@ -1380,6 +1380,18 @@ function doPDFImageClick(evt){
 	ga('send','social', 'ImageDownload','asPDF',location.href);
     }
 }
+function doPSImageClick(evt){
+    var evt = (evt) ? evt : ((event) ? event : null );
+    var it = (evt.currentTarget) ? evt.currentTarget : this;
+    var figimg = getPSImage(it.clipthis);
+    if(figimg && figimg.href){
+	var pdfurl=figimg.href;
+	var pdfclass=figimg.className;
+	var pform=document.getElementById('pageform');
+	submitPageForm(pdfurl,pdfclass,'GET'); 
+	ga('send','social', 'ImageDownload','asPS',location.href);
+    }
+}
 function doPNGImageClick(evt){
     var evt = (evt) ? evt : ((event) ? event : null );
     var it = (evt.currentTarget) ? evt.currentTarget : this;
@@ -4087,6 +4099,15 @@ function DLimageBuildControls(mydlimage,mylink){
 		    }
 		    ctl.appendChild(gb);
 	    */
+	    /* PS */
+	    gb= document.createElement('div');
+	    gb.className='sharebutton asPS';
+	    gb.setAttribute("title","PS image");
+	    gb.onclick=doPSImageClick;
+	    gb.myonclick=doPSImageClick;
+	    gb.clipthis = currentObj.parentNode;
+	    ctl.appendChild(gb);
+	    appendMissingClass(mydlimage,'hasDownload');
 	    /* GIF */
 	    gb= document.createElement('div');
 	    gb.className='sharebutton asGIF';
@@ -6531,10 +6552,12 @@ function removePageForm(href,overridePageForm){
 }
 /*
   appendPageForm -- appends to href, appending pageform inputs corresponding to class.
+appendPageForm
 */
 function appendPageForm(href,classes,includeDefaultValues,overridePageForm){
     var filtered =removePageForm(href,overridePageForm);
     var localhref=localHrefOf(filtered);
+/*    var localhref= filtered; */
     var myform=document.getElementById('pageform');
     if(myform){
 	var alldisabled=alldisabledPageForm(classes,includeDefaultValues);
