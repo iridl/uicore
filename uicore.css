@@ -1949,7 +1949,7 @@ so that only the gdriveurl="active" button is shown
 .asGDrive .gDriveSubButton[gdriveurl="active"]{}
 .asGDrive .gDriveSubButton[gdriveurl="standby"]{display: none  !important;}
 
-.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPDFget,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
+.asGeoTiffPaletteColor,  .asGeoTiff, .asKML,.asWMS,.asPDF,.asPS,.asPDFget,.asPNG,.asGIF,.asJPG, .asTSV, .asHTML, .asCutAndPaste{
     min-height: 10pt;
     min-width: 20pt;
     cursor: pointer;
@@ -1980,6 +1980,9 @@ content: "TSV table";
 }
 .asHTML:before {
 content: "table";
+}
+.asPS:before {
+content: "PS";
 }
 .asPDF:before {
 content: "PDF";
@@ -2014,6 +2017,9 @@ content: "table";
 .asTSV::before {
 content: "TSV table";
 }
+.asPS:before {
+content: "PS";
+}
 .asPDF:before {
 content: "PDF";
 }
@@ -2032,7 +2038,7 @@ content: "Widget";
 .asJPG::before {
 content: "JPG";
 }
-.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,asGDrive:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover,.asCutAndPaste::hover {
+.asKML:hover,.asWMS:hover,.asTSV:hover,.asPDF:hover,.asPS:hover,asGDrive:hover,.asPNG:hover,.asGIF:hover,.asJPG:hover,.asCutAndPaste::hover {
 opacity: 1.0;
 }
 
