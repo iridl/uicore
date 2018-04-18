@@ -3438,7 +3438,7 @@ function setbbox (newbbox,myinfo,myclasses) {
 		    res = ress[iin];
 		    resf = resfs[iin];
 		    // none -- return pt:[x,y]
-		    // number -- return bbox of that size bb:[x-(0.5*res),y-(0.5*res),x+(0.5*res),y+(0.5*res)]
+		    // number -- return bbox of that size bb:[x,y,x+res,y+res]
 		    // uri -- returns geoobject of that class/type 
 		    if(res.value && res.value.substr(0,6) == 'irids:'){
 			invalidatePageInput(myin);
@@ -3505,10 +3505,10 @@ function setbbox (newbbox,myinfo,myclasses) {
 			x = delta*Math.floor(parseFloat(newbbox[0])/delta);
 			y = delta*Math.floor(parseFloat(newbbox[1])/delta);
 			var roundbox=new Array();
-			roundbox[0]=x-(0.5*delta);
-			roundbox[1]=y-(0.5*delta);
-			roundbox[2]=x+(0.5*delta);
-			roundbox[3]=y+(0.5*delta);
+			roundbox[0]=x;
+			roundbox[1]=y;
+			roundbox[2]=x+delta;
+			roundbox[3]=y+delta;
 			myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
 		    }
 		    else {
