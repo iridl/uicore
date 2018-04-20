@@ -3438,7 +3438,7 @@ function setbbox (newbbox,myinfo,myclasses) {
 		    res = ress[iin];
 		    resf = resfs[iin];
 		    // none -- return pt:[x,y]
-		    // number -- return bbox of that size bb:[x-(0.5*res),y-(0.5*res),x+(0.5*res),y+(0.5*res)]
+		    // number -- return bbox of that size bb:[x,y,x+res,y+res]
 		    // uri -- returns geoobject of that class/type 
 		    if(res.value && res.value.substr(0,6) == 'irids:'){
 			invalidatePageInput(myin);
