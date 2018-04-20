@@ -3500,15 +3500,20 @@ function setbbox (newbbox,myinfo,myclasses) {
 			xmlhttp.send();
 		    }
 		    else if(typeof(res) != 'undefined' && parseFloat(res.value) != 'NaN'){
-			var x,y,delta;
+			/* edited by R. Cousin on 20180418 */
+			/* previous code was covering only case where gridboxes edges were a multiple of delta */
+			/* introducing an offset correction to cover as well all other cases */
+			var x,y,delta,xoffset,yoffset;
 			delta = parseFloat(res.value);
-			x = delta*Math.floor(parseFloat(newbbox[0])/delta);
-			y = delta*Math.floor(parseFloat(newbbox[1])/delta);
+			xoffset = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
+			yoffset = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+			x = delta*Math.floor(parseFloat(newbbox[0]-xoffset)/delta)+xoffset;
+			y = delta*Math.floor(parseFloat(newbbox[1]-yoffset)/delta)+yoffset;
 			var roundbox=new Array();
-			roundbox[0]=x-(0.5*delta);
-			roundbox[1]=y-(0.5*delta);
-			roundbox[2]=x+(0.5*delta);
-			roundbox[3]=y+(0.5*delta);
+			roundbox[0]=x;
+			roundbox[1]=y;
+			roundbox[2]=x+delta;
+			roundbox[3]=y+delta;
 			myin.value="bb:" + roundbox.join(':') + ifCRS + ":bb";
 		    }
 		    else {
