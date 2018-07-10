@@ -4967,6 +4967,7 @@ Languages["ru"]="русский";
 Languages["sw"]="swahili";
 Languages["mg"]="malagasy";
 Languages["ar"]="العَرَبِية";
+Languages["rw"]="kinyarwanda";
 var LanguageTitle = new Array();
 LanguageTitle["en"]="Language";
 LanguageTitle["es"]="Idioma";
@@ -4977,6 +4978,7 @@ LanguageTitle["ru"]="Язык";
 LanguageTitle["sw"]="Lugha";
 LanguageTitle["mg"]="Teny";
 LanguageTitle["ar"]="لغة";
+LanguageTitle["rw"]="Ururimi";
 function languageChange(){
     var s=document.getElementById('chooseLanguage');
     var sel=s.getElementsByTagName('select')[0];
