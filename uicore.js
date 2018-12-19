@@ -144,8 +144,7 @@ jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
-jsDependsOn('https://maps.googleapis.com/maps/api/js?v=3&libraries=drawing,geometry,places,visualization');
-jsDependsOn('https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js');
+jsDependsOn('https://openlayers.org/en/v5.3.0/build/ol.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
@@ -6960,186 +6959,17 @@ function addGMapParam(name,val) {
 
 var idleFlag = true
 function initializeGMap(gmap) {
-   //document.getElementById('pageform').elements['gmap'].value = 'test';
-   gmap.infowindow = new google.maps.InfoWindow();
-   var map = new google.maps.Map(document.getElementById(gmap.id), gmap.mapOptions);
-   gmap.map = map;
-   setGMap(gmap);
-   setGMapLayers(gmap);
-   gmap.boundsChanged = false;
-   recttm = null;
-   var mapClickType = (gmap.mapClick ? gmap.mapClick.type : 'none');
-
-   if (mapClickType == 'click') {
-      google.maps.event.addListener(map, "click", function (e) {
-         var y = e.latLng.lat();
-         var x = e.latLng.lng();
-         var bb = [ x, y, x, y, true ];
-         setbbox(bb,{},null);
-      });
-
-   } else if  ( mapClickType == 'marker') {
-      var m = gmap.mapClick.marker;
-      m.map = map;
-      var marker = new google.maps.Marker(m);
-      marker.setVisible(gmap.mapClick.showFeature);
-      marker.addListener("dragend", function (e) {
-         var y = e.latLng.lat();
-         var x = e.latLng.lng();
-         var bb = [ x, y, x, y, true ];
-         setbbox(bb,{},null);
-      });
-      if (gmap.mapClick.moveOnClick) {
-         google.maps.event.addListener(map, "click", function (e) {
-            var y = e.latLng.lat();
-            var x = e.latLng.lng();
-            var bb = [ x, y, x, y, true ];
-            marker.setPosition({lat:y,lng:x});
-            marker.setVisible(true);
-            setbbox(bb,{},null);
-         });
-      }
-
-   } else if  (mapClickType == 'rectangle') {
-      var r = gmap.mapClick.rectangle;
-      r.map = map;
-      var rect = new google.maps.Rectangle(r);
-      setGMapRectVar(rect);
-      rect.setVisible(gmap.mapClick.showFeature);
-      rect.addListener("bounds_changed", function () {
-         if (recttm) { 
-            window.clearTimeout(recttm); 
-         } 
-         recttm = window.setTimeout(function () {
-            setGMapRectVar(rect);
-         }, 1000); 
-      });
-      if (gmap.mapClick.moveOnClick) {
-         google.maps.event.addListener(map, "click", function (e) {
-            var y = e.latLng.lat();
-            var x = e.latLng.lng();
-            var bs = rect.getBounds();
-            var offx = x - (bs.getNorthEast().lng() + bs.getSouthWest().lng()) / 2.0;
-            var offy = y - (bs.getNorthEast().lat() + bs.getSouthWest().lat()) / 2.0;
-            rect.setBounds({east: bs.getNorthEast().lng()+offx, north: bs.getNorthEast().lat()+offy, south: bs.getSouthWest().lat()+offy, west: bs.getSouthWest().lng()+offx});
-            setGMapRectVar(rect);
-            rect.setVisible(true);
-         });
-      }
-
-   }
-
-      google.maps.event.addListener(map, "bounds_changed", function () {
-         gmap.boundsChanged = true;
-      });
-      google.maps.event.addListener(map, "idle", function () {
-         if (idleFlag) {
-            idleFlag = false;
-            if (gmap.boundsChanged) {
-               var z = {center: map.getCenter(), zoom: map.getZoom()};
-               setPageFormVariable('gmap',stringifyGMapLoc(z));
-
-               if  (gmap.mapClick && gmap.mapClick.setBounds) {
-                  var bs = map.getBounds();
-                  var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
-                  setbbox(bb,{},null);
-               }
-            } 
-         } else {
-            idleFlag = true;
-         }
-      });
-
-   if (gmap.featureLayer) {
-
-      if (gmap.featureLayer.markerCluster) {
-         var markerClusterer = new MarkerClusterer(map,[],gmap.featureLayer.markerCluster);
-         google.maps.event.addListener(map.data, 'addfeature', function (e) {
-            if (e.feature.getGeometry().getType() === 'Point') {
-                   var opts = gmap.featureLayer.makeMarkerOptions(e.feature);
-                   opts.position = e.feature.getGeometry().get();
-                   opts.map = map;
-                   var marker = new google.maps.Marker(opts);
-                   if (gmap.featureLayer.featureClick == 'infoWindow') {
-                      google.maps.event.addListener(marker, 'click', function (marker, e) {
-                          return function () {
-                              gmap.infowindow.setPosition(e.feature.getGeometry().get());
-                              gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature));
-                              gmap.infowindow.open(map);
-                          };
-                      }(marker, e));
-                   } else if (gmap.featureLayer.featureClick == 'click') {
-                      google.maps.event.addListener(marker, 'click', function (marker, e) {
-                          return function () {
-                             var y = marker.getPosition().lat();
-                             var x = marker.getPosition().lng();
-                             var bb = [ x, y, x, y, true ];
-                             setbbox(bb,{},null);
-                          };
-                      }(marker, e));
-                   }
-                   markerClusterer.addMarker(marker);
-            }
-         });
-         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
-         map.data.setMap(null);
-         google.maps.event.addListener(map, "click", function (e) {
-             gmap.infowindow.close();
-         });
-
-      } else {  
-         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
-         if (gmap.featureLayer.makeMarkerOptions) {
-            map.data.setStyle( gmap.featureLayer.makeMarkerOptions );
-         }
-
-         if (gmap.featureLayer.featureClick == 'infoWindow') {
-            map.data.addListener('click', function(e) {
-               gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature)); 
-               gmap.infowindow.setPosition(e.latLng);
-               gmap.infowindow.open(map);
-            });
-            google.maps.event.addListener(map, "click", function (e) {
-               gmap.infowindow.close();
-            });
-
-         } else if (gmap.featureLayer.featureClick == 'click') {
-            map.data.addListener('click', function(e) {
-               var y = e.latLng.lat();
-               var x = e.latLng.lng();
-               var bb = [ x, y, x, y, true ];
-               setbbox(bb,{},null);
-            });
-         }
-      }
-   }
-
-   if (gmap.debug) {
-      function CoordMapType(tileSize) {
-         this.tileSize = tileSize;
-      }
-
-      CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-          var div = ownerDocument.createElement('div');
-          //div.innerHTML = coord;
-          var scale = Math.pow(2,zoom);
-          //div.innerHTML = "IRI, Columbia Univ.  ("+(coord.x % scale)+", "+(coord.y % scale) + ") "+scale + ", z=" + zoom;
-          div.innerHTML = "("+(coord.x % scale)+","+(coord.y % scale) + ") "+scale + ", z=" + zoom + 
-             "<br/>" + "("+(coord.x)+","+(coord.y) + ") "+ "<br/>"+plotrangeX(coord.x,zoom) + "<br/>"+plotrangeY(coord.y,zoom);
-          div.style.width = this.tileSize.width + 'px';
-          div.style.height = this.tileSize.height + 'px';
-          div.style.fontSize = '10';
-          div.style.borderStyle = 'solid';
-          div.style.borderWidth = '1px';
-          div.style.borderColor = '#AAAAAA';
-          div.style.clor = '#888888';
-          return div;
-      };
-      map.overlayMapTypes.push(new CoordMapType(new google.maps.Size(256, 256)));
-   }
-
-   var lc = createLayersControls(gmap);
-   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(lc);
+   var layers = [
+      new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
+   ];
+   var map = new ol.Map({
+      target: gmap.id,
+      layers: layers,
+      view: new ol.View({
+         center: ol.proj.fromLonLat([34, -15]),
+         zoom: 6,
+      }),
+   });
 }
 
 function initializeGMaps() {
