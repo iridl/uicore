@@ -6826,7 +6826,7 @@ function createLayersControls(gmap) {
 
 function resetGMap(gmap) {
    map = gmap.map;
-   map.getView().setCenter(gmap.init.center);
+   map.getView().setCenter(ol.proj.fromLonLat(gmap.init.center));
    map.getView().setZoom(gmap.init.zoom);
 }
 
@@ -6854,7 +6854,7 @@ function stringifyGMapLoc(gmapVal) {
 function setGMapCenterZoom(map,gmapVarVal) {
    var x = parseGMapLoc(gmapVarVal);
    map.getView().setZoom(x.zoom);
-   map.getView().setCenter(x.center);
+   map.getView().setCenter(ol.proj.fromLonLat(x.center));
 }
 function setGMapBbox(map,bboxVarVal) {
    var x = parseBbox(bboxVarVal);
@@ -6868,7 +6868,7 @@ function setGMapBbox(map,bboxVarVal) {
 
 function setGMap(gmap) {
    var map = gmap.map;
-   gmap.init = {center: map.getView().getCenter(), zoom: map.getView().getZoom()};
+   gmap.init = {center: ol.proj.toLonLat(map.getView().getCenter()), zoom: map.getView().getZoom()};
    var f = document.getElementById('pageform');
    if (f) {
       var gmapVar = f.elements['gmap'];
@@ -6878,7 +6878,7 @@ function setGMap(gmap) {
       } else if (bboxVar && bboxVar.value) {
          setGMapBbox(map,bboxVar.value);
       } 
-      gmap.init.center = map.getView().getCenter();
+      gmap.init.center = ol.proj.toLonLat(map.getView().getCenter());
       gmap.init.zoom = map.getView().getZoom();
       setPageFormVariable('gmap',stringifyGMapLoc(gmap.init));
    }
@@ -6896,6 +6896,7 @@ function addGMapParam(name,val) {
 
 var idleFlag = true
 function initializeGMap(gmap) {
+   var proj = ol.proj.get('EPSG:4326');
    var layers = [
       new ol.layer.Tile({ source: new ol.source.OSM(), opacity: 1 }),
       //new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
@@ -6904,12 +6905,16 @@ function initializeGMap(gmap) {
       target: gmap.id,
       layers: layers,
       view: new ol.View({
-         center: ol.proj.fromLonLat([34, -15]),
-         zoom: 6,
-         //rotation:  Math.PI/4,
+         center: (gmap.mapOptions && gmap.mapOptions.center ? ol.proj.fromLonLat(gmap.mapOptions.center,proj) : ol.proj.fromLonLat([0,0],proj) ),
+         zoom: (gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : 0),
+         rotation:  (gmap.mapOptions && gmap.mapOptions.rotation ? gmap.mapOptions.rotation : 0),
+         projection: proj,
+         extent: proj.getExtent(),
       }),
    });
    gmap.map = map;
+
+   setGMap(gmap);
 
    var popup = document.createElement('div');
    popup.className = "ol-popup";
@@ -6936,7 +6941,7 @@ function initializeGMap(gmap) {
       return false;
    };
    map.on('singleclick', function(evt) {
-      popupContent.innerHTML = ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate),3);
+      popupContent.innerHTML = ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate,proj),3);
       popupOverlay.setPosition(evt.coordinate);
    });
 
@@ -7011,12 +7016,12 @@ function updateGMaps(changedInput) {
             if (name == 'gmap' && value) {
                setGMapCenterZoom(map,value);
             } else if (name == 'gmap' && !value) {
-               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? ol.proj.fromLonLat(gmap.mapOptions.center) : ol.proj.fromLonLat(gmap.init.center));
                map.getView().setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
             } else if (name == 'bbox' && value) {
                setGMapBbox(map,value);
             } else if (name == 'bbox' && !value) {
-               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? ol.proj.fromLonLat(gmap.mapOptions.center) : ol.proj.fromLonLat(gmap.init.center));
                map.getView().setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
             } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
                setGMapLayers(gmap);
