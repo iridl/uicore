@@ -6760,81 +6760,6 @@ function setgithubjson(newname){
 
 var gmaps = {};
 
-var gmapStyles = {
- light: [
-  { elementType: "geometry", stylers: [ { color: "#f5f5f5" } ] },
-  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
-  { elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { elementType: "labels.text.stroke", stylers: [ { color: "#f5f5f5" } ] },
-  { featureType: "administrative", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "administrative.country", stylers: [ { visibility: "on" } ] },
-  { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
-  { featureType: "landscape", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "poi", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "road", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "road", elementType: "geometry", stylers: [ { color: "#ffffff" } ] },
-  { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#dadada" } ] },
-  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "transit", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "transit.line", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
-  { featureType: "transit.station", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
-  { featureType: "water", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "water", elementType: "geometry", stylers: [ { color: "#c9c9c9" } ] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] }
- ],
- dark: [
-  { stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { elementType: "geometry", stylers: [ { color: "#212121" } ] },
-  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
-  { elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { elementType: "labels.text.stroke", stylers: [ { color: "#212121" } ] },
-  { featureType: "administrative", elementType: "geometry", stylers: [ { color: "#757575" } ] },
-  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "administrative.land_parcel", stylers: [ { visibility: "off" } ] },
-  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#181818" } ] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [ { color: "#1b1b1b" } ] },
-  { featureType: "road", elementType: "geometry.fill", stylers: [ { color: "#2c2c2c" } ] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [ { color: "#8a8a8a" } ] },
-  { featureType: "road.arterial", elementType: "geometry", stylers: [ { color: "#373737" } ] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#3c3c3c" } ] },
-  { featureType: "road.highway.controlled_access", elementType: "geometry", stylers: [ { color: "#4e4e4e" } ] },
-  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "transit", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "water", elementType: "geometry", stylers: [ { color: "#000000" } ] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#3d3d3d" } ] }
- ],
- iridl: [
-  { elementType: 'geometry', stylers: [{color: '#f5f5f5'}] },
-  { elementType: 'labels.icon', stylers: [{visibility: 'off'}] },
-  { elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
-  { elementType: 'labels.text.stroke', stylers: [{color: '#f5f5f5'}] },
-  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{color: '#bdbdbd'}] },
-  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
-  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
-  { featureType: 'poi', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
-  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
-  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{color: '#ffffff'}] },
-  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{color: '#dadada'}] },
-  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
-  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
-  { featureType: 'transit.line', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
-  { featureType: 'transit.station', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{color: '#c9c9c9'}] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] }
- ]
-};
-
 function createGMapDLImage(options) {
    gmaps[options.id] = options;
 }
@@ -6870,8 +6795,20 @@ function plotrangeY(y,z) {
    return '/Y/'+r1+'/'+r2+'/plotrange';
 }
 
+function fdlurl(url,p) {
+   return function(cs) {
+      z = cs[0];
+      x = cs[1];
+      y = -cs[2] - 1;
+      u = url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef//antialias/true/psdef//SRS/%28EPSG:900913%29/psdef" +
+      plotrangeX(x,z) + plotrangeY(y,z)+"/+.gif" + p;
+      return u;
+   };
+}
+
+
 function setLayerOpacity(gmapId,layerIndex,opacity) {
-   gmaps[gmapId].map.overlayMapTypes.getAt(layerIndex).setOpacity(opacity);
+   gmaps[gmapId].map.getLayers().getArray()[layerIndex].setOpacity(opacity);
 }
 
 function createLayersControls(gmap) {
@@ -6889,8 +6826,8 @@ function createLayersControls(gmap) {
 
 function resetGMap(gmap) {
    map = gmap.map;
-   map.setCenter(gmap.init.center);
-   map.setZoom(gmap.init.zoom);
+   map.getView().setCenter(gmap.init.center);
+   map.getView().setZoom(gmap.init.zoom);
 }
 
 function setGMapRectVar(rect) {
@@ -6905,33 +6842,33 @@ function setGMapRectVar(rect) {
 
 function parseGMapLoc(gmapValStr) {
    var vs = JSON.parse(gmapValStr);
-   var x =  {center: new google.maps.LatLng(vs[0],vs[1]), zoom: vs[2]};
+   var x =  {center: [vs[0],vs[1]], zoom: vs[2]};
    return x;
 }
 
 function stringifyGMapLoc(gmapVal) {
-   var s = JSON.stringify([gmapVal.center.lat(),gmapVal.center.lng(),gmapVal.zoom]);
+   var s = JSON.stringify([gmapVal.center[0],gmapVal.center[1],gmapVal.zoom]);
    return s;
 }
 
 function setGMapCenterZoom(map,gmapVarVal) {
    var x = parseGMapLoc(gmapVarVal);
-   map.setZoom(x.zoom);
-   map.setCenter(x.center);
+   map.getView().setZoom(x.zoom);
+   map.getView().setCenter(x.center);
 }
 function setGMapBbox(map,bboxVarVal) {
    var x = parseBbox(bboxVarVal);
    if (x) {
       var dx = (x[2] - x[0]) * 0.01;
       var dy = (x[1] - x[3]) * 0.01;
-      map.fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
+      map.getView().fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
    }
 }
 
 
 function setGMap(gmap) {
    var map = gmap.map;
-   gmap.init = {center: map.getCenter(), zoom: map.getZoom()};
+   gmap.init = {center: map.getView().getCenter(), zoom: map.getView().getZoom()};
    var f = document.getElementById('pageform');
    if (f) {
       var gmapVar = f.elements['gmap'];
@@ -6941,8 +6878,8 @@ function setGMap(gmap) {
       } else if (bboxVar && bboxVar.value) {
          setGMapBbox(map,bboxVar.value);
       } 
-      gmap.init.center = map.getCenter();
-      gmap.init.zoom = map.getZoom();
+      gmap.init.center = map.getView().getCenter();
+      gmap.init.zoom = map.getView().getZoom();
       setPageFormVariable('gmap',stringifyGMapLoc(gmap.init));
    }
 }
@@ -6960,7 +6897,8 @@ function addGMapParam(name,val) {
 var idleFlag = true
 function initializeGMap(gmap) {
    var layers = [
-      new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
+      new ol.layer.Tile({ source: new ol.source.OSM(), opacity: 1 }),
+      //new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
    ];
    var map = new ol.Map({
       target: gmap.id,
@@ -6968,8 +6906,40 @@ function initializeGMap(gmap) {
       view: new ol.View({
          center: ol.proj.fromLonLat([34, -15]),
          zoom: 6,
+         //rotation:  Math.PI/4,
       }),
    });
+   gmap.map = map;
+
+   var popup = document.createElement('div');
+   popup.className = "ol-popup";
+   popup.title = "Popup Title";
+   var popupCloser = document.createElement('a');
+   popupCloser.className = "ol-popup-closer";
+   var popupContent = document.createElement('div');
+   popupContent.className = "ol-popup-content";
+   popup.appendChild(popupCloser);
+   popup.appendChild(popupContent);
+
+   var popupOverlay = new ol.Overlay({
+     element: popup,
+     autoPan: true,
+     autoPanAnimation: {
+        duration: 1250
+     }
+   });
+   map.addOverlay( popupOverlay );
+
+   popupCloser.onclick = function() {
+      popupOverlay.setPosition(undefined);
+      popupCloser.blur();
+      return false;
+   };
+   map.on('singleclick', function(evt) {
+      popupContent.innerHTML = ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate),3);
+      popupOverlay.setPosition(evt.coordinate);
+   });
+
 }
 
 function initializeGMaps() {
@@ -6994,10 +6964,10 @@ function makeParams(ps) {
 function setGMapLayers(gmap) {
    if (gmap && gmap.map) {
       var opacities = [];
-      gmap.map.overlayMapTypes.forEach( function(e,i) {
+      gmap.map.getLayers().getArray().forEach( function(e,i) {
          opacities[i] = e.getOpacity();
       });
-      gmap.map.overlayMapTypes.clear();
+      gmap.map.getLayers().clear();
       var params = makeParams(gmapParams);
       for (var i in gmap.imageLayers) {
          var layer = gmap.imageLayers[i];
@@ -7041,13 +7011,13 @@ function updateGMaps(changedInput) {
             if (name == 'gmap' && value) {
                setGMapCenterZoom(map,value);
             } else if (name == 'gmap' && !value) {
-               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
-               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
+               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.getView().setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
             } else if (name == 'bbox' && value) {
                setGMapBbox(map,value);
             } else if (name == 'bbox' && !value) {
-               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
-               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
+               map.getView().setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
+               map.getView().setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
             } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
                setGMapLayers(gmap);
             }
