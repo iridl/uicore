@@ -6898,21 +6898,34 @@ var idleFlag = true
 function initializeGMap(gmap) {
    var proj = ol.proj.get('EPSG:4326');
    var layers = [
-      new ol.layer.Tile({ source: new ol.source.OSM(), opacity: 1 }),
+      new ol.layer.Tile({ source: new ol.source.OSM(), opacity: 1, brightness: 0.1, }),
       //new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
+      //new ol.layer.Tile({ source: new ol.source.Stamen({ layer: 'terrain' }) }),
    ];
    var map = new ol.Map({
       target: gmap.id,
+      controls: [
+         new ol.control.ScaleLine({units: 'degrees'}),
+         new ol.control.FullScreen(),
+         new ol.control.Attribution({collapsible: true}),
+         //new ol.control.MousePosition(),
+         //new ol.control.OverviewMap(),
+         //new ol.control.Rotate({duration: 2000}),
+         //new ol.control.ZoomSlider(),
+         new ol.control.Zoom(),
+      ],
       layers: layers,
       view: new ol.View({
          center: (gmap.mapOptions && gmap.mapOptions.center ? ol.proj.fromLonLat(gmap.mapOptions.center,proj) : ol.proj.fromLonLat([0,0],proj) ),
          zoom: (gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : 0),
          rotation:  (gmap.mapOptions && gmap.mapOptions.rotation ? gmap.mapOptions.rotation : 0),
-         projection: proj,
-         extent: proj.getExtent(),
+         //projection: proj,
+         projection: 'EPSG:4326',
       }),
    });
    gmap.map = map;
+
+   console.log(map.getView().calculateExtent(map.getSize()));
 
    setGMap(gmap);
 
