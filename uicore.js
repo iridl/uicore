@@ -6767,8 +6767,10 @@ function createGMapDLImage(options) {
 function X(x,z) {
    return (x/Math.pow(2,z)*360-180);
 }
-
 function Y(y,z) {
+   return (y/Math.pow(2,z)*180-90);
+}
+function Y3857(y,z) {
    var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
    return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
 }
@@ -6796,6 +6798,18 @@ function plotrangeY(y,z) {
 }
 
 function fdlurl(url,p) {
+   return function(cs) {
+      z = cs[0];
+      x = cs[1];
+      y = Math.pow(2,z) + cs[2];
+      u = url + "//XOVY/2/psdef//plotaxislength/512/psdef//plotborder/0/psdef" +
+          plotrangeX(x,z) + plotrangeY(y,z)+"/+.png" + p;
+      //console.log(cs, z,x,y,plotrangeX(x,z),plotrangeY(y,z),u);
+      return u;
+   };
+}
+
+function fdlurl3857(url,p) {
    return function(cs) {
       z = cs[0];
       x = cs[1];
@@ -6897,10 +6911,28 @@ function addGMapParam(name,val) {
 var idleFlag = true
 function initializeGMap(gmap) {
    var proj = ol.proj.get('EPSG:4326');
+
+   iriLayer = new ol.layer.Tile({
+       opacity: 0.5,
+       source: new ol.source.TileImage({
+          attributions: "© IRI, Columbia University",
+          wrapX: true,
+          tileGrid: new ol.tilegrid.TileGrid({
+             extent: [-180,-90,180,90],
+             minZoom: 0,
+             tileSize: [512,256],
+             resolutions: [0.703125,0.3515625,0.17578125,0.087890625, 0.043945313, 0.021972656, 0.010986328, 0.005493164, 0.002746582, 0.001373291, 0.000686646, 0.000343323, 0.000171661, 8.58307E-05, 4.29153E-05, 2.14577E-05, 1.07288E-05, 5.36442E-06, 2.68221E-06, 1.3411E-06, 6.70552E-07, 3.35276E-07, 1.67638E-07],
+          }),
+          projection: 'EPSG:4326',
+          tileUrlFunction: fdlurl('https://iridl.ldeo.columbia.edu/expert/SOURCES/.WORLDBATH432/.bath/a-/-a/X/Y/fig-/colors/coasts/lakes/countries/-fig','?x=1'),
+       })
+   });
+
    var layers = [
-      new ol.layer.Tile({ source: new ol.source.OSM(), opacity: 1, brightness: 0.1, }),
+      new ol.layer.Tile({ source: new ol.source.OSM({wrapX: true}), opacity: 1, brightness: 0.8, }),
       //new ol.layer.Tile({ source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga' }), opacity: 1.0}),
       //new ol.layer.Tile({ source: new ol.source.Stamen({ layer: 'terrain' }) }),
+      iriLayer,
    ];
    var map = new ol.Map({
       target: gmap.id,
@@ -6991,7 +7023,7 @@ function setGMapLayers(gmap) {
          var layer = gmap.imageLayers[i];
          var opts = {
             getTileUrl: function (l,p) {return function (c, z) {
-               var r =  l.url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef//antialias/true/psdef//SRS/%28EPSG:900913%29/psdef" + 
+               var r =  l.url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef" + 
                  plotrangeX(c.x,z) + plotrangeY(c.y,z)+"/+.gif" + p;
                return r;
             }}(layer,params),

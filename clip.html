@@ -16,11 +16,18 @@
 
       var osm = new ol.layer.Tile({
         source: new ol.source.XYZ( {url: 'http://mt{0-1}.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga' }),
+        //source: new ol.source.XYZ( {url: 'https://maps-cdn.salesboard.biz/styles/klokantech-3d-gl-style/{z}/{x}/{y}.png' }),
+        //source: new ol.source.XYZ( {url: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png' }),
+        //source: new ol.source.XYZ( {url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' }),
+        //source: new ol.source.XYZ( {url: 'http://{a-c}.tile.stamen.com/toner/{z}/{x}/{y}.png' }),
+        //source: new ol.source.XYZ( {url: 'http://{a-c}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png' }),
         opacity: 1,
+        //preload: Infinity,
       });
       var osm0 = new ol.layer.Tile({
         source: src,
         opacity: 1,
+        //preload: Infinity,
       });
 
       var map = new ol.Map({
@@ -39,13 +46,11 @@
         var r = event.frameState.pixelRatio;
         console.log(event);
         var s = ctx.getTransform();
-        console.log(s);
         ctx.save();
         ctx.transform(m[0]*r,m[1]*r,m[2]*r,m[3]*r,m[4]*r,m[5]*r);
         ctx.beginPath();
         clippath.forEach(function(ps0) {
            ps0.forEach(function(ps1) {
-              console.log(ps1.length);
               var first = true;
               ps1.forEach(function(e) {
                  var v = e;
