@@ -6820,6 +6820,22 @@ function fdlurl3857(url,p) {
    };
 }
 
+function createIridlSource(url,params) {
+   var iridlSource = new ol.source.TileImage({
+       projection: 'EPSG:4326',
+       attributions: "© IRI, Columbia University",
+       wrapX: true,
+       tileUrlFunction: fdlurl(url,params),
+       tileGrid: new ol.tilegrid.TileGrid({
+          extent: [-180,-90,180,90],
+          minZoom: 0,
+          tileSize: [512,256],
+          resolutions: [0.703125,0.3515625,0.17578125,0.087890625, 0.043945313, 0.021972656, 0.010986328, 0.005493164, 0.002746582, 0.001373291, 0.000686646, 0.000343323, 0.000171661, 8.58307E-05, 4.29153E-05, 2.14577E-05, 1.07288E-05, 5.36442E-06, 2.68221E-06, 1.3411E-06, 6.70552E-07, 3.35276E-07, 1.67638E-07],
+       }),
+    });
+    return iridlSource;
+}
+
 
 function setLayerOpacity(gmapId,layerIndex,opacity) {
    gmaps[gmapId].map.getLayers().getArray()[layerIndex].setOpacity(opacity);
@@ -6841,7 +6857,8 @@ function createLayersControls(gmap) {
 function resetGMap(gmap) {
    var map = gmap.map;
    var view = map.getView();
-   view.setCenter(ol.proj.fromLonLat(gmap.init.center,view.getProjection()));
+   var xy = ol.proj.fromLonLat(gmap.init.center,view.getProjection());
+   view.setCenter(xy);
    view.setZoom(gmap.init.zoom);
 }
 
@@ -6869,8 +6886,9 @@ function stringifyGMapLoc(gmapVal) {
 function setGMapCenterZoom(map,gmapVarVal) {
    var view = map.getView();
    var x = parseGMapLoc(gmapVarVal);
+   var xy = ol.proj.fromLonLat(x.center,view.getProjection());
+   view.setCenter(xy);
    view.setZoom(x.zoom);
-   view.setCenter(ol.proj.fromLonLat(x.center),view.getProjection());
 }
 function setGMapBbox(map,bboxVarVal) {
    var view = map.getView();
@@ -6947,6 +6965,8 @@ function initializeGMap(gmap) {
    }
    if (!('center' in gmap.viewOptions)) {
       gmap.viewOptions.center = ol.proj.fromLonLat([0,0],gmap.viewOptions.projection);
+   } else {
+      gmap.viewOptions.center = ol.proj.fromLonLat(gmap.viewOptions.center,gmap.viewOptions.projection);
    } 
    if (!('rotation' in gmap.viewOptions)) {
       gmap.viewOptions.rotation = 0.0;
@@ -6984,18 +7004,7 @@ function initializeGMap(gmap) {
          }
          var iridlLayer = new ol.layer.Tile({
             opacity: x.opacity,
-            source: new ol.source.TileImage({
-               projection: 'EPSG:4326',
-               attributions: "© IRI, Columbia University",
-               wrapX: true,
-               tileUrlFunction: fdlurl(x.url,params),
-               tileGrid: new ol.tilegrid.TileGrid({
-                  extent: [-180,-90,180,90],
-                  minZoom: 0,
-                  tileSize: [512,256],
-                  resolutions: [0.703125,0.3515625,0.17578125,0.087890625, 0.043945313, 0.021972656, 0.010986328, 0.005493164, 0.002746582, 0.001373291, 0.000686646, 0.000343323, 0.000171661, 8.58307E-05, 4.29153E-05, 2.14577E-05, 1.07288E-05, 5.36442E-06, 2.68221E-06, 1.3411E-06, 6.70552E-07, 3.35276E-07, 1.67638E-07],
-               }),
-             })
+            source: createIridlSource(x.url,params),
          });
          x.layer = iridlLayer;
          layers.push( x.layer );
@@ -7067,7 +7076,8 @@ function updateGMapLayers(gmap) {
       for (var i in gmap.layers) {
          var x = gmap.layers[i]; 
          if (x.type == "iridl") {
-            //x.layer.getSource().setTileUrlFunction( fdlurl(x.url, params) );
+            var iridlSource = createIridlSource(x.url,params);
+            x.layer.setSource(iridlSource);
          }
       }
    }
