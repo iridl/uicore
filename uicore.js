@@ -6846,16 +6846,37 @@ function setLayerOpacity(gmapId,layerIndex,opacity) {
    gmaps[gmapId].map.getLayers().getArray()[layerIndex].setOpacity(opacity);
 }
 
-function createLayersControls(gmap) {
-  var rdiv = document.createElement('div');
-  rdiv.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
-  for (var i in gmap.layers) {
-      var layer = gmap.layers[i];
-      var ldiv = document.createElement('div');
-      ldiv.innerHTML = layer.name+'<br><input type="range" style="width:80px" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
-      rdiv.appendChild(ldiv);
-  }
-  return rdiv;
+function createOpacityControl() {
+      return (function (Control) {
+        function OpacityControl(opt_options) {
+          var options = opt_options || {};
+
+          var gmap = options.gmap;
+          var layers = gmap.layers;
+
+          var element = document.createElement('div');
+          //element.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
+          element.className = 'dl-opacity-control ol-unselectable ol-control';
+          for (var i in layers) {
+             var layer = layers[i];
+             var lelement = document.createElement('div');
+             lelement.className = 'dl-opacity-slider';
+             lelement.innerHTML = ''+layer.name+'<br><input type="range" "dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
+             element.appendChild(lelement);
+          }
+
+          Control.call(this, {
+            element: element,
+            target: options.target
+          });
+        }
+
+        if ( Control ) OpacityControl.__proto__ = Control;
+        OpacityControl.prototype = Object.create( Control && Control.prototype );
+        OpacityControl.prototype.constructor = OpacityControl;
+
+        return OpacityControl;
+      }(ol.control.Control));
 }
 
 
@@ -6943,7 +6964,7 @@ function flatArrayEq(a,b) {
    if (a.length != b.length) {
       return false;
    }
-   for (i in a) {
+   for (var i in a) {
       if (a[i] != b[i]) {
          return false;
       }
@@ -6960,7 +6981,13 @@ function viewSetBounds(view) {
 }
 
 
+var OpacityControl = null;
+
 function initializeGMap(gmap) {
+
+   if (!OpacityControl) {
+      OpacityControl = createOpacityControl();
+   }
 
    if (!('id' in gmap)) {
       throw "uicore: id undefined in gmap";
@@ -6974,17 +7001,6 @@ function initializeGMap(gmap) {
    }
    if (!('target' in gmap.mapOptions)) {
       gmap.mapOptions.target = gmap.id;
-   }
-   if (!('controls' in gmap.mapOptions)) {
-      gmap.mapOptions.controls = [
-         new ol.control.ScaleLine({
-            units: 'degrees',
-         }),
-         new ol.control.FullScreen(),
-         new ol.control.Attribution({collapsible: true}),
-         new ol.control.Rotate({duration: 250}),
-         new ol.control.Zoom(),
-      ];
    }
    if (!('viewOptions' in gmap)) {
       gmap.viewOptions = {};
@@ -7047,6 +7063,19 @@ function initializeGMap(gmap) {
    gmap.mapOptions.layers = layers;
 
    //gmap.mapOptions.interactions = ol.interaction.defaults().extend([new ol.interaction.DragBox()]);
+
+   if (!('controls' in gmap.mapOptions)) {
+      gmap.mapOptions.controls = [
+         new ol.control.ScaleLine({
+            units: 'degrees',
+         }),
+         new ol.control.FullScreen(),
+         new ol.control.Attribution({collapsible: true}),
+         new ol.control.Rotate({duration: 250}),
+         new ol.control.Zoom(),
+         new OpacityControl({gmap: gmap}),
+      ];
+   }
 
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
