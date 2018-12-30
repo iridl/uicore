@@ -3504,8 +3504,13 @@ function setbbox (newbbox,myinfo,myclasses) {
 			/* introducing an offset correction to cover as well all other cases */
 			var x,y,delta,xoffset,yoffset;
 			delta = parseFloat(res.value);
-			xoffset = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
-			yoffset = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+                        if ( ("iridl:hasAbscissa" in myinfo) && ("iridl:hasOrdinate" in myinfo) ) {
+			   xoffset = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
+			   yoffset = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+                        } else {
+                           xoffset = 0.0;
+                           yoffset = 0.0;
+                        }
 			x = delta*Math.floor(parseFloat(newbbox[0]-xoffset)/delta)+xoffset;
 			y = delta*Math.floor(parseFloat(newbbox[1]-yoffset)/delta)+yoffset;
 			var roundbox=new Array();
@@ -6860,6 +6865,7 @@ function resetGMap(gmap) {
    var xy = ol.proj.fromLonLat(gmap.init.center,view.getProjection());
    view.setCenter(xy);
    view.setZoom(gmap.init.zoom);
+   viewSetBounds(view);
 }
 
 function setGMapRectVar(rect) {
@@ -6889,6 +6895,7 @@ function setGMapCenterZoom(map,gmapVarVal) {
    var xy = ol.proj.fromLonLat(x.center,view.getProjection());
    view.setCenter(xy);
    view.setZoom(x.zoom);
+   viewSetBounds(view);
 }
 function setGMapBbox(map,bboxVarVal) {
    var view = map.getView();
@@ -6896,7 +6903,9 @@ function setGMapBbox(map,bboxVarVal) {
    if (x) {
       var dx = (x[2] - x[0]) * 0.01;
       var dy = (x[1] - x[3]) * 0.01;
-      view.fit([x[0]+dx, x[3]+dy, x[2]-dx, x[1]-dy]);
+      var bounds = [x[0]+dx, x[3]+dy, x[2]-dx, x[1]-dy];
+      view.fit(bounds);
+      viewSetBounds(view);
    }
 }
 
@@ -6930,7 +6939,27 @@ function addGMapParam(name,val) {
    }
 }
 
-var idleFlag = true
+function flatArrayEq(a,b) {
+   if (a.length != b.length) {
+      return false;
+   }
+   for (i in a) {
+      if (a[i] != b[i]) {
+         return false;
+      }
+   }
+   return true;
+}
+
+function viewSetBounds(view) { 
+   newBounds = view.calculateExtent();
+   oldBounds = view.get('dlBounds');
+   if (!flatArrayEq(oldBounds,newBounds)) {
+      view.set('dlBounds', newBounds);
+   }
+}
+
+
 function initializeGMap(gmap) {
 
    if (!('id' in gmap)) {
@@ -6949,7 +6978,7 @@ function initializeGMap(gmap) {
    if (!('controls' in gmap.mapOptions)) {
       gmap.mapOptions.controls = [
          new ol.control.ScaleLine({
-            //units: 'degrees',
+            units: 'degrees',
          }),
          new ol.control.FullScreen(),
          new ol.control.Attribution({collapsible: true}),
@@ -6972,7 +7001,8 @@ function initializeGMap(gmap) {
       gmap.viewOptions.rotation = 0.0;
    } 
 
-   gmap.mapOptions.view = new ol.View(gmap.viewOptions)
+   var view = new ol.View(gmap.viewOptions);
+   gmap.mapOptions.view = view;
 
    if (!('layers' in gmap)) {
       gmap.layers = [];
@@ -7006,6 +7036,7 @@ function initializeGMap(gmap) {
             opacity: x.opacity,
             source: createIridlSource(x.url,params),
          });
+
          x.layer = iridlLayer;
          layers.push( x.layer );
       } else {
@@ -7015,11 +7046,75 @@ function initializeGMap(gmap) {
 
    gmap.mapOptions.layers = layers;
 
+   //gmap.mapOptions.interactions = ol.interaction.defaults().extend([new ol.interaction.DragBox()]);
+
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
 
+
+   if (!('mapClick' in gmap)) {
+      gmap.mapClick = {};
+   }
+   if (!('type' in gmap.mapClick)) {
+      gmap.mapClick.type = 'none';
+   }
+   if (!('showFeature' in gmap.mapClick)) {
+      gmap.mapClick.showFeature = false;
+   }
+   if (!('moveOnClick' in gmap.mapClick)) {
+      gmap.mapClick.moveOnClick = false;
+   }
+   if (!('setBounds' in gmap.mapClick)) {
+      gmap.mapClick.setBounds = false;
+   }
+   if (!('setBounds' in gmap.mapClick)) {
+      gmap.mapClick.setBounds = false;
+   }
+   if (!('marker' in gmap.mapClick)) {
+      gmap.mapClick.marker = {};
+   }
+   if (!('rectangle' in gmap.mapClick)) {
+      gmap.mapClick.rectangle = {};
+   }
+
+   if (gmap.mapClick.setBounds) {
+      view.set('dlBounds',view.calculateExtent());
+      map.on('change:size', function (evt) {
+         viewSetBounds(view);
+      });
+      view.on('change', function (evt) {
+         viewSetBounds(view);
+      });
+      view.on('propertychange', function (evt) {
+         if (evt.key == 'dlBounds') {
+            var newBounds = view.get('dlBounds');
+            var bb = [ newBounds[0], newBounds[3], newBounds[2], newBounds[1], true];
+            console.log('uicore: bounds changed:', newBounds );
+            setbbox(bb,{},null);
+         }
+      });
+   }
+
    setGMap(gmap);
 
+   var mapClickType = gmap.mapClick.type;
+
+   if (mapClickType == 'click') {
+      map.on('singleclick', function(evt) {
+         var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
+         var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
+         console.log('uicore: map click:', xy);
+         setbbox(bb,{},null);
+      });
+   } else if  (mapClickType == 'marker') {
+   } else if  (mapClickType == 'rectangle') {
+   } else {
+      throw "uicore: map click type '" + mapClickType + "' is not supported";
+   }
+
+
+// -----------------------------------------------
+/*
    var popup = document.createElement('div');
    popup.className = "ol-popup";
    popup.title = "Popup Title";
@@ -7048,6 +7143,9 @@ function initializeGMap(gmap) {
       popupContent.innerHTML = ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate,map.getView().getProjection()),3);
       popupOverlay.setPosition(evt.coordinate);
    });
+*/
+
+// ----------------------------------------------
 
 }
 
@@ -7103,20 +7201,24 @@ function updateGMaps(changedInput) {
       if (inArray('dlimg',cs)) {
          for (var i=0;i!=es.length;i++) {
             var gmap = gmaps[ es[i].id ]
-            var map = gmap.map;
-            var view = map.getView();
-            if (name == 'gmap' && value) {
-               setGMapCenterZoom(map,value);
-            } else if (name == 'gmap' && !value) {
-               view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center) );
-               view.setZoom( gmap.viewOptions.zoom );
-            } else if (name == 'bbox' && value) {
-               setGMapBbox(map,value);
-            } else if (name == 'bbox' && !value) {
-               view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center) );
-               view.setZoom( gmap.viewOptions.zoom );
-            } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
-               updateGMapLayers(gmap);
+            if (gmap.map) {
+               var map = gmap.map;
+               var view = map.getView();
+               if (name == 'gmap' && value) {
+                  setGMapCenterZoom(map,value);
+               } else if (name == 'gmap' && !value) {
+                  view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center, view.getProjection()) );
+                  view.setZoom( gmap.viewOptions.zoom );
+                  viewSetBounds(view);
+               } else if (name == 'bbox' && value) {
+                  setGMapBbox(map,value);
+               } else if (name == 'bbox' && !value) {
+                  view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center, view.getProjection()) );
+                  view.setZoom( gmap.viewOptions.zoom );
+                  viewSetBounds(view);
+               } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
+                  updateGMapLayers(gmap);
+               }
             }
          }
       }
