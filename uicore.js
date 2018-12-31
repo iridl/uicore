@@ -3178,14 +3178,12 @@ function initializeDLimage(){
 		ctl.myonclick=dosettingsbutton;
 		leg.appendChild(ctl);
 
-                if (!hasGMap) {
-		   ctl=document.createElement('div');
-		   ctl.className="dlimagecontrol layers";
-		   ctl.title="Layers";
-		   ctl.onclick=dolayersbutton;
-		   ctl.myonclick=dolayersbutton;
-		   leg.appendChild(ctl);
-                }
+		ctl=document.createElement('div');
+		ctl.className="dlimagecontrol layers";
+		ctl.title="Layers";
+		ctl.onclick=dolayersbutton;
+		ctl.myonclick=dolayersbutton;
+		leg.appendChild(ctl);
 
 		if(s.className.indexOf('NoDefaultIvars')<0){
 		    appendMissingClass(s,'ShowControlIvars');
@@ -3877,6 +3875,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    for (var i = 0; i<layerlist.length; i++) {
 		var layer=layerlist[i];
 		var layername=layer["iridl:name"];
+		addGMapParam('layers',layername,null);
 		var style=layer["iridl:style"];
 		var iptsp = document.createElement('label');
 		if(style.join){
@@ -5258,7 +5257,7 @@ function setPageForm(){
 		}
 		var ipos=varcnts[iname];
 		var refvalue = decodeURIComponent(hold);
-                addGMapParam(iname,refvalue);
+                addGMapParam(iname,refvalue,true);
 		if(inputs[iname].length){
 		    if(inputs[iname][ipos].type == 'checkbox'){
 			for (var ick = 0 ; ick < inputs[iname].length; ick++){
@@ -6952,13 +6951,18 @@ function setGMap(gmap) {
    }
 }
 
-var gmapParams = {};
+var gmapParams = {layers: {}};
 var GMAP_EXCLUDED_PARAMS = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength:1};
 
 
-function addGMapParam(name,val) {
+function addGMapParam(name,val,flag) {
+   console.log('addGMapParam:', name,val,flag);
    if (!(name in GMAP_EXCLUDED_PARAMS)) {
-      gmapParams[name] = val;
+      if (gmapParams[name] instanceof Object) {
+         gmapParams[name][val] = flag;
+      } else {
+         gmapParams[name] = val;
+      }
    }
 }
 
@@ -7194,11 +7198,37 @@ function initializeGMaps() {
 function makeParams(ps) {
    var s = '';
    for (var name in ps) {
-       s += '&' + name + '=' + encodeURIComponent(ps[name]);
+       if (ps[name] instanceof Object) {
+          var allNulls = true;
+          for (var val in ps[name]) {
+             allNulls = allNulls && (ps[name][val]==null);
+          }
+          for (var val in ps[name]) {
+             if (ps[name][val]==null) {
+                ps[name][val] = (allNulls ? true : false);;
+             }
+          }
+
+          var s2 = '';
+          var allIn = true;
+          for (var val in ps[name]) {
+             if (ps[name][val]) {
+                s2 += '&' + name + '=' + val;
+             } else {
+                allIn = false;
+             }
+          }
+          if (!allIn) {
+             s += s2;
+          }
+       } else {
+          s += '&' + name + '=' + encodeURIComponent(ps[name]);
+       }
    } 
    if (s != '') {
       s = '?' + s.slice(1,s.length);
    } 
+   console.log('makeParams:',ps,s);
    return s;
 }
 
@@ -7229,7 +7259,7 @@ function updateGMaps(changedInput) {
    if(changedInput) {
       var name = changedInput.name;
       var value = changedInput.value;
-      addGMapParam(name,value);
+      addGMapParam(name,value,changedInput.checked);
       var cs = changedInput.className ? changedInput.className.split(' ') : []; 
       var es = document.getElementsByClassName('dlimgGMap');
       if (inArray('dlimg',cs)) {
