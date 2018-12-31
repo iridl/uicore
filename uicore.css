@@ -2152,16 +2152,16 @@ width: 30%;
 }
 
 /* range input css for ol */
-input[type=range] {
+input.dl-opacity-input-range[type=range] {
   height: 12px;
   -webkit-appearance: none;
-  margin: 10px 0;
+  margin: 0 0 3px 0;
   width: 100%;
 }
-input[type=range]:focus {
+input.dl-opacity-input-range[type=range]:focus {
   outline: none;
 }
-input[type=range]::-webkit-slider-runnable-track {
+input.dl-opacity-input-range[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
@@ -2171,7 +2171,7 @@ input[type=range]::-webkit-slider-runnable-track {
   border-radius: 2px;
   border: 0px solid #000000;
 }
-input[type=range]::-webkit-slider-thumb {
+input.dl-opacity-input-range[type=range]::-webkit-slider-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #7697BD;
   height: 6px;
@@ -2182,10 +2182,10 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   margin-top: 1px;
 }
-input[type=range]:focus::-webkit-slider-runnable-track {
+input.dl-opacity-input-range[type=range]:focus::-webkit-slider-runnable-track {
   background: #7697BD;
 }
-input[type=range]::-moz-range-track {
+input.dl-opacity-input-range[type=range]::-moz-range-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
@@ -2195,7 +2195,7 @@ input[type=range]::-moz-range-track {
   border-radius: 2px;
   border: 0px solid #000000;
 }
-input[type=range]::-moz-range-thumb {
+input.dl-opacity-input-range[type=range]::-moz-range-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #7697BD;
   height: 6px;
@@ -2204,7 +2204,7 @@ input[type=range]::-moz-range-thumb {
   background: #FFFFFF;
   cursor: pointer;
 }
-input[type=range]::-ms-track {
+input.dl-opacity-input-range[type=range]::-ms-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
@@ -2213,19 +2213,19 @@ input[type=range]::-ms-track {
   border-color: transparent;
   color: transparent;
 }
-input[type=range]::-ms-fill-lower {
+input.dl-opacity-input-range[type=range]::-ms-fill-lower {
   background: #7697BD;
   border: 0px solid #000000;
   border-radius: 4px;
   box-shadow: 1px 1px 1px #7697BD;
 }
-input[type=range]::-ms-fill-upper {
+input.dl-opacity-input-range[type=range]::-ms-fill-upper {
   background: #7697BD;
   border: 0px solid #000000;
   border-radius: 4px;
   box-shadow: 1px 1px 1px #7697BD;
 }
-input[type=range]::-ms-thumb {
+input.dl-opacity-input-range[type=range]::-ms-thumb {
   margin-top: 1px;
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #7697BD;
@@ -2235,10 +2235,10 @@ input[type=range]::-ms-thumb {
   background: #FFFFFF;
   cursor: pointer;
 }
-input[type=range]:focus::-ms-fill-lower {
+input.dl-opacity-input-range[type=range]:focus::-ms-fill-lower {
   background: #7697BD;
 }
-input[type=range]:focus::-ms-fill-upper {
+input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
   background: #7697BD;
 }
 
@@ -2248,12 +2248,12 @@ input[type=range]:focus::-ms-fill-upper {
 .dl-opacity-slider {
    width: 40px;
    color: #7697BD;
-   line-height: 10px;
 }
 .dl-opacity-control {
    top: 75px;
    left: 1em;
    font-size: 8pt;
+   font-weight: bold;
 }
 
 .ol-dragbox {

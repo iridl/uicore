@@ -6859,10 +6859,12 @@ function createOpacityControl() {
           element.className = 'dl-opacity-control ol-unselectable ol-control';
           for (var i in layers) {
              var layer = layers[i];
-             var lelement = document.createElement('div');
-             lelement.className = 'dl-opacity-slider';
-             lelement.innerHTML = ''+layer.name+'<br><input type="range" "dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
-             element.appendChild(lelement);
+             if (layer.showOpacityControl) {
+                var lelement = document.createElement('div');
+                lelement.className = 'dl-opacity-slider';
+                lelement.innerHTML = '<div>'+layer.name+'</div><input type="range" class="dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
+                element.appendChild(lelement);
+             }
           }
 
           Control.call(this, {
@@ -7036,6 +7038,9 @@ function initializeGMap(gmap) {
       }
       if (!('opacity' in x)) {
          x.opacity = 1.0;
+      }
+      if (!('showOpacityControl' in x)) {
+         x.showOpacityControl = true;
       }
 
       if (x.type == "ol") {
