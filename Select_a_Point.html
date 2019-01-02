@@ -201,12 +201,33 @@ width: 45%;
                 },
 
                 layers: [
-                   { type: 'ol', name: 'OSM', opacity: 1.0, layer: new ol.layer.Tile({ source: new ol.source.OSM({wrapX: true}) }) },
-                   { type: 'iridl', name: 'Layer 1', opacity: 0.5, url: 'https://iridl.ldeo.columbia.edu/expert/%28koeppen%29//maptype/parameter/%28koeppen%29eq/%7BSOURCES/.FAO/.NRMED/.SD/.Climate/.Derived/.class%7Dif/%28koeppen%29//maptype/parameter/%28prec%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.prcp/DATA/0/700/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28wetdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.wet%7Dif/%28koeppen%29//maptype/parameter/%28meantemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.mean/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28mintemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.minimum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28maxtemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.maximum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28frostdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.frost%7Dif/%28koeppen%29//maptype/parameter/%28elev%29eq/%7BSOURCES/.NOAA/.NGDC/.ETOPO1/.z_ice/lon/%28X%29renameGRID/lat/%28Y%29renameGRID/X/-180/180/RANGE/Y/-90/90/RANGE/startcolormap/DATA/0/8752/RANGE/white/white/LightGoldenrodYellow/0/VALUE/LightGoldenrod/500/VALUE/goldenrod/1500/VALUE/DarkGoldenrod/3000/VALUE/sienna/8224/VALUE/sienna/endcolormap%7Dif/X/Y/fig-/colors black countries coasts lakes/-fig//T/last/plotvalue'} ,
+                   { type: 'ol', name: 'OSM', opacity: 1.0, showOpacityControl: false, layer: new ol.layer.Tile({ source: new ol.source.OSM({wrapX: true}) }) },
+                   { type: 'ol', name: 'MapBox', opacity: 0.2, showOpacityControl: true, layer: new ol.layer.Tile({ minResolution: 0.015, source: new ol.source.TileJSON({ url: 'https://api.tiles.mapbox.com/v3/mapbox.natural-earth-hypso-bathy.json?secure', crossOrigin: 'anonymous' }) }) },
+                   { type: 'iridl', name: 'IRI Data Library', opacity: 0.5, url: 'https://iridl.ldeo.columbia.edu/expert/%28koeppen%29//maptype/parameter/%28koeppen%29eq/%7BSOURCES/.FAO/.NRMED/.SD/.Climate/.Derived/.class%7Dif/%28koeppen%29//maptype/parameter/%28prec%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.prcp/DATA/0/700/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28wetdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.wet%7Dif/%28koeppen%29//maptype/parameter/%28meantemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.mean/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28mintemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.minimum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28maxtemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.maximum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28frostdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.frost%7Dif/%28koeppen%29//maptype/parameter/%28elev%29eq/%7BSOURCES/.NOAA/.NGDC/.ETOPO1/.z_ice/lon/%28X%29renameGRID/lat/%28Y%29renameGRID/X/-180/180/RANGE/Y/-90/90/RANGE/startcolormap/DATA/0/8752/RANGE/white/white/LightGoldenrodYellow/0/VALUE/LightGoldenrod/500/VALUE/goldenrod/1500/VALUE/DarkGoldenrod/3000/VALUE/sienna/8224/VALUE/sienna/endcolormap%7Dif/X/Y/fig-/colors black countries coasts lakes/-fig//T/last/plotvalue'} ,
+                   { type: 'ol', name: 'Features', opacity: 1.0, showOpacityControl: true, layer: new ol.layer.Vector({ source: new ol.source.Vector({ url: 'https://iridl.ldeo.columbia.edu/dlcharts/render/d0379821527e1fda87a9221bbf5afee97e8b2fea', format: new ol.format.GeoJSON() }), style: 
+new ol.style.Style({
+              image: new ol.style.Circle({
+                radius: 5,
+                stroke: new ol.style.Stroke({
+                  color: [0,0,0,0.5],
+                  width: 1,
+                }),
+                fill: new ol.style.Fill({
+                  color: '#ffff00',
+                }),
+              }),
+              //text: new ol.style.Text({
+              //  text: '*',
+              //  fill: new ol.style.Fill({
+              //    color: '#fff'
+              //  }),
+              //})
+            }),
+})  },
                 ],
 
                 mapClick: { 
-                   type: 'rectangle', // none | click | marker | rectangle
+                   type: 'click', // none | click | marker | rectangle
                    showFeature: true,
                    moveOnClick: false,
                    setBounds: true,

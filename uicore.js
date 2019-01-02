@@ -6956,7 +6956,7 @@ var GMAP_EXCLUDED_PARAMS = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength
 
 
 function addGMapParam(name,val,flag) {
-   console.log('addGMapParam:', name,val,flag);
+   //console.log('addGMapParam:', name,val,flag);
    if (!(name in GMAP_EXCLUDED_PARAMS)) {
       if (gmapParams[name] instanceof Object) {
          gmapParams[name][val] = flag;
@@ -7122,6 +7122,7 @@ function initializeGMap(gmap) {
       });
       view.on('change', function (evt) {
          viewSetBounds(view);
+         //console.log('resolution:',view.getResolution(),view.getZoom());
       });
       view.on('propertychange', function (evt) {
          if (evt.key == 'dlBounds') {
@@ -7228,7 +7229,6 @@ function makeParams(ps) {
    if (s != '') {
       s = '?' + s.slice(1,s.length);
    } 
-   console.log('makeParams:',ps,s);
    return s;
 }
 
