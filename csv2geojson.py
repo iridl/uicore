@@ -1,4 +1,4 @@
-import csv, json
+import csv, json, random
 from geojson import Feature, FeatureCollection, Point
 
 def coord(s):
@@ -8,10 +8,10 @@ def coord(s):
    else:
       n = s
       d = ''
-   return float(n) * (1.0 if d in ['N','E',''] else -1.0) 
+   return float(n) * (1.0 if d in ['N','E',''] else -1.0) + (random.random() * 2 - 1.0)
 
 features = []
-with open('africa.tsv') as csvfile:
+with open('africa1.tsv') as csvfile:
     reader = csv.reader(csvfile, delimiter='\t')
     for code, country, elevation, latitude, longitude, station in reader:
         latitude, longitude = map(coord, (latitude, longitude))
@@ -29,6 +29,6 @@ with open('africa.tsv') as csvfile:
         )
 
 collection = FeatureCollection(features)
-with open("africa.geojson", "w") as f:
+with open("africa1.geojson", "w") as f:
     f.write('%s' % collection)
 
