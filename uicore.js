@@ -7067,6 +7067,7 @@ function initializeGMap(gmap) {
       } else {
          throw "uicore: layer type '" + x.type + "' is not supported";
       }
+      x.layer.set('dlname', x.name);
    }
 
    gmap.mapOptions.layers = layers;
@@ -7314,18 +7315,7 @@ function updateGMaps(changedInput) {
    }
 }
 
-function defaultMakeFeature(row) {
-   var lon = 0;
-   var lat = 0;
-   if (row.lat && row.lon) {
-      lon = parseFloat(row.lon) * (row.lon[row.lon.length-1]=='W'?-1:1);
-      lat = parseFloat(row.lat) * (row.lat[row.lat.length-1]=='S'?-1:1);
-   }
-   var feature = {type: "Feature", geometry: {type: "Point", coordinates: [lon,lat]}, properties: {}};
-   return feature;
-}
-
-
+/*
 function loadGMapGeoJson(map, format, url, makeFeature) {
    if (format == 'tsv') {
       var r = getXMLhttp();
@@ -7355,6 +7345,7 @@ function loadGMapGeoJson(map, format, url, makeFeature) {
       map.data.loadGeoJson(url);
    }
 }
+*/
 
 
 
