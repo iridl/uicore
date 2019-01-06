@@ -7093,36 +7093,6 @@ function initializeGMap(gmap) {
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
 
-   var select = new ol.interaction.Select({
-      toggleCondition: function (e) { return false;},
-      condition: function (e) {
-          if (e.type == 'singleclick') {
-             var res = map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-                var features = feature.get('features');
-                return !(features && features.length > 1);
-             });
-             return res;
-          } else {
-             return false;
-          }
-      },
-   });
-   map.addInteraction(select);
-   var selectedFeatures = select.getFeatures();
-   selectedFeatures.on(['add', 'remove'], function() {
-      console.log('selectedFeatures:', selectedFeatures.getArray());
-/*
-        var names = selectedFeatures.getArray().map(function(feature) {
-          return feature.get('name');
-        });
-        if (names.length > 0) {
-          infoBox.innerHTML = names.join(', ');
-        } else {
-          infoBox.innerHTML = 'No countries selected';
-        }
-*/
-   });
-
 
    if (!('mapClick' in gmap)) {
       gmap.mapClick = {};
@@ -7148,6 +7118,18 @@ function initializeGMap(gmap) {
    if (!('rectangle' in gmap.mapClick)) {
       gmap.mapClick.rectangle = {};
    }
+   if (!('featureClick' in gmap)) {
+      gmap.featureClick = {};
+   }
+   if (!('type' in gmap.featureClick)) {
+      gmap.featureClick.type = 'none';
+   }
+   if (!('makeInfoWindow' in gmap.featureClick)) {
+      gmap.featureClick.makeInfoWindow = function(feature, layer) {
+         return 'Feature';
+      };
+   }
+
 
    if (gmap.mapClick.setBounds) {
       view.set('dlBounds',view.calculateExtent());
@@ -7170,38 +7152,16 @@ function initializeGMap(gmap) {
 
    setGMap(gmap);
 
-   var mapClickType = gmap.mapClick.type;
 
-   if (mapClickType == 'click') {
-      map.on('singleclick', function(evt) {
-         var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-            //console.log('forEachFeatureAtPixel:', feature.getProperties());
-            return feature;
-         }, {hitTolerance: 3});
-         var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
-         var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
-         console.log('uicore: map click:', xy);
-         setbbox(bb,{},null);
-      });
-   } else if  (mapClickType == 'marker') {
-   } else if  (mapClickType == 'rectangle') {
-   } else {
-      throw "uicore: map click type '" + mapClickType + "' is not supported";
-   }
-
-
-// -----------------------------------------------
-/*
    var popup = document.createElement('div');
    popup.className = "ol-popup";
-   popup.title = "Popup Title";
+   //popup.title = "Popup Title";
    var popupCloser = document.createElement('a');
    popupCloser.className = "ol-popup-closer";
    var popupContent = document.createElement('div');
    popupContent.className = "ol-popup-content";
    popup.appendChild(popupCloser);
    popup.appendChild(popupContent);
-
    var popupOverlay = new ol.Overlay({
      element: popup,
      autoPan: true,
@@ -7210,19 +7170,46 @@ function initializeGMap(gmap) {
      }
    });
    map.addOverlay( popupOverlay );
-
    popupCloser.onclick = function() {
       popupOverlay.setPosition(undefined);
       popupCloser.blur();
       return false;
    };
-   map.on('singleclick', function(evt) {
-      popupContent.innerHTML = ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate,map.getView().getProjection()),3);
-      popupOverlay.setPosition(evt.coordinate);
-   });
-*/
 
-// ----------------------------------------------
+
+   var mapClickType = gmap.mapClick.type;
+   var featureClickType = gmap.featureClick.type;
+
+   map.on('singleclick', function(evt) {
+      var res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+         var features = feature.get('features');
+         if (features) {
+            return (features.length > 1 ? null : [features[0],layer]);
+         } else {
+            return [feature,layer];
+         }
+      });
+      if (res) {
+         var feature = res[0];
+         var layer = res[1];
+         if (featureClickType == 'click') {
+            var ex = feature.getGeometry().getExtent();
+            var bb = [ ex[0], ex[3], ex[2], ex[1], true ];
+            console.log('uicore: feature click:', feature.getProperties(), ex);
+            setbbox(bb,{},null);
+         } else if (featureClickType == 'infoWindow') {
+            popupContent.innerHTML = gmap.featureClick.makeInfoWindow(feature, layer);
+            popupOverlay.setPosition(evt.coordinate);
+         }
+      } else {
+         if (mapClickType == 'click') {
+            var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
+            var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
+            console.log('uicore: map click:', xy);
+            setbbox(bb,{},null);
+         }
+      }
+   });
 
 }
 

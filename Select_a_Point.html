@@ -166,11 +166,9 @@ width: 45%;
         <script type="module">
            import 'https://openlayers.org/en/v5.3.0/build/ol.js';
 
-           function makeInfoWindowOptions(feature) {
-              return {
-                 content: feature.getProperty('description'),
-                 pixelOffset: new google.maps.Size(0,0)
-              };
+           function makeInfoWindow(feature, layer) {
+              return feature.get('country') + ', ' + feature.get('station');
+              //ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate,map.getView().getProjection()),3);
            }
 
            function makeStyle(color, text) {
@@ -293,9 +291,9 @@ width: 45%;
                    } 
                 },
 
-                featureLayer: { //optional
-                    featureClick: 'infoWindow', //none | click | infoWindow
-                    makeInfoWindowOptions: makeInfoWindowOptions, //function
+                featureClick: {
+                    type: 'click', //none | click | infoWindow
+                    makeInfoWindow: makeInfoWindow, //function
                 },
 
 
