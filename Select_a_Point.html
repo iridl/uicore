@@ -167,7 +167,7 @@ width: 45%;
            import 'https://openlayers.org/en/v5.3.0/build/ol.js';
 
            function makeInfoWindow(feature, layer) {
-              return layer.get('dlname') + ': ' + feature.get('country') + ', ' + feature.get('station');
+              return layer.get('dlname') + ': ' + feature.get('country') + ', ' + feature.get('station') + ', <b>Elevation:</b> ' + feature.get('elevation');
               //ol.coordinate.toStringXY(ol.proj.toLonLat(evt.coordinate,map.getView().getProjection()),3);
            }
 
