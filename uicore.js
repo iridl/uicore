@@ -6842,7 +6842,15 @@ function createIridlSource(url,params) {
 
 
 function setLayerOpacity(gmapId,layerIndex,opacity) {
-   gmaps[gmapId].map.getLayers().getArray()[layerIndex].setOpacity(opacity);
+   var gmap = gmaps[gmapId];
+   var layer = gmap.map.getLayers().getArray()[layerIndex]
+   layer.setOpacity(opacity);
+   if (opacity != 0.0 ) {
+      layer.setVisible( true );
+   } else {
+      gmap.popupOverlay.setPosition(undefined);
+      layer.setVisible( false );
+   }
 }
 
 function createOpacityControl() {
@@ -7011,6 +7019,9 @@ function initializeGMap(gmap) {
    if (!('viewOptions' in gmap)) {
       gmap.viewOptions = {};
    }
+   if (!('zoom' in gmap.viewOptions)) {
+      gmap.viewOptions.zoom = 3;
+   }
    if (!('projection' in gmap.viewOptions)) {
       gmap.viewOptions.projection = 'EPSG:4326';
    }
@@ -7021,7 +7032,64 @@ function initializeGMap(gmap) {
    } 
    if (!('rotation' in gmap.viewOptions)) {
       gmap.viewOptions.rotation = 0.0;
-   } 
+   } else {
+      gmap.viewOptions.rotation = gmap.viewOptions.rotation * Math.PI / 180.0;;
+   }
+
+   if (!('mapClick' in gmap)) {
+      gmap.mapClick = {};
+   }
+   if (!('type' in gmap.mapClick)) {
+      gmap.mapClick.type = 'none';
+   }
+   if (!('showFeature' in gmap.mapClick)) {
+      gmap.mapClick.showFeature = true;
+   }
+   if (!('moveOnClick' in gmap.mapClick)) {
+      gmap.mapClick.moveOnClick = true;
+   }
+   if (!('setBounds' in gmap.mapClick)) {
+      gmap.mapClick.setBounds = false;
+   }
+   if (!('marker' in gmap.mapClick)) {
+      gmap.mapClick.marker = {};
+   }
+   if (!('position' in gmap.mapClick.marker)) {
+      gmap.mapClick.marker.position = ol.proj.fromLonLat([0.0,0.0],gmap.viewOptions.projection);
+   } else {
+      gmap.mapClick.marker.position = ol.proj.fromLonLat(gmap.mapClick.marker.position,gmap.viewOptions.projection);
+   }
+   if (!('draggable' in gmap.mapClick.marker)) {
+      gmap.mapClick.marker.draggable = true;
+   }
+
+   if (!('rectangle' in gmap.mapClick)) {
+      gmap.mapClick.rectangle = {};
+   }
+   if (!('bounds' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.bounds = ol.proj.transformExtent([0.0,0.0,1.0,1.0],'EPSG:4326',gmap.viewOptions.projection);
+   } else {
+      gmap.mapClick.rectangle.bounds = ol.proj.transformExtent(gmap.mapClick.rectangle.bounds,'EPSG:4326',gmap.viewOptions.projection);
+   }
+   if (!('draggable' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.draggable = true;
+   }
+   if (!('editable' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.editable = true;
+   }
+
+   if (!('featureClick' in gmap)) {
+      gmap.featureClick = {};
+   }
+   if (!('type' in gmap.featureClick)) {
+      gmap.featureClick.type = 'none';
+   }
+   if (!('makeInfoWindow' in gmap.featureClick)) {
+      gmap.featureClick.makeInfoWindow = function(feature, layer) {
+         return layer.get('dlname');
+      };
+   }
+
 
    var view = new ol.View(gmap.viewOptions);
    gmap.mapOptions.view = view;
@@ -7070,13 +7138,44 @@ function initializeGMap(gmap) {
       x.layer.set('dlname', x.name);
    }
 
+   // ---
+   var markerFeature = new ol.Feature(new ol.geom.Point([0, 0]));
+   markerFeature.setStyle( new ol.style.Style({
+            image: new ol.style.Icon({
+               anchor: [0.5, 46],
+               anchorXUnits: 'fraction',
+               anchorYUnits: 'pixels',
+               opacity: 0.95,
+               src: '/uicore/icons/markerBlack32x48.png',
+            }),
+            stroke: new ol.style.Stroke({
+               width: 3,
+               color: [255, 0, 0, 1]
+            }),
+            fill: new ol.style.Fill({
+               color: [0, 0, 255, 0.6]
+            }),
+   }));
+   var markerLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+         features: [markerFeature],
+      }),
+   });
+   if (gmap.mapClick.type == 'marker') {
+      gmap.layers.push({type: 'ol', layer: markerLayer, name: 'Marker', opacity: 1.0, showOpacityControl: false});
+      markerLayer.set('dlname', 'Marker');
+      markerLayer.setVisible(gmap.mapClick.showFeature);
+      layers.push( markerLayer );
+   }
+
+   // ---
+
    gmap.mapOptions.layers = layers;
 
-/*
    gmap.mapOptions.interactions = ol.interaction.defaults().extend([
-      //new ol.interaction.DragBox(),
+      new ol.interaction.DragBox({condition: ol.events.condition.shiftKeyOnly,}),
+      //new ol.interaction.Extent(),
    ]);
-*/
 
    if (!('controls' in gmap.mapOptions)) {
       gmap.mapOptions.controls = [
@@ -7093,43 +7192,6 @@ function initializeGMap(gmap) {
 
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
-
-
-   if (!('mapClick' in gmap)) {
-      gmap.mapClick = {};
-   }
-   if (!('type' in gmap.mapClick)) {
-      gmap.mapClick.type = 'none';
-   }
-   if (!('showFeature' in gmap.mapClick)) {
-      gmap.mapClick.showFeature = false;
-   }
-   if (!('moveOnClick' in gmap.mapClick)) {
-      gmap.mapClick.moveOnClick = false;
-   }
-   if (!('setBounds' in gmap.mapClick)) {
-      gmap.mapClick.setBounds = false;
-   }
-   if (!('setBounds' in gmap.mapClick)) {
-      gmap.mapClick.setBounds = false;
-   }
-   if (!('marker' in gmap.mapClick)) {
-      gmap.mapClick.marker = {};
-   }
-   if (!('rectangle' in gmap.mapClick)) {
-      gmap.mapClick.rectangle = {};
-   }
-   if (!('featureClick' in gmap)) {
-      gmap.featureClick = {};
-   }
-   if (!('type' in gmap.featureClick)) {
-      gmap.featureClick.type = 'none';
-   }
-   if (!('makeInfoWindow' in gmap.featureClick)) {
-      gmap.featureClick.makeInfoWindow = function(feature, layer) {
-         return 'Feature';
-      };
-   }
 
 
    if (gmap.mapClick.setBounds) {
@@ -7176,37 +7238,46 @@ function initializeGMap(gmap) {
       popupCloser.blur();
       return false;
    };
-
-
-   var mapClickType = gmap.mapClick.type;
-   var featureClickType = gmap.featureClick.type;
+   gmap.popupOverlay = popupOverlay;
 
    map.on('singleclick', function(evt) {
-      var res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-         var features = feature.get('features');
-         if (features) {
-            return (features.length > 1 ? null : [features[0],layer]);
-         } else {
-            return [feature,layer];
-         }
-      });
+      var res = null;
+      if (gmap.featureClick.type != 'none') {
+         res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+            if (layer == markerLayer) {
+               return null;
+            }
+            var features = feature.get('features');
+            if (features) {
+               return (features.length > 1 ? null : [features[0],layer]);
+            } else {
+               return [feature,layer];
+            }
+         });
+      }
       if (res) {
          var feature = res[0];
          var layer = res[1];
-         if (featureClickType == 'click') {
+         if (gmap.featureClick.type == 'click') {
             var ex = feature.getGeometry().getExtent();
             var bb = [ ex[0], ex[3], ex[2], ex[1], true ];
             console.log('uicore: feature click:', feature.getProperties(), ex);
             setbbox(bb,{},null);
-         } else if (featureClickType == 'infoWindow') {
+         } else if (gmap.featureClick.type == 'infoWindow') {
             popupContent.innerHTML = gmap.featureClick.makeInfoWindow(feature, layer);
             popupOverlay.setPosition(evt.coordinate);
          }
       } else {
-         if (mapClickType == 'click') {
+         if (gmap.mapClick.type == 'click' || gmap.mapClick.type == 'marker') {
             var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
             var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
             console.log('uicore: map click:', xy);
+            if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
+               markerFeature.setGeometry(new ol.geom.Point(xy));
+               if (!markerLayer.getVisible()) {
+                  markerLayer.setVisible(true);
+               }
+            }
             setbbox(bb,{},null);
          }
       }

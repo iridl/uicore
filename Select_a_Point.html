@@ -265,6 +265,7 @@ width: 45%;
                 viewOptions: {
                    center: [30,5],
                    zoom: 3, 
+                   rotation: 0,
                 },
 
                 layers: [
@@ -276,16 +277,16 @@ width: 45%;
                 ],
 
                 mapClick: { 
-                   type: 'click', // none | click | marker | rectangle
-                   showFeature: true,
-                   moveOnClick: false,
+                   type: 'marker', // none | click | marker | rectangle
+                   showFeature: false,
+                   moveOnClick: true,
                    setBounds: true,
-                   marker: { // google.maps.Marker options (without map)
+                   marker: {
                       draggable: true,
                       position: [30.0,60.0],
                    },
-                   rectangle: { // google.maps.Rectangle options
-                      bounds: { north: 63.0, south: 57.0, east: 33.0, west: 27.0 },
+                   rectangle: {
+                      bounds: [27,57,33,63],
                       editable: true,
                       draggable: true,
                    } 
