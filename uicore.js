@@ -6898,11 +6898,10 @@ function resetGMap(gmap) {
    viewSetBounds(view);
 }
 
-function setGMapRectVar(rect) {
+function setGMapRectVar(ex) {
    var f = document.getElementById('pageform');
    if (f) {
-      var bs = rect.getBounds();
-      var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+      var bb = [ex[0], ex[1], ex[2], ex[3], true];
       var val = 'bb:' + bb.slice(0,4).join(':') + ':bb';
       setPageFormVariable('gmapRect',val);
    }
@@ -7139,7 +7138,7 @@ function initializeGMap(gmap) {
    }
 
    // ---
-   var markerFeature = new ol.Feature(new ol.geom.Point([0, 0]));
+   var markerFeature = new ol.Feature(new ol.geom.Point([gmap.mapClick.marker.position[0], gmap.mapClick.marker.position[1]]));
    markerFeature.setStyle( new ol.style.Style({
             image: new ol.style.Icon({
                anchor: [0.5, 46],
@@ -7148,19 +7147,13 @@ function initializeGMap(gmap) {
                opacity: 0.95,
                src: '/uicore/icons/markerBlack32x48.png',
             }),
-            stroke: new ol.style.Stroke({
-               width: 3,
-               color: [255, 0, 0, 1]
-            }),
-            fill: new ol.style.Fill({
-               color: [0, 0, 255, 0.6]
-            }),
    }));
    var markerLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
          features: [markerFeature],
       }),
    });
+
    if (gmap.mapClick.type == 'marker') {
       gmap.layers.push({type: 'ol', layer: markerLayer, name: 'Marker', opacity: 1.0, showOpacityControl: false});
       markerLayer.set('dlname', 'Marker');
@@ -7169,6 +7162,31 @@ function initializeGMap(gmap) {
    }
 
    // ---
+   var ex = gmap.mapClick.rectangle.bounds;
+   var rectFeature = new ol.Feature(new ol.geom.Polygon([[[ex[0],ex[1]],[ex[0],ex[3]],[ex[2],ex[3]],[ex[2],ex[1]]]]));
+   rectFeature.setStyle( new ol.style.Style({
+            stroke: new ol.style.Stroke({
+               width: 3,
+               color: [0, 0, 0, 1]
+            }),
+            fill: new ol.style.Fill({
+               color: [0, 0, 0, 0.3]
+            }),
+   }));
+   var rectLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+         features: [rectFeature],
+      }),
+   });
+
+   if (gmap.mapClick.type == 'rectangle') {
+      gmap.layers.push({type: 'ol', layer: rectLayer, name: 'Rectangle', opacity: 1.0, showOpacityControl: false});
+      rectLayer.set('dlname', 'Rectangle');
+      rectLayer.setVisible(gmap.mapClick.showFeature);
+      layers.push( rectLayer );
+   }
+
+   // --- 
 
    gmap.mapOptions.layers = layers;
 
@@ -7206,7 +7224,7 @@ function initializeGMap(gmap) {
       view.on('propertychange', function (evt) {
          if (evt.key == 'dlBounds') {
             var newBounds = view.get('dlBounds');
-            var bb = [ newBounds[0], newBounds[3], newBounds[2], newBounds[1], true];
+            var bb = [ newBounds[0], newBounds[1], newBounds[2], newBounds[3], true];
             console.log('uicore: bounds changed:', newBounds );
             setbbox(bb,{},null);
          }
@@ -7244,7 +7262,7 @@ function initializeGMap(gmap) {
       var res = null;
       if (gmap.featureClick.type != 'none') {
          res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-            if (layer == markerLayer) {
+            if (layer == markerLayer || layer == rectLayer) {
                return null;
             }
             var features = feature.get('features');
@@ -7260,7 +7278,7 @@ function initializeGMap(gmap) {
          var layer = res[1];
          if (gmap.featureClick.type == 'click') {
             var ex = feature.getGeometry().getExtent();
-            var bb = [ ex[0], ex[3], ex[2], ex[1], true ];
+            var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
             console.log('uicore: feature click:', feature.getProperties(), ex);
             setbbox(bb,{},null);
          } else if (gmap.featureClick.type == 'infoWindow') {
@@ -7268,17 +7286,30 @@ function initializeGMap(gmap) {
             popupOverlay.setPosition(evt.coordinate);
          }
       } else {
-         if (gmap.mapClick.type == 'click' || gmap.mapClick.type == 'marker') {
+         if (gmap.mapClick.type != 'none') {
             var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
             var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
             console.log('uicore: map click:', xy);
-            if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
+            if (gmap.mapClick.type == 'click') {
+               setbbox(bb,{},null);
+            } else if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
                markerFeature.setGeometry(new ol.geom.Point(xy));
                if (!markerLayer.getVisible()) {
                   markerLayer.setVisible(true);
                }
+               setbbox(bb,{},null);
+            } else if (gmap.mapClick.type == 'rectangle' && gmap.mapClick.moveOnClick) {
+               var geom = rectFeature.getGeometry();
+               var ex = geom.getExtent();
+               var dxy = [xy[0]-ex[0]-(ex[2]-ex[0])/2.0,xy[1]-ex[1]-(ex[3]-ex[1])/2.0];
+               geom.translate(dxy[0],dxy[1]);
+               ex = geom.getExtent();
+               if (!rectLayer.getVisible()) {
+                  rectLayer.setVisible(true);
+               }
+               setbbox(bb,{},null);
+               setGMapRectVar(ex);
             }
-            setbbox(bb,{},null);
          }
       }
    });
