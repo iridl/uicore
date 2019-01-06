@@ -7071,7 +7071,11 @@ function initializeGMap(gmap) {
 
    gmap.mapOptions.layers = layers;
 
-   //gmap.mapOptions.interactions = ol.interaction.defaults().extend([new ol.interaction.DragBox()]);
+/*
+   gmap.mapOptions.interactions = ol.interaction.defaults().extend([
+      //new ol.interaction.DragBox(),
+   ]);
+*/
 
    if (!('controls' in gmap.mapOptions)) {
       gmap.mapOptions.controls = [
@@ -7088,6 +7092,36 @@ function initializeGMap(gmap) {
 
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
+
+   var select = new ol.interaction.Select({
+      toggleCondition: function (e) { return false;},
+      condition: function (e) {
+          if (e.type == 'singleclick') {
+             var res = map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+                var features = feature.get('features');
+                return !(features && features.length > 1);
+             });
+             return res;
+          } else {
+             return false;
+          }
+      },
+   });
+   map.addInteraction(select);
+   var selectedFeatures = select.getFeatures();
+   selectedFeatures.on(['add', 'remove'], function() {
+      console.log('selectedFeatures:', selectedFeatures.getArray());
+/*
+        var names = selectedFeatures.getArray().map(function(feature) {
+          return feature.get('name');
+        });
+        if (names.length > 0) {
+          infoBox.innerHTML = names.join(', ');
+        } else {
+          infoBox.innerHTML = 'No countries selected';
+        }
+*/
+   });
 
 
    if (!('mapClick' in gmap)) {
@@ -7140,6 +7174,10 @@ function initializeGMap(gmap) {
 
    if (mapClickType == 'click') {
       map.on('singleclick', function(evt) {
+         var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+            //console.log('forEachFeatureAtPixel:', feature.getProperties());
+            return feature;
+         }, {hitTolerance: 3});
          var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
          var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
          console.log('uicore: map click:', xy);
