@@ -7190,10 +7190,13 @@ function initializeGMap(gmap) {
 
    gmap.mapOptions.layers = layers;
 
+   var translateInteraction = new ol.interaction.Translate({layers: [markerLayer,rectLayer]});
+
    gmap.mapOptions.interactions = ol.interaction.defaults().extend([
-      new ol.interaction.DragBox({condition: ol.events.condition.shiftKeyOnly,}),
+      //new ol.interaction.DragBox({condition: ol.events.condition.shiftKeyOnly,}),
       //new ol.interaction.Extent(),
    ]);
+
 
    if (!('controls' in gmap.mapOptions)) {
       gmap.mapOptions.controls = [
@@ -7210,6 +7213,10 @@ function initializeGMap(gmap) {
 
    var map = new ol.Map(gmap.mapOptions);
    gmap.map = map;
+
+   if (gmap.mapClick.type == 'marker' && gmap.mapClick.marker.draggable || gmap.mapClick.type == 'rectangle' && gmap.mapClick.rectangle.draggable) {
+      map.addInteraction(translateInteraction);
+   }
 
 
    if (gmap.mapClick.setBounds) {
@@ -7258,6 +7265,19 @@ function initializeGMap(gmap) {
    };
    gmap.popupOverlay = popupOverlay;
 
+   translateInteraction.on('translateend', function (evt) {
+      if (gmap.mapClick.type == 'marker') {
+         var ex = ol.proj.transform(markerFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
+         console.log('uicore: marker (move):', ex);
+         setbbox(bb,{},null);
+      } else if (gmap.mapClick.type == 'rectangle') {
+         var ex = ol.proj.transform(rectFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         console.log('uicore: rectangle (move):', ex);
+         setGMapRectVar(ex);
+      }
+   });
+
    map.on('singleclick', function(evt) {
       var res = null;
       if (gmap.featureClick.type != 'none') {
@@ -7289,25 +7309,26 @@ function initializeGMap(gmap) {
          if (gmap.mapClick.type != 'none') {
             var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
             var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
-            console.log('uicore: map click:', xy);
             if (gmap.mapClick.type == 'click') {
+               console.log('uicore: click:', xy);
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
                markerFeature.setGeometry(new ol.geom.Point(xy));
                if (!markerLayer.getVisible()) {
                   markerLayer.setVisible(true);
                }
+               console.log('uicore: marker (click):', xy);
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'rectangle' && gmap.mapClick.moveOnClick) {
                var geom = rectFeature.getGeometry();
-               var ex = geom.getExtent();
+               var ex = ol.proj.transform(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
                var dxy = [xy[0]-ex[0]-(ex[2]-ex[0])/2.0,xy[1]-ex[1]-(ex[3]-ex[1])/2.0];
                geom.translate(dxy[0],dxy[1]);
-               ex = geom.getExtent();
+               ex = ol.proj.transform(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
                if (!rectLayer.getVisible()) {
                   rectLayer.setVisible(true);
                }
-               setbbox(bb,{},null);
+               console.log('uicore: rectangle (click):', ex);
                setGMapRectVar(ex);
             }
          }
