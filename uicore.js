@@ -7148,20 +7148,7 @@ function initializeGMap(gmap) {
                src: '/uicore/icons/markerBlack32x48.png',
             }),
    }));
-   var markerLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
-         features: [markerFeature],
-      }),
-   });
 
-   if (gmap.mapClick.type == 'marker') {
-      gmap.layers.push({type: 'ol', layer: markerLayer, name: 'Marker', opacity: 1.0, showOpacityControl: false});
-      markerLayer.set('dlname', 'Marker');
-      markerLayer.setVisible(gmap.mapClick.showFeature);
-      layers.push( markerLayer );
-   }
-
-   // ---
    var ex = gmap.mapClick.rectangle.bounds;
    var rectFeature = new ol.Feature(new ol.geom.Polygon([[[ex[0],ex[1]],[ex[0],ex[3]],[ex[2],ex[3]],[ex[2],ex[1]]]]));
    rectFeature.setStyle( new ol.style.Style({
@@ -7173,29 +7160,37 @@ function initializeGMap(gmap) {
                color: [0, 0, 0, 0.3]
             }),
    }));
-   var rectLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
-         features: [rectFeature],
-      }),
+
+   var interactionSource = new ol.source.Vector({
+         features: [],
+   });
+   var interactionLayer = new ol.layer.Vector({
+      source: interactionSource,
    });
 
-   if (gmap.mapClick.type == 'rectangle') {
-      gmap.layers.push({type: 'ol', layer: rectLayer, name: 'Rectangle', opacity: 1.0, showOpacityControl: false});
-      rectLayer.set('dlname', 'Rectangle');
-      rectLayer.setVisible(gmap.mapClick.showFeature);
-      layers.push( rectLayer );
+   interactionLayer.set('dlname', 'Interaction');
+   gmap.layers.push({type: 'ol', layer: interactionLayer, name: 'Interaction', opacity: 1.0, showOpacityControl: false});
+   if (gmap.mapClick.type == 'marker') {
+      interactionSource.addFeature(markerFeature);
+      interactionLayer.setVisible(gmap.mapClick.showFeature);
+   } else if (gmap.mapClick.type == 'rectangle') {
+      interactionSource.addFeature(rectFeature);
+      interactionLayer.setVisible(gmap.mapClick.showFeature);
    }
+   layers.push( interactionLayer );
 
    // --- 
 
    gmap.mapOptions.layers = layers;
 
-   var translateInteraction = new ol.interaction.Translate({layers: [markerLayer,rectLayer]});
+   var translateInteraction = new ol.interaction.Translate({layers: [interactionLayer]});
 
+/*
    gmap.mapOptions.interactions = ol.interaction.defaults().extend([
       //new ol.interaction.DragBox({condition: ol.events.condition.shiftKeyOnly,}),
       //new ol.interaction.Extent(),
    ]);
+*/
 
 
    if (!('controls' in gmap.mapOptions)) {
@@ -7282,7 +7277,7 @@ function initializeGMap(gmap) {
       var res = null;
       if (gmap.featureClick.type != 'none') {
          res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-            if (layer == markerLayer || layer == rectLayer) {
+            if (layer == interactionLayer) {
                return null;
             }
             var features = feature.get('features');
@@ -7316,8 +7311,8 @@ function initializeGMap(gmap) {
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
                markerFeature.setGeometry(new ol.geom.Point(xy));
-               if (!markerLayer.getVisible()) {
-                  markerLayer.setVisible(true);
+               if (!interactionLayer.getVisible()) {
+                  interactionLayer.setVisible(true);
                }
                console.log('uicore: marker (click):', xy);
                setbbox(bb,{},null);
@@ -7327,8 +7322,8 @@ function initializeGMap(gmap) {
                var dxy = [xy[0]-ex[0]-(ex[2]-ex[0])/2.0,xy[1]-ex[1]-(ex[3]-ex[1])/2.0];
                geom.translate(dxy[0],dxy[1]);
                ex = ol.proj.transformExtent(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
-               if (!rectLayer.getVisible()) {
-                  rectLayer.setVisible(true);
+               if (!interactionLayer.getVisible()) {
+                  interactionLayer.setVisible(true);
                }
                console.log('uicore: rectangle (click):', ex);
                setGMapRectVar(ex);
