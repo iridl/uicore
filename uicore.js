@@ -7119,6 +7119,7 @@ function initializeGMap(gmap) {
             throw "uicore: layer undefined in 'ol' layer";
          }
          x.layer.setOpacity(x.opacity);
+         x.layer.setVisible(x.opacity != 0.0);
          layers.push( x.layer );
       } else if (x.type == "iridl") {
          if (!('url' in x)) {
@@ -7130,6 +7131,7 @@ function initializeGMap(gmap) {
          });
 
          x.layer = iridlLayer;
+         x.layer.setVisible(x.opacity != 0.0);
          layers.push( x.layer );
       } else {
          throw "uicore: layer type '" + x.type + "' is not supported";

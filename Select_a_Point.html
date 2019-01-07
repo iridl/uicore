@@ -274,7 +274,7 @@ width: 45%;
                    { type: 'ol', name: 'MapBox', opacity: 0.2, showOpacityControl: true, layer: new ol.layer.Tile({ minResolution: 0.015, source: new ol.source.TileJSON({ url: 'https://api.tiles.mapbox.com/v3/mapbox.natural-earth-hypso-bathy.json?secure', crossOrigin: 'anonymous' }) }) },
                    { type: 'iridl', name: 'IRI Data Library', opacity: 0.5, url: 'https://iridl.ldeo.columbia.edu/expert/%28koeppen%29//maptype/parameter/%28koeppen%29eq/%7BSOURCES/.FAO/.NRMED/.SD/.Climate/.Derived/.class%7Dif/%28koeppen%29//maptype/parameter/%28prec%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.prcp/DATA/0/700/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28wetdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.wet%7Dif/%28koeppen%29//maptype/parameter/%28meantemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.mean/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28mintemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.minimum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28maxtemp%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.maximum/.temp/DATA/-55/45/RANGE%7Dif/%28koeppen%29//maptype/parameter/%28frostdays%29eq/%7BSOURCES/.UEA/.CRU/.TS2p1/.climatology/.c7100/.frost%7Dif/%28koeppen%29//maptype/parameter/%28elev%29eq/%7BSOURCES/.NOAA/.NGDC/.ETOPO1/.z_ice/lon/%28X%29renameGRID/lat/%28Y%29renameGRID/X/-180/180/RANGE/Y/-90/90/RANGE/startcolormap/DATA/0/8752/RANGE/white/white/LightGoldenrodYellow/0/VALUE/LightGoldenrod/500/VALUE/goldenrod/1500/VALUE/DarkGoldenrod/3000/VALUE/sienna/8224/VALUE/sienna/endcolormap%7Dif/X/Y/fig-/colors black countries coasts lakes/-fig//T/last/plotvalue'} ,
                    { type: 'ol', name: 'NOAA Stations', opacity: 1.0, showOpacityControl: true, layer: clusterLayer },
-                   { type: 'ol', name: 'Sample Features', opacity: 1.0, showOpacityControl: true, layer: vectorLayer },
+                   { type: 'ol', name: 'Random Points', opacity: 0.0, showOpacityControl: true, layer: vectorLayer },
                 ],
 
                 mapClick: { 
@@ -288,8 +288,8 @@ width: 45%;
                    },
                    rectangle: {
                       bounds: [27,2,33,8],
-                      editable: false,
                       draggable: true,
+                      editable: false,
                    } 
                 },
 
