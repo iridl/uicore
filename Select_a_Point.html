@@ -48,9 +48,9 @@
 <body xml:lang="en">
 <form name="pageform" id="pageform" class="info carryup carry dlimg dlauximg share dlimgts dlimgloc">
 <input class="carryup carry " name="Set-Language" type="hidden" />
-<input class="carryup carry dlimg share dlimgloc" name="bbox" type="hidden" />
+<input class="carryup carry dlimg share dlimgts dlimgloc" name="bbox" type="hidden" />
 <input class="carryup carry dlimg share " name="gmap" type="hidden"/>
-<input class="share dlimgts dlimgloc dlimglocnosta" name="gmapRect" type="hidden" />
+<input class="share dlimgts dlimgloc" name="gmapRect" type="hidden" value="bb:27:2:33:8:bb"/>
 <input class="dlimg share" name="T" type="hidden" />
 <input class="share dlimgts dlimgloc" name="region" type="hidden" />
 <input class="share dlimg dlauximg" name="maptype" type="hidden" data-default="koeppen" />
@@ -130,7 +130,7 @@ width: 45%;
       <li><a href="#tabs-3" >Contact Us</a></li>
     </ul>
 <fieldset class="dlimage">
-<img class="regionwithinbbox dlimgloc" src="http://iridl.ldeo.columbia.edu/SOURCES/.WORLDBATH/.bath/X/Y/%28bb:-180%2C-90%2C180%2C90%29//bbox/parameter/geoobject/geoboundingbox/BOXEDGES/%28bb:-180%2C-90%2C180%2C90%29//gmapRect/parameter/geoobject/2/copy/rasterize/Y/cosd/mul/X/1/index%5BX/Y%5Dweighted-average/exch/Y/exch%5BX/Y%5Dweighted-average/X/Y/fig-/lightgrey/mask/grey/mews_prov/black/countries_gaz/red/fill/red/smallpushpins/-fig//plotbordertop/8/psdef//antialias/true/psdef//plotaxislength/120/psdef//plotborder/0/psdef//plotborderleft/8/psdef//plotborderright/8/psdef//plotborderbottom/8/psdef/+.gif" />
+<img class="regionwithinbbox dlimgloc" src="http://iridl.ldeo.columbia.edu/SOURCES/.WORLDBATH/.bath/X/Y/%28bb:-180%2C-90%2C180%2C90%29//bbox/parameter/geoobject/geoboundingbox/BOXEDGES/%28bb:-30%2C-30%2C30%2C30%29//gmapRect/parameter/geoobject/2/copy/rasterize/Y/cosd/mul/X/1/index%5BX/Y%5Dweighted-average/exch/Y/exch%5BX/Y%5Dweighted-average/X/Y/fig-/lightgrey/mask/grey/mews_prov/black/countries_gaz/red/fill/red/smallpushpins/-fig//plotbordertop/8/psdef//antialias/true/psdef//plotaxislength/120/psdef//plotborder/0/psdef//plotborderleft/8/psdef//plotborderright/8/psdef//plotborderbottom/8/psdef/+.gif" />
 <div class="rightblock valid">
 <a class="dlimgts" rel="iridl:hasJSON" href="http://iridl.ldeo.columbia.edu/expert/%28bb:-180%2C-90%2C180%2C90%29//gmapRect/parameter/geoobject/info.json"></a>
 <span class="template iridl:long_name bold"></span>
@@ -277,16 +277,16 @@ width: 45%;
                 ],
 
                 mapClick: { 
-                   type: 'marker', // none | click | marker | rectangle
+                   type: 'rectangle', // none | click | marker | rectangle
                    showFeature: true,
-                   moveOnClick: false,
+                   moveOnClick: true,
                    setBounds: true,
                    marker: {
                       draggable: true,
-                      position: [30.0,60.0],
+                      position: [30,5],
                    },
                    rectangle: {
-                      bounds: [27,57,33,63],
+                      bounds: [27,2,33,8],
                       editable: true,
                       draggable: true,
                    } 

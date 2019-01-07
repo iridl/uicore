@@ -7302,8 +7302,10 @@ function initializeGMap(gmap) {
             console.log('uicore: feature click:', feature.getProperties(), ex);
             setbbox(bb,{},null);
          } else if (gmap.featureClick.type == 'infoWindow') {
+            console.log('overlay:', evt.coordinate);
+            var ex = feature.getGeometry().getExtent();
             popupContent.innerHTML = gmap.featureClick.makeInfoWindow(feature, layer);
-            popupOverlay.setPosition(evt.coordinate);
+            popupOverlay.setPosition([(ex[0]+ex[2])/2.0,(ex[1]+ex[3])/2.0]);
          }
       } else {
          if (gmap.mapClick.type != 'none') {
