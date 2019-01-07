@@ -7230,9 +7230,9 @@ function initializeGMap(gmap) {
       });
       view.on('propertychange', function (evt) {
          if (evt.key == 'dlBounds') {
-            var newBounds = view.get('dlBounds');
-            var bb = [ newBounds[0], newBounds[1], newBounds[2], newBounds[3], true];
-            console.log('uicore: bounds changed:', newBounds );
+            var ex = ol.proj.transformExtent(view.get('dlBounds'),map.getView().getProjection(),'EPSG:4326');
+            var bb = [ ex[0], ex[1], ex[2], ex[3], true];
+            console.log('uicore: bounds changed:', ex );
             setbbox(bb,{},null);
          }
       });
@@ -7267,12 +7267,12 @@ function initializeGMap(gmap) {
 
    translateInteraction.on('translateend', function (evt) {
       if (gmap.mapClick.type == 'marker') {
-         var ex = ol.proj.transform(markerFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         var ex = ol.proj.transformExtent(markerFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
          var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
          console.log('uicore: marker (move):', ex);
          setbbox(bb,{},null);
       } else if (gmap.mapClick.type == 'rectangle') {
-         var ex = ol.proj.transform(rectFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         var ex = ol.proj.transformExtent(rectFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
          console.log('uicore: rectangle (move):', ex);
          setGMapRectVar(ex);
       }
@@ -7297,7 +7297,7 @@ function initializeGMap(gmap) {
          var feature = res[0];
          var layer = res[1];
          if (gmap.featureClick.type == 'click') {
-            var ex = feature.getGeometry().getExtent();
+            var ex = ol.proj.transformExtent(feature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
             var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
             console.log('uicore: feature click:', feature.getProperties(), ex);
             setbbox(bb,{},null);
@@ -7323,10 +7323,10 @@ function initializeGMap(gmap) {
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'rectangle' && gmap.mapClick.moveOnClick) {
                var geom = rectFeature.getGeometry();
-               var ex = ol.proj.transform(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
+               var ex = ol.proj.transformExtent(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
                var dxy = [xy[0]-ex[0]-(ex[2]-ex[0])/2.0,xy[1]-ex[1]-(ex[3]-ex[1])/2.0];
                geom.translate(dxy[0],dxy[1]);
-               ex = ol.proj.transform(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
+               ex = ol.proj.transformExtent(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
                if (!rectLayer.getVisible()) {
                   rectLayer.setVisible(true);
                }
