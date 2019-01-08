@@ -2303,3 +2303,19 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
   content: "✖";
 }
 
+.dl-layer-loading.dl-layer-error {
+  color: red;
+  animation: none;
+}
+.dl-layer-loading {
+  animation: blinker 0.3s linear infinite;
+}
+.dl-layer-error {
+  color: red;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

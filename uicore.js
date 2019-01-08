@@ -6850,6 +6850,10 @@ function setLayerOpacity(gmapId,layerIndex,opacity) {
    } else {
       gmap.popupOverlay.setPosition(undefined);
       layer.setVisible( false );
+      var source = layer.getSource();
+      source.set('dlTileCounters',null);
+      source.refresh();
+      setStatusClassName(source);
    }
 }
 
@@ -6861,21 +6865,29 @@ function createOpacityControl() {
           var gmap = options.gmap;
           var layers = gmap.layers;
 
-          var element = document.createElement('div');
-          //element.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
-          element.className = 'dl-opacity-control ol-unselectable ol-control';
+          var el = document.createElement('div');
+          //el.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
+          el.className = 'dl-opacity-control ol-unselectable ol-control';
           for (var i in layers) {
              var layer = layers[i];
              if (layer.showOpacityControl) {
-                var lelement = document.createElement('div');
-                lelement.className = 'dl-opacity-slider';
-                lelement.innerHTML = '<div>'+layer.name+'</div><input type="range" class="dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
-                element.appendChild(lelement);
+                var p = document.createElement('div');
+                p.className = 'dl-opacity-slider';
+                var s = document.createElement('div');
+                s.innerHTML = layer.name;
+                layer.layer.getSource().set('dlStatusEl',s);
+                var r = document.createElement('div');
+                r.innerHTML = '<input type="range" class="dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);" />';
+                p.appendChild(s);
+                p.appendChild(r);
+                el.appendChild(p)
+             } else {
+                layer.layer.getSource().set('dlStatusEl',s);
              }
           }
 
           Control.call(this, {
-            element: element,
+            element: el,
             target: options.target
           });
         }
@@ -7137,6 +7149,60 @@ function initializeGMap(gmap) {
          throw "uicore: layer type '" + x.type + "' is not supported";
       }
       x.layer.set('dlname', x.name);
+
+      var source = x.layer.getSource();
+      var setStatusClassName = function (source) {
+         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
+         var cs = [];
+         if (counters[0] > counters[1]) {
+            cs.push('dl-layer-loading');
+         }
+         if (counters[2]) {
+            cs.push('dl-layer-error');
+         }
+         var el = source.get('dlStatusEl');
+         if (el) {
+            el.className = cs.join(' ');
+         }
+      }
+      var displayTileCounters = function () {
+         var el = document.getElementById("tilecounters");
+         if (el) {
+            var s = '<div class="loading"></div>';
+            for (var i in gmap.layers) {
+               var source = gmap.layers[i].layer.getSource();
+               var counters = source.get('dlTileCounters') || [0,0,0];
+               s += '['+counters.join(',')+','+source.getState()[0].toUpperCase()+'], ';
+            }
+            el.innerHTML = s;
+         }
+      }
+      
+      source.on('tileloadstart', function(evt) {
+         var source = evt.target;
+         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
+         counters[0] ++;
+         source.set('dlTileCounters', counters);
+         //displayTileCounters();
+         setStatusClassName(source);
+      });
+      source.on('tileloadend', function(evt) {
+         var source = evt.target;
+         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
+         counters[1] ++;
+         source.set('dlTileCounters', counters);
+         //displayTileCounters();
+         setStatusClassName(source);
+      });
+      source.on('tileloaderror', function(evt) {
+         var source = evt.target;
+         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
+         counters[2] ++;
+         source.set('dlTileCounters', counters);
+         //displayTileCounters();
+         setStatusClassName(source);
+      });
+
    }
 
    // ---
@@ -7229,7 +7295,7 @@ function initializeGMap(gmap) {
          if (evt.key == 'dlBounds') {
             var ex = ol.proj.transformExtent(view.get('dlBounds'),map.getView().getProjection(),'EPSG:4326');
             var bb = [ ex[0], ex[1], ex[2], ex[3], true];
-            console.log('uicore: bounds changed:', ex );
+            //console.log('uicore: bounds changed:', ex );
             setbbox(bb,{},null);
          }
       });
@@ -7266,11 +7332,11 @@ function initializeGMap(gmap) {
       if (gmap.mapClick.type == 'marker') {
          var ex = ol.proj.transformExtent(markerFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
          var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
-         console.log('uicore: marker (move):', ex);
+         //console.log('uicore: marker (move):', ex);
          setbbox(bb,{},null);
       } else if (gmap.mapClick.type == 'rectangle') {
          var ex = ol.proj.transformExtent(rectFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
-         console.log('uicore: rectangle (move):', ex);
+         //console.log('uicore: rectangle (move):', ex);
          setGMapRectVar(ex);
       }
    });
@@ -7296,10 +7362,9 @@ function initializeGMap(gmap) {
          if (gmap.featureClick.type == 'click') {
             var ex = ol.proj.transformExtent(feature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
             var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
-            console.log('uicore: feature click:', feature.getProperties(), ex);
+            //console.log('uicore: feature click:', feature.getProperties(), ex);
             setbbox(bb,{},null);
          } else if (gmap.featureClick.type == 'infoWindow') {
-            console.log('overlay:', evt.coordinate);
             var ex = feature.getGeometry().getExtent();
             popupContent.innerHTML = gmap.featureClick.makeInfoWindow(feature, layer);
             popupOverlay.setPosition([(ex[0]+ex[2])/2.0,(ex[1]+ex[3])/2.0]);
@@ -7309,14 +7374,14 @@ function initializeGMap(gmap) {
             var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
             var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
             if (gmap.mapClick.type == 'click') {
-               console.log('uicore: click:', xy);
+               //console.log('uicore: click:', xy);
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
                markerFeature.setGeometry(new ol.geom.Point(xy));
                if (!interactionLayer.getVisible()) {
                   interactionLayer.setVisible(true);
                }
-               console.log('uicore: marker (click):', xy);
+               //console.log('uicore: marker (click):', xy);
                setbbox(bb,{},null);
             } else if (gmap.mapClick.type == 'rectangle' && gmap.mapClick.moveOnClick) {
                var geom = rectFeature.getGeometry();
@@ -7327,7 +7392,7 @@ function initializeGMap(gmap) {
                if (!interactionLayer.getVisible()) {
                   interactionLayer.setVisible(true);
                }
-               console.log('uicore: rectangle (click):', ex);
+               //console.log('uicore: rectangle (click):', ex);
                setGMapRectVar(ex);
             }
          }
@@ -7386,8 +7451,9 @@ function updateGMapLayers(gmap) {
       for (var i in gmap.layers) {
          var x = gmap.layers[i]; 
          if (x.type == "iridl") {
-            var iridlSource = createIridlSource(x.url,params);
-            x.layer.setSource(iridlSource);
+            var source = x.layer.getSource();
+            source.setTileUrlFunction(fdlurl(x.url,params));
+            source.refresh();
          }
       }
    }
