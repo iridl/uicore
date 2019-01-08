@@ -6900,6 +6900,36 @@ function createOpacityControl() {
       }(ol.control.Control));
 }
 
+function createProgressControl() {
+      return (function (Control) {
+        function ProgressControl(opt_options) {
+          var options = opt_options || {};
+
+          var gmap = options.gmap;
+          var layers = gmap.layers;
+
+          var el = document.createElement('div');
+          el.className = 'dl-progress-control ol-unselectable ol-control';
+          el.style.width = "0%";
+          gmap.progressBarEl2 = el;
+
+          Control.call(this, {
+            element: el,
+            target: options.target
+          });
+        }
+
+        if ( Control ) ProgressControl.__proto__ = Control;
+        ProgressControl.prototype = Object.create( Control && Control.prototype );
+        ProgressControl.prototype.constructor = ProgressControl;
+
+        return ProgressControl;
+      }(ol.control.Control));
+}
+
+
+
+
 
 function resetGMap(gmap) {
    var map = gmap.map;
@@ -7028,7 +7058,7 @@ function setProgressBar (gmap) {
    var inerror = gcounters[2];
    if (loading != 0) {
       var width = ( loaded/loading * 100).toFixed(1) + '%';
-      var el = gmap.progressBarEl;
+      var el = gmap.progressBarEl2;
       if (el) {
          el.style.width = width;
       }
@@ -7036,7 +7066,7 @@ function setProgressBar (gmap) {
          gmap.dlTileCounters = [0,0,inerror];
          setTimeout(function() {
             if (el) {
-               el.style.width = "0%";;
+               el.style.width = "0%";
             }
          }, 750);
       }
@@ -7044,11 +7074,15 @@ function setProgressBar (gmap) {
 }
 
 var OpacityControl = null;
+var ProgressControl = null;
 
 function initializeGMap(gmap) {
 
    if (!OpacityControl) {
       OpacityControl = createOpacityControl();
+   }
+   if (!ProgressControl) {
+      ProgressControl = createProgressControl();
    }
 
    if (!('id' in gmap)) {
@@ -7278,6 +7312,7 @@ function initializeGMap(gmap) {
          new ol.control.Rotate({duration: 250}),
          new ol.control.Zoom(),
          new OpacityControl({gmap: gmap}),
+         new ProgressControl({gmap: gmap}),
       ];
    }
 
