@@ -2319,3 +2319,16 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
     opacity: 0;
   }
 }
+
+.dl-map-progress-wrapper {
+        position: relative;
+}
+.dl-map-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: rgba(118, 151, 189, 1);
+        width: 0%;
+        /*transition: width 25ms;*/
+}

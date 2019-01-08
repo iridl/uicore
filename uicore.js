@@ -6882,7 +6882,7 @@ function createOpacityControl() {
                 p.appendChild(r);
                 el.appendChild(p)
              } else {
-                layer.layer.getSource().set('dlStatusEl',s);
+                layer.layer.getSource().set('dlStatusEl',null);
              }
           }
 
@@ -7006,6 +7006,43 @@ function viewSetBounds(view) {
 }
 
 
+function setStatusClassName(source) {
+   var counters = source.get('dlTileCounters') || [0,0,0];
+   var cs = [];
+   if (counters[0] > counters[1]) {
+      cs.push('dl-layer-loading');
+   }
+   if (counters[2]) {
+      cs.push('dl-layer-error');
+   }
+   var el = source.get('dlStatusEl');
+   if (el) {
+      el.className = cs.join(' ');
+   }
+}
+
+function setProgressBar (gmap) {
+   var gcounters = gmap.dlTileCounters || [0,0,0];
+   var loading = gcounters[0];
+   var loaded = gcounters[1];
+   var inerror = gcounters[2];
+   if (loading != 0) {
+      var width = ( loaded/loading * 100).toFixed(1) + '%';
+      var el = gmap.progressBarEl;
+      if (el) {
+         el.style.width = width;
+      }
+      if (loading == loaded) {
+         gmap.dlTileCounters = [0,0,inerror];
+         setTimeout(function() {
+            if (el) {
+               el.style.width = "0%";;
+            }
+         }, 750);
+      }
+   }
+}
+
 var OpacityControl = null;
 
 function initializeGMap(gmap) {
@@ -7017,6 +7054,9 @@ function initializeGMap(gmap) {
    if (!('id' in gmap)) {
       throw "uicore: id undefined in gmap";
    }
+
+   gmap.progressBarEl = document.getElementById(gmap.id + ".progress");
+
    if (!('debug' in gmap)) {
       gmap.debug = false;
    }
@@ -7151,58 +7191,25 @@ function initializeGMap(gmap) {
       x.layer.set('dlname', x.name);
 
       var source = x.layer.getSource();
-      var setStatusClassName = function (source) {
-         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
-         var cs = [];
-         if (counters[0] > counters[1]) {
-            cs.push('dl-layer-loading');
-         }
-         if (counters[2]) {
-            cs.push('dl-layer-error');
-         }
-         var el = source.get('dlStatusEl');
-         if (el) {
-            el.className = cs.join(' ');
-         }
-      }
-      var displayTileCounters = function () {
-         var el = document.getElementById("tilecounters");
-         if (el) {
-            var s = '<div class="loading"></div>';
-            for (var i in gmap.layers) {
-               var source = gmap.layers[i].layer.getSource();
+      var tlevents = ['tileloadstart','tileloadend','tileloaderror'];
+      for (i in tlevents) {
+         (function(){ 
+            var index = i;
+            var _gmap = gmap;
+            var _layer = x;
+            source.on(tlevents[index], function(evt) {
+               var source = evt.target;
+               var gcounters = _gmap.dlTileCounters || [0,0,0];
+               gcounters[index] ++;
+               _gmap.dlTileCounters = gcounters;
                var counters = source.get('dlTileCounters') || [0,0,0];
-               s += '['+counters.join(',')+','+source.getState()[0].toUpperCase()+'], ';
-            }
-            el.innerHTML = s;
-         }
+               counters[index] ++;
+               source.set('dlTileCounters', counters);
+               setStatusClassName(source);
+               setProgressBar(_gmap);
+            });
+         })();
       }
-      
-      source.on('tileloadstart', function(evt) {
-         var source = evt.target;
-         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
-         counters[0] ++;
-         source.set('dlTileCounters', counters);
-         //displayTileCounters();
-         setStatusClassName(source);
-      });
-      source.on('tileloadend', function(evt) {
-         var source = evt.target;
-         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
-         counters[1] ++;
-         source.set('dlTileCounters', counters);
-         //displayTileCounters();
-         setStatusClassName(source);
-      });
-      source.on('tileloaderror', function(evt) {
-         var source = evt.target;
-         var counters = source.get('dlTileCounters') || [0,0,0]; // loading, loaded, in error
-         counters[2] ++;
-         source.set('dlTileCounters', counters);
-         //displayTileCounters();
-         setStatusClassName(source);
-      });
-
    }
 
    // ---
