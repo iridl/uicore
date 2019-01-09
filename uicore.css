@@ -2157,6 +2157,7 @@ input.dl-opacity-input-range[type=range] {
   -webkit-appearance: none;
   margin: 0 0 3px 0;
   width: 100%;
+  background-color: transparent;
 }
 input.dl-opacity-input-range[type=range]:focus {
   outline: none;
@@ -2174,7 +2175,7 @@ input.dl-opacity-input-range[type=range]::-webkit-slider-runnable-track {
 input.dl-opacity-input-range[type=range]::-webkit-slider-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #4d74a1;
-  height: 6px;
+  height: 7px;
   width: 15px;
   border-radius: 2px;
   background: #FFFFFF;
@@ -2198,7 +2199,7 @@ input.dl-opacity-input-range[type=range]::-moz-range-track {
 input.dl-opacity-input-range[type=range]::-moz-range-thumb {
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #4d74a1;
-  height: 6px;
+  height: 7px;
   width: 15px;
   border-radius: 2px;
   background: #FFFFFF;
@@ -2229,7 +2230,7 @@ input.dl-opacity-input-range[type=range]::-ms-thumb {
   margin-top: 1px;
   box-shadow: 0px 0px 0px #000000;
   border: 0px solid #4d74a1;
-  height: 6px;
+  height: 7px;
   width: 15px;
   border-radius: 2px;
   background: #FFFFFF;
@@ -2253,7 +2254,7 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
    top: 75px;
    left: 1em;
    font-size: 8pt;
-   font-weight: bold;
+   font-weight: normal;
 }
 .dl-progress-control {
    top: 0;
@@ -2278,15 +2279,16 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
 }
 .ol-popup {
   position: absolute;
-  background-color: white;
+  background-color: rgba(255,255,255,.85);
   -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
   filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
   padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #cccccc;
+  border-radius: 5px;
   bottom: 12px;
   left: -50px;
   min-width: 200px;
+  border: 1px solid rgba(0,60,136,.3);
+
 }
 .ol-popup:after, .ol-popup:before {
   top: 100%;
@@ -2298,16 +2300,18 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
   pointer-events: none;
 }
 .ol-popup:after {
-  border-top-color: white;
+  border-top-color: rgba(255,255,255,.85);
   border-width: 10px;
-  left: 48px;
+  left: 50px;
   margin-left: -10px;
 }
 .ol-popup:before {
-  border-top-color: #cccccc;
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
   border-width: 11px;
   left: 48px;
   margin-left: -11px;
+  border-top-color: rgba(0,60,136,.3);
 }
 .ol-popup-closer {
   text-decoration: none;
@@ -2317,6 +2321,7 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
 }
 .ol-popup-closer:after {
   content: "✖";
+  color: rgba(0,60,136,.3);
 }
 
 .dl-layer-loading.dl-layer-error {
