@@ -6865,7 +6865,6 @@ function createOpacityControl() {
           var layers = gmap.layers;
 
           var el = document.createElement('div');
-          //el.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
           el.className = 'dl-opacity-control ol-unselectable ol-control';
           for (var i in layers) {
              var layer = layers[i];
@@ -7172,7 +7171,7 @@ function initializeGMap(gmap) {
       gmap.featureClick = {};
    }
    if (!('type' in gmap.featureClick)) {
-      gmap.featureClick.type = 'none';
+      gmap.featureClick.type = 'click';
    }
    if (!('makeInfoWindow' in gmap.featureClick)) {
       gmap.featureClick.makeInfoWindow = function(feature, layer) {
