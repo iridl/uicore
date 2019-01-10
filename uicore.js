@@ -7058,9 +7058,9 @@ function setProgressBar (gmap) {
    var inerror = gcounters[2];
    if (loading != 0) {
       var newProgressBarValue = loaded/loading * 100;
-      if (newProgressBarValue > oldProgressBarValue) {
+      if (true || newProgressBarValue > oldProgressBarValue) {
          gmap.progressBarValue = newProgressBarValue;
-         var width = ( loaded/loading * 100).toFixed(1) + '%';
+         var width = newProgressBarValue.toFixed(1) + '%';
          var el = gmap.progressBarEl2;
          if (el) {
             el.style.width = width;
