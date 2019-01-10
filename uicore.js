@@ -144,8 +144,6 @@ jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
-jsDependsOn('https://maps.googleapis.com/maps/api/js?v=3&libraries=drawing,geometry,places,visualization');
-jsDependsOn('https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
@@ -3179,14 +3177,12 @@ function initializeDLimage(){
 		ctl.myonclick=dosettingsbutton;
 		leg.appendChild(ctl);
 
-                if (!hasGMap) {
-		   ctl=document.createElement('div');
-		   ctl.className="dlimagecontrol layers";
-		   ctl.title="Layers";
-		   ctl.onclick=dolayersbutton;
-		   ctl.myonclick=dolayersbutton;
-		   leg.appendChild(ctl);
-                }
+		ctl=document.createElement('div');
+		ctl.className="dlimagecontrol layers";
+		ctl.title="Layers";
+		ctl.onclick=dolayersbutton;
+		ctl.myonclick=dolayersbutton;
+		leg.appendChild(ctl);
 
 		if(s.className.indexOf('NoDefaultIvars')<0){
 		    appendMissingClass(s,'ShowControlIvars');
@@ -3505,8 +3501,13 @@ function setbbox (newbbox,myinfo,myclasses) {
 			/* introducing an offset correction to cover as well all other cases */
 			var x,y,delta,xoffset,yoffset;
 			delta = parseFloat(res.value);
-			xoffset = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
-			yoffset = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+                        if ( ("iridl:hasAbscissa" in myinfo) && ("iridl:hasOrdinate" in myinfo) ) {
+			   xoffset = myinfo["iridl:hasAbscissa"]["iridl:gridvalues"]["iridl:first"];
+			   yoffset = myinfo["iridl:hasOrdinate"]["iridl:gridvalues"]["iridl:first"];
+                        } else {
+                           xoffset = 0.0;
+                           yoffset = 0.0;
+                        }
 			x = delta*Math.floor(parseFloat(newbbox[0]-xoffset)/delta)+xoffset;
 			y = delta*Math.floor(parseFloat(newbbox[1]-yoffset)/delta)+yoffset;
 			var roundbox=new Array();
@@ -3873,6 +3874,7 @@ function DLimageBuildControls(mydlimage,mylink){
 	    for (var i = 0; i<layerlist.length; i++) {
 		var layer=layerlist[i];
 		var layername=layer["iridl:name"];
+		addGMapParam('layers',layername,null);
 		var style=layer["iridl:style"];
 		var iptsp = document.createElement('label');
 		if(style.join){
@@ -5254,7 +5256,7 @@ function setPageForm(){
 		}
 		var ipos=varcnts[iname];
 		var refvalue = decodeURIComponent(hold);
-                addGMapParam(iname,refvalue);
+                addGMapParam(iname,refvalue,true);
 		if(inputs[iname].length){
 		    if(inputs[iname][ipos].type == 'checkbox'){
 			for (var ick = 0 ; ick < inputs[iname].length; ick++){
@@ -6761,81 +6763,6 @@ function setgithubjson(newname){
 
 var gmaps = {};
 
-var gmapStyles = {
- light: [
-  { elementType: "geometry", stylers: [ { color: "#f5f5f5" } ] },
-  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
-  { elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { elementType: "labels.text.stroke", stylers: [ { color: "#f5f5f5" } ] },
-  { featureType: "administrative", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "administrative.country", stylers: [ { visibility: "on" } ] },
-  { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
-  { featureType: "landscape", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "poi", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "road", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "road", elementType: "geometry", stylers: [ { color: "#ffffff" } ] },
-  { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#dadada" } ] },
-  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "transit", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "transit.line", elementType: "geometry", stylers: [ { color: "#e5e5e5" } ] },
-  { featureType: "transit.station", elementType: "geometry", stylers: [ { color: "#eeeeee" } ] },
-  { featureType: "water", stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { featureType: "water", elementType: "geometry", stylers: [ { color: "#c9c9c9" } ] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] }
- ],
- dark: [
-  { stylers: [ { saturation: -100 }, { visibility: "on" } ] },
-  { elementType: "geometry", stylers: [ { color: "#212121" } ] },
-  { elementType: "labels.icon", stylers: [ { visibility: "off" } ] },
-  { elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { elementType: "labels.text.stroke", stylers: [ { color: "#212121" } ] },
-  { featureType: "administrative", elementType: "geometry", stylers: [ { color: "#757575" } ] },
-  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [ { color: "#9e9e9e" } ] },
-  { featureType: "administrative.land_parcel", stylers: [ { visibility: "off" } ] },
-  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [ { color: "#bdbdbd" } ] },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [ { color: "#181818" } ] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [ { color: "#1b1b1b" } ] },
-  { featureType: "road", elementType: "geometry.fill", stylers: [ { color: "#2c2c2c" } ] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [ { color: "#8a8a8a" } ] },
-  { featureType: "road.arterial", elementType: "geometry", stylers: [ { color: "#373737" } ] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [ { color: "#3c3c3c" } ] },
-  { featureType: "road.highway.controlled_access", elementType: "geometry", stylers: [ { color: "#4e4e4e" } ] },
-  { featureType: "road.local", elementType: "labels.text.fill", stylers: [ { color: "#616161" } ] },
-  { featureType: "transit", elementType: "labels.text.fill", stylers: [ { color: "#757575" } ] },
-  { featureType: "water", elementType: "geometry", stylers: [ { color: "#000000" } ] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [ { color: "#3d3d3d" } ] }
- ],
- iridl: [
-  { elementType: 'geometry', stylers: [{color: '#f5f5f5'}] },
-  { elementType: 'labels.icon', stylers: [{visibility: 'off'}] },
-  { elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
-  { elementType: 'labels.text.stroke', stylers: [{color: '#f5f5f5'}] },
-  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{color: '#bdbdbd'}] },
-  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
-  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [ { visibility: "on" }, {width: 0.2}, {color: "#cccccc"} ] },
-  { featureType: 'poi', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
-  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
-  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{color: '#ffffff'}] },
-  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{color: '#757575'}] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{color: '#dadada'}] },
-  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{color: '#616161'}] },
-  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] },
-  { featureType: 'transit.line', elementType: 'geometry', stylers: [{color: '#e5e5e5'}] },
-  { featureType: 'transit.station', elementType: 'geometry', stylers: [{color: '#eeeeee'}] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{color: '#c9c9c9'}] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{color: '#9e9e9e'}] }
- ]
-};
-
 function createGMapDLImage(options) {
    gmaps[options.id] = options;
 }
@@ -6843,8 +6770,10 @@ function createGMapDLImage(options) {
 function X(x,z) {
    return (x/Math.pow(2,z)*360-180);
 }
-
 function Y(y,z) {
+   return (y/Math.pow(2,z)*180-90);
+}
+function Y3857(y,z) {
    var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
    return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
 }
@@ -6871,34 +6800,148 @@ function plotrangeY(y,z) {
    return '/Y/'+r1+'/'+r2+'/plotrange';
 }
 
-function setLayerOpacity(gmapId,layerIndex,opacity) {
-   gmaps[gmapId].map.overlayMapTypes.getAt(layerIndex).setOpacity(opacity);
+function fdlurl(url,p) {
+   return function(cs) {
+      z = cs[0];
+      x = cs[1];
+      y = Math.pow(2,z) + cs[2];
+      u = url + "//XOVY/2/psdef//plotaxislength/512/psdef//plotborder/0/psdef" +
+          plotrangeX(x,z) + plotrangeY(y,z)+"/+.png" + p;
+      //console.log(cs, z,x,y,plotrangeX(x,z),plotrangeY(y,z),u);
+      return u;
+   };
 }
 
-function createLayersControls(gmap) {
-  var rdiv = document.createElement('div');
-  rdiv.style.cssText = 'margin: 0px 0px; font-size: 10px; text-align: left; line-height: 20px; overflow: hidden';
-  for (var i in gmap.imageLayers) {
-      var layer = gmap.imageLayers[i];
-      var ldiv = document.createElement('div');
-      ldiv.innerHTML = layer.name+'<br><input type="range" style="width:80px" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);"/>';
-      rdiv.appendChild(ldiv);
-  }
-  return rdiv;
+function fdlurl3857(url,p) {
+   return function(cs) {
+      z = cs[0];
+      x = cs[1];
+      y = -cs[2] - 1;
+      u = url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef//antialias/true/psdef//SRS/%28EPSG:900913%29/psdef" +
+      plotrangeX(x,z) + plotrangeY(y,z)+"/+.gif" + p;
+      return u;
+   };
 }
+
+function createIridlSource(url,params) {
+   var iridlSource = new ol.source.TileImage({
+       projection: 'EPSG:4326',
+       attributions: "© IRI, Columbia University",
+       wrapX: true,
+       tileUrlFunction: fdlurl(url,params),
+       tileGrid: new ol.tilegrid.TileGrid({
+          extent: [-180,-90,180,90],
+          minZoom: 0,
+          tileSize: [512,256],
+          resolutions: [0.703125,0.3515625,0.17578125,0.087890625, 0.043945313, 0.021972656, 0.010986328, 0.005493164, 0.002746582, 0.001373291, 0.000686646, 0.000343323, 0.000171661, 8.58307E-05, 4.29153E-05, 2.14577E-05, 1.07288E-05, 5.36442E-06, 2.68221E-06, 1.3411E-06, 6.70552E-07, 3.35276E-07, 1.67638E-07],
+       }),
+    });
+    return iridlSource;
+}
+
+
+function setLayerOpacity(gmapId,layerIndex,opacity) {
+   var gmap = gmaps[gmapId];
+   var layer = gmap.map.getLayers().getArray()[layerIndex];
+   layer.setOpacity(opacity);
+   if (opacity != 0.0 ) {
+      layer.setVisible( true );
+   } else {
+      gmap.popupOverlay.setPosition(undefined);
+      layer.setVisible( false );
+      var source = layer.getSource();
+      source.set('dlTileCounters',null);
+      source.refresh();
+      setStatusClassName(source);
+   }
+}
+
+function createOpacityControl() {
+      return (function (Control) {
+        function OpacityControl(opt_options) {
+          var options = opt_options || {};
+
+          var gmap = options.gmap;
+          var layers = gmap.layers;
+
+          var el = document.createElement('div');
+          el.className = 'dl-opacity-control ol-unselectable ol-control';
+          for (var i in layers) {
+             var layer = layers[i];
+             if (layer.showOpacityControl) {
+                var p = document.createElement('div');
+                p.className = 'dl-opacity-slider';
+                var s = document.createElement('div');
+                s.innerHTML = layer.name;
+                layer.layer.getSource().set('dlStatusEl',s);
+                var r = document.createElement('div');
+                r.innerHTML = '<input type="range" class="dl-opacity-input-range" value="'+layer.opacity*100.0+'" oninput="setLayerOpacity(\''+gmap.id+'\','+i+',this.value/100.0);" />';
+                p.appendChild(s);
+                p.appendChild(r);
+                el.appendChild(p)
+             } else {
+                layer.layer.getSource().set('dlStatusEl',null);
+             }
+          }
+
+          Control.call(this, {
+            element: el,
+            target: options.target
+          });
+        }
+
+        if ( Control ) OpacityControl.__proto__ = Control;
+        OpacityControl.prototype = Object.create( Control && Control.prototype );
+        OpacityControl.prototype.constructor = OpacityControl;
+
+        return OpacityControl;
+      }(ol.control.Control));
+}
+
+function createProgressControl() {
+      return (function (Control) {
+        function ProgressControl(opt_options) {
+          var options = opt_options || {};
+
+          var gmap = options.gmap;
+          var layers = gmap.layers;
+
+          var el = document.createElement('div');
+          el.className = 'dl-progress-control ol-unselectable ol-control';
+          el.style.width = "0%";
+          gmap.progressBarEl2 = el;
+
+          Control.call(this, {
+            element: el,
+            target: options.target
+          });
+        }
+
+        if ( Control ) ProgressControl.__proto__ = Control;
+        ProgressControl.prototype = Object.create( Control && Control.prototype );
+        ProgressControl.prototype.constructor = ProgressControl;
+
+        return ProgressControl;
+      }(ol.control.Control));
+}
+
+
+
 
 
 function resetGMap(gmap) {
-   map = gmap.map;
-   map.setCenter(gmap.init.center);
-   map.setZoom(gmap.init.zoom);
+   var map = gmap.map;
+   var view = map.getView();
+   var xy = ol.proj.fromLonLat(gmap.init.center,view.getProjection());
+   view.setCenter(xy);
+   view.setZoom(gmap.init.zoom);
+   viewSetBounds(view);
 }
 
-function setGMapRectVar(rect) {
+function setGMapRectVar(ex) {
    var f = document.getElementById('pageform');
    if (f) {
-      var bs = rect.getBounds();
-      var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
+      var bb = [ex[0], ex[1], ex[2], ex[3], true];
       var val = 'bb:' + bb.slice(0,4).join(':') + ':bb';
       setPageFormVariable('gmapRect',val);
    }
@@ -6906,33 +6949,40 @@ function setGMapRectVar(rect) {
 
 function parseGMapLoc(gmapValStr) {
    var vs = JSON.parse(gmapValStr);
-   var x =  {center: new google.maps.LatLng(vs[0],vs[1]), zoom: vs[2]};
+   var x =  {center: [vs[0],vs[1]], zoom: vs[2]};
    return x;
 }
 
 function stringifyGMapLoc(gmapVal) {
-   var s = JSON.stringify([gmapVal.center.lat(),gmapVal.center.lng(),gmapVal.zoom]);
+   var s = JSON.stringify([gmapVal.center[0],gmapVal.center[1],gmapVal.zoom]);
    return s;
 }
 
 function setGMapCenterZoom(map,gmapVarVal) {
+   var view = map.getView();
    var x = parseGMapLoc(gmapVarVal);
-   map.setZoom(x.zoom);
-   map.setCenter(x.center);
+   var xy = ol.proj.fromLonLat(x.center,view.getProjection());
+   view.setCenter(xy);
+   view.setZoom(x.zoom);
+   viewSetBounds(view);
 }
 function setGMapBbox(map,bboxVarVal) {
+   var view = map.getView();
    var x = parseBbox(bboxVarVal);
    if (x) {
       var dx = (x[2] - x[0]) * 0.01;
       var dy = (x[1] - x[3]) * 0.01;
-      map.fitBounds({west: x[0]+dx, north: x[1]-dy, east: x[2]-dx, south: x[3]+dy});
+      var bounds = [x[0]+dx, x[3]+dy, x[2]-dx, x[1]-dy];
+      view.fit(bounds);
+      viewSetBounds(view);
    }
 }
 
 
 function setGMap(gmap) {
    var map = gmap.map;
-   gmap.init = {center: map.getCenter(), zoom: map.getZoom()};
+   var view = map.getView();
+   gmap.init = {center: ol.proj.toLonLat(view.getCenter(),view.getProjection()), zoom: view.getZoom()};
    var f = document.getElementById('pageform');
    if (f) {
       var gmapVar = f.elements['gmap'];
@@ -6942,204 +6992,469 @@ function setGMap(gmap) {
       } else if (bboxVar && bboxVar.value) {
          setGMapBbox(map,bboxVar.value);
       } 
-      gmap.init.center = map.getCenter();
-      gmap.init.zoom = map.getZoom();
+      gmap.init.center = ol.proj.toLonLat(view.getCenter(),view.getProjection());
+      gmap.init.zoom = view.getZoom();
       setPageFormVariable('gmap',stringifyGMapLoc(gmap.init));
    }
 }
 
-var gmapParams = {};
+var gmapParams = {layers: {}};
 var GMAP_EXCLUDED_PARAMS = {bbox:1, region:1, gmap:1, gmapRect:1, plotaxislength:1};
 
 
-function addGMapParam(name,val) {
+function addGMapParam(name,val,flag) {
+   //console.log('addGMapParam:', name,val,flag);
    if (!(name in GMAP_EXCLUDED_PARAMS)) {
-      gmapParams[name] = val;
+      if (gmapParams[name] instanceof Object) {
+         gmapParams[name][val] = flag;
+      } else {
+         gmapParams[name] = val;
+      }
    }
 }
 
-var idleFlag = true
+function flatArrayEq(a,b) {
+   if (a.length != b.length) {
+      return false;
+   }
+   for (var i in a) {
+      if (a[i] != b[i]) {
+         return false;
+      }
+   }
+   return true;
+}
+
+function viewSetBounds(view) { 
+   newBounds = view.calculateExtent();
+   oldBounds = view.get('dlBounds');
+   if (!flatArrayEq(oldBounds,newBounds)) {
+      view.set('dlBounds', newBounds);
+   }
+}
+
+
+function setStatusClassName(source) {
+   var counters = source.get('dlTileCounters') || [0,0,0];
+   var cs = [];
+   if (counters[0] > counters[1]) {
+      cs.push('dl-layer-loading');
+   }
+   if (counters[2]) {
+      cs.push('dl-layer-error');
+   }
+   var el = source.get('dlStatusEl');
+   if (el) {
+      el.className = cs.join(' ');
+   }
+}
+
+function setProgressBar (gmap) {
+   var gcounters = gmap.dlTileCounters || [0,0,0];
+   var oldProgressBarValue = gmap.progressBarValue || 0;
+   var loading = gcounters[0];
+   var loaded = gcounters[1];
+   var inerror = gcounters[2];
+   if (loading != 0) {
+      var newProgressBarValue = loaded/loading * 100;
+      if (true || newProgressBarValue > oldProgressBarValue) {
+         gmap.progressBarValue = newProgressBarValue;
+         var width = newProgressBarValue.toFixed(1) + '%';
+         var el = gmap.progressBarEl2;
+         if (el) {
+            el.style.width = width;
+         }
+      }
+      if (loading == loaded) {
+         gmap.progressBarValue = 0;
+         gmap.dlTileCounters = [0,0,inerror];
+         setTimeout(function() {
+            if (el) {
+               el.style.width = "0%";
+            }
+         }, 750);
+      }
+   }
+}
+
+var OpacityControl = null;
+var ProgressControl = null;
+
 function initializeGMap(gmap) {
-   //document.getElementById('pageform').elements['gmap'].value = 'test';
-   gmap.infowindow = new google.maps.InfoWindow();
-   var map = new google.maps.Map(document.getElementById(gmap.id), gmap.mapOptions);
-   gmap.map = map;
-   setGMap(gmap);
-   setGMapLayers(gmap);
-   gmap.boundsChanged = false;
-   recttm = null;
-   var mapClickType = (gmap.mapClick ? gmap.mapClick.type : 'none');
 
-   if (mapClickType == 'click') {
-      google.maps.event.addListener(map, "click", function (e) {
-         var y = e.latLng.lat();
-         var x = e.latLng.lng();
-         var bb = [ x, y, x, y, true ];
-         setbbox(bb,{},null);
-      });
-
-   } else if  ( mapClickType == 'marker') {
-      var m = gmap.mapClick.marker;
-      m.map = map;
-      var marker = new google.maps.Marker(m);
-      marker.setVisible(gmap.mapClick.showFeature);
-      marker.addListener("dragend", function (e) {
-         var y = e.latLng.lat();
-         var x = e.latLng.lng();
-         var bb = [ x, y, x, y, true ];
-         setbbox(bb,{},null);
-      });
-      if (gmap.mapClick.moveOnClick) {
-         google.maps.event.addListener(map, "click", function (e) {
-            var y = e.latLng.lat();
-            var x = e.latLng.lng();
-            var bb = [ x, y, x, y, true ];
-            marker.setPosition({lat:y,lng:x});
-            marker.setVisible(true);
-            setbbox(bb,{},null);
-         });
-      }
-
-   } else if  (mapClickType == 'rectangle') {
-      var r = gmap.mapClick.rectangle;
-      r.map = map;
-      var rect = new google.maps.Rectangle(r);
-      setGMapRectVar(rect);
-      rect.setVisible(gmap.mapClick.showFeature);
-      rect.addListener("bounds_changed", function () {
-         if (recttm) { 
-            window.clearTimeout(recttm); 
-         } 
-         recttm = window.setTimeout(function () {
-            setGMapRectVar(rect);
-         }, 1000); 
-      });
-      if (gmap.mapClick.moveOnClick) {
-         google.maps.event.addListener(map, "click", function (e) {
-            var y = e.latLng.lat();
-            var x = e.latLng.lng();
-            var bs = rect.getBounds();
-            var offx = x - (bs.getNorthEast().lng() + bs.getSouthWest().lng()) / 2.0;
-            var offy = y - (bs.getNorthEast().lat() + bs.getSouthWest().lat()) / 2.0;
-            rect.setBounds({east: bs.getNorthEast().lng()+offx, north: bs.getNorthEast().lat()+offy, south: bs.getSouthWest().lat()+offy, west: bs.getSouthWest().lng()+offx});
-            setGMapRectVar(rect);
-            rect.setVisible(true);
-         });
-      }
-
+   if (!OpacityControl) {
+      OpacityControl = createOpacityControl();
+   }
+   if (!ProgressControl) {
+      ProgressControl = createProgressControl();
    }
 
-      google.maps.event.addListener(map, "bounds_changed", function () {
-         gmap.boundsChanged = true;
-      });
-      google.maps.event.addListener(map, "idle", function () {
-         if (idleFlag) {
-            idleFlag = false;
-            if (gmap.boundsChanged) {
-               var z = {center: map.getCenter(), zoom: map.getZoom()};
-               setPageFormVariable('gmap',stringifyGMapLoc(z));
+   if (!('id' in gmap)) {
+      throw "uicore: id undefined in gmap";
+   }
 
-               if  (gmap.mapClick && gmap.mapClick.setBounds) {
-                  var bs = map.getBounds();
-                  var bb = [bs.getSouthWest().lng(), bs.getNorthEast().lat(), bs.getNorthEast().lng(), bs.getSouthWest().lat(), true];
-                  setbbox(bb,{},null);
-               }
-            } 
-         } else {
-            idleFlag = true;
+   gmap.progressBarEl = document.getElementById(gmap.id + ".progress");
+
+   if (!('debug' in gmap)) {
+      gmap.debug = false;
+   }
+
+   if (!('mapOptions' in gmap)) {
+      gmap.mapOptions = {};
+   }
+   if (!('target' in gmap.mapOptions)) {
+      gmap.mapOptions.target = gmap.id;
+   }
+   if (!('viewOptions' in gmap)) {
+      gmap.viewOptions = {};
+   }
+   if (!('zoom' in gmap.viewOptions)) {
+      gmap.viewOptions.zoom = 3;
+   }
+   if (!('projection' in gmap.viewOptions)) {
+      gmap.viewOptions.projection = 'EPSG:4326';
+   }
+   if (!('center' in gmap.viewOptions)) {
+      gmap.viewOptions.center = ol.proj.fromLonLat([0,0],gmap.viewOptions.projection);
+   } else {
+      gmap.viewOptions.center = ol.proj.fromLonLat(gmap.viewOptions.center,gmap.viewOptions.projection);
+   } 
+   if (!('rotation' in gmap.viewOptions)) {
+      gmap.viewOptions.rotation = 0.0;
+   } else {
+      gmap.viewOptions.rotation = gmap.viewOptions.rotation * Math.PI / 180.0;;
+   }
+
+   if (!('mapClick' in gmap)) {
+      gmap.mapClick = {};
+   }
+   if (!('type' in gmap.mapClick)) {
+      gmap.mapClick.type = 'none';
+   }
+   if (!('showFeature' in gmap.mapClick)) {
+      gmap.mapClick.showFeature = true;
+   }
+   if (!('moveOnClick' in gmap.mapClick)) {
+      gmap.mapClick.moveOnClick = true;
+   }
+   if (!('setBounds' in gmap.mapClick)) {
+      gmap.mapClick.setBounds = false;
+   }
+   if (!('marker' in gmap.mapClick)) {
+      gmap.mapClick.marker = {};
+   }
+   if (!('position' in gmap.mapClick.marker)) {
+      gmap.mapClick.marker.position = ol.proj.fromLonLat([0.0,0.0],gmap.viewOptions.projection);
+   } else {
+      gmap.mapClick.marker.position = ol.proj.fromLonLat(gmap.mapClick.marker.position,gmap.viewOptions.projection);
+   }
+   if (!('draggable' in gmap.mapClick.marker)) {
+      gmap.mapClick.marker.draggable = true;
+   }
+
+   if (!('rectangle' in gmap.mapClick)) {
+      gmap.mapClick.rectangle = {};
+   }
+   if (!('bounds' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.bounds = ol.proj.transformExtent([0.0,0.0,1.0,1.0],'EPSG:4326',gmap.viewOptions.projection);
+   } else {
+      gmap.mapClick.rectangle.bounds = ol.proj.transformExtent(gmap.mapClick.rectangle.bounds,'EPSG:4326',gmap.viewOptions.projection);
+   }
+   if (!('draggable' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.draggable = true;
+   }
+   if (!('editable' in gmap.mapClick.rectangle)) {
+      gmap.mapClick.rectangle.editable = true;
+   }
+
+   if (!('featureClick' in gmap)) {
+      gmap.featureClick = {};
+   }
+   if (!('type' in gmap.featureClick)) {
+      gmap.featureClick.type = 'click';
+   }
+   if (!('makeInfoWindow' in gmap.featureClick)) {
+      gmap.featureClick.makeInfoWindow = function(feature, layer) {
+         return layer.get('dlname');
+      };
+   }
+
+
+   var view = new ol.View(gmap.viewOptions);
+   gmap.mapOptions.view = view;
+
+   if (!('layers' in gmap)) {
+      gmap.layers = [];
+   }
+
+   var params = makeParams(gmapParams);
+   var layers = [];
+   for (var i in gmap.layers) {
+      var x = gmap.layers[i];
+      if (!('type' in x)) {
+         throw "uicore: layer type undefined";
+      }
+      if (!('name' in x)) {
+         throw "uicore: layer name undefined";
+      }
+      if (!('opacity' in x)) {
+         x.opacity = 1.0;
+      }
+      if (!('showOpacityControl' in x)) {
+         x.showOpacityControl = true;
+      }
+
+      if (x.type == "ol") {
+         if (!('layer' in x)) {
+            throw "uicore: layer undefined in 'ol' layer";
+         }
+         x.layer.setOpacity(x.opacity);
+         x.layer.setVisible(x.opacity != 0.0);
+         layers.push( x.layer );
+      } else if (x.type == "iridl") {
+         if (!('url' in x)) {
+            throw "uicore: url undefined in 'iridl' layer";
+         }
+         var iridlLayer = new ol.layer.Tile({
+            opacity: x.opacity,
+            source: createIridlSource(x.url,params),
+         });
+
+         x.layer = iridlLayer;
+         x.layer.setVisible(x.opacity != 0.0);
+         layers.push( x.layer );
+      } else {
+         throw "uicore: layer type '" + x.type + "' is not supported";
+      }
+      x.layer.set('dlname', x.name);
+
+      var source = x.layer.getSource();
+      var tlevents = ['tileloadstart','tileloadend','tileloaderror'];
+      for (i in tlevents) {
+         (function(){ 
+            var index = i;
+            var _gmap = gmap;
+            var _layer = x;
+            source.on(tlevents[index], function(evt) {
+               var source = evt.target;
+               var gcounters = _gmap.dlTileCounters || [0,0,0];
+               gcounters[index] ++;
+               _gmap.dlTileCounters = gcounters;
+               var counters = source.get('dlTileCounters') || [0,0,0];
+               counters[index] ++;
+               source.set('dlTileCounters', counters);
+               setStatusClassName(source);
+               setProgressBar(_gmap);
+            });
+         })();
+      }
+   }
+
+   // ---
+   var markerFeature = new ol.Feature(new ol.geom.Point([gmap.mapClick.marker.position[0], gmap.mapClick.marker.position[1]]));
+   markerFeature.setStyle( new ol.style.Style({
+            image: new ol.style.Icon({
+               anchor: [0.5, 46],
+               anchorXUnits: 'fraction',
+               anchorYUnits: 'pixels',
+               opacity: 0.95,
+               src: '/uicore/ol/markerBlack32x48.png',
+            }),
+   }));
+
+   var ex = gmap.mapClick.rectangle.bounds;
+   var rectFeature = new ol.Feature(new ol.geom.Polygon([[[ex[0],ex[1]],[ex[0],ex[3]],[ex[2],ex[3]],[ex[2],ex[1]]]]));
+   rectFeature.setStyle( new ol.style.Style({
+            stroke: new ol.style.Stroke({
+               width: 3,
+               color: [0, 0, 0, 1]
+            }),
+            fill: new ol.style.Fill({
+               color: [0, 0, 0, 0.3]
+            }),
+   }));
+
+   var interactionSource = new ol.source.Vector({
+         features: [],
+   });
+   var interactionLayer = new ol.layer.Vector({
+      source: interactionSource,
+   });
+
+   interactionLayer.set('dlname', 'Interaction');
+   gmap.layers.push({type: 'ol', layer: interactionLayer, name: 'Interaction', opacity: 0.8, showOpacityControl: false});
+   if (gmap.mapClick.type == 'marker') {
+      interactionSource.addFeature(markerFeature);
+      interactionLayer.setVisible(gmap.mapClick.showFeature);
+   } else if (gmap.mapClick.type == 'rectangle') {
+      interactionSource.addFeature(rectFeature);
+      interactionLayer.setVisible(gmap.mapClick.showFeature);
+   }
+   layers.push( interactionLayer );
+
+   // --- 
+
+   gmap.mapOptions.layers = layers;
+
+   var translateInteraction = new ol.interaction.Translate({layers: [interactionLayer]});
+
+/*
+   gmap.mapOptions.interactions = ol.interaction.defaults().extend([
+      //new ol.interaction.DragBox({condition: ol.events.condition.shiftKeyOnly,}),
+      //new ol.interaction.Extent(),
+   ]);
+*/
+
+
+   if (!('controls' in gmap.mapOptions)) {
+      gmap.mapOptions.controls = [
+         new ol.control.ScaleLine({
+            units: 'degrees',
+         }),
+         new ol.control.FullScreen(),
+         new ol.control.Attribution({collapsible: true}),
+         new ol.control.Rotate({duration: 250}),
+         new ol.control.Zoom(),
+         new OpacityControl({gmap: gmap}),
+         new ProgressControl({gmap: gmap}),
+      ];
+   }
+
+   var map = new ol.Map(gmap.mapOptions);
+   gmap.map = map;
+
+   if (gmap.mapClick.type == 'marker' && gmap.mapClick.marker.draggable || gmap.mapClick.type == 'rectangle' && gmap.mapClick.rectangle.draggable) {
+      map.addInteraction(translateInteraction);
+   }
+
+
+   if (gmap.mapClick.setBounds) {
+      view.set('dlBounds',view.calculateExtent());
+      map.on('change:size', function (evt) {
+         viewSetBounds(view);
+      });
+      view.on('change', function (evt) {
+         viewSetBounds(view);
+         //console.log('resolution:',view.getResolution(),view.getZoom());
+      });
+      view.on('propertychange', function (evt) {
+         if (evt.key == 'dlBounds') {
+            var ex = ol.proj.transformExtent(view.get('dlBounds'),map.getView().getProjection(),'EPSG:4326');
+            var bb = [ ex[0], ex[1], ex[2], ex[3], true];
+            //console.log('uicore: bounds changed:', ex );
+            setbbox(bb,{},null);
          }
       });
+   }
 
-   if (gmap.featureLayer) {
+   setGMap(gmap);
 
-      if (gmap.featureLayer.markerCluster) {
-         var markerClusterer = new MarkerClusterer(map,[],gmap.featureLayer.markerCluster);
-         google.maps.event.addListener(map.data, 'addfeature', function (e) {
-            if (e.feature.getGeometry().getType() === 'Point') {
-                   var opts = gmap.featureLayer.makeMarkerOptions(e.feature);
-                   opts.position = e.feature.getGeometry().get();
-                   opts.map = map;
-                   var marker = new google.maps.Marker(opts);
-                   if (gmap.featureLayer.featureClick == 'infoWindow') {
-                      google.maps.event.addListener(marker, 'click', function (marker, e) {
-                          return function () {
-                              gmap.infowindow.setPosition(e.feature.getGeometry().get());
-                              gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature));
-                              gmap.infowindow.open(map);
-                          };
-                      }(marker, e));
-                   } else if (gmap.featureLayer.featureClick == 'click') {
-                      google.maps.event.addListener(marker, 'click', function (marker, e) {
-                          return function () {
-                             var y = marker.getPosition().lat();
-                             var x = marker.getPosition().lng();
-                             var bb = [ x, y, x, y, true ];
-                             setbbox(bb,{},null);
-                          };
-                      }(marker, e));
-                   }
-                   markerClusterer.addMarker(marker);
+
+   var popup = document.createElement('div');
+   popup.className = "ol-popup";
+   //popup.title = "Popup Title";
+   var popupCloser = document.createElement('a');
+   popupCloser.className = "ol-popup-closer";
+   var popupContent = document.createElement('div');
+   popupContent.className = "ol-popup-content";
+   popup.appendChild(popupCloser);
+   popup.appendChild(popupContent);
+   var popupOverlay = new ol.Overlay({
+     element: popup,
+     autoPan: true,
+     autoPanAnimation: {
+        duration: 250
+     }
+   });
+   map.addOverlay( popupOverlay );
+   popupCloser.onclick = function() {
+      popupOverlay.setPosition(undefined);
+      popupCloser.blur();
+      return false;
+   };
+   gmap.popupOverlay = popupOverlay;
+
+   translateInteraction.on('translateend', function (evt) {
+      if (gmap.mapClick.type == 'marker') {
+         var ex = ol.proj.transformExtent(markerFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
+         //console.log('uicore: marker (move):', ex);
+         setbbox(bb,{},null);
+      } else if (gmap.mapClick.type == 'rectangle') {
+         var ex = ol.proj.transformExtent(rectFeature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+         //console.log('uicore: rectangle (move):', ex);
+         setGMapRectVar(ex);
+      }
+   });
+
+   map.on('singleclick', function(evt) {
+      var res = null;
+      if (gmap.featureClick.type != 'none') {
+         res = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+            if (layer == interactionLayer) {
+               return null;
+            }
+            var features = feature.get('features');
+            if (features) {
+               return (features.length > 1 ? null : [features[0],layer]);
+            } else {
+               return [feature,layer];
             }
          });
-         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
-         map.data.setMap(null);
-         google.maps.event.addListener(map, "click", function (e) {
-             gmap.infowindow.close();
-         });
-
-      } else {  
-         loadGMapGeoJson(map, gmap.featureLayer.format, gmap.featureLayer.url, gmap.featureLayer.makeFeature);
-         if (gmap.featureLayer.makeMarkerOptions) {
-            map.data.setStyle( gmap.featureLayer.makeMarkerOptions );
+      }
+      if (res) {
+         var feature = res[0];
+         var layer = res[1];
+         if (gmap.featureClick.type == 'click') {
+            var ex = ol.proj.transformExtent(feature.getGeometry().getExtent(),map.getView().getProjection(),'EPSG:4326');
+            var bb = [ ex[0], ex[1], ex[2], ex[3], true ];
+            //console.log('uicore: feature click:', feature.getProperties(), ex);
+            setbbox(bb,{},null);
+         } else if (gmap.featureClick.type == 'infoWindow') {
+            var ex = feature.getGeometry().getExtent();
+            popupContent.innerHTML = gmap.featureClick.makeInfoWindow(feature, layer);
+            popupOverlay.setPosition([(ex[0]+ex[2])/2.0,(ex[1]+ex[3])/2.0]);
          }
-
-         if (gmap.featureLayer.featureClick == 'infoWindow') {
-            map.data.addListener('click', function(e) {
-               gmap.infowindow.setOptions(gmap.featureLayer.makeInfoWindowOptions(e.feature)); 
-               gmap.infowindow.setPosition(e.latLng);
-               gmap.infowindow.open(map);
-            });
-            google.maps.event.addListener(map, "click", function (e) {
-               gmap.infowindow.close();
-            });
-
-         } else if (gmap.featureLayer.featureClick == 'click') {
-            map.data.addListener('click', function(e) {
-               var y = e.latLng.lat();
-               var x = e.latLng.lng();
-               var bb = [ x, y, x, y, true ];
+      } else {
+         if (gmap.mapClick.type != 'none') {
+            var xy = ol.proj.toLonLat(evt.coordinate,map.getView().getProjection());
+            var bb = [ xy[0], xy[1], xy[0], xy[1], true ];
+            if (gmap.mapClick.type == 'click') {
+               //console.log('uicore: click:', xy);
                setbbox(bb,{},null);
-            });
+            } else if (gmap.mapClick.type == 'marker' && gmap.mapClick.moveOnClick) {
+               markerFeature.setGeometry(new ol.geom.Point(xy));
+               if (!interactionLayer.getVisible()) {
+                  interactionLayer.setVisible(true);
+               }
+               //console.log('uicore: marker (click):', xy);
+               setbbox(bb,{},null);
+            } else if (gmap.mapClick.type == 'rectangle' && gmap.mapClick.moveOnClick) {
+               var geom = rectFeature.getGeometry();
+               var ex = ol.proj.transformExtent(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
+               var dxy = [xy[0]-ex[0]-(ex[2]-ex[0])/2.0,xy[1]-ex[1]-(ex[3]-ex[1])/2.0];
+               geom.translate(dxy[0],dxy[1]);
+               ex = ol.proj.transformExtent(geom.getExtent(),map.getView().getProjection(),'EPSG:4326');
+               if (!interactionLayer.getVisible()) {
+                  interactionLayer.setVisible(true);
+               }
+               //console.log('uicore: rectangle (click):', ex);
+               setGMapRectVar(ex);
+            }
          }
       }
-   }
+   });
 
-   if (gmap.debug) {
-      function CoordMapType(tileSize) {
-         this.tileSize = tileSize;
+   if (typeof ResizeObserver !== 'undefined') { // this only works in Chrome
+      var mapEl = document.getElementById(gmap.id);
+      if (mapEl) {
+         new ResizeObserver(function(x){
+            map.updateSize();
+            //console.log('observeMapSizeChange:',x)
+         }).observe(mapEl);
       }
-
-      CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-          var div = ownerDocument.createElement('div');
-          //div.innerHTML = coord;
-          var scale = Math.pow(2,zoom);
-          //div.innerHTML = "IRI, Columbia Univ.  ("+(coord.x % scale)+", "+(coord.y % scale) + ") "+scale + ", z=" + zoom;
-          div.innerHTML = "("+(coord.x % scale)+","+(coord.y % scale) + ") "+scale + ", z=" + zoom + 
-             "<br/>" + "("+(coord.x)+","+(coord.y) + ") "+ "<br/>"+plotrangeX(coord.x,zoom) + "<br/>"+plotrangeY(coord.y,zoom);
-          div.style.width = this.tileSize.width + 'px';
-          div.style.height = this.tileSize.height + 'px';
-          div.style.fontSize = '10';
-          div.style.borderStyle = 'solid';
-          div.style.borderWidth = '1px';
-          div.style.borderColor = '#AAAAAA';
-          div.style.clor = '#888888';
-          return div;
-      };
-      map.overlayMapTypes.push(new CoordMapType(new google.maps.Size(256, 256)));
    }
 
-   var lc = createLayersControls(gmap);
-   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(lc);
 }
 
 function initializeGMaps() {
@@ -7153,7 +7468,32 @@ function initializeGMaps() {
 function makeParams(ps) {
    var s = '';
    for (var name in ps) {
-       s += '&' + name + '=' + encodeURIComponent(ps[name]);
+       if (ps[name] instanceof Object) {
+          var allNulls = true;
+          for (var val in ps[name]) {
+             allNulls = allNulls && (ps[name][val]==null);
+          }
+          for (var val in ps[name]) {
+             if (ps[name][val]==null) {
+                ps[name][val] = (allNulls ? true : false);;
+             }
+          }
+
+          var s2 = '';
+          var allIn = true;
+          for (var val in ps[name]) {
+             if (ps[name][val]) {
+                s2 += '&' + name + '=' + val;
+             } else {
+                allIn = false;
+             }
+          }
+          if (!allIn) {
+             s += s2;
+          }
+       } else {
+          s += '&' + name + '=' + encodeURIComponent(ps[name]);
+       }
    } 
    if (s != '') {
       s = '?' + s.slice(1,s.length);
@@ -7161,28 +7501,16 @@ function makeParams(ps) {
    return s;
 }
 
-function setGMapLayers(gmap) {
-   if (gmap && gmap.map) {
-      var opacities = [];
-      gmap.map.overlayMapTypes.forEach( function(e,i) {
-         opacities[i] = e.getOpacity();
-      });
-      gmap.map.overlayMapTypes.clear();
+function updateGMapLayers(gmap) {
+   if ('map' in gmap) {
       var params = makeParams(gmapParams);
-      for (var i in gmap.imageLayers) {
-         var layer = gmap.imageLayers[i];
-         var opts = {
-            getTileUrl: function (l,p) {return function (c, z) {
-               var r =  l.url + "//XOVY/1/psdef//plotaxislength/256/psdef//plotborder/0/psdef//antialias/true/psdef//SRS/%28EPSG:900913%29/psdef" + 
-                 plotrangeX(c.x,z) + plotrangeY(c.y,z)+"/+.gif" + p;
-               return r;
-            }}(layer,params),
-            tileSize: new google.maps.Size(256, 256),
-            name: layer.name,
-            opacity: (opacities.length > i ? opacities[i] : layer.opacity)
-         };
-         var typ = new google.maps.ImageMapType(opts);
-         gmap.map.overlayMapTypes.push(typ);
+      for (var i in gmap.layers) {
+         var x = gmap.layers[i]; 
+         if (x.type == "iridl") {
+            var source = x.layer.getSource();
+            source.setTileUrlFunction(fdlurl(x.url,params));
+            source.refresh();
+         }
       }
    }
 }
@@ -7201,43 +7529,37 @@ function updateGMaps(changedInput) {
    if(changedInput) {
       var name = changedInput.name;
       var value = changedInput.value;
-      addGMapParam(name,value);
+      addGMapParam(name,value,changedInput.checked);
       var cs = changedInput.className ? changedInput.className.split(' ') : []; 
       var es = document.getElementsByClassName('dlimgGMap');
       if (inArray('dlimg',cs)) {
          for (var i=0;i!=es.length;i++) {
             var gmap = gmaps[ es[i].id ]
-            var map = gmap.map;
-            if (name == 'gmap' && value) {
-               setGMapCenterZoom(map,value);
-            } else if (name == 'gmap' && !value) {
-               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
-               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
-            } else if (name == 'bbox' && value) {
-               setGMapBbox(map,value);
-            } else if (name == 'bbox' && !value) {
-               map.setCenter(gmap.mapOptions && gmap.mapOptions.center ? gmap.mapOptions.center : gmap.init.center);
-               map.setZoom(gmap.mapOptions && gmap.mapOptions.zoom ? gmap.mapOptions.zoom : gmap.init.zoom);
-            } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
-               setGMapLayers(gmap);
+            if (gmap.map) {
+               var map = gmap.map;
+               var view = map.getView();
+               if (name == 'gmap' && value) {
+                  setGMapCenterZoom(map,value);
+               } else if (name == 'gmap' && !value) {
+                  view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center, view.getProjection()) );
+                  view.setZoom( gmap.viewOptions.zoom );
+                  viewSetBounds(view);
+               } else if (name == 'bbox' && value) {
+                  setGMapBbox(map,value);
+               } else if (name == 'bbox' && !value) {
+                  view.setCenter( ol.proj.fromLonLat(gmap.viewOptions.center, view.getProjection()) );
+                  view.setZoom( gmap.viewOptions.zoom );
+                  viewSetBounds(view);
+               } else if (!(name in GMAP_EXCLUDED_PARAMS)) {
+                  updateGMapLayers(gmap);
+               }
             }
          }
       }
    }
 }
 
-function defaultMakeFeature(row) {
-   var lon = 0;
-   var lat = 0;
-   if (row.lat && row.lon) {
-      lon = parseFloat(row.lon) * (row.lon[row.lon.length-1]=='W'?-1:1);
-      lat = parseFloat(row.lat) * (row.lat[row.lat.length-1]=='S'?-1:1);
-   }
-   var feature = {type: "Feature", geometry: {type: "Point", coordinates: [lon,lat]}, properties: {}};
-   return feature;
-}
-
-
+/*
 function loadGMapGeoJson(map, format, url, makeFeature) {
    if (format == 'tsv') {
       var r = getXMLhttp();
@@ -7267,6 +7589,7 @@ function loadGMapGeoJson(map, format, url, makeFeature) {
       map.data.loadGeoJson(url);
    }
 }
+*/
 
 
 
