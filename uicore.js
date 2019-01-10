@@ -144,7 +144,6 @@ jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
-//jsDependsOn('https://openlayers.org/en/v5.3.0/build/ol.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
@@ -7254,7 +7253,7 @@ function initializeGMap(gmap) {
                anchorXUnits: 'fraction',
                anchorYUnits: 'pixels',
                opacity: 0.95,
-               src: '/uicore/icons/markerBlack32x48.png',
+               src: '/uicore/ol/markerBlack32x48.png',
             }),
    }));
 
