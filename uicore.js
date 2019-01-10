@@ -7446,6 +7446,16 @@ function initializeGMap(gmap) {
       }
    });
 
+   if (typeof ResizeObserver !== 'undefined') { // this only works in Chrome
+      var mapEl = document.getElementById(gmap.id);
+      if (mapEl) {
+         new ResizeObserver(function(x){
+            map.updateSize();
+            //console.log('observeMapSizeChange:',x)
+         }).observe(mapEl);
+      }
+   }
+
 }
 
 function initializeGMaps() {
