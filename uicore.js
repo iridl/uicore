@@ -144,7 +144,7 @@ jsDependsOn(puredir + 'pure.js');
 jsDependsOn(puredir + 'jquery.js');
 /* loads jsonld javascript */
 jsDependsOn(scriptroot.substr(0,scriptroot.length-7) + 'jsonld/jsonld.js');
-jsDependsOn('https://openlayers.org/en/v5.3.0/build/ol.js');
+//jsDependsOn('https://openlayers.org/en/v5.3.0/build/ol.js');
 var ifmaproomroot = document.location.href.lastIndexOf('/maproom/');
 var maproomroot = document.location.href.substr(0,document.location.href.lastIndexOf('/maproom/')+9);
 
@@ -7278,7 +7278,7 @@ function initializeGMap(gmap) {
    });
 
    interactionLayer.set('dlname', 'Interaction');
-   gmap.layers.push({type: 'ol', layer: interactionLayer, name: 'Interaction', opacity: 1.0, showOpacityControl: false});
+   gmap.layers.push({type: 'ol', layer: interactionLayer, name: 'Interaction', opacity: 0.8, showOpacityControl: false});
    if (gmap.mapClick.type == 'marker') {
       interactionSource.addFeature(markerFeature);
       interactionLayer.setVisible(gmap.mapClick.showFeature);
