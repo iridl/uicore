@@ -7052,16 +7052,22 @@ function setStatusClassName(source) {
 
 function setProgressBar (gmap) {
    var gcounters = gmap.dlTileCounters || [0,0,0];
+   var oldProgressBarValue = gmap.progressBarValue || 0;
    var loading = gcounters[0];
    var loaded = gcounters[1];
    var inerror = gcounters[2];
    if (loading != 0) {
-      var width = ( loaded/loading * 100).toFixed(1) + '%';
-      var el = gmap.progressBarEl2;
-      if (el) {
-         el.style.width = width;
+      var newProgressBarValue = loaded/loading * 100;
+      if (newProgressBarValue > oldProgressBarValue) {
+         gmap.progressBarValue = newProgressBarValue;
+         var width = ( loaded/loading * 100).toFixed(1) + '%';
+         var el = gmap.progressBarEl2;
+         if (el) {
+            el.style.width = width;
+         }
       }
       if (loading == loaded) {
+         gmap.progressBarValue = 0;
          gmap.dlTileCounters = [0,0,inerror];
          setTimeout(function() {
             if (el) {
