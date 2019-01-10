@@ -2155,7 +2155,7 @@ width: 30%;
 input.dl-opacity-input-range[type=range] {
   height: 12px;
   -webkit-appearance: none;
-  margin: 0 0 3px 0;
+  margin: 0 0 5px 0;
   width: 100%;
   background-color: transparent;
 }
@@ -2251,15 +2251,15 @@ input.dl-opacity-input-range[type=range]:focus::-ms-fill-upper {
    color: #4d74a1;
 }
 .dl-opacity-control {
-   top: 75px;
-   left: 1em;
+   top: 80px;
+   left: 8px;
    font-size: 8pt;
    font-weight: normal;
 }
 .dl-progress-control {
    top: 0;
    left: 0;
-   height: 4px;
+   height: 6px;
    border-radius: 0;
    margin: 0;
    padding: 0;

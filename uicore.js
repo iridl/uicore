@@ -6843,7 +6843,7 @@ function createIridlSource(url,params) {
 
 function setLayerOpacity(gmapId,layerIndex,opacity) {
    var gmap = gmaps[gmapId];
-   var layer = gmap.map.getLayers().getArray()[layerIndex]
+   var layer = gmap.map.getLayers().getArray()[layerIndex];
    layer.setOpacity(opacity);
    if (opacity != 0.0 ) {
       layer.setVisible( true );
